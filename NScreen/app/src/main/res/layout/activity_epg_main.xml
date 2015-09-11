@@ -70,6 +70,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listView" />
+        android:id="@+id/epg_main_listview" />
 
 </LinearLayout>
