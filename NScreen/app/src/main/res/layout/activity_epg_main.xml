@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.stvn.nscreen.epg.EpgMainActivity">
+
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="56.25dp"
+        android:background="@mipmap/title_bar_bg"
+        android:id="@+id/frameLayout">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="채널 가이드"
+            android:id="@+id/textView"
+            android:layout_gravity="center_vertical"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton"
+            android:background="@mipmap/btn_back"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="9dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/frameLayout"
+        android:layout_toEndOf="@+id/frameLayout">
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="40.75dp"
+            android:id="@+id/imageButton2"
+            android:background="@mipmap/btn_nor"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전체채널"
+            android:id="@+id/textView2"
+            android:layout_gravity="center"
+            android:textColor="#7b5aa3"
+            android:textSize="14.5sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView2"
+            android:background="@mipmap/ch_box_arrow"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="25.25dp" />
+    </FrameLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView" />
+
+</LinearLayout>
