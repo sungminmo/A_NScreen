@@ -6,4 +6,6 @@
 
     <string name="intro_cnm">C&amp;M nScreen Service</string>
     <string name="title_activity_epg_main">EpgMainActivity</string>
+
+    <string name="title_activity_detail_channel">DetailChannelActivity</string>
 </resources>
