@@ -49,11 +49,6 @@ public class EpgMainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_epg_main, menu);
-
-        MenuItem m = menu.add(0, 12321, 1, "DetailChannel");
-
-        m.setIntent(new Intent(this, EpgSubActivity.class));
-
         return true;
     }
 

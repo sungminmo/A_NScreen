@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="348dp"
+    android:layout_height="459dp"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="58dp">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시청을 원하시는 채널장르를 선택하실 수 있습니다."
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="22.75dp"
+                android:gravity="center"
+                android:textSize="13.25sp"
+                android:textColor="#000000"
+                android:textIsSelectable="true" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/btn_close"
+                android:layout_gravity="right"
+                android:layout_marginTop="13.25dp"
+                android:layout_marginRight="13.25dp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="40.75dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageButton
+                android:layout_width="249dp"
+                android:layout_height="40.75dp"
+                android:id="@+id/imageButton4"
+                android:layout_gravity="center"
+                android:background="@mipmap/btn_select"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:text="전체채널"
+                android:layout_gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="14.5sp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="40.75dp"
+            android:layout_marginBottom="27.25dp">
+
+            <ImageButton
+                android:layout_width="249dp"
+                android:layout_height="40.75dp"
+                android:id="@+id/imageButton5"
+                android:background="@mipmap/btn_nor"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5"
+                android:text="선호채널"
+                android:layout_gravity="center"
+                android:textColor="#7b5aa3"
+                android:textSize="14.5sp" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageButton
+                android:layout_width="64.75dp"
+                android:layout_height="65dp"
+                android:id="@+id/imageButton6"
+                android:layout_marginRight="27.25dp"
+                android:layout_marginBottom="27.25dp"
+                android:background="@mipmap/btn_nor"/>
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton7"
+            android:layout_marginRight="27.25dp"
+            android:layout_toRightOf="@id/imageButton6"
+            android:background="@mipmap/btn_nor" />
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton8"
+            android:layout_toRightOf="@id/imageButton7"
+            android:background="@mipmap/btn_nor" />
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton9"
+            android:alignLeft="@id/imageButton6"
+            android:background="@mipmap/btn_nor"
+            android:layout_below="@+id/imageButton6"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="27.25dp" />
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton10"
+            android:background="@mipmap/btn_nor"
+            android:layout_alignTop="@+id/imageButton9"
+            android:layout_toRightOf="@+id/imageButton6"
+            android:layout_toEndOf="@+id/imageButton6" />
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton11"
+            android:background="@mipmap/btn_nor"
+            android:layout_alignTop="@+id/imageButton10"
+            android:layout_toRightOf="@+id/imageButton7"
+            android:layout_toEndOf="@+id/imageButton7" />
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton12"
+            android:background="@mipmap/btn_nor"
+            android:layout_below="@+id/imageButton9"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton13"
+            android:background="@mipmap/btn_nor"
+            android:layout_below="@+id/imageButton9"
+            android:layout_alignLeft="@+id/imageButton10"
+            android:layout_alignStart="@+id/imageButton10" />
+
+        <ImageButton
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageButton14"
+            android:background="@mipmap/btn_nor"
+            android:layout_below="@+id/imageButton9"
+            android:layout_toRightOf="@+id/imageButton7"
+            android:layout_toEndOf="@+id/imageButton7" />
+
+    </RelativeLayout>
+
+</LinearLayout>
