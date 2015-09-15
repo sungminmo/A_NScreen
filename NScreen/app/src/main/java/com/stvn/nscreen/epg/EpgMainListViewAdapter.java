@@ -34,7 +34,6 @@ public class EpgMainListViewAdapter extends BaseAdapter {
         this.mOnClickListener = onClickListener;
     }
 
-
     @Override
     public int getCount() { return mDatas.size(); }
 
@@ -48,7 +47,6 @@ public class EpgMainListViewAdapter extends BaseAdapter {
     public void addItem(ListViewDataObject obj) { mDatas.add(obj); }
     public void remove(int position) { mDatas.remove(position); }
     public void clear() { mDatas.clear(); }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -65,18 +63,12 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
 
-
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("title"));
-
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return convertView;
     }
-
-
 }

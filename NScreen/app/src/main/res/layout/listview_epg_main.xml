@@ -3,95 +3,95 @@
     android:layout_width="match_parent" android:layout_height="58dp">
 
     <ImageButton
+        android:id="@+id/epg_main_imagebutton_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/epg_main_imagebutton_favorite"
-        android:background="@mipmap/btn_favorite_unselect"
         android:layout_marginLeft="14.25dp"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:background="@mipmap/btn_favorite_unselect" />
 
     <TextView
+        android:id="@+id/epg_main_textview_channel_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00"
-        android:id="@+id/epg_main_textview_channel_number"
-        android:textSize="14.5sp"
-        android:textColor="#000000"
+        android:layout_marginTop="8.75dp"
         android:layout_marginLeft="42dp"
-        android:layout_marginTop="8.75dp" />
+        android:text="00"
+        android:textSize="14.5sp"
+        android:textColor="#000000" />
 
     <ImageView
+        android:id="@+id/epg_main_imagebutton_channel_logo"
         android:layout_width="48dp"
         android:layout_height="19.25dp"
-        android:id="@+id/epg_main_imagebutton_channel_logo"
         android:layout_marginLeft="39.75dp"
         android:layout_marginBottom="8.75dp"
-        android:background="#aaaaaa"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:background="#aaaaaa" />
 
     <TextView
+        android:id="@+id/epg_main_textview_program_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8.75dp"
+        android:layout_marginLeft="96dp"
+        android:layout_marginRight="30dp"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
-        android:id="@+id/epg_main_textview_program_title"
         android:textSize="14.5sp"
         android:textColor="#000000"
-        android:layout_marginLeft="96dp"
-        android:layout_marginTop="8.75dp"
-        android:layout_marginRight="30dp"
         android:ellipsize="end"
         android:lines="1" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00~00:00"
         android:id="@+id/epg_main_textview_program_time"
-        android:textSize="12sp"
-        android:textColor="#000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
         android:layout_marginLeft="96dp"
-        android:layout_marginTop="28dp" />
+        android:text="00:00~00:00"
+        android:textSize="12sp"
+        android:textColor="#000000" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/epg_main_imageview_program_age"
-        android:background="@mipmap/btn_age_all"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="29dp" />
-
-    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/epg_main_imageview_program_hdsd"
-        android:background="@mipmap/btn_size_hd"
-        android:layout_marginLeft="198dp"
-        android:layout_marginTop="29dp" />
+        android:background="@mipmap/btn_age_all"
+        android:layout_marginTop="29dp"
+        android:layout_marginLeft="170dp" />
 
     <ImageView
+        android:id="@+id/epg_main_imageview_program_hdsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:layout_marginLeft="198dp"
+        android:background="@mipmap/btn_size_hd" />
+
+    <ImageView
+        android:id="@+id/epg_main_imageview_progress_bg"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
-        android:id="@+id/epg_main_imageview_progress_bg"
-        android:background="@drawable/progress_bg"
         android:layout_marginLeft="96dp"
+        android:layout_marginBottom="9.75dp"
         android:layout_marginRight="50dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="9.75dp" />
+        android:background="@drawable/progress_bg" />
 
     <ImageView
+        android:id="@+id/epg_main_imageview_progress_curent"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
-        android:id="@+id/epg_main_imageview_progress_curent"
-        android:background="@drawable/progress_bar"
         android:layout_marginLeft="96dp"
+        android:layout_marginBottom="9.75dp"
         android:layout_marginRight="200dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="9.75dp" />
+        android:background="@drawable/progress_bar" />
 
     <ImageView
+        android:id="@+id/epg_main_imageview_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/epg_main_imageview_more"
         android:background="@mipmap/btn_list_arrow"
         android:layout_gravity="center_vertical|right"
         android:layout_marginRight="12.75dp" />

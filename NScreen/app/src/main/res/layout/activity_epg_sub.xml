@@ -5,20 +5,20 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:orientation="horizontal"
+        android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
         android:layout_height="56.25dp"
-        android:background="@mipmap/title_bar_bg"
-        android:id="@+id/frameLayout1">
+        android:orientation="horizontal"
+        android:background="@mipmap/title_bar_bg">
 
     </FrameLayout>
 
     <FrameLayout
-        android:orientation="horizontal"
+        android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
         android:layout_height="56.25dp"
-        android:background="#c6b3dd"
-        android:id="@+id/frameLayout2">
+        android:orientation="horizontal"
+        android:background="#c6b3dd">
 
         <LinearLayout
             android:layout_width="70.5dp"
@@ -30,8 +30,8 @@
     </FrameLayout>
 
     <ListView
+        android:id="@+id/epg_sub_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/epg_sub_listview" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

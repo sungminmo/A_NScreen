@@ -22,7 +22,7 @@ public class PvrMainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_epg_main);
 
         mInstance = this;
-        mPref = new JYSharedPreferences(this);
+        mPref     = new JYSharedPreferences(this);
         if (mPref.isLogging()) {
             Log.d(tag, "onCreate()");
         }

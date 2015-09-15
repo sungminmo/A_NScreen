@@ -6,30 +6,29 @@
     tools:context="com.stvn.nscreen.epg.EpgMainActivity">
 
     <FrameLayout
-        android:orientation="horizontal"
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="56.25dp"
-        android:background="@mipmap/title_bar_bg"
-        android:id="@+id/frameLayout">
+        android:background="@mipmap/title_bar_bg">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="채널 가이드"
-            android:id="@+id/textView"
             android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="채널 가이드"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:gravity="center_vertical|center_horizontal" />
+            android:textColor="#ffffff" />
 
         <ImageButton
+            android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:background="@mipmap/btn_back"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="9dp" />
+            android:layout_marginLeft="9dp"
+            android:background="@mipmap/btn_back" />
 
     </FrameLayout>
 
@@ -41,35 +40,36 @@
         android:layout_toEndOf="@+id/frameLayout">
 
         <ImageButton
+            android:id="@+id/imageButton2"
             android:layout_width="fill_parent"
             android:layout_height="40.75dp"
-            android:id="@+id/imageButton2"
-            android:background="@mipmap/btn_nor"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="9dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:background="@mipmap/btn_nor" />
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전체채널"
-            android:id="@+id/textView2"
             android:layout_gravity="center"
-            android:textColor="#7b5aa3"
-            android:textSize="14.5sp" />
+            android:text="전체채널"
+            android:textSize="14.5sp"
+            android:textColor="#7b5aa3" />
 
         <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
-            android:background="@mipmap/ch_box_arrow"
             android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="25.25dp" />
+            android:layout_marginRight="25.25dp"
+            android:background="@mipmap/ch_box_arrow" />
+
     </FrameLayout>
 
     <ListView
+        android:id="@+id/epg_main_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/epg_main_listview" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

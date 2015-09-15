@@ -21,7 +21,6 @@ public class EpgMainActivity extends AppCompatActivity {
     private              EpgMainListViewAdapter mAdapter;
     private              ListView               mListView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +33,10 @@ public class EpgMainActivity extends AppCompatActivity {
         mAdapter  = new EpgMainListViewAdapter(this, null);
         // for test
         for ( int i = 0; i < 1000; i++ ) {
-            String sChannel = String.format("%02d", i);
+            String sChannel        = String.format("%02d", i);
             ListViewDataObject obj = new ListViewDataObject(0, 0, "{\"channelNumber\":\""+sChannel+"\",\"title\":\"전국 노래자랑 광진구편 초대가수 임석원 사회 송해\"}");
             mAdapter.addItem(obj);
         }
-
-
 
         mListView = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
@@ -59,17 +56,10 @@ public class EpgMainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == 12321) {
-            Intent intent = new Intent(this, EpgSubActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

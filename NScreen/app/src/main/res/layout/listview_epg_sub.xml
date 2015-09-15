@@ -6,8 +6,8 @@
         android:id="@+id/epg_sub_textview_program_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="23dp"
+        android:layout_marginLeft="10dp"
         android:layout_gravity="left|top"
         android:text="00:00~00:00"
         android:textSize="14sp"
@@ -17,8 +17,8 @@
         android:id="@+id/epg_sub_textview_program_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="96dp"
         android:layout_marginTop="8.75dp"
+        android:layout_marginLeft="96dp"
         android:layout_marginRight="30dp"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
@@ -27,25 +27,25 @@
         android:ellipsize="end" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/epg_sub_imageview_program_age"
-        android:background="@mipmap/btn_age_all"
-        android:layout_marginLeft="96dp"
-        android:layout_marginTop="29dp" />
-
-    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/epg_sub_imageview_program_hdsd"
-        android:background="@mipmap/btn_size_hd"
-        android:layout_marginLeft="124dp"
-        android:layout_marginTop="29dp" />
+        android:layout_marginTop="29dp"
+        android:layout_marginLeft="96dp"
+        android:background="@mipmap/btn_age_all" />
 
     <ImageView
+        android:id="@+id/epg_sub_imageview_program_hdsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:layout_marginLeft="124dp"
+        android:background="@mipmap/btn_size_hd" />
+
+    <ImageView
+        android:id="@+id/epg_sub_imageview_progress_bg"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
-        android:id="@+id/epg_sub_imageview_progress_bg"
         android:background="@drawable/progress_bg"
         android:layout_marginLeft="96dp"
         android:layout_marginRight="50dp"
@@ -53,13 +53,12 @@
         android:layout_marginBottom="9.75dp" />
 
     <ImageView
+        android:id="@+id/epg_sub_imageview_progress_curent"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
-        android:id="@+id/epg_sub_imageview_progress_curent"
-        android:background="@drawable/progress_bar"
         android:layout_marginLeft="96dp"
+        android:layout_marginBottom="9.75dp"
         android:layout_marginRight="200dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="9.75dp" />
+        android:background="@drawable/progress_bar" />
 
 </FrameLayout>

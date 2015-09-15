@@ -66,8 +66,6 @@ public class EpgSubListViewAdapter extends BaseAdapter {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return convertView;
     }
-
 }
