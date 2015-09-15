@@ -15,79 +15,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="116dp"
+            android:layout_height="30.25dp"
+            android:layout_marginTop="9.75dp"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/btn_selector"
+            android:text="VOD찜목록"
+            android:textColor="@drawable/btn_selector_textcolor"/>
 
-            <ImageButton
-                android:id="@+id/imageButton1"
-                android:layout_width="116dp"
-                android:layout_height="30.25dp"
-                android:layout_weight="1"
-                android:layout_gravity="right|bottom"
-                android:gravity="right"
-                android:background="@mipmap/btn_select"/>
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="116dp"
+            android:layout_height="30.25dp"
+            android:layout_marginTop="9.75dp"
+            android:background="@drawable/btn_selector"
+            android:text="VOD시청목록"
+            android:textColor="@drawable/btn_selector_textcolor" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:layout_gravity="right|center_vertical"
-                android:gravity="center"
-                android:text="VOD찜목록"
-                android:textColor="#FFFFFF" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="116dp"
-                android:layout_height="30.25dp"
-                android:layout_weight="1"
-                android:layout_gravity="center_horizontal|bottom"
-                android:background="@mipmap/btn_nor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="VOD시청목록"
-                android:textColor="#7b5aa3" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginRight="6dp">
-
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="116dp"
-                android:layout_height="30.25dp"
-                android:layout_weight="1"
-                android:layout_gravity="left|bottom"
-                android:background="@mipmap/btn_nor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:gravity="center"
-                android:text="VOD구매목록"
-                android:textColor="#7b5aa3" />
-
-        </FrameLayout>
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="116dp"
+            android:layout_height="30.25dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="9.75dp"
+            android:background="@drawable/btn_selector"
+            android:text="VOD구매목록"
+            android:textColor="@drawable/btn_selector_textcolor" />
 
     </LinearLayout>
 

@@ -34,63 +34,47 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/frameLayout"
         android:layout_toEndOf="@+id/frameLayout"
+        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <FrameLayout
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="174dp"
+            android:layout_height="30.25dp"
+            android:layout_marginTop="9.75dp"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/btn_selector"
+            android:text="녹화예약관리"
+            android:textColor="@drawable/btn_selector_textcolor"/>
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="174dp"
+            android:layout_height="30.25dp"
+            android:layout_marginTop="9.75dp"
+            android:background="@drawable/btn_selector"
+            android:text="녹화물 목록"
+            android:textColor="@drawable/btn_selector_textcolor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="174dp"
-                android:layout_height="30.25dp"
-                android:layout_weight="1"
-                android:layout_marginTop="9.75dp"
-                android:layout_marginBottom="32dp"
-                android:layout_gravity="right"
-                android:layout_marginLeft="6dp"
-                android:background="@mipmap/btn_select" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="녹화예약관리"
-                android:textColor="#ffffff" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="174dp"
-                android:layout_height="30.25dp"
-                android:layout_weight="1"
-                android:layout_marginTop="9.75dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginRight="6dp"
-                android:background="@mipmap/btn_nor"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="녹화물 목록"
-                android:textColor="#7b5aa3" />
-
-        </FrameLayout>
-
+            android:text="총 120개의 녹화예약 콘텐트가 있습니다."
+            android:textSize="11.5sp"
+            android:textColor="#7b5aa3" />
     </LinearLayout>
 
     <ListView
