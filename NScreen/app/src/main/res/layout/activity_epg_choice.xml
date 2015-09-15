@@ -46,7 +46,7 @@
                 android:layout_width="249dp"
                 android:layout_height="40.75dp"
                 android:layout_gravity="center"
-                android:background="@drawable/img_btn_selector"/>
+                android:background="@drawable/img_btn_selector_long"/>
 
             <TextView
                 android:id="@+id/textView4"
@@ -69,7 +69,7 @@
                 android:layout_width="249dp"
                 android:layout_height="40.75dp"
                 android:layout_gravity="center"
-                android:background="@drawable/img_btn_selector" />
+                android:background="@drawable/img_btn_selector_long" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -95,7 +95,7 @@
             android:layout_height="65dp"
             android:layout_marginBottom="27.25dp"
             android:layout_marginRight="27.25dp"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor" />
 
         <ImageButton
@@ -104,7 +104,7 @@
             android:layout_height="65dp"
             android:layout_marginRight="27.25dp"
             android:layout_toRightOf="@id/imageButton6"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
         <ImageButton
@@ -112,7 +112,7 @@
             android:layout_width="64.75dp"
             android:layout_height="65dp"
             android:layout_toRightOf="@id/imageButton7"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
         <ImageButton
@@ -124,7 +124,7 @@
             android:layout_below="@+id/imageButton6"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
         <ImageButton
@@ -134,7 +134,7 @@
             android:layout_alignTop="@+id/imageButton9"
             android:layout_toRightOf="@+id/imageButton6"
             android:layout_toEndOf="@+id/imageButton6"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
         <ImageButton
@@ -144,7 +144,7 @@
             android:layout_alignTop="@+id/imageButton10"
             android:layout_toRightOf="@+id/imageButton7"
             android:layout_toEndOf="@+id/imageButton7"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
         <ImageButton
@@ -154,7 +154,7 @@
             android:layout_below="@+id/imageButton9"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
         <ImageButton
@@ -164,7 +164,7 @@
             android:layout_below="@+id/imageButton9"
             android:layout_alignLeft="@+id/imageButton10"
             android:layout_alignStart="@+id/imageButton10"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
         <ImageButton
@@ -174,7 +174,7 @@
             android:layout_below="@+id/imageButton9"
             android:layout_toRightOf="@+id/imageButton7"
             android:layout_toEndOf="@+id/imageButton7"
-            android:background="@mipmap/btn_nor"
+            android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor"  />
 
     </RelativeLayout>

@@ -10,11 +10,30 @@
         android:layout_height="56.25dp"
         android:background="@mipmap/title_bar_bg">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="마이 C&amp;M"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="9dp"
+            android:background="@mipmap/btn_back" />
+
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="44dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal">
 
@@ -51,14 +70,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="31.75dp"
+        android:layout_height="27.75dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10.25dp"
+            android:layout_marginTop="6.25dp"
             android:layout_gravity="center_horizontal"
             android:text="총 19개의 찜 VOD가 있습니다."
             android:textColor="#7b5aa3"

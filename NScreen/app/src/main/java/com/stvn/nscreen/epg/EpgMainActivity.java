@@ -1,15 +1,19 @@
 package com.stvn.nscreen.epg;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.my.MyMainActivity;
 
 public class EpgMainActivity extends AppCompatActivity {
 
@@ -19,6 +23,8 @@ public class EpgMainActivity extends AppCompatActivity {
 
     private              EpgMainListViewAdapter mAdapter;
     private              ListView               mListView;
+
+    private              ImageButton            imageButton2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,16 @@ public class EpgMainActivity extends AppCompatActivity {
 
         mListView = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
+
+        imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
+
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EpgMainActivity.this, EpgChoiceActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
