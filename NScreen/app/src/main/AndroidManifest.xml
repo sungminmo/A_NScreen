@@ -32,6 +32,21 @@
             android:label="@string/title_activity_detail_channel" >
 
         </activity>
+        <activity android:name=".pvr.PvrMainActivity">
+
+        </activity>
+        <activity android:name=".pvr.PvrSubActivity">
+
+        </activity>
+        <activity android:name=".epg.EpgChoiceActivity">
+
+        </activity>
+        <activity android:name=".my.MyMainActivity">
+
+        </activity>
+        <activity android:name=".search.SearchMainActivity">
+            
+        </activity>
     </application>
 
 </manifest>

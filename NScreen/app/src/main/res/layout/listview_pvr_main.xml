@@ -42,7 +42,7 @@
         android:layout_gravity="bottom" />
 
     <TextView
-        android:id="@+id/pvr_main_imagebutton_channel_text"
+        android:id="@+id/pvr_main_textview_program_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="154.5dp"

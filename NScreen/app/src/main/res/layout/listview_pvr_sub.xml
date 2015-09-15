@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="58dp">
+
+    <TextView
+        android:id="@+id/pvr_sub_textview_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="09.14 (월)"
+        android:textColor="#000000"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/pvr_sub_textview_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="left|bottom"
+        android:text="13:19"
+        android:textSize="12sp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/pvr_sub_textview_program_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="154.5dp"
+        android:layout_gravity="right|center_vertical"
+        android:gravity="center_vertical"
+        android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
+        android:textSize="14.5sp"
+        android:textColor="#000000"
+        android:ellipsize="end"
+        android:lines="1"
+        android:autoText="true" />
+
+    <ImageView
+        android:id="@+id/pvr_sub_imagebutton_channel_logo"
+        android:layout_width="48dp"
+        android:layout_height="19.25dp"
+        android:layout_marginLeft="88.25dp"
+        android:layout_gravity="center_vertical"
+        android:background="#aaaaaa" />
+
+</FrameLayout>

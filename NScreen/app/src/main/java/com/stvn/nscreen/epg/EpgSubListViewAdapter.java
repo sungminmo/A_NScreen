@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class EpgSubListViewAdapter extends BaseAdapter {
 
-    private static final String                        tag              = EpgMainListViewAdapter.class.getSimpleName();
+    private static final String                        tag              = EpgSubListViewAdapter.class.getSimpleName();
     private              Context                       mContext         = null;
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
