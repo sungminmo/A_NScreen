@@ -54,7 +54,8 @@
             android:layout_marginTop="9.75dp"
             android:background="@drawable/btn_selector"
             android:text="VOD시청목록"
-            android:textColor="@drawable/btn_selector_textcolor" />
+            android:textColor="@drawable/btn_selector_textcolor"
+            android:layout_marginLeft="-1dp" />
 
         <Button
             android:id="@+id/button3"
@@ -64,7 +65,8 @@
             android:layout_marginTop="9.75dp"
             android:background="@drawable/btn_selector"
             android:text="VOD구매목록"
-            android:textColor="@drawable/btn_selector_textcolor" />
+            android:textColor="@drawable/btn_selector_textcolor"
+            android:layout_marginLeft="-1dp" />
 
     </LinearLayout>
 

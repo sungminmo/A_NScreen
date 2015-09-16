@@ -44,6 +44,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:autoText="true"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp"
+        android:layout_marginRight="18.5dp" />
 
 </FrameLayout>

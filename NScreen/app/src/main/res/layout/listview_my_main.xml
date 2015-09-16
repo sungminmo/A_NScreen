@@ -35,6 +35,7 @@
         android:textColor="#000000"
         android:ellipsize="end"
         android:lines="1"
-        android:autoText="true" />
+        android:autoText="true"
+        android:layout_marginRight="18.5dp" />
 
 </FrameLayout>

@@ -35,7 +35,8 @@
         android:textColor="#000000"
         android:ellipsize="end"
         android:lines="1"
-        android:autoText="true" />
+        android:autoText="false"
+        android:layout_marginRight="15dp" />
 
     <ImageView
         android:id="@+id/pvr_sub_imagebutton_channel_logo"

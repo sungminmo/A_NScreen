@@ -59,7 +59,8 @@
             android:background="@drawable/btn_selector"
             android:text="녹화물 목록"
             android:textColor="@drawable/btn_selector_textcolor"
-            android:layout_marginRight="6dp" />
+            android:layout_marginRight="6dp"
+            android:layout_marginLeft="-1dp" />
 
     </LinearLayout>
 

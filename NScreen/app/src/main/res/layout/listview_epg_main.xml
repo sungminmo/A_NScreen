@@ -36,12 +36,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8.75dp"
         android:layout_marginLeft="96dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="50dp"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
         android:textColor="#000000"
         android:ellipsize="end"
-        android:lines="1" />
+        android:lines="1"
+        android:autoText="false" />
 
     <TextView
         android:id="@+id/epg_main_textview_program_time"
