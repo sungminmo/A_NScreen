@@ -10,7 +10,7 @@ import com.stvn.nscreen.R;
 /**
  * Created by limdavid on 15. 9. 14..
  */
-public class EpgChoiceActivity extends AppCompatActivity{
+public class EpgChoiceActivity extends AppCompatActivity {
     private static final String                 tag = EpgChoiceActivity.class.getSimpleName();
     private static       EpgChoiceActivity      mInstance;
     private              JYSharedPreferences    mPref;

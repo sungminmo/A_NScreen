@@ -13,15 +13,6 @@
         android:textSize="12sp" />
 
     <ImageView
-        android:id="@+id/pvr_main_imagebutton_channel_logo"
-        android:layout_width="48dp"
-        android:layout_height="19.25dp"
-        android:layout_marginLeft="88.25dp"
-        android:layout_marginBottom="29dp"
-        android:layout_gravity="bottom"
-        android:background="#aaaaaa" />
-
-    <ImageView
         android:id="@+id/pvr_main_imageview_progress_bg"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
@@ -42,28 +33,36 @@
         android:layout_gravity="bottom" />
 
     <TextView
+        android:id="@+id/pvr_main_textview_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_gravity="left|bottom"
+        android:text="13:19"
+        android:textSize="12sp"
+        android:textColor="#000000" />
+
+    <ImageView
+        android:id="@+id/pvr_main_imagebutton_channel_logo"
+        android:layout_width="48dp"
+        android:layout_height="19.25dp"
+        android:layout_marginLeft="88.25dp"
+        android:layout_gravity="left|center_vertical"
+        android:background="#aaaaaa" />
+
+    <TextView
         android:id="@+id/pvr_main_textview_program_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="154.5dp"
-        android:layout_marginBottom="27dp"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="left|center_vertical"
+        android:gravity="center_vertical"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
         android:textColor="#000000"
         android:ellipsize="end"
         android:lines="1"
-        android:autoText="true" />
-
-    <TextView
-        android:id="@+id/pvr_main_textview_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="26dp"
-        android:layout_gravity="left|bottom"
-        android:text="13:19"
-        android:textSize="12sp"
-        android:textColor="#000000" />
+        android:autoText="true"
+        android:layout_marginLeft="154.5dp" />
 
 </FrameLayout>

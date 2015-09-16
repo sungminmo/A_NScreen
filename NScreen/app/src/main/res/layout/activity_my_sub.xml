@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -15,7 +16,7 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical|center_horizontal"
-            android:text="검색"
+            android:text="마이 C&amp;M"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#ffffff" />
@@ -33,37 +34,59 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/frameLayout"
-        android:layout_toEndOf="@+id/frameLayout"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/button1"
-            android:layout_width="174dp"
+            android:layout_width="116dp"
             android:layout_height="30.25dp"
             android:layout_marginTop="9.75dp"
             android:layout_marginLeft="6dp"
             android:background="@drawable/btn_selector"
-            android:text="VOD 명 검색"
+            android:text="VOD찜목록"
             android:textColor="@drawable/btn_selector_textcolor"/>
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="174dp"
+            android:layout_width="116dp"
             android:layout_height="30.25dp"
             android:layout_marginTop="9.75dp"
             android:background="@drawable/btn_selector"
-            android:text="프로그램 명 검색"
-            android:textColor="@drawable/btn_selector_textcolor"
-            android:layout_marginRight="6dp" />
+            android:text="VOD시청목록"
+            android:textColor="@drawable/btn_selector_textcolor" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="116dp"
+            android:layout_height="30.25dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="9.75dp"
+            android:background="@drawable/btn_selector"
+            android:text="VOD구매목록"
+            android:textColor="@drawable/btn_selector_textcolor" />
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/search_main_listview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="27.75dp"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6.25dp"
+            android:layout_gravity="center_horizontal"
+            android:text="총 19개의 찜 VOD가 있습니다."
+            android:textColor="#7b5aa3"
+            android:textSize="11.5sp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/my_sub_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

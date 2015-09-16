@@ -1,9 +1,12 @@
 package com.stvn.nscreen;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,6 +14,81 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8;
+
+        Button1 = (Button) findViewById(R.id.Button1);
+        Button2 = (Button) findViewById(R.id.Button2);
+        Button3 = (Button) findViewById(R.id.Button3);
+        Button4 = (Button) findViewById(R.id.Button4);
+        Button5 = (Button) findViewById(R.id.Button5);
+        Button6 = (Button) findViewById(R.id.Button6);
+        Button7 = (Button) findViewById(R.id.Button7);
+        Button8 = (Button) findViewById(R.id.Button8);
+
+        Button1.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgChoiceActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button2.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgMainActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button3.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgSubActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button4.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MyMainActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button5.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MySubActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button6.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrMainActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button7.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrSubActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button8.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.search.SearchMainActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override

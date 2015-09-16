@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="58.75dp">
 
     <TextView
-        android:id="@+id/my_main_textview_date"
+        android:id="@+id/my_sub_textview_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -13,7 +13,7 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/my_main_textview_time"
+        android:id="@+id/my_sub_textview_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
@@ -23,18 +23,27 @@
         android:textSize="12sp"
         android:textColor="#000000" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/btn_month"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="13dp"
+        android:layout_gravity="left|top" />
+
     <TextView
-        android:id="@+id/my_main_textview_program_title"
+        android:id="@+id/my_sub_textview_program_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="105.75dp"
-        android:layout_gravity="right|center_vertical"
+        android:layout_gravity="right|bottom"
         android:gravity="center_vertical"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
         android:textColor="#000000"
         android:ellipsize="end"
         android:lines="1"
-        android:autoText="true" />
+        android:autoText="true"
+        android:layout_marginBottom="12dp" />
 
 </FrameLayout>
