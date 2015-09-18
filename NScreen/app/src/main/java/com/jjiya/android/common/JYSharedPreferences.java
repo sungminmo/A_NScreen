@@ -13,8 +13,8 @@ public class JYSharedPreferences {
 
     static Context mContext;
 
-    //private final boolean bLogging = true; // 개발시에는 true 로.
-    private final boolean bLogging = false; // release 시에는 false 로.
+    private final boolean bLogging = true; // 개발시에는 true 로.
+    //private final boolean bLogging = false; // release 시에는 false 로.
 
     private final String PREF_NAME = "com.jjiya.pref";
 
