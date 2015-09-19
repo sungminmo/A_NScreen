@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CMActionBar">
+        <attr name="actionbar_style">
+            <flag name="empty" value="0x00" />	<!-- 제목만.. -->
+            <flag name="back" value="0x01" />	<!-- 백버튼만.. -->
+            <flag name="close" value="0x02" /> <!-- 우상단 x 표 닫기 버튼만 있는 헤더 -->
+        </attr>
+    </declare-styleable>
+</resources>
