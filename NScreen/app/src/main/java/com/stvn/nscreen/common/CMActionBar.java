@@ -108,6 +108,13 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
     }
 
     /**
+     * 액션바의 타이틀을 설정한다.
+     * */
+    public void setActionBarTitle(String title) {
+        this.mActionBarTitle.setText(title);
+    }
+
+    /**
      * 리소스의 스타일 값으로 액션바 스타일 적용
      * */
     public void setActionBarStyle(int style) {
