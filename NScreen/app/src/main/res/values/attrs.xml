@@ -2,9 +2,10 @@
 <resources>
     <declare-styleable name="CMActionBar">
         <attr name="actionbar_style">
-            <flag name="empty" value="0x00" />	<!-- 제목만.. -->
-            <flag name="back" value="0x01" />	<!-- 백버튼만.. -->
-            <flag name="close" value="0x02" /> <!-- 우상단 x 표 닫기 버튼만 있는 헤더 -->
+            <flag name="empty" value="0x00" />	<!-- 타이틀만 -->
+            <flag name="back" value="0x01" />	<!-- 좌측 백버튼만 -->
+            <flag name="close" value="0x02" /> <!-- 우측 닫기 버튼만  -->
+            <flag name="main" value="0x03" /> <!-- 메인에서 사용될 좌측 전체 메뉴, 타이틀 이미지, 우측 검색버튼 -->
         </attr>
         <attr name="actionbar_title" format="string" />
     </declare-styleable>

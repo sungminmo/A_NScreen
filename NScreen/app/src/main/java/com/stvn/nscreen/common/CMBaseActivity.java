@@ -78,4 +78,8 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
     public void onBackEventPressed() {}
     @Override
     public void onCloseEventPressed() {}
+    @Override
+    public void onSideMenuEventPressed() {}
+    @Override
+    public void onSearchEventPressed() {}
 }
