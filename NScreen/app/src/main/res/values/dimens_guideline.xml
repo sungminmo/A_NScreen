@@ -1,15 +1,24 @@
 <resources>
     <dimen name="dp0">0.00dp</dimen>
+    <dimen name="dp0.5">0.50dp</dimen>
+    <dimen name="dp0.75">0.75dp</dimen>
     <dimen name="dp1">1.00dp</dimen>
     <dimen name="dp2">2.00dp</dimen>
+    <dimen name="dp2.25">2.25dp</dimen>
     <dimen name="dp3">3.00dp</dimen>
+    <dimen name="dp3.75">3.75dp</dimen>
     <dimen name="dp4">4.00dp</dimen>
     <dimen name="dp5">5.00dp</dimen>
     <dimen name="dp6">6.00dp</dimen>
+    <dimen name="dp6.75">6.75dp</dimen>
     <dimen name="dp7">7.00dp</dimen>
+    <dimen name="dp7.5">7.50dp</dimen>
     <dimen name="dp8">8.00dp</dimen>
+    <dimen name="dp8.75">8.75dp</dimen>
     <dimen name="dp9">9.00dp</dimen>
+    <dimen name="dp9.75">9.75dp</dimen>
     <dimen name="dp10">10.00dp</dimen>
+    <dimen name="dp10.5">10.50dp</dimen>
     <dimen name="dp11">11.00dp</dimen>
     <dimen name="dp12">12.00dp</dimen>
     <dimen name="dp13">13.00dp</dimen>
@@ -21,19 +30,25 @@
     <dimen name="dp19">19.00dp</dimen>
     <dimen name="dp20">20.00dp</dimen>
     <dimen name="dp21">21.00dp</dimen>
+    <dimen name="dp21.5">21.50dp</dimen>
     <dimen name="dp22">22.00dp</dimen>
     <dimen name="dp23">23.00dp</dimen>
+    <dimen name="dp23.75">23.75dp</dimen>
     <dimen name="dp24">24.00dp</dimen>
     <dimen name="dp25">25.00dp</dimen>
     <dimen name="dp26">26.00dp</dimen>
+    <dimen name="dp26.75">26.75dp</dimen>
     <dimen name="dp27">27.00dp</dimen>
     <dimen name="dp28">28.00dp</dimen>
     <dimen name="dp29">29.00dp</dimen>
     <dimen name="dp30">30.00dp</dimen>
+    <dimen name="dp30.25">30.25dp</dimen>
     <dimen name="dp31">31.00dp</dimen>
     <dimen name="dp32">32.00dp</dimen>
     <dimen name="dp33">33.00dp</dimen>
+    <dimen name="dp33.25">33.25dp</dimen>
     <dimen name="dp34">34.00dp</dimen>
+    <dimen name="dp34.5">34.50dp</dimen>
     <dimen name="dp35">35.00dp</dimen>
     <dimen name="dp36">36.00dp</dimen>
     <dimen name="dp37">37.00dp</dimen>
@@ -83,6 +98,7 @@
     <dimen name="dp80">80.00dp</dimen>
     <dimen name="dp81">81.00dp</dimen>
     <dimen name="dp82">82.00dp</dimen>
+    <dimen name="dp82.5">82.50dp</dimen>
     <dimen name="dp83">83.00dp</dimen>
     <dimen name="dp84">84.00dp</dimen>
     <dimen name="dp85">85.00dp</dimen>
@@ -121,6 +137,7 @@
     <dimen name="dp118">118.00dp</dimen>
     <dimen name="dp119">119.00dp</dimen>
     <dimen name="dp120">120.00dp</dimen>
+    <dimen name="dp120.25">120.25dp</dimen>
     <dimen name="dp121">121.00dp</dimen>
     <dimen name="dp122">122.00dp</dimen>
     <dimen name="dp123">123.00dp</dimen>
@@ -1001,5 +1018,6 @@
     <dimen name="dp998">998.00dp</dimen>
     <dimen name="dp999">999.00dp</dimen>
     <dimen name="dp1000">1000.00dp</dimen>
+
 
 </resources>
