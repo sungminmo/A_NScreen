@@ -54,6 +54,9 @@
         <activity android:name=".search.SearchMainActivity">
             
         </activity>
+        <!-- 설정 화면 메인 엑티비티 -->
+        <activity android:name=".setting.CMSettingMainActivity" />
+
     </application>
 
 </manifest>
