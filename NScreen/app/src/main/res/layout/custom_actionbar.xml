@@ -1,26 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_56.25">
+    android:layout_height="@dimen/dimen_56.25"
+    android:background="@mipmap/title_bar_bg">
     <!-- 좌측 버튼 영역 -->
     <RelativeLayout
         android:id="@+id/actionbar_left"
-        android:layout_width="@dimen/dimen_30"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="@dimen/dimen_9">
         <ImageView
+            android:id="@+id/actionbar_image_l"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
     <!-- 중앙 타이틀 영역 -->
     <LinearLayout
-        android:layout_width="@dimen/dimen_1"
-        android:layout_height="@dimen/dimen_0">
-
+        android:layout_width="@dimen/dimen_0"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/actionbar_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:gravity="center"/>
     </LinearLayout>
     <!-- 우측 공백 영역 -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/actionbar_right"
-        android:layout_width="@dimen/dimen_30"
-        android:layout_height="match_parent">
-    </LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="@dimen/dimen_9">
+        <ImageView
+            android:id="@+id/actionbar_image_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 </LinearLayout>
