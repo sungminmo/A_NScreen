@@ -8,4 +8,7 @@
     <string name="title_activity_epg_main">EpgMainActivity</string>
 
     <string name="title_activity_detail_channel">DetailChannelActivity</string>
+    <string name="search_title">검색</string>
+    <string name="search_title_tab_text1">VOD 명 검색</string>
+    <string name="search_title_tab_text2">프로그램 명 검색</string>
 </resources>
