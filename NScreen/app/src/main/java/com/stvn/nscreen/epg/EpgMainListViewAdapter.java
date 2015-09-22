@@ -64,7 +64,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
-            titleTextView.setText(jobj.getString("title"));
+            titleTextView.setText(jobj.getString("channelName"));
 
         } catch (JSONException e) {
             e.printStackTrace();
