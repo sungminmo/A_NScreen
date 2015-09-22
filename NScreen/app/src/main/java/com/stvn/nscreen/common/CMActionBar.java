@@ -27,12 +27,15 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
     private TextView mActionBarTitle;
     private CMActionBarListener mEventListener;
 
+    private int mLeftWidth, mRightWidth;
+
     /** 상단 액션바 스타일 enum */
     public enum CMActionBarStyle {
 
-        EMPTY (0x00), // No Button ActionBar Style
-        BACK (0x01), // Back Button Only ActionBar Style
-        CLOSE (0x02); // Right Close Button Only ActionBar Style
+        EMPTY (0x00), // 타이틀
+        BACK (0x01), // 좌측 백버튼
+        CLOSE (0x02), // 우측 닫기버튼
+        MAIN (0x03); // 좌측 전체메뉴, 중앙타이틀이미지, 우측 검색버튼
         /** 스타일 */
         private int	mStyle;
 
@@ -50,6 +53,8 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
     public interface CMActionBarListener {
         public abstract void onBackEventPressed();
         public abstract void onCloseEventPressed();
+        public abstract void onSideMenuEventPressed();
+        public abstract void onSearchEventPressed();
     }
 
     /**
@@ -151,6 +156,7 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
                 this.mLeftArea.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
+                        mLeftArea.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         ViewGroup.LayoutParams lParams = mRightArea.getLayoutParams();
                         lParams.width = mLeftArea.getWidth();
                         mRightArea.setLayoutParams(lParams);
@@ -165,6 +171,7 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
                 this.mRightArea.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
+                        mLeftArea.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         ViewGroup.LayoutParams lParams = mLeftArea.getLayoutParams();
                         lParams.width = mRightArea.getWidth();
                         mLeftArea.setLayoutParams(lParams);
@@ -172,6 +179,67 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
                 });
                 break;
             }
+            case MAIN: {
+                // TODO:메인메뉴 좌/우 이미지 추가 시 이미지 변경이 필요 함 15.09.19 kimwoodam
+                ((ImageView)findViewById(R.id.actionbar_image_l)).setImageResource(R.mipmap.btn_list_arrow);
+                ((ImageView)findViewById(R.id.actionbar_image_r)).setImageResource(R.mipmap.btn_back);
+
+                this.mLeftArea.setVisibility(View.VISIBLE);
+                this.mRightArea.setVisibility(View.VISIBLE);
+                this.mLeftArea.setOnClickListener(this);
+                this.mRightArea.setOnClickListener(this);
+
+                this.mLeftArea.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        mLeftArea.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        mLeftWidth = mLeftArea.getWidth();
+
+                        if (mRightWidth != 0) {
+                            int width = compareToBigValue(mLeftWidth, mRightWidth);
+
+                            ViewGroup.LayoutParams lParams = mLeftArea.getLayoutParams();
+                            lParams.width = width;
+                            mLeftArea.setLayoutParams(lParams);
+
+                            lParams = mRightArea.getLayoutParams();
+                            lParams.width = width;
+                            mRightArea.setLayoutParams(lParams);
+                        }
+                    }
+                });
+
+                this.mRightArea.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        mRightArea.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        mRightWidth = mRightArea.getWidth();
+
+                        if (mLeftWidth != 0) {
+                            int width = compareToBigValue(mLeftWidth, mRightWidth);
+
+                            ViewGroup.LayoutParams lParams = mLeftArea.getLayoutParams();
+                            lParams.width = width;
+                            mLeftArea.setLayoutParams(lParams);
+
+                            lParams = mRightArea.getLayoutParams();
+                            lParams.width = width;
+                            mRightArea.setLayoutParams(lParams);
+                        }
+                    }
+                });
+                break;
+            }
+        }
+    }
+
+    private int compareToBigValue(int compare1, int compare2) {
+        if (compare1 > compare2) {
+            return compare1;
+        } else {
+            return compare2;
         }
     }
 
@@ -183,7 +251,6 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
             case BACK: {
                 if (v.getId() == R.id.actionbar_left) {
                     this.mEventListener.onBackEventPressed();
-                    break;
                 }
                 break;
             }
@@ -191,6 +258,14 @@ public class CMActionBar extends LinearLayout implements View.OnClickListener {
                if (v.getId() == R.id.actionbar_right) {
                    this.mEventListener.onCloseEventPressed();
                }
+                break;
+            }
+            case MAIN: {
+                if (v.getId() == R.id.actionbar_left) {
+                    this.mEventListener.onSideMenuEventPressed();
+                } else if (v.getId() == R.id.actionbar_right) {
+                    this.mEventListener.onSearchEventPressed();
+                }
                 break;
             }
             case EMPTY:
