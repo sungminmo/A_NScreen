@@ -20,6 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by swlim on 2015. 9. 11..
  */
+
 public class EpgMainListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = EpgMainListViewAdapter.class.getSimpleName();
