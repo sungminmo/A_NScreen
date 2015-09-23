@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">C&amp;M nScreen Service</string>
 
+    <string name="wait_a_moment">잠시만 기다려 주십시오.</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
