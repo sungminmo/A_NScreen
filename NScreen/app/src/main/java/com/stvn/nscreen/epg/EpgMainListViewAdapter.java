@@ -20,6 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by swlim on 2015. 9. 11..
  */
+
 public class EpgMainListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = EpgMainListViewAdapter.class.getSimpleName();
@@ -64,7 +65,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
-            titleTextView.setText(jobj.getString("title"));
+            titleTextView.setText(jobj.getString("channelName"));
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -7,11 +7,11 @@
         android:id="@+id/epg_sub_textview_program_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="24.25dp"
+        android:layout_marginLeft="10.75dp"
         android:layout_gravity="left|top"
         android:text="00:00~00:00"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textColor="#000000" />
 
     <TextView
@@ -19,8 +19,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8.75dp"
-        android:layout_marginLeft="96dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="98.75dp"
+        android:layout_marginRight="39.5dp"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
         android:textColor="#000000"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="29dp"
-        android:layout_marginLeft="96dp"
+        android:layout_marginLeft="98.75dp"
         android:background="@mipmap/btn_age_all" />
 
     <ImageView
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="29dp"
-        android:layout_marginLeft="124dp"
+        android:layout_marginLeft="127.25dp"
         android:background="@mipmap/btn_size_hd" />
 
     <ImageView
@@ -49,7 +49,7 @@
         android:layout_height="2.25dp"
         android:background="@drawable/progress_bg"
         android:layout_marginLeft="96dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginRight="39.5dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="9.75dp" />
 
