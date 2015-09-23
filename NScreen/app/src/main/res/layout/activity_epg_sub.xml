@@ -23,8 +23,14 @@
         <LinearLayout
             android:layout_width="70.5dp"
             android:layout_height="56.25dp"
-            android:background="#FFFFFF">
+            android:background="#FFFFFF"
+            android:gravity="center">
 
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="17dp"
+                android:id="@+id/epg_sub_imageview_channel_logo"
+                android:background="#aaaaaa" />
         </LinearLayout>
 
     </FrameLayout>

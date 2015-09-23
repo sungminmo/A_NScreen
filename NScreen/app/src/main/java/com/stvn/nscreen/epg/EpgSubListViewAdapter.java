@@ -61,7 +61,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
 
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
 
-            titleTextView.setText(jobj.getString("title"));
+            titleTextView.setText(jobj.getString("programTitle"));
 
         } catch (JSONException e) {
             e.printStackTrace();

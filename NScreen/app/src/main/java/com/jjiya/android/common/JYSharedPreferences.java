@@ -16,6 +16,10 @@ public class JYSharedPreferences {
     private final boolean bLogging = true; // 개발시에는 true 로.
     //private final boolean bLogging = false; // release 시에는 false 로.
 
+    private final boolean bRealServer = false; // 개발서버 접속시에는 false 로.
+    //private final boolean bRealServer = true; // 개발서버 접속시에는 true 로.
+
+    private              JYSharedPreferences    mPref;
     private final String PREF_NAME = "com.jjiya.pref";
 
     public final static String COOKIE       = "COOKIE";
@@ -35,6 +39,10 @@ public class JYSharedPreferences {
 
     public boolean isLogging() {
         return bLogging;
+    }
+
+    public boolean isRealServer() {
+        return bRealServer;
     }
 
     public void put(String key, String value) {
@@ -86,17 +94,12 @@ public class JYSharedPreferences {
         }
     }
 
-    public String getServerUrl() {
-        String rtn = "";
-        String sLoginServer = getValue(LOGIN_SERVER, "");
-        //String sLoginServer = getValue(SERVER_CODE, "");
-//        if ( sLoginServer.equals(Constants.HOST_SEO_VAL) ) {
-//            rtn = Constants.HOST_SEO_URL;
-//        } else if ( sLoginServer.equals(Constants.HOST_KYG_VAL) ) {
-//            rtn = Constants.HOST_KYG_URL;
-//        } else {
-//            rtn = "";
-//        }
-        return rtn;
+    public String getEpgServerUrl() {
+        if ( isRealServer() ) {
+            return Constants.SERVER_URL_EPG_REAL;
+        } else {
+            return Constants.SERVER_URL_EPG_DEV;
+        }
+
     }
 }
