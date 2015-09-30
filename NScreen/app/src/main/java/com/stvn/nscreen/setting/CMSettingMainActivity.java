@@ -18,6 +18,14 @@ import com.stvn.nscreen.common.CMBaseActivity;
  */
 public class CMSettingMainActivity extends CMBaseActivity implements View.OnClickListener {
 
+    private final int CMSetting_Region_Index = 100;
+    private final int CMSetting_Purchase_Auth_Index = 101;
+    private final int CMSetting_Adult_Search_Index = 102;
+    private final int CMSetting_Adult_Auth_Index = 103;
+    private final int CMSetting_Notice_Index = 104;
+    private final int CMSetting_Pay_Channel_Index = 105;
+    private final int CMSetting_Customer_Center_Index = 106;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +48,19 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         ViewGroup mainView = (ViewGroup) findViewById(R.id.setting_layout);;
         LinearLayout itemRow;
 
-        itemRow = makeSettingItem(0, true, "지역설정", "현재설정지역 : ", "강동구", R.color.text_area_color, false);
+        itemRow = makeSettingItem(CMSetting_Region_Index, true, "지역설정", "현재설정지역 : ", "강동구", R.color.text_area_color, false);
         mainView.addView(itemRow);
-        itemRow = makeSettingItem(1, true, "구매인증 비밀번호 관리", "", "", 0, false);
+        itemRow = makeSettingItem(CMSetting_Purchase_Auth_Index, true, "구매인증 비밀번호 관리", "", "", 0, false);
         mainView.addView(itemRow);
-        itemRow = makeSettingItem(2, true, "성인검색 제한설정", "", "", 0, true);
+        itemRow = makeSettingItem(CMSetting_Adult_Search_Index, true, "성인검색 제한설정", "", "", 0, true);
         mainView.addView(itemRow);
-        itemRow = makeSettingItem(3, true, "성인인증", "", "성인인증이 필요합니다.", R.color.red, false);
+        itemRow = makeSettingItem(CMSetting_Adult_Auth_Index, true, "성인인증", "", "성인인증이 필요합니다.", R.color.red, false);
         mainView.addView(itemRow);
-        itemRow = makeSettingItem(4, false, "공지사항", "", "", 0, false);
+        itemRow = makeSettingItem(CMSetting_Notice_Index, false, "공지사항", "", "", 0, false);
         mainView.addView(itemRow);
-        itemRow = makeSettingItem(5, false, "유료채널 안내", "", "", 0, false);
+        itemRow = makeSettingItem(CMSetting_Pay_Channel_Index, false, "유료채널 안내", "", "", 0, false);
         mainView.addView(itemRow);
-        itemRow = makeSettingItem(6, false, "고객센터 안내", "", "", 0, false);
+        itemRow = makeSettingItem(CMSetting_Customer_Center_Index, false, "고객센터 안내", "", "", 0, false);
         mainView.addView(itemRow);
 
     }
@@ -102,6 +110,31 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case CMSetting_Region_Index: {
+                break;
+            }
+            case CMSetting_Purchase_Auth_Index: {
+                break;
+            }
+            case CMSetting_Adult_Search_Index: {
+                break;
+            }
+            case CMSetting_Adult_Auth_Index: {
+                break;
+            }
+            case CMSetting_Notice_Index: {
+                break;
+            }
+            case CMSetting_Pay_Channel_Index: {
+                break;
+            }
+            case CMSetting_Customer_Center_Index: {
+                break;
+            }
+            default:
+                break;
+        }
 
     }
 }
