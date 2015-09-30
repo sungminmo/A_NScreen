@@ -1,5 +1,7 @@
 package com.stvn.nscreen.setting;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -112,6 +114,44 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case CMSetting_Region_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingRegionActivity.class);
+                startActivityForResult(nextIntent, CMSetting_Region_Index);
+                break;
+            }
+            case CMSetting_Purchase_Auth_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
+                startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Index);
+                break;
+            }
+            case CMSetting_Adult_Search_Index: {
+                break;
+            }
+            case CMSetting_Adult_Auth_Index: {
+                break;
+            }
+            case CMSetting_Notice_Index: {
+                break;
+            }
+            case CMSetting_Pay_Channel_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPayChannelActivity.class);
+                startActivity(nextIntent);
+                break;
+            }
+            case CMSetting_Customer_Center_Index: {
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case CMSetting_Region_Index: {
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO: 지역 설정 성공 시 현재 화면에 대한 지역정보를 갱신한다.
+                }
                 break;
             }
             case CMSetting_Purchase_Auth_Index: {
@@ -135,6 +175,5 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
             default:
                 break;
         }
-
     }
 }

@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_1"
             android:layout_marginTop="@dimen/dimen_10"
-            android:background="@color/setting_item_selector"/>
+            android:background="@color/setting_list_divider"/>
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
