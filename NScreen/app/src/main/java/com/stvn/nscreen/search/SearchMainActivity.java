@@ -3,7 +3,6 @@ package com.stvn.nscreen.search;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -19,13 +18,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.common.CMBaseActivity;
 
 import java.util.ArrayList;
 
 /**
  * Created by limdavid on 15. 9. 15..
  */
-public class SearchMainActivity extends AppCompatActivity {
+public class SearchMainActivity extends CMBaseActivity {
     private static final String                     tag = SearchMainActivity.class.getSimpleName();
     private              SearchBaseFragment         mFragment;
     private Button mTab1;               // VoD

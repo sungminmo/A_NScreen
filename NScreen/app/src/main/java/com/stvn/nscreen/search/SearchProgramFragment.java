@@ -6,9 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.common.BaseSwipeListViewListener;
+import com.stvn.nscreen.common.SwipeListView;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class SearchProgramFragment extends SearchBaseFragment{
 
     private LayoutInflater mInflater;
-    private ListView mListView;
+    private SwipeListView mListView;
     private ArrayList<Integer> mProgramlist = new ArrayList<Integer>();
     private SearchProgramAdapter mAdapter;
 
@@ -37,10 +38,56 @@ public class SearchProgramFragment extends SearchBaseFragment{
 
     private void initView()
     {
-        mListView = (ListView)getView().findViewById(R.id.programlistview);
+        mListView = (SwipeListView)getView().findViewById(R.id.programlistview);
         mAdapter = new SearchProgramAdapter(getActivity(),mProgramlist);
         mListView.setAdapter(mAdapter);
-        Log.d("ljh ","찍히냐");
+        mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+            @Override
+            public void onOpened(int position, boolean toRight) {
+            }
+
+            @Override
+            public void onClosed(int position, boolean fromRight) {
+            }
+
+            @Override
+            public void onListChanged() {
+            }
+
+            @Override
+            public void onMove(int position, float x) {
+            }
+
+            @Override
+            public void onStartOpen(int position, int action, boolean right) {
+                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+            }
+
+            @Override
+            public void onStartClose(int position, boolean right) {
+                Log.d("swipe", String.format("onStartClose %d", position));
+            }
+
+            @Override
+            public void onClickFrontView(int position) {
+                Log.d("swipe", String.format("onClickFrontView %d", position));
+            }
+
+            @Override
+            public void onClickBackView(int position) {
+                Log.d("swipe", String.format("onClickBackView %d", position));
+            }
+
+            @Override
+            public void onDismiss(int[] reverseSortedPositions) {
+//                for (int position : reverseSortedPositions) {
+//                    data.remove(position);
+//                }
+                mAdapter.notifyDataSetChanged();
+            }
+
+        });
+        Log.d("ljh ", "찍히냐");
         for(int i=0;i<100;i++)
         {
             mProgramlist.add(i);

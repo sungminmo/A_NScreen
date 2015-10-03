@@ -20,7 +20,7 @@ public class SearchVodFragment extends SearchBaseFragment{
     private GridView mGridView;
     private ArrayList<Integer> mProgramlist = new ArrayList<Integer>();
     private SearchVodAdapter mAdapter;
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mInflater = inflater;
@@ -28,7 +28,7 @@ public class SearchVodFragment extends SearchBaseFragment{
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated( Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
     }
