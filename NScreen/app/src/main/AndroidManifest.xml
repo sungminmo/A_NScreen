@@ -42,7 +42,11 @@
         <activity android:name=".pvr.PvrSubActivity">
 
         </activity>
-        <activity android:name=".epg.EpgChoiceActivity">
+        <activity android:name=".epg.EpgChoiceActivity"
+            android:screenOrientation = "unspecified"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation|keyboardHidden">
 
         </activity>
         <activity android:name=".my.MyMainActivity">
