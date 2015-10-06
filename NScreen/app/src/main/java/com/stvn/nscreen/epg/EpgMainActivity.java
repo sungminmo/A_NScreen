@@ -47,7 +47,7 @@ public class EpgMainActivity extends AppCompatActivity {
     private              EpgMainListViewAdapter mAdapter;
     private              ListView               mListView;
 
-    private              ImageButton            imageButton2;
+    private              ImageButton            epg_main_genre_choice_imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +71,9 @@ public class EpgMainActivity extends AppCompatActivity {
         mListView = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
 
-        imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
+        epg_main_genre_choice_imageButton = (ImageButton) findViewById(R.id.epg_main_genre_choice_imageButton);
 
-        imageButton2.setOnClickListener(new View.OnClickListener() {
+        epg_main_genre_choice_imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(EpgMainActivity.this, EpgChoiceActivity.class);
