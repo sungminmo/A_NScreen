@@ -8,10 +8,10 @@
 	<color name="search_programtext_grape">#c5c5c5</color>
 
 	<!-- 설정 화면 내 사용 색상 -->
-	<color name="text_area_color">#9932cc</color> <!-- 지역명 색상 -->
-	<color name="setting_list_divider">#f5f5f5</color> <!-- 설정 내 사용되는 리스트 divider 색상 -->
+	<color name="text_area_color">#7b5aa3</color> <!-- 지역명 색상 -->
+	<color name="setting_list_divider">#c5c5c5</color> <!-- 설정 내 사용되는 리스트 divider 색상 -->
 	<color name="setting_region_top_color">#e5e5e5</color> <!-- 지역설정 상단 배경 색상 -->
 
 	<drawable name="setting_item_background">#ffffff</drawable> <!-- 설정 내 사용되는 리스트 아이템 배경 색상 -->
-	<drawable name="setting_item_selector_color">#e5d7f1</drawable> <!-- 설정 내 사용되는 리스트 아이템 selector 색상 -->
+	<drawable name="setting_item_selector_color">#e6d7f0</drawable> <!-- 설정 내 사용되는 리스트 아이템 selector 색상 -->
 </resources>
