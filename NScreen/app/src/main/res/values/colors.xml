@@ -3,7 +3,9 @@
 	<color name="white">#ffffff</color>
 	<color name="black">#000000</color>
 	<color name="red">#ff0000</color>
-	<color name="transparent">#00000000</color>
+	<color name="transparent">#00000000</color>   
+	<color name="search_programtext_violet">#7b5aa3</color>
+	<color name="search_programtext_grape">#c5c5c5</color>
 
 	<!-- 설정 화면 내 사용 색상 -->
 	<color name="text_area_color">#9932cc</color> <!-- 지역명 색상 -->
