@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class SearchMainActivity extends CMBaseActivity {
     private              SearchBaseFragment         mFragment;
     private Button mTab1;               // VoD
     private Button mTab2;               // 프로그램명
-    private int mTabSelectIdx = -1;
+    private int mTabSelectIdx = 0;
     private ImageView mClose;
     private TextView mSearchCount;
     private EditText mKeywordView;
@@ -44,6 +45,8 @@ public class SearchMainActivity extends CMBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_main);
+        setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
+        setActionBarTitle("검색");
         initView();
         initData();
 
@@ -87,6 +90,7 @@ public class SearchMainActivity extends CMBaseActivity {
         mSearchLayout = (View)findViewById(R.id.search_layout);
         mSearchLayout.setVisibility(View.GONE);
         mFragmentlayout = (FrameLayout)findViewById(R.id.searchFragment);
+        switchTab(0);
     }
     private void initData()
     {
@@ -198,5 +202,10 @@ public class SearchMainActivity extends CMBaseActivity {
     public void hideSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(mKeywordView.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onBackEventPressed() {
+        finish();
     }
 }

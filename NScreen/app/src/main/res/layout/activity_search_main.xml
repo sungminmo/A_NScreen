@@ -5,13 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-    <com.stvn.nscreen.common.CMActionBar
-        android:id="@+id/common_actionbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app1:actionbar_style="back"
-        app1:actionbar_title="검색"
-    />
 
     <LinearLayout
         android:layout_width="match_parent"
