@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         Button7 = (Button) findViewById(R.id.Button7);
         Button8 = (Button) findViewById(R.id.Button8);
 
-        Button1.setOnClickListener (new View.OnClickListener() {
+        Button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgChoiceActivity.class);
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button2.setOnClickListener (new View.OnClickListener() {
+        Button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgMainActivity.class);
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button3.setOnClickListener (new View.OnClickListener() {
+        Button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgSubActivity.class);
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button4.setOnClickListener (new View.OnClickListener() {
+        Button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MyMainActivity.class);
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button5.setOnClickListener (new View.OnClickListener() {
+        Button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MySubActivity.class);
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button6.setOnClickListener (new View.OnClickListener() {
+        Button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrMainActivity.class);
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button7.setOnClickListener (new View.OnClickListener() {
+        Button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrSubActivity.class);
@@ -82,16 +82,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button8.setOnClickListener (new View.OnClickListener() {
+        Button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.search.SearchMainActivity.class);
                 startActivity(i);
             }
         });
-    }
 
-    @Override
+
+        ((Button) findViewById(R.id.Button9)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.setting.CMSettingMainActivity.class);
+                startActivity(i);
+            }
+        });
+
+    }
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);

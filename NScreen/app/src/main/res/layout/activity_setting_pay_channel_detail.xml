@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen_10">
+    <Button
+        android:id="@+id/setting_pay_channel_detail_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_25"
+        android:layout_alignParentBottom="true"
+        android:text="확인" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/setting_pay_channel_detail_confirm">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/setting_pay_channel_detail_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/setting_pay_channel_detail_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="채널 해피독은 집에 혼자있는 강아지를 위한 방송입니다.\n 채널에 대한 상세한 설명이 이곳에 적혀 질 것이다."/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

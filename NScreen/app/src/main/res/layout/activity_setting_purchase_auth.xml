@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen_10">
+    <!-- 유의문구 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_80"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="신규로 설정할 인증번호를 입력해주세요."
+            android:textColor="@color/black" />
+    </LinearLayout>
+    <!-- 인증번호 입력 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_0"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/setting_region_top_color">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_15"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="인증번호 입력"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_area_color" />
+            <EditText
+                android:id="@+id/setting_purchase_auth_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:hint="인증번호 입력"
+                android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_15"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="입력확인"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_area_color" />
+            <EditText
+                android:id="@+id/setting_purchase_auth_password_re"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:hint="입력확인"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/setting_purchase_auth_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:gravity="center"
+            android:text="인증번호가 일치하지 않습니다."
+            android:textSize="12sp"
+            android:textColor="@color/red" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:gravity="center"
+            android:text="추후 비밀번호가 기억나지 않으실 경우\n셋탑박스를 다시 등록 해주세요."
+            android:textSize="12sp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+    <!-- 하단 버튼 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60"
+        android:gravity="center_vertical">
+        <Button
+            android:id="@+id/setting_purchase_auth_cancel"
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_weight="1"
+            android:text="변경취소" />
+        <View
+            android:layout_width="@dimen/dimen_8"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/setting_purchase_auth_complete"
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_weight="1"
+            android:text="변경완료" />
+    </LinearLayout>
+</LinearLayout>

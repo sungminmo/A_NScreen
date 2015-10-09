@@ -58,6 +58,12 @@
         <activity android:name=".search.SearchMainActivity">
             
         </activity>
+        <!-- 설정 화면 관련 엑티비티 -->
+        <activity android:name=".setting.CMSettingMainActivity" />
+        <activity android:name=".setting.CMSettingRegionActivity" />
+        <activity android:name=".setting.CMSettingPurchaseAuthActivity" />
+        <activity android:name=".setting.CMSettingPayChannelActivity" />
+        <activity android:name=".setting.CMSettingPayChannelDetailActivity" />
     </application>
 
 </manifest>
