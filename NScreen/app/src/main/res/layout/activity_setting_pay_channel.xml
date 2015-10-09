@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_0"
+        android:layout_weight="1"
+        android:id="@+id/setting_pay_channel_listview"
+        android:divider="@color/setting_list_divider"
+        android:dividerHeight="1px"
+        android:listSelector="@drawable/setting_item_selector"
+        android:cacheColorHint="@color/transparent" />
+</LinearLayout>
