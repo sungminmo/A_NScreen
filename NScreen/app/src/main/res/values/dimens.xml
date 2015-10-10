@@ -25,11 +25,15 @@
     <dimen name="dimen_10.5">@dimen/dp10.5</dimen>
     <dimen name="dimen_11">@dimen/dp11</dimen>
     <dimen name="dimen_12">@dimen/dp12</dimen>
+    <dimen name="dimen_12.75">@dimen/dp12.75</dimen>
     <dimen name="dimen_13">@dimen/dp13</dimen>
     <dimen name="dimen_14">@dimen/dp14</dimen>
     <dimen name="dimen_15">@dimen/dp15</dimen>
+    <dimen name="dimen_15.25">@dimen/dp15.25</dimen>
     <dimen name="dimen_16">@dimen/dp16</dimen>
     <dimen name="dimen_17">@dimen/dp17</dimen>
+    <dimen name="dimen_17.25">@dimen/dp17.25</dimen>
+    <dimen name="dimen_17.5">@dimen/dp17.5</dimen>
     <dimen name="dimen_18">@dimen/dp18</dimen>
     <dimen name="dimen_19">@dimen/dp19</dimen>
     <dimen name="dimen_20">@dimen/dp20</dimen>
@@ -44,6 +48,7 @@
     <dimen name="dimen_26.75">@dimen/dp26.75</dimen>
     <dimen name="dimen_27">@dimen/dp27</dimen>
     <dimen name="dimen_28">@dimen/dp28</dimen>
+    <dimen name="dimen_28.75">@dimen/dp28.75</dimen>
     <dimen name="dimen_29">@dimen/dp29</dimen>
     <dimen name="dimen_30">@dimen/dp30</dimen>
     <dimen name="dimen_30.25">@dimen/dp30.25</dimen>
@@ -55,6 +60,7 @@
     <dimen name="dimen_34.5">@dimen/dp34.5</dimen>
     <dimen name="dimen_35">@dimen/dp35</dimen>
     <dimen name="dimen_36">@dimen/dp36</dimen>
+    <dimen name="dimen_36.75">@dimen/dp36.75</dimen>
     <dimen name="dimen_37">@dimen/dp37</dimen>
     <dimen name="dimen_38">@dimen/dp38</dimen>
     <dimen name="dimen_39">@dimen/dp39</dimen>
@@ -62,8 +68,10 @@
     <dimen name="dimen_41">@dimen/dp41</dimen>
     <dimen name="dimen_42">@dimen/dp42</dimen>
     <dimen name="dimen_43">@dimen/dp43</dimen>
+    <dimen name="dimen_43.25">@dimen/dp43.25</dimen>
     <dimen name="dimen_44">@dimen/dp44</dimen>
     <dimen name="dimen_45">@dimen/dp45</dimen>
+    <dimen name="dimen_45.75">@dimen/dp45.75</dimen>
     <dimen name="dimen_46">@dimen/dp46</dimen>
     <dimen name="dimen_47">@dimen/dp47</dimen>
     <dimen name="dimen_48">@dimen/dp48</dimen>
@@ -84,6 +92,7 @@
     <dimen name="dimen_62">@dimen/dp62</dimen>
     <dimen name="dimen_63">@dimen/dp63</dimen>
     <dimen name="dimen_64">@dimen/dp64</dimen>
+    <dimen name="dimen_64.75">@dimen/dp64.75</dimen>
     <dimen name="dimen_65">@dimen/dp65</dimen>
     <dimen name="dimen_66">@dimen/dp66</dimen>
     <dimen name="dimen_67">@dimen/dp67</dimen>
@@ -147,6 +156,7 @@
     <dimen name="dimen_123">@dimen/dp123</dimen>
     <dimen name="dimen_124">@dimen/dp124</dimen>
     <dimen name="dimen_125">@dimen/dp125</dimen>
+    <dimen name="dimen_125.75">@dimen/dp125.75</dimen>
     <dimen name="dimen_126">@dimen/dp126</dimen>
     <dimen name="dimen_127">@dimen/dp127</dimen>
     <dimen name="dimen_128">@dimen/dp128</dimen>

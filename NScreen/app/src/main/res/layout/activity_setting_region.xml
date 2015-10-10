@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_60"
+        android:layout_height="@dimen/dimen_64.75"
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@color/setting_region_top_color">
@@ -41,7 +41,10 @@
             android:layout_width="@dimen/dimen_0"
             android:layout_height="@dimen/dimen_40"
             android:layout_weight="1"
-            android:text="변경취소" />
+            android:text="변경취소"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:background="@drawable/btn_cancel_color_selector" />
         <View
             android:layout_width="@dimen/dimen_8"
             android:layout_height="match_parent" />
@@ -50,6 +53,9 @@
             android:layout_width="@dimen/dimen_0"
             android:layout_height="@dimen/dimen_40"
             android:layout_weight="1"
-            android:text="변경완료" />
+            android:text="변경완료"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:background="@drawable/btn_ok_color_selector" />
     </LinearLayout>
 </LinearLayout>

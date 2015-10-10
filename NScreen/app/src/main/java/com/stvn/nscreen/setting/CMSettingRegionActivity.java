@@ -48,6 +48,8 @@ public class CMSettingRegionActivity extends CMBaseActivity implements View.OnCl
         sampleList.add("송파구");
         sampleList.add("중구");
         this.mAdapter = new CMSettingRegionAdapter(this, sampleList);
+        this.mAdapter.changeSelectedRegion(0);
+
         this.mListView = (ListView)findViewById(R.id.setting_region_listview);
         this.mListView.setOnItemClickListener(this);
         this.mListView.setAdapter(this.mAdapter);
@@ -76,5 +78,7 @@ public class CMSettingRegionActivity extends CMBaseActivity implements View.OnCl
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Object regionName = parent.getItemAtPosition(position);
         this.mRegionName.setText((String)regionName);
+
+        this.mAdapter.changeSelectedRegion(position);
     }
 }

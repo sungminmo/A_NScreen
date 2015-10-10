@@ -3,13 +3,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/dimen_10">
+    android:padding="@dimen/dimen_12.75">
     <Button
         android:id="@+id/setting_pay_channel_detail_confirm"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_25"
+        android:layout_height="@dimen/dimen_40"
+        android:layout_marginTop="@dimen/dimen_12.75"
+        android:layout_marginBottom="@dimen/dimen_5"
         android:layout_alignParentBottom="true"
-        android:text="확인" />
+        android:text="확인"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:background="@drawable/btn_ok_color_selector" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

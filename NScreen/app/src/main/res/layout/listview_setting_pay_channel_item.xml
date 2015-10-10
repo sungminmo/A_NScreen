@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_45">
+    android:layout_height="@dimen/dimen_58">
     <ImageView
         android:id="@+id/setting_pay_channel_item_image"
         android:layout_width="wrap_content"
@@ -22,6 +22,6 @@
         android:id="@+id/setting_pay_channel_item_arrow"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:padding="@dimen/dimen_16"
+        android:padding="@dimen/dimen_12.75"
         android:src="@mipmap/btn_list_arrow"/>
 </LinearLayout>

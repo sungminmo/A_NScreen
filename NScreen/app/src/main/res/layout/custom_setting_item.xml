@@ -8,13 +8,18 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_60">
-        <ImageView
+        android:layout_height="@dimen/dimen_58">
+        <RelativeLayout
             android:id="@+id/setting_item_image"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="@dimen/dimen_16"
-            android:src="@mipmap/btn_age_15"/>
+            android:padding="@dimen/dimen_16">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/btn_setting_question_selector" />
+        </RelativeLayout>
         <TextView
             android:id="@+id/setting_item_title"
             android:layout_width="@dimen/dimen_0"
@@ -30,7 +35,8 @@
             android:orientation="horizontal"
             android:layout_width="@dimen/dimen_0"
             android:layout_height="match_parent"
-            android:layout_weight="0.8">
+            android:layout_weight="0.8"
+            android:visibility="gone">
             <TextView
                 android:id="@+id/setting_item_title_sub1"
                 android:layout_width="wrap_content"
@@ -50,12 +56,26 @@
                 android:textColor="@color/black"
                 android:gravity="left|center_vertical" />
         </LinearLayout>
-        <ImageView
-            android:id="@+id/setting_item_arrow"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="@dimen/dimen_16"
-            android:src="@mipmap/btn_list_arrow"/>
+            android:paddingRight="@dimen/dimen_12.75">
+
+            <ImageView
+                android:id="@+id/setting_item_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/btn_list_arrow" />
+
+            <Switch
+                android:id="@+id/setting_item_switch_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+
     </LinearLayout>
     <View
         android:layout_width="match_parent"
