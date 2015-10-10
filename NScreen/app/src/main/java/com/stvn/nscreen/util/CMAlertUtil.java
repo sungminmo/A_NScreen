@@ -10,6 +10,10 @@ import com.stvn.nscreen.custom.CMAlertDialog;
  */
 public class CMAlertUtil {
 
+    public interface InputDialogClickListener {
+        public void positiveClickEvent(DialogInterface dialog, String text);
+        public void negativeClickEvent(DialogInterface dialog);
+    }
 
     /****
      * 하단버튼 없는 TextDialog
@@ -48,8 +52,7 @@ public class CMAlertUtil {
         mDialog.show();
     }
 
-    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener)
-    {
+    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener) {
         CMAlertDialog mDialog = new CMAlertDialog(ctx);
         mDialog.setTitle(title);
         mDialog.setMessage(msg1,msg2);
@@ -74,8 +77,7 @@ public class CMAlertUtil {
         mDialog.setPositiveButton("확인", listener);
         mDialog.show();
     }
-    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener,DialogInterface.OnClickListener canclelistener)
-    {
+    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener, DialogInterface.OnClickListener canclelistener) {
         CMAlertDialog mDialog = new CMAlertDialog(ctx);
         mDialog.setTitle(title);
         mDialog.setMessage(msg1, msg2);
@@ -102,4 +104,12 @@ public class CMAlertUtil {
         mDialog.show();
     }
 
+    public static void Alert(Context ctx, String title, String msg1, String msg2, String ok, String cancel, boolean isbold1, boolean isbold2, boolean useSecureMode, InputDialogClickListener listener) {
+        CMAlertDialog mDialog = new CMAlertDialog(ctx, CMAlertDialog.CMDialogType.DialogType3);
+        mDialog.setTitle(title);
+        mDialog.setMessage(msg1, msg2, isbold1, isbold2);
+        mDialog.setInputSetting(4, 20, true);
+        mDialog.setInputDlgButton(ok, cancel, listener);
+        mDialog.show();
+    }
 }

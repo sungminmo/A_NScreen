@@ -4,27 +4,37 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 /**
  * Created by leejunghoon on 15. 10. 9..
  */
 public class CMAlertDialog extends Dialog{
 
-    private LinearLayout mType1,mType2;
+    private LinearLayout mType1,mType2,mType3;
     private ImageView mType1_close;
     private TextView mType1_Title,mType1_Content;
     private TextView mType2_Title,mType2_Content1,mType2_Content2;
+    private TextView mType3_Title,mType3_Content1,mType3_Content2;
+    private EditText mType3_Field;
     private Button mType2_Cancel,mType2_Ok;
+    private Button mType3_Cancel,mType3_Ok;
     private CMDialogType mType;
+    private int mType3_min_length, mType3_max_length;
+    private String mType3_Field_Text;
     public enum CMDialogType{
-        DialogType1, DialogType2
+        DialogType1, DialogType2, DialogType3
     };
 
 
@@ -63,6 +73,15 @@ public class CMAlertDialog extends Dialog{
         mType2_Cancel = (Button)findViewById(R.id.type2_cancel);
         mType2_Ok = (Button)findViewById(R.id.type2_ok);
 
+        //Dialog Type3
+        mType3_Field_Text = "";
+        mType3 = (LinearLayout)findViewById(R.id.type3);
+        mType3_Title = (TextView)findViewById(R.id.type3_title);
+        mType3_Content1 = (TextView)findViewById(R.id.type3_text);
+        mType3_Field = (EditText)findViewById(R.id.type3_field);
+        mType3_Content2 = (TextView)findViewById(R.id.type3_text2);
+        mType3_Cancel = (Button)findViewById(R.id.type3_cancel);
+        mType3_Ok = (Button)findViewById(R.id.type3_ok);
         switch (mType)
         {
             case DialogType1:
@@ -85,6 +104,23 @@ public class CMAlertDialog extends Dialog{
                     }
                 });
                 break;
+            case DialogType3:
+                mType1.setVisibility(View.GONE);
+                mType2.setVisibility(View.GONE);
+                mType3.setVisibility(View.VISIBLE);
+                mType3_Ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+                mType3_Cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+                break;
         }
     }
 
@@ -97,6 +133,9 @@ public class CMAlertDialog extends Dialog{
                 break;
             case DialogType2:
                 mType2_Content1.setText(msg);
+                break;
+            case DialogType3:
+                mType3_Content1.setText(msg);
                 break;
         }
     }
@@ -111,14 +150,20 @@ public class CMAlertDialog extends Dialog{
             case DialogType2:
                 mType2_Title.setText(title);
                 break;
+            case DialogType3:
+                mType3_Title.setText(title);
+                break;
         }
     }
 
-    public void setMessage(String msg1,String msg2)
-    {
+    public void setMessage(String msg1,String msg2) {
         mType2_Content1.setText(msg1);
         mType2_Content2.setText(msg2);
 
+        if (mType == CMDialogType.DialogType3) {
+            mType3_Content1.setText(msg1);
+            mType3_Content2.setText(msg2);
+        }
     }
 
     public void setMessage(String msg1,String msg2,boolean isbold1,boolean isbold2)
@@ -130,6 +175,17 @@ public class CMAlertDialog extends Dialog{
         if(isbold2)
             mType2_Content2.setTypeface(null,Typeface.BOLD);
 
+        if (mType == CMDialogType.DialogType3) {
+            mType3_Content1.setText(msg1);
+            mType3_Content2.setText(msg2);
+
+            if (isbold1) {
+                mType3_Content1.setTypeface(null, Typeface.BOLD);
+            }
+            if (isbold2) {
+                mType3_Content2.setTypeface(null, Typeface.BOLD);
+            }
+        }
     }
 
     /***
@@ -159,12 +215,52 @@ public class CMAlertDialog extends Dialog{
             @Override
             public void onClick(View v) {
                 dismiss();
-                if(listener!=null)
-                {
-                    listener.onClick(CMAlertDialog.this,DialogInterface.BUTTON_NEGATIVE);
+                if (listener != null) {
+                    listener.onClick(CMAlertDialog.this, DialogInterface.BUTTON_NEGATIVE);
                 }
             }
         });
     }
 
+    /**
+     * 입력 다이얼로그 내 EditText 설정
+     * */
+    public void setInputSetting(final int minLength, final int maxLength, final boolean secureMode) {
+
+        mType3_min_length = minLength;
+        mType3_max_length = maxLength;
+        mType3_Field.setFilters(new InputFilter[] { new InputFilter.LengthFilter(maxLength)});
+        if (secureMode) {
+            mType3_Field.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            mType3_Field.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+    }
+
+    /**
+     * 입력 다이얼로그 내 버튼 리스너 등록 처리
+     * */
+    public void setInputDlgButton(String ok, String cancel,final CMAlertUtil.InputDialogClickListener listener) {
+
+        mType3_Ok.setText(ok);
+        mType3_Ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                if (listener!=null) {
+                    listener.positiveClickEvent(CMAlertDialog.this, mType3_Field.getText().toString());
+                }
+            }
+        });
+
+        mType3_Cancel.setText(cancel);
+        mType3_Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                if (listener!=null) {
+                    listener.negativeClickEvent(CMAlertDialog.this);
+                }
+            }
+        });
+    }
 }
