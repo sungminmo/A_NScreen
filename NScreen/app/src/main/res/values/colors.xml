@@ -2,7 +2,7 @@
 <resources>
 	<color name="white">#ffffff</color>
 	<color name="black">#000000</color>
-	<color name="red">#ff0000</color>
+	<color name="red">#ff3b30</color>
 	<color name="transparent">#00000000</color>   
 	<color name="search_programtext_violet">#7b5aa3</color>
 	<color name="search_programtext_grape">#c5c5c5</color>
@@ -11,7 +11,14 @@
 	<color name="text_area_color">#9932cc</color> <!-- 지역명 색상 -->
 	<color name="setting_list_divider">#f5f5f5</color> <!-- 설정 내 사용되는 리스트 divider 색상 -->
 	<color name="setting_region_top_color">#e5e5e5</color> <!-- 지역설정 상단 배경 색상 -->
+	<color name="setting_purchase_content_color">#f0f0f0</color> <!-- 구매인증 비밀번호관리 컨텐츠영역 배경 색상 -->
 
 	<drawable name="setting_item_background">#ffffff</drawable> <!-- 설정 내 사용되는 리스트 아이템 배경 색상 -->
 	<drawable name="setting_item_selector_color">#e5d7f1</drawable> <!-- 설정 내 사용되는 리스트 아이템 selector 색상 -->
+
+	<drawable name="button_ok_color">#957bb5</drawable> <!-- 확인 버튼 배경 색상 -->
+	<drawable name="button_ok_press_color">#7b5aa3</drawable> <!-- 확인 버튼 선택 시 배경 색상 -->
+	<drawable name="button_cancel_color">#b4b6b8</drawable> <!-- 취소 버튼 배경 색상 -->
+	<drawable name="button_cancel_press_color">#8a8c8e</drawable> <!-- 취소 버튼 선택 시 배경 색상 -->
+
 </resources>
