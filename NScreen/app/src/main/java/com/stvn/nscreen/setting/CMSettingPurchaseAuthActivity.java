@@ -3,7 +3,7 @@ package com.stvn.nscreen.setting;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
@@ -16,9 +16,8 @@ import com.stvn.nscreen.common.CMBaseActivity;
  */
 public class CMSettingPurchaseAuthActivity extends CMBaseActivity implements View.OnClickListener {
 
-    private TextView mRegionName;
-    private ListView mListView;
-    private CMSettingRegionAdapter mAdapter;
+    private EditText mAuthPwd, mAuthPwdRe;
+    private TextView mErrorTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +38,10 @@ public class CMSettingPurchaseAuthActivity extends CMBaseActivity implements Vie
      * */
     private void initializeView() {
 
+        mAuthPwd = (EditText)findViewById(R.id.setting_purchase_auth_password);
+        mAuthPwdRe = (EditText)findViewById(R.id.setting_purchase_auth_password_re);
+        mErrorTxt = (TextView)findViewById(R.id.setting_purchase_auth_error);
+
         findViewById(R.id.setting_purchase_auth_cancel).setOnClickListener(this);
         findViewById(R.id.setting_purchase_auth_complete).setOnClickListener(this);
     }
@@ -52,10 +55,26 @@ public class CMSettingPurchaseAuthActivity extends CMBaseActivity implements Vie
                 break;
             }
             case R.id.setting_purchase_auth_complete: {
-                setResult(Activity.RESULT_OK);
-                finish();
+                if (isComparePassword()) {
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
                 break;
             }
+        }
+    }
+
+    private boolean isComparePassword() {
+        String pwd = mAuthPwd.getText().toString();
+        String pwdRe = mAuthPwdRe.getText().toString();
+        if (pwd.equals(pwdRe)) {
+            mAuthPwdRe.setSelected(false);
+            mErrorTxt.setText("");
+            return true;
+        } else {
+            mErrorTxt.setText("인증번호가 일치하지 않습니다.");
+            mAuthPwdRe.setSelected(true);
+            return false;
         }
     }
 }

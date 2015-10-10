@@ -1,26 +1,28 @@
 package com.stvn.nscreen.setting;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 /**
  * 설정 화면
  * Created by kimwoodam on 2015. 9. 19..
  * TODO:메뉴 클릭 이벤트 및 메뉴별 화면 작업, 이미지 및 레이아웃 관련 전체적 수정 작업 필요 15.09.23 kimwoodam
  */
-public class CMSettingMainActivity extends CMBaseActivity implements View.OnClickListener {
+public class CMSettingMainActivity extends CMBaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private final int CMSetting_Region_Tag = 100;
     private final int CMSetting_Purchase_Auth_Tag = 101;
@@ -134,7 +136,7 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         LinearLayout itemRow = (LinearLayout)getLayoutInflater().inflate(R.layout.custom_setting_item, null);
 
         itemRow.setId(itemIndex);
-        itemRow.findViewById(R.id.setting_item_toggle_button).setVisibility(View.VISIBLE);
+        itemRow.findViewById(R.id.setting_item_switch_button).setVisibility(View.VISIBLE);
         itemRow.setBackgroundResource(R.drawable.setting_item_background);
 
         if (useImage == true) {
@@ -152,14 +154,13 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         ((TextView)itemRow.findViewById(R.id.setting_item_title)).setText(title);
 
         // TODO: 가이드 완료 시 디자인 적용 필요 15.10.09
-        Button toggleButton = (Button)itemRow.findViewById(R.id.setting_item_toggle_button);
-        toggleButton.setTag(itemIndex);
-        toggleButton.setOnClickListener(this);
-        if (isToggleOn) {
-            toggleButton.setText("설정");
-        } else {
-            toggleButton.setText("미설정");
-        }
+        Switch switchButton = (Switch)itemRow.findViewById(R.id.setting_item_switch_button);
+        switchButton.setTag(itemIndex);
+        switchButton.setOnCheckedChangeListener(this);
+        switchButton.setText("");
+        switchButton.setTextOn("설정");
+        switchButton.setTextOff("미설정");
+        switchButton.setChecked(isToggleOn);
 
         itemRow.findViewById(R.id.setting_item_arrow).setVisibility(View.INVISIBLE);
         return itemRow;
@@ -175,15 +176,26 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
     }
 
     /**
-     * 성인검색제한설정 값 변
+     * 성인검색제한설정 값 변경
      * */
     private void setAdultSearchRestriction(boolean isToggleOn) {
         View itemView = findViewById(R.id.setting_adult_search_Index);
-        Button toggleButton = (Button)itemView.findViewById(R.id.setting_item_toggle_button);
-        if (isToggleOn) {
-            toggleButton.setText("설정");
-        } else {
-            toggleButton.setText("미설정");
+        Switch switchButton = (Switch)itemView.findViewById(R.id.setting_item_switch_button);
+        switchButton.setChecked(isToggleOn);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.setting_item_switch_button: {
+                int tag = (int)buttonView.getTag();
+                if (tag == R.id.setting_adult_search_Index) {
+                    // TODO: 본인인증(성인인증) 관련 페이지 적용 처리 필요 15.10.09
+                    CMSettingData.getInstance().setAdultSearchRestriction(this, isChecked);
+                }
+                break;
+            }
+            default:
         }
     }
 
@@ -197,8 +209,16 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case R.id.setting_purchase_auth_Index: {
-                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
-                startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+                CMAlertUtil.Alert(this, "구매인증 비밀번호 입력", "구매인증 비밀번호 입려해주세요.", "인증번호가 기억나지 않으실 경우,\n셋탑박스를 다시 등록해주세요.", "확인", "취소", true, false, true, new CMAlertUtil.InputDialogClickListener() {
+                    @Override
+                    public void positiveClickEvent(DialogInterface dialog, String text) {
+                        Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
+                        startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+                    }
+                    @Override
+                    public void negativeClickEvent(DialogInterface dialog) {
+                    }
+                });
                 break;
             }
             case R.id.setting_adult_search_Index: {
@@ -237,17 +257,7 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 }
 
                 if (TextUtils.isEmpty(title) == false && TextUtils.isEmpty(message) == false) {
-                    Toast.makeText(this, title+"\n\n"+message, Toast.LENGTH_SHORT).show();
-                }
-                break;
-            }
-            case R.id.setting_item_toggle_button: {
-                int tag = (int)v.getTag();
-                if (tag == R.id.setting_adult_search_Index) {
-                    // TODO: 본인인증(성인인증) 관련 페이지 적용 처리 필요 15.10.09
-                    boolean isToggleOn = !CMSettingData.getInstance().getAdultSearchRestriction(this);
-                    CMSettingData.getInstance().setAdultSearchRestriction(this, isToggleOn);
-                    setAdultSearchRestriction(isToggleOn);
+                    CMAlertUtil.Alert(this, title, message);
                 }
                 break;
             }
@@ -289,4 +299,5 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
         }
     }
+
 }

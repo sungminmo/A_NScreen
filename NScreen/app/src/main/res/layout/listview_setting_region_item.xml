@@ -19,6 +19,6 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dimen_10"
         android:layout_toRightOf="@id/setting_region_item_name"
-        android:src="@mipmap/btn_list_arrow"
+        android:src="@mipmap/list_check"
         android:visibility="gone" />
 </RelativeLayout>
