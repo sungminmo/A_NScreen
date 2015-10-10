@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_60"
+        android:layout_height="@dimen/dimen_64.75"
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@color/setting_region_top_color">
