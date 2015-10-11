@@ -1,5 +1,6 @@
 package com.stvn.nscreen.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,7 +22,11 @@ public class CMSettingPayChannelDetailActivity extends CMBaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_pay_channel_detail);
-        setActionBarInfo("", CMActionBar.CMActionBarStyle.BACK);
+
+        Intent recvIntent = getIntent();
+        String title = recvIntent.getStringExtra("Channel_Title");
+
+        setActionBarInfo(title, CMActionBar.CMActionBarStyle.BACK);
 
         initializeView();
     }
