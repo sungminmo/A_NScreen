@@ -209,7 +209,7 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case R.id.setting_purchase_auth_Index: {
-                CMAlertUtil.Alert(this, "구매인증 비밀번호 입력", "구매인증 비밀번호 입려해주세요.", "인증번호가 기억나지 않으실 경우,\n셋탑박스를 다시 등록해주세요.", "확인", "취소", true, false, true, new CMAlertUtil.InputDialogClickListener() {
+                CMAlertUtil.Alert(this, "구매인증 비밀번호 입력", "구매인증 비밀번호 입력해주세요.", "인증번호가 기억나지 않으실 경우,\n셋탑박스를 다시 등록해주세요.", "확인", "취소", true, false, true, new CMAlertUtil.InputDialogClickListener() {
                     @Override
                     public void positiveClickEvent(DialogInterface dialog, String text) {
                         Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
