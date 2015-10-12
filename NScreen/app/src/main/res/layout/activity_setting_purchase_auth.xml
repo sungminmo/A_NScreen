@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/dimen_12.75"
+    android:paddingRight="@dimen/dimen_12.75">
+    <!-- 유의문구 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_125.75"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="새로 설정할 인증번호를 입력해주세요."
+            android:textColor="@color/black" />
+    </LinearLayout>
+    <!-- 인증번호 입력 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_0"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/dimen_36.75"
+        android:paddingRight="@dimen/dimen_36.75"
+        android:orientation="vertical"
+        android:background="@color/setting_purchase_content_color">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_26"
+                android:gravity="center"
+                android:text="인증번호 입력"
+                android:textSize="16.25sp"
+                android:textColor="@color/text_area_color" />
+            <EditText
+                android:id="@+id/setting_purchase_auth_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_marginTop="@dimen/dimen_17.25"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:inputType="text|textPassword"
+                android:password="true"
+                android:hint="인증번호 입력"
+                android:maxLength="20"
+                android:background="@drawable/text_setting_pwd_box_selector" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_26"
+                android:gravity="center"
+                android:text="입력확인"
+                android:textSize="16.25sp"
+                android:textColor="@color/text_area_color" />
+            <EditText
+                android:id="@+id/setting_purchase_auth_password_re"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_marginTop="@dimen/dimen_17.25"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:inputType="text|textPassword"
+                android:password="true"
+                android:hint="입력확인"
+                android:maxLength="20"
+                android:background="@drawable/text_setting_pwd_box_selector" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/setting_purchase_auth_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_28.75"
+            android:gravity="center"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/red" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_45.75"
+            android:gravity="center"
+            android:text="비밀번호가 기억나지 않으실 경우,\n셋탑박스를 다시 등록하여 재설정 하실 수 있습니다."
+            android:textSize="12.5sp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+    <!-- 하단 버튼 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60"
+        android:gravity="center_vertical">
+        <Button
+            android:id="@+id/setting_purchase_auth_cancel"
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_weight="1"
+            android:text="변경취소"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_cancel_color_selector" />
+        <View
+            android:layout_width="@dimen/dimen_8"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/setting_purchase_auth_complete"
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_weight="1"
+            android:text="변경완료"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_ok_color_selector" />
+    </LinearLayout>
+</LinearLayout>

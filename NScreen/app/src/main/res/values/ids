@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="setting_region_Index" type="id"/>
+    <item name="setting_purchase_auth_Index" type="id"/>
+    <item name="setting_adult_search_Index" type="id"/>
+    <item name="setting_adult_auth_Index" type="id"/>
+    <item name="setting_notice_Index" type="id"/>
+    <item name="setting_pay_channel_Index" type="id"/>
+    <item name="setting_customer_center_Index" type="id"/>
+</resources>

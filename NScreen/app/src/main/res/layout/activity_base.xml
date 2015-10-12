@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app1="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/base_view"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <com.stvn.nscreen.common.CMActionBar
+        android:id="@+id/common_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app1:actionbar_style="empty"
+        app1:actionbar_title="" />
+
+</LinearLayout>
