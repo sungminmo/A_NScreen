@@ -132,8 +132,8 @@ public class EpgMainActivity extends AppCompatActivity {
                         sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
                         sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelName")) {
-                        sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTitle")) {
+                        sb.append(",\"channelProgramOnAirTitle\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelInfo")) {
                         sb.append(",\"channelInfo\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelOnAirHD")) {
