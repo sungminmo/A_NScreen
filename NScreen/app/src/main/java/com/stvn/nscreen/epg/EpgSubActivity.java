@@ -126,8 +126,10 @@ public class EpgSubActivity extends AppCompatActivity {
                         sb.append(",\"programTitle\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("programContent")) {
                         sb.append(",\"programContent\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("programBroadcastingTime")) {
-                        sb.append(",\"programBroadcastingTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("programBroadcastingStartTime")) {
+                        sb.append(",\"programBroadcastingStartTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("programBroadcastingEndTime")) {
+                        sb.append(",\"programBroadcastingEndTime\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("programHD")) {
                         sb.append(",\"programHD\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("programGrade")) {
