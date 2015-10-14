@@ -99,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ((Button) findViewById(R.id.Button10)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodMainActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
         @Override
     public boolean onCreateOptionsMenu(Menu menu) {

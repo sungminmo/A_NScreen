@@ -1,4 +1,4 @@
-package com.stvn.nscreen.epg;
+package com.stvn.nscreen.vod;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +16,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
+import com.jjiya.android.common.VolleySingleton;
 import com.stvn.nscreen.R;
 
 import org.json.JSONException;
@@ -27,31 +28,21 @@ import java.util.ArrayList;
  * Created by swlim on 2015. 9. 11..
  */
 
-public class EpgMainListViewAdapter extends BaseAdapter {
+public class VodMainGridViewAdapter extends BaseAdapter {
 
-    private static final String                        tag              = EpgMainListViewAdapter.class.getSimpleName();
+    private static final String                        tag              = VodMainGridViewAdapter.class.getSimpleName();
     private              Context                       mContext         = null;
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
-    private              RequestQueue                  mRequestQueue;
     private              ImageLoader                   mImageLoader;
 
-    public EpgMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
+    public VodMainGridViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
-        this.mRequestQueue = Volley.newRequestQueue(mContext);
-        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
-            public void putBitmap(String url, Bitmap bitmap) {
-                mCache.put(url, bitmap);
-            }
-            public Bitmap getBitmap(String url) {
-                return mCache.get(url);
-            }
-        });
+        this.mImageLoader     = VolleySingleton.getInstance().getImageLoader();
     }
 
     @Override
@@ -72,28 +63,34 @@ public class EpgMainListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_main, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.gridview_vod_main, parent, false);
         }
 
         try {
             ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
             JSONObject         jobj         = new JSONObject(dobj.sJson);
 
-            // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
-            // ImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imagebutton_channel_logo);
+            NetworkImageView vodImageView   = ViewHolder.get(convertView, R.id.volleyImageView);
+            TextView  titleTextView         = ViewHolder.get(convertView, R.id.vod_main_textview_title);
 
-            ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
-            TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
-            TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
+            titleTextView.setText(jobj.getString("title"));
+            int ino = randomRange(0, 4);
 
-            //ViewHolder.channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+            // http://www.jjiya.com/cnm/0.jpeg
+            String imgurl = "http://www.jjiya.com/cnm/"+ino+".jpeg";
+            vodImageView.setImageUrl(imgurl, mImageLoader);
 
-            channelNumberTextView.setText(jobj.getString("channelNumber"));
-            titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
+
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return convertView;
+    }
+
+    // 지정된 범위의 정수 1개를 램덤하게 반환하는 메서드
+    // n1 은 "하한값", n2 는 상한값
+    public static int randomRange(int n1, int n2) {
+        return (int) (Math.random() * (n2 - n1 + 1)) + n1;
     }
 }
