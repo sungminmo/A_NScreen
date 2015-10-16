@@ -157,9 +157,6 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         Switch switchButton = (Switch)itemRow.findViewById(R.id.setting_item_switch_button);
         switchButton.setTag(itemIndex);
         switchButton.setOnCheckedChangeListener(this);
-        switchButton.setText("");
-        switchButton.setTextOn("설정");
-        switchButton.setTextOff("미설정");
         switchButton.setChecked(isToggleOn);
 
         itemRow.findViewById(R.id.setting_item_arrow).setVisibility(View.INVISIBLE);
