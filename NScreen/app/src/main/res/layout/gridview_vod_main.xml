@@ -4,6 +4,12 @@
     android:layout_height="137.75dp">
 
 
+    <ImageView
+        android:layout_width="82.75dp"
+        android:layout_height="120.5dp"
+        android:id="@+id/imageView5"
+        android:layout_marginTop="1dp"
+        android:background="#0000" />
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/volleyImageView"
