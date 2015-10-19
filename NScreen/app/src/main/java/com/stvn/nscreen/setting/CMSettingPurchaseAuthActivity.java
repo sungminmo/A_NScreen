@@ -2,6 +2,7 @@ package com.stvn.nscreen.setting;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 /**
  * 설정화면 > 구매인증 비밀번호 관리
@@ -56,6 +58,10 @@ public class CMSettingPurchaseAuthActivity extends CMBaseActivity implements Vie
             }
             case R.id.setting_purchase_auth_complete: {
                 if (isComparePassword()) {
+
+                    String pwd = mAuthPwd.getText().toString();
+                    CMSettingData.getInstance().setPurchaseAuthPassword(CMSettingPurchaseAuthActivity.this, pwd);
+
                     setResult(Activity.RESULT_OK);
                     finish();
                 }
@@ -67,14 +73,28 @@ public class CMSettingPurchaseAuthActivity extends CMBaseActivity implements Vie
     private boolean isComparePassword() {
         String pwd = mAuthPwd.getText().toString();
         String pwdRe = mAuthPwdRe.getText().toString();
-        if (pwd.equals(pwdRe)) {
-            mAuthPwdRe.setSelected(false);
-            mErrorTxt.setText("");
-            return true;
-        } else {
-            mErrorTxt.setText("인증번호가 일치하지 않습니다.");
-            mAuthPwdRe.setSelected(true);
+
+        if (TextUtils.isEmpty(pwd)) {
+            CMAlertUtil.Alert(CMSettingPurchaseAuthActivity.this, "인증번호 입력오류", "인증번호를 입력하지 않으셨습니다.");
             return false;
+        } else if (TextUtils.isEmpty(pwdRe)) {
+            CMAlertUtil.Alert(CMSettingPurchaseAuthActivity.this, "인증번호 입력오류", "인증번호 입력확인 입력하지 않으셨습니다.");
+            return false;
+        } else if (pwd.length() < 4 || pwdRe.length() < 4) {
+            CMAlertUtil.Alert(CMSettingPurchaseAuthActivity.this, "인증번호 입력오류", "인증번호는 최소 4자리입니다.");
+            return false;
+        } else {
+            if (pwd.equals(pwdRe)) {
+                mAuthPwdRe.setSelected(false);
+                mAuthPwdRe.setTextColor(getResources().getColor(R.color.black));
+                mErrorTxt.setText("");
+                return true;
+            } else {
+                mAuthPwdRe.setSelected(true);
+                mAuthPwdRe.setTextColor(getResources().getColor(R.color.red));
+                mErrorTxt.setText("인증번호가 일치하지 않습니다.");
+                return false;
+            }
         }
     }
 }

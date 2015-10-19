@@ -1,6 +1,7 @@
 package com.stvn.nscreen.setting;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jjiya.android.common.ListViewDataObject;
 import com.stvn.nscreen.R;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -16,12 +20,13 @@ import java.util.ArrayList;
  * 설정화면 > 지역설정 > 리스트 어댑터
  * Created by kimwoodam on 2015. 9. 30..
  */
-public class CMSettingRegionAdapter extends ArrayAdapter<Object> {
+public class CMSettingRegionAdapter extends ArrayAdapter<ListViewDataObject> {
     LayoutInflater mInflater;
     private Context mContext;
-    private int mSelectedIndex;
+    private String mSelectedAreaCode;
+    private String mSelectedAreaName;
 
-    public CMSettingRegionAdapter(Context context, ArrayList<Object> items) {
+    public CMSettingRegionAdapter(Context context, ArrayList<ListViewDataObject> items) {
         super(context, 0, items);
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
@@ -45,15 +50,26 @@ public class CMSettingRegionAdapter extends ArrayAdapter<Object> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Object info = getItem(position);
-        if (info != null) {
-            holder.regionName.setText((String)info);
-        }
+        ListViewDataObject info = getItem(position);
 
-        if (position == this.mSelectedIndex) {
-            holder.selectedImage.setVisibility(View.VISIBLE);
-        } else {
-            holder.selectedImage.setVisibility(View.GONE);
+        try {
+            JSONObject jsonObj = new JSONObject(info.sJson);
+            String areaName = jsonObj.getString("areaName");
+            String areaCode = jsonObj.getString("areaCode");
+            holder.regionName.setText(areaName);
+
+            if (TextUtils.isEmpty(this.mSelectedAreaCode) == false && areaCode.equals(this.mSelectedAreaCode)) {
+                holder.selectedImage.setVisibility(View.VISIBLE);
+
+                this.mSelectedAreaName = areaName;
+                this.mSelectedAreaCode = areaCode;
+
+            } else {
+                holder.selectedImage.setVisibility(View.GONE);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return convertView;
     }
@@ -63,9 +79,23 @@ public class CMSettingRegionAdapter extends ArrayAdapter<Object> {
         ImageView selectedImage;
     }
 
-    public void changeSelectedRegion(int position) {
-        this.mSelectedIndex = position;
+    public void changeSelectedRegion(String areaCode, String areaName) {
+        this.mSelectedAreaCode = areaCode;
+        this.mSelectedAreaName = areaName;
         notifyDataSetChanged();
     }
 
+    public String getRegionName() {
+        if (TextUtils.isEmpty(this.mSelectedAreaName)) {
+            this.mSelectedAreaName = "";
+        }
+        return this.mSelectedAreaName;
+    }
+
+    public String getRegionCode() {
+        if (TextUtils.isEmpty(this.mSelectedAreaCode)) {
+            this.mSelectedAreaCode = "";
+        }
+        return this.mSelectedAreaCode;
+    }
 }

@@ -4,16 +4,16 @@
         <shape android:dither="true" android:shape="rectangle" android:useLevel="false" android:visible="true">
             <corners android:radius="@dimen/dimen_30" />
             <size android:height="@dimen/dimen_29" />
-            <stroke android:width="@dimen/dimen_1" android:color="#ff9932cc" />
-            <solid android:color="#ffffff" />
+            <stroke android:width="@dimen/dimen_1" android:color="@color/switch_stroke_color" />
+            <solid android:color="@color/switch_background_color" />
         </shape>
     </item>
     <item android:state_checked="false">
         <shape android:dither="true" android:shape="rectangle" android:useLevel="false" android:visible="true">
             <corners android:radius="@dimen/dimen_30" />
             <size android:height="@dimen/dimen_29" />
-            <stroke android:width="@dimen/dimen_1" android:color="#ff9932cc" />
-            <solid android:color="#ffffff" />
+            <stroke android:width="@dimen/dimen_1" android:color="@color/switch_stroke_color" />
+            <solid android:color="@color/switch_background_color" />
         </shape>
 	</item>
 </selector>

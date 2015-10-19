@@ -56,7 +56,8 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         LinearLayout itemRow;
         ViewGroup mainView = (ViewGroup) findViewById(R.id.setting_layout);;
 
-        itemRow = makeSettingItem(R.id.setting_region_Index, true, "지역설정", "현재설정지역 : ", "강동구", R.color.text_area_color, false);
+        String areaName = CMSettingData.getInstance().getUserAreaName(CMSettingMainActivity.this);
+        itemRow = makeSettingItem(R.id.setting_region_Index, true, "지역설정", "현재설정지역 : ", areaName, R.color.text_area_color, false);
         mainView.addView(itemRow);
 
         itemRow = makeSettingItem(R.id.setting_purchase_auth_Index, true, "구매인증 비밀번호 관리", "", "", 0, false);
@@ -182,13 +183,34 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.setting_item_switch_button: {
                 int tag = (int)buttonView.getTag();
                 if (tag == R.id.setting_adult_search_Index) {
-                    // TODO: 본인인증(성인인증) 관련 페이지 적용 처리 필요 15.10.09
-                    CMSettingData.getInstance().setAdultSearchRestriction(this, isChecked);
+                    if (isChecked == false) {
+                        if (CMSettingData.getInstance().isAdultAuth(CMSettingMainActivity.this) == false) {
+                            CMAlertUtil.Alert(CMSettingMainActivity.this,
+                                    "성인인증 필요",
+                                    "성인검색 제한 설정을 해제하기 위해서는 성인인증이 필요합니다.", "성인인증을 진행하시겠습니까?", "예", "아니오", false, true,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // TODO: 본인인증(성인인증) 관련 페이지 적용 처리 필요 15.10.09
+                                            CMSettingData.getInstance().setAdultSearchRestriction(CMSettingMainActivity.this, isChecked);
+                                        }
+                                    }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            buttonView.setChecked(true);
+                                        }
+                                    });
+                        } else {
+                            CMSettingData.getInstance().setAdultSearchRestriction(CMSettingMainActivity.this, isChecked);
+                        }
+                    } else {
+                        CMSettingData.getInstance().setAdultSearchRestriction(CMSettingMainActivity.this, isChecked);
+                    }
                 }
                 break;
             }
@@ -209,8 +231,12 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 CMAlertUtil.Alert(this, "구매인증 비밀번호 입력", "구매인증 비밀번호 입력해주세요.", "인증번호가 기억나지 않으실 경우,\n셋탑박스를 다시 등록해주세요.", "확인", "취소", true, false, true, new CMAlertUtil.InputDialogClickListener() {
                     @Override
                     public void positiveClickEvent(DialogInterface dialog, String text) {
-                        Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
-                        startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+
+                        String savedPassword = CMSettingData.getInstance().getPurchaseAuthPassword(CMSettingMainActivity.this);
+                        if (text.equals(savedPassword)) {
+                            Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
+                            startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+                        }
                     }
                     @Override
                     public void negativeClickEvent(DialogInterface dialog) {
@@ -268,7 +294,8 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         switch (requestCode) {
             case CMSetting_Region_Tag: {
                 if (resultCode == Activity.RESULT_OK) {
-                    // TODO: 지역 설정 성공 시 현재 화면에 대한 지역정보를 갱신한다.
+                    String areaName = CMSettingData.getInstance().getUserAreaName(CMSettingMainActivity.this);
+                    setAreaName(areaName);
                 }
                 break;
             }

@@ -17,8 +17,50 @@ public class CMSettingData {
         return mInstance;
     }
 
-//    public static final String ADULT_AUTH_CHECK_KEY = "ADULT_AUTH_CHECK"; // 성인인증 여부
-//    public static final String ADULT_SEARCH_RESTRICTION_KEY = "ADULT_AUTH_CHECK"; // 성인검색 제한 설정
+    /**
+     * 사용자 설정 지역 코드 정보 반환
+     * */
+    public String getUserAreaCode(Context context) {
+        JYSharedPreferences preferences = new JYSharedPreferences(context);
+        return preferences.getValue(CMConstants.USER_REGION_CODE_KEY, "");
+    }
+
+    /**
+     * 사용자 설정 지역 코드 정보 저장
+     * */
+    public void setUserAreaCode(Context context, String areaCode) {
+        JYSharedPreferences preferences = new JYSharedPreferences(context);
+        preferences.put(CMConstants.USER_REGION_CODE_KEY, areaCode);
+    }
+
+    public String getUserAreaName(Context context) {
+        JYSharedPreferences preferences = new JYSharedPreferences(context);
+        return preferences.getValue(CMConstants.USER_REGION_NAME_KEY, "");
+    }
+    /**
+     * 사용자 설정 지역 코드 정보 저장
+     * */
+    public void setUserAreaName(Context context, String areaCode) {
+        JYSharedPreferences preferences = new JYSharedPreferences(context);
+        preferences.put(CMConstants.USER_REGION_NAME_KEY, areaCode);
+    }
+
+    /**
+     * 구매인증 비밀번호 반환
+     * */
+    public String getPurchaseAuthPassword(Context context) {
+        JYSharedPreferences preferences = new JYSharedPreferences(context);
+        return preferences.getValue(CMConstants.PURCHASE_AUTH_PASSWORD_KEY, "");
+    }
+
+    /**
+     * 구매인증 비밀번호 설정
+     * */
+    public void setPurchaseAuthPassword(Context context, String purchasePwd) {
+        JYSharedPreferences preferences = new JYSharedPreferences(context);
+        preferences.put(CMConstants.PURCHASE_AUTH_PASSWORD_KEY, purchasePwd);
+    }
+
     /**
      * 성인인증 여부 반환
      * */

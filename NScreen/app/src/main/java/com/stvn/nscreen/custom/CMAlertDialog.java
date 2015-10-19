@@ -4,10 +4,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -175,7 +177,7 @@ public class CMAlertDialog extends Dialog{
         if(isbold2)
             mType2_Content2.setTypeface(null,Typeface.BOLD);
 
-        if (mType == CMDialogType.DialogType3) {
+        if (mType.compareTo(CMDialogType.DialogType3) == 0) {
             mType3_Content1.setText(msg1);
             mType3_Content2.setText(msg2);
 
@@ -262,5 +264,21 @@ public class CMAlertDialog extends Dialog{
                 }
             }
         });
+    }
+
+    @Override
+    public void show() {
+        super.show();
+
+        if (mType.compareTo(CMDialogType.DialogType3) == 0) {
+            Handler mHandler = new Handler();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mType3_Field, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }, 100);
+        }
     }
 }
