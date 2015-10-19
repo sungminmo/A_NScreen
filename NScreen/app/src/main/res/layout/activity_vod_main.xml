@@ -5,18 +5,18 @@
     android:orientation="vertical"
     tools:context="com.stvn.nscreen.vod.VodMainActivity">
 
-
-
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/vod_main_gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="auto_fit"
+        android:numColumns="4"
         android:columnWidth="90dp"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
+        android:horizontalSpacing="5.5dp"
+        android:verticalSpacing="9.25dp"
         android:gravity="center"
-        android:stretchMode="columnWidth" >
+        android:stretchMode="columnWidth"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp">
 
     </GridView>
 
