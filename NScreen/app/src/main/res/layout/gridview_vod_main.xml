@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="82.75dp"
-    android:layout_height="147dp">
+    android:layout_height="137.75dp">
 
 
 
@@ -22,7 +22,7 @@
         android:lines="1"
         android:autoText="false"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="125dp" />
+        android:layout_marginTop="124dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -31,5 +31,23 @@
         android:layout_gravity="left|top"
         android:background="@mipmap/icon_rank"
         android:layout_marginLeft="0.5dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView3"
+        android:layout_gravity="right|top"
+        android:layout_marginRight="2.25dp"
+        android:layout_marginTop="3.25dp"
+        android:background="@mipmap/vod_01" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:layout_gravity="right|bottom"
+        android:background="@mipmap/icon_nor"
+        android:layout_marginRight="2.25dp"
+        android:layout_marginBottom="19.5dp" />
 
 </FrameLayout>
