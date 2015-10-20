@@ -55,6 +55,16 @@
         <activity android:name=".setting.CMSettingPayChannelActivity" />
         <activity android:name=".setting.CMSettingPayChannelDetailActivity" />
         <activity android:name=".vod.VodMainActivity" />
+        <activity
+            android:name=".vod.VodCategoryMainActivity"
+            android:label="@string/title_activity_vod_category_main"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".vod.VodDetailActivity"
+            android:label="@string/title_activity_vod_detail"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

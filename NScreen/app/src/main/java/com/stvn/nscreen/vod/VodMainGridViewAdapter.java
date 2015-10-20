@@ -67,20 +67,22 @@ public class VodMainGridViewAdapter extends BaseAdapter {
         }
 
         try {
-            ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
-            JSONObject         jobj         = new JSONObject(dobj.sJson);
+            ListViewDataObject obj        = (ListViewDataObject)getItem(position);
+            JSONObject         jo         = new JSONObject(obj.sJson);
 
-            NetworkImageView vodImageView   = ViewHolder.get(convertView, R.id.volleyImageView);
-            TextView  titleTextView         = ViewHolder.get(convertView, R.id.vod_main_textview_title);
+            NetworkImageView vodImageView = ViewHolder.get(convertView, R.id.volleyImageView);
+            TextView titleTextView        = ViewHolder.get(convertView, R.id.vod_main_textview_title);
+            TextView rankTextView         = ViewHolder.get(convertView, R.id.vod_main_grid_rank_textview);
 
-            titleTextView.setText(jobj.getString("title"));
+            titleTextView.setText(jo.getString("title"));
+            rankTextView.setText(jo.getString("ranking"));
+
+
             int ino = randomRange(0, 4);
 
             // http://www.jjiya.com/cnm/0.jpeg
-            String imgurl = "http://www.jjiya.com/cnm/"+ino+".jpeg";
+            String imgurl = "http://www.jjiya.com/cnm/0.jpeg"; // String imgurl = "http://www.jjiya.com/cnm/"+ino+".jpeg";
             vodImageView.setImageUrl(imgurl, mImageLoader);
-
-
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -38,6 +38,16 @@
         android:background="@mipmap/icon_rank"
         android:layout_marginLeft="0.5dp" />
 
+    <TextView
+        android:layout_width="22dp"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/vod_main_grid_rank_textview"
+        android:textSize="11.5sp"
+        android:textColor="#ffffff"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="2dp" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

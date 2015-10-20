@@ -100,6 +100,13 @@ public class JYSharedPreferences {
         } else {
             return Constants.SERVER_URL_EPG_DEV;
         }
+    }
 
+    public String getVodServerUrl() {
+        if ( isRealServer() ) {
+            return Constants.SERVER_URL_CASTIS_PUBLIC;
+        } else {
+            return Constants.SERVER_URL_CASTIS_VPN;
+        }
     }
 }

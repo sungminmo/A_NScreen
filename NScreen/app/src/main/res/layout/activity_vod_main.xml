@@ -1,14 +1,65 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.stvn.nscreen.vod.VodMainActivity">
+    tools:context="com.stvn.nscreen.vod.VodMainActivity"
+    android:background="@color/white">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vod_main_event_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="156dp">
+    </android.support.v4.view.ViewPager>
+    
+    <android.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="28dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:background="#b4b6b8"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+
+    <LinearLayout
+        android:id="@+id/vod_main_pop20_more_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="44.75dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인기순위 Top20"
+            android:id="@+id/textView3"
+            android:layout_weight="1"
+            android:layout_marginLeft="16.5dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="더보기"
+            android:id="@+id/textView4"
+            android:textSize="12sp"
+            android:textColor="#8a8c8e"
+            android:layout_marginRight="7.75dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView6"
+            android:src="@mipmap/btn_list_arrow"
+            android:layout_marginRight="9.75dp" />
+    </LinearLayout>
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/vod_main_gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="335.5dp"
         android:numColumns="4"
         android:columnWidth="90dp"
         android:horizontalSpacing="5.5dp"
@@ -20,4 +71,4 @@
 
     </GridView>
 
-</RelativeLayout>
+</LinearLayout>
