@@ -32,6 +32,7 @@ public class JYSharedPreferences {
     public final static String LOGIN_SERVER = "LOGIN_SERVER"; // 로그인 화면에서 선택한 서버.
     public final static String VoVolunteerActivityIsCompletMode = "VoVolunteerActivityIsCompletMode"; // VoVolunteerActivityIsCompletMode : true, false
 
+    public final static String TERMINAL_KEY = "TERMINAL_KEY";
 
     public JYSharedPreferences(Context c) {
         mContext = c;

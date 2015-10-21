@@ -36,7 +36,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageView8"
+                    android:id="@+id/vod_detail_rating_imageview"
                     android:src="@mipmap/btn_age_all"
                     android:layout_marginLeft="11.25dp" />
 
@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="title"
-                    android:id="@+id/textView5"
+                    android:id="@+id/vod_detail_title"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
@@ -139,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="원 [부가세 별도]"
-                    android:id="@+id/vod_main_price_textview"
+                    android:id="@+id/vod_detail_price_textview"
                     android:textSize="11sp"
                     android:textColor="#000000"
                     android:singleLine="true" />
@@ -169,7 +169,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="genre / time"
-                    android:id="@+id/vod_main_genre_textview"
+                    android:id="@+id/vod_detail_genre_textview"
                     android:textSize="11sp"
                     android:textColor="#000000"
                     android:singleLine="true"
@@ -199,7 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="director"
-                    android:id="@+id/vod_main_director_textview"
+                    android:id="@+id/vod_detail_director_textview"
                     android:textSize="11sp"
                     android:textColor="#000000"
                     android:singleLine="true"
@@ -229,7 +229,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="starring"
-                    android:id="@+id/vod_main_starring_textview"
+                    android:id="@+id/vod_detail_starring_textview"
                     android:textSize="11sp"
                     android:textColor="#000000"
                     android:singleLine="true"
@@ -303,5 +303,205 @@
         android:background="#b4b6b8"
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="36.5dp"
+        android:id="@+id/vod_detail_series_linearlayout"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginRight="12.75dp"
+        android:layout_marginTop="3dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#7b5aa3"
+            />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:id="@+id/horizontalScrollView"
+            android:background="#f2eef6"
+            android:layout_marginTop="0.25dp"
+            android:layout_marginBottom="0.25dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:layout_width="41.25dp"
+                    android:layout_height="27.75dp"
+                    android:layout_marginLeft="15.5dp"
+                    android:text="5회"
+                    android:id="@+id/vod_detail_series_5_button" />
+
+                <Button
+                    android:layout_width="41.25dp"
+                    android:layout_height="27.75dp"
+                    android:layout_marginLeft="15.5dp"
+                    android:text="4회"
+                    android:id="@+id/vod_detail_series_4_button" />
+
+                <Button
+                    android:layout_width="41.25dp"
+                    android:layout_height="27.75dp"
+                    android:layout_marginLeft="15.5dp"
+                    android:text="3회"
+                    android:id="@+id/vod_detail_series_3_button" />
+
+                <Button
+                    android:layout_width="41.25dp"
+                    android:layout_height="27.75dp"
+                    android:layout_marginLeft="15.5dp"
+                    android:text="2회"
+                    android:id="@+id/vod_detail_series_2_button" />
+
+                <Button
+                    android:layout_width="41.25dp"
+                    android:layout_height="27.75dp"
+                    android:layout_marginLeft="15.5dp"
+                    android:text="1회"
+                    android:id="@+id/vod_detail_series_1_button" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#7b5aa3"
+            />
+
+
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:id="@+id/vod_detail_synopsis_scrollView"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginTop="6.25dp"
+        android:layout_marginRight="12.75dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="synopsis 오랫동안 쫓던 대형 범죄를 해결한 후 숨을 돌리려는 찰나, 서도철은 재벌 3세 조태오를 만나게 된다. 세상 무서울 것 없는 안하무인의 조태오와 언제나 그의 곁을 지키는 오른팔 최상무. 서도철은 의문의 사건을 쫓던 중 그들이 사건의 배후에 있음을 직감하는데..."
+            android:id="@+id/vod_detail_synopsis_textview"
+            android:textSize="11.75sp"
+            android:textColor="#000000" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40.75dp"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginRight="12.75dp"
+        android:id="@+id/vod_detail_purchase_linearlayout">
+
+        <Button
+            android:layout_width="108.25dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15.5dp"
+            android:text="미리보기"
+            android:id="@+id/vod_detail_preplay_button"
+            android:layout_marginRight="5.5dp" />
+
+        <Button
+            android:layout_width="108.25dp"
+            android:layout_height="match_parent"
+            android:text="구매하기"
+            android:id="@+id/vod_detail_order_button"
+            android:layout_marginRight="5.5dp" />
+
+        <Button
+            android:layout_width="108.25dp"
+            android:layout_height="match_parent"
+            android:text="찜하기"
+            android:id="@+id/vod_detail_jjim_button" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40.75dp"
+        android:layout_marginLeft="12.25dp"
+        android:layout_marginRight="12.25dp"
+        android:id="@+id/vod_detail_play_linearlayout" >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="시청하기"
+            android:id="@+id/button" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40.75dp"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginRight="12.75dp"
+        android:id="@+id/vod_detail_tvonly_linearlayout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TV에서봐"
+            android:id="@+id/textView5"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="14sp"
+            android:textColor="#7b5aa3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="169.5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="해당 VOD를 시청하신 분들이 많이 찾는 VOD"
+            android:id="@+id/textView14"
+            android:textSize="13sp"
+            android:textColor="#000000"
+            android:layout_marginLeft="12.75dp"
+            android:singleLine="true"
+            android:layout_marginRight="12.75dp"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8.75dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:background="#b4b6b8"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vod_detail_related_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="160.75dp">
+        </android.support.v4.view.ViewPager>
+
+    </LinearLayout>
+
 
 </LinearLayout>

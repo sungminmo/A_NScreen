@@ -8,12 +8,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.JYSharedPreferences;
+import com.stvn.nscreen.vod.VodDetailActivity;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String              tag = VodDetailActivity.class.getSimpleName();
+    private static       MainActivity        mInstance;
+    private              JYSharedPreferences mPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mInstance     = this;
+        mPref         = new JYSharedPreferences(this);
+
+        /**
+         * 테스트 터미널키 저장하기.
+         */
+        mPref.put(JYSharedPreferences.TERMINAL_KEY, "9CED3A20FB6A4D7FF35D1AC965F988D2");
+
 
         Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8;
 
