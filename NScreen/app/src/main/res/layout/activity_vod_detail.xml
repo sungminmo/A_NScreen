@@ -338,35 +338,50 @@
                     android:layout_height="27.75dp"
                     android:layout_marginLeft="15.5dp"
                     android:text="5회"
-                    android:id="@+id/vod_detail_series_5_button" />
+                    android:id="@+id/vod_detail_series_5_button"
+                    android:textSize="14.5sp"
+                    android:textColor="#7b5aa3"
+                    android:background="@drawable/series_selector" />
 
                 <Button
                     android:layout_width="41.25dp"
                     android:layout_height="27.75dp"
                     android:layout_marginLeft="15.5dp"
                     android:text="4회"
-                    android:id="@+id/vod_detail_series_4_button" />
+                    android:id="@+id/vod_detail_series_4_button"
+                    android:textSize="14.5sp"
+                    android:textColor="#7b5aa3"
+                    android:background="@drawable/series_selector" />
 
                 <Button
                     android:layout_width="41.25dp"
                     android:layout_height="27.75dp"
                     android:layout_marginLeft="15.5dp"
                     android:text="3회"
-                    android:id="@+id/vod_detail_series_3_button" />
+                    android:id="@+id/vod_detail_series_3_button"
+                    android:textSize="14.5sp"
+                    android:textColor="#7b5aa3"
+                    android:background="@drawable/series_selector" />
 
                 <Button
                     android:layout_width="41.25dp"
                     android:layout_height="27.75dp"
                     android:layout_marginLeft="15.5dp"
                     android:text="2회"
-                    android:id="@+id/vod_detail_series_2_button" />
+                    android:id="@+id/vod_detail_series_2_button"
+                    android:textSize="14.5sp"
+                    android:textColor="#7b5aa3"
+                    android:background="@drawable/series_selector" />
 
                 <Button
                     android:layout_width="41.25dp"
                     android:layout_height="27.75dp"
                     android:layout_marginLeft="15.5dp"
                     android:text="1회"
-                    android:id="@+id/vod_detail_series_1_button" />
+                    android:id="@+id/vod_detail_series_1_button"
+                    android:textSize="14.5sp"
+                    android:textColor="#7b5aa3"
+                    android:background="@drawable/series_selector" />
 
             </LinearLayout>
 

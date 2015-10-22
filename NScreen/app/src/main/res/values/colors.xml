@@ -28,4 +28,7 @@
 	<drawable name="button_cancel_color">#b4b6b8</drawable> <!-- 취소 버튼 배경 색상 -->
 	<drawable name="button_cancel_press_color">#8a8c8e</drawable> <!-- 취소 버튼 선택 시 배경 색상 -->
 
+	<!-- VOD DETAIL 시리즈 색 -->
+	<color name="series_unpress_color">#0000</color>
+
 </resources>
