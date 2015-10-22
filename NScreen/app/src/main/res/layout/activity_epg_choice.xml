@@ -4,75 +4,34 @@
     android:layout_height="456.25dp"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="#FBFBFB">
+    android:background="#FFFFFF">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="58.5dp">
 
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="58dp">
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="23dp"
+            android:gravity="center"
+            android:text="시청을 원하시는 채널장르를 선택하실 수 있습니다."
+            android:textSize="13.25sp"
+            android:textColor="#000000"
+            android:textIsSelectable="true" />
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="23dp"
-                android:gravity="center"
-                android:text="시청을 원하시는 채널장르를 선택하실 수 있습니다."
-                android:textSize="13.25sp"
-                android:textColor="#000000"
-                android:textIsSelectable="true" />
+        <ImageButton
+            android:id="@+id/epg_choice_close_imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12.75dp"
+            android:layout_marginRight="13dp"
+            android:layout_gravity="right"
+            android:background="@mipmap/btn_close" />
 
-            <ImageButton
-                android:id="@+id/epg_choice_close_imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="13.25dp"
-                android:layout_marginRight="13.25dp"
-                android:layout_gravity="right"
-                android:background="@mipmap/btn_close" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="40.75dp"
-            android:layout_marginBottom="16dp">
-
-            <Button
-                android:id="@+id/Button1"
-                android:layout_width="249dp"
-                android:layout_height="40.75dp"
-                android:layout_gravity="center"
-                android:background="@drawable/img_btn_selector_long"
-                android:text="전체채널"
-                android:textColor="@drawable/btn_selector_textcolor"
-                android:textSize="14.5sp" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="40.75dp"
-            android:layout_marginBottom="27.25dp">
-
-            <Button
-                android:id="@+id/Button2"
-                android:layout_width="249dp"
-                android:layout_height="40.75dp"
-                android:layout_gravity="center"
-                android:background="@drawable/img_btn_selector_long"
-                android:text="선호채널"
-                android:textColor="@drawable/btn_selector_textcolor"
-                android:textSize="14.5sp" />
-
-        </FrameLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -80,122 +39,128 @@
         android:layout_gravity="center">
 
         <Button
-            android:id="@+id/Button3"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:layout_marginBottom="27.25dp"
-            android:layout_marginRight="27.25dp"
-            android:paddingBottom="6dp"
+            android:id="@+id/Button1"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_marginBottom="27.5dp"
+            android:layout_marginRight="27.75dp"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="지상파/홈쇼핑"
-            android:textColor="@drawable/btn_selector_textcolor"
+            android:background="@drawable/epg_choice_btn_selector_01"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/Button2"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_marginRight="28dp"
+            android:layout_toRightOf="@id/Button1"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_02"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/Button3"
+            android:layout_width="64.5dp"
+            android:layout_height="65dp"
+            android:layout_toRightOf="@id/Button2"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_03"
             android:textSize="10.25sp" />
 
         <Button
             android:id="@+id/Button4"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:layout_marginRight="27.25dp"
-            android:paddingBottom="6dp"
-            android:layout_toRightOf="@id/Button3"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_below="@+id/Button1"
+            android:layout_alignLeft="@+id/Button1"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="HD"
-            android:textColor="@drawable/btn_selector_textcolor"
-            android:textSize="10.25sp" />
+            android:background="@drawable/epg_choice_btn_selector_04"
+            android:textSize="10.25sp"
+            android:layout_marginBottom="27.5dp" />
 
         <Button
             android:id="@+id/Button5"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:paddingBottom="6dp"
-            android:layout_toRightOf="@id/Button4"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_alignTop="@+id/Button4"
+            android:layout_alignLeft="@+id/Button2"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="연예/오락"
-            android:textColor="@drawable/btn_selector_textcolor"
+            android:background="@drawable/epg_choice_btn_selector_05"
             android:textSize="10.25sp" />
 
         <Button
             android:id="@+id/Button6"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:layout_marginBottom="27.25dp"
-            android:paddingBottom="6dp"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
             android:layout_below="@+id/Button3"
+            android:layout_alignTop="@+id/Button4"
             android:layout_alignLeft="@+id/Button3"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="영화"
-            android:textColor="@drawable/btn_selector_textcolor"
+            android:background="@drawable/epg_choice_btn_selector_06"
             android:textSize="10.25sp" />
 
         <Button
             android:id="@+id/Button7"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:paddingBottom="6dp"
-            android:layout_alignTop="@+id/Button6"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_below="@+id/Button4"
             android:layout_alignLeft="@+id/Button4"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="드라마"
-            android:textColor="@drawable/btn_selector_textcolor"
-            android:textSize="10.25sp" />
+            android:background="@drawable/epg_choice_btn_selector_07"
+            android:textSize="10.25sp"
+            android:layout_marginBottom="27.5dp" />
 
         <Button
             android:id="@+id/Button8"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:paddingBottom="6dp"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
             android:layout_below="@+id/Button5"
-            android:layout_alignTop="@+id/Button6"
+            android:layout_alignTop="@+id/Button7"
             android:layout_alignLeft="@+id/Button5"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="스포츠"
-            android:textColor="@drawable/btn_selector_textcolor"
+            android:background="@drawable/epg_choice_btn_selector_08"
             android:textSize="10.25sp" />
 
         <Button
             android:id="@+id/Button9"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:paddingBottom="6dp"
-            android:layout_below="@+id/Button6"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_alignTop="@+id/Button8"
             android:layout_alignLeft="@+id/Button6"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="여성"
-            android:textColor="@drawable/btn_selector_textcolor"
+            android:background="@drawable/epg_choice_btn_selector_09"
             android:textSize="10.25sp" />
 
         <Button
             android:id="@+id/Button10"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:paddingBottom="6dp"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
             android:layout_below="@+id/Button7"
-            android:layout_alignTop="@+id/Button9"
             android:layout_alignLeft="@+id/Button7"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="어린이/교육"
-            android:textColor="@drawable/btn_selector_textcolor"
-            android:textSize="10.25sp" />
+            android:background="@drawable/epg_choice_btn_selector_10"
+            android:textSize="10.25sp"
+            android:layout_marginBottom="57.25dp" />
 
         <Button
             android:id="@+id/Button11"
-            android:layout_width="64.75dp"
-            android:layout_height="65dp"
-            android:paddingBottom="6dp"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_below="@+id/Button8"
             android:layout_alignTop="@+id/Button10"
             android:layout_alignLeft="@+id/Button8"
             android:gravity="bottom|center_horizontal"
-            android:background="@drawable/img_btn_selector_short"
-            android:text="취미/레저"
-            android:textColor="@drawable/btn_selector_textcolor"
+            android:background="@drawable/epg_choice_btn_selector_11"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/Button12"
+            android:layout_width="64.25dp"
+            android:layout_height="64.5dp"
+            android:layout_alignTop="@+id/Button11"
+            android:layout_alignLeft="@+id/Button9"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_12"
             android:textSize="10.25sp" />
 
     </RelativeLayout>
