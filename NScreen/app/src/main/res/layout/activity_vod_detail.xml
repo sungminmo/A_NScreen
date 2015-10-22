@@ -460,7 +460,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="40.75dp"
         android:layout_marginLeft="12.75dp"
@@ -469,12 +469,23 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="[]는 TV에 시청하실 수 있습니다."
+            android:layout_height="wrap_content"
+            android:text="[]는"
             android:id="@+id/textView5"
-            android:gravity="center_vertical|center_horizontal"
             android:textSize="14sp"
-            android:textColor="#7b5aa3" />
+            android:textColor="#7b5aa3"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" TV에서 시청하실 수 있습니다."
+            android:id="@+id/textView16"
+            android:layout_weight="1"
+            android:textColor="#7b5aa3"
+            android:textSize="14sp"
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout
