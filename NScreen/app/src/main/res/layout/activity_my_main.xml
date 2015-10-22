@@ -44,7 +44,7 @@
             android:layout_marginTop="9.75dp"
             android:layout_marginLeft="6dp"
             android:background="@drawable/btn_selector"
-            android:text="VOD찜목록"
+            android:text="VOD구매목록"
             android:textColor="@drawable/btn_selector_textcolor"/>
 
         <Button
@@ -64,7 +64,7 @@
             android:layout_marginRight="6dp"
             android:layout_marginTop="9.75dp"
             android:background="@drawable/btn_selector"
-            android:text="VOD구매목록"
+            android:text="VOD찜목록"
             android:textColor="@drawable/btn_selector_textcolor"
             android:layout_marginLeft="-1dp" />
 

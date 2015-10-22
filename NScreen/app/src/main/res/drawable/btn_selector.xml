@@ -3,7 +3,7 @@
     <item android:state_focused="false"
         android:state_selected="false"
         android:state_pressed="false"
-        android:drawable="@mipmap/btn_tab_select" />
+        android:drawable="@mipmap/btn_tab_unselect" />
 
     <item android:state_focused="true"
         android:state_selected="true"
