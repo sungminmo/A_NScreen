@@ -439,10 +439,9 @@
         android:gravity="center">
 
 
-    <Button
+        <Button android:id="@+id/vod_detail_preplay_button"
             android:layout_width="108.25dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15.5dp"
             android:text="미리보기"
             android:layout_marginRight="5.5dp"
             android:background="@drawable/img_btn_selector_short"
@@ -499,12 +498,24 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TV에서봐"
+            android:layout_height="wrap_content"
+            android:text="[]는"
             android:id="@+id/textView5"
-            android:gravity="center_vertical|center_horizontal"
             android:textSize="14sp"
-            android:textColor="#7b5aa3" />
+            android:textColor="#7b5aa3"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" TV에서 시청하실 수 있습니다."
+            android:id="@+id/textView16"
+            android:layout_weight="1"
+            android:textColor="#7b5aa3"
+            android:textSize="14sp"
+            android:gravity="center" />
+
     </LinearLayout>
 
     <LinearLayout
