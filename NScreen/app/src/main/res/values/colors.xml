@@ -20,6 +20,10 @@
 	<color name="switch_solid_on_color">#705099</color>
 	<color name="switch_solid_off_color">#ffffff</color>
 
+	<!-- edittext custom 색 -->
+	<color name="text_solid_default_color">#7b5aa3</color>
+	<color name="text_solid_error_color">#ff3b30</color>
+
 	<drawable name="setting_item_background">#ffffff</drawable> <!-- 설정 내 사용되는 리스트 아이템 배경 색상 -->
 	<drawable name="setting_item_selector_color">#e4d8f2</drawable> <!-- 설정 내 사용되는 리스트 아이템 selector 색상 -->
 
