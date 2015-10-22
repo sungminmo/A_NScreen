@@ -3,10 +3,10 @@
     <item
         android:state_selected="false"
         android:state_pressed="false"
-        android:drawable="@drawable/setting_pw_box_nor" />
+        android:drawable="@drawable/text_default_style" />
 
     <item
         android:state_selected="true"
         android:state_pressed="false"
-        android:drawable="@drawable/setting_pw_box_error" />
+        android:drawable="@drawable/text_error_style" />
 </selector>
