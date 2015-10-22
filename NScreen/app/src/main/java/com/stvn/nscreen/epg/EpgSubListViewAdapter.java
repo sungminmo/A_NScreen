@@ -60,10 +60,8 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             JSONObject         jobj          = new JSONObject(dobj.sJson);
 
             TextView           titleTextView = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
-            TextView           timeTextView  = ViewHolder.get(convertView, R.id.epg_sub_textview_program_time);
 
             titleTextView.setText(jobj.getString("programTitle"));
-            timeTextView.setText(jobj.getString("programBroadcastingStartTime"));
 
         } catch (JSONException e) {
             e.printStackTrace();

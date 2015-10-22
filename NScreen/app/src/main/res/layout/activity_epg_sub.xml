@@ -16,21 +16,22 @@
     <FrameLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
-        android:layout_height="56.25dp"
+        android:layout_height="65dp"
         android:orientation="horizontal"
         android:background="#c6b3dd">
 
         <LinearLayout
-            android:layout_width="70.5dp"
-            android:layout_height="56.25dp"
-            android:background="#FFFFFF"
-            android:gravity="center">
+            android:layout_width="81.5dp"
+            android:layout_height="65dp"
+            android:background="#FFFFFF">
 
             <ImageView
                 android:layout_width="48dp"
-                android:layout_height="17dp"
+                android:layout_height="19.25dp"
                 android:id="@+id/epg_sub_imageview_channel_logo"
-                android:background="#aaaaaa" />
+                android:background="#aaaaaa"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="23dp" />
         </LinearLayout>
 
     </FrameLayout>

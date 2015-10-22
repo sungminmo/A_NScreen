@@ -19,8 +19,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8.75dp"
-        android:layout_marginLeft="98.75dp"
-        android:layout_marginRight="39.5dp"
+        android:layout_marginLeft="94.5dp"
+        android:layout_marginRight="10.75dp"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
         android:textColor="#000000"
@@ -31,16 +31,16 @@
         android:id="@+id/epg_sub_imageview_program_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:layout_marginLeft="98.75dp"
+        android:layout_marginTop="27.75dp"
+        android:layout_marginLeft="94.5dp"
         android:background="@mipmap/btn_age_all" />
 
     <ImageView
         android:id="@+id/epg_sub_imageview_program_hdsd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:layout_marginLeft="127.25dp"
+        android:layout_marginTop="27.75dp"
+        android:layout_marginLeft="123dp"
         android:background="@mipmap/btn_size_hd" />
 
     <ImageView
@@ -48,8 +48,8 @@
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
         android:background="@drawable/progress_bg"
-        android:layout_marginLeft="96dp"
-        android:layout_marginRight="39.5dp"
+        android:layout_marginLeft="94.5dp"
+        android:layout_marginRight="10.75dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="9.75dp" />
 
@@ -57,10 +57,19 @@
         android:id="@+id/epg_sub_imageview_progress_curent"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
-        android:layout_marginLeft="96dp"
+        android:layout_marginLeft="94.5dp"
         android:layout_marginBottom="9.75dp"
         android:layout_marginRight="200dp"
         android:background="@drawable/progress_bar"
         android:layout_gravity="right|bottom" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView9"
+        android:layout_gravity="left|top"
+        android:layout_marginTop="27.75dp"
+        android:layout_marginLeft="151.5dp"
+        android:background="@mipmap/icon_record" />
 
 </FrameLayout>
