@@ -21,14 +21,14 @@
         android:textSize="14.5sp"
         android:textColor="#000000" />
 
-    <ImageView
-        android:id="@+id/epg_main_imagebutton_channel_logo"
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/epg_main_imageview_channel_logo"
         android:layout_width="48dp"
         android:layout_height="19.25dp"
         android:layout_marginLeft="39dp"
         android:layout_marginBottom="8.75dp"
         android:layout_gravity="bottom"
-        android:background="#aaaaaa" />
+        android:background="#0000" />
 
     <TextView
         android:id="@+id/epg_main_textview_program_title"

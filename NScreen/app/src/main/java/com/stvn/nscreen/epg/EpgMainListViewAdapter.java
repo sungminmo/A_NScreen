@@ -80,7 +80,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             JSONObject         jobj         = new JSONObject(dobj.sJson);
 
             // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
-            // ImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imagebutton_channel_logo);
+            NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
 
             ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
@@ -90,6 +90,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
+            channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
 
         } catch (JSONException e) {
             e.printStackTrace();
