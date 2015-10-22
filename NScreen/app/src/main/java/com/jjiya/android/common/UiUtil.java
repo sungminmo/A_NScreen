@@ -1,5 +1,6 @@
 package com.jjiya.android.common;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.stvn.nscreen.R;
@@ -57,6 +58,77 @@ public class UiUtil {
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_on);
+        }
+    }
+
+    public static void setIndicatorImage(int iCurrPage, int iTotalPage, ImageView image1, ImageView image2, ImageView image3, ImageView image4, ImageView image5) {
+        if ( iTotalPage == 0 ||  iTotalPage == 1 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.GONE);
+            image3.setVisibility(View.GONE);
+            image4.setVisibility(View.GONE);
+            image5.setVisibility(View.GONE);
+        } else if ( iTotalPage == 2 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.GONE);
+            image4.setVisibility(View.GONE);
+            image5.setVisibility(View.GONE);
+        } else if ( iTotalPage == 3 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.GONE);
+            image5.setVisibility(View.GONE);
+        } else if ( iTotalPage == 4 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.GONE);
+        } else if ( iTotalPage == 5 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.VISIBLE);
+        }
+        switch ( iCurrPage ) {
+            case 0: {
+                image1.setImageResource(R.mipmap.indicator_on);
+                image2.setImageResource(R.mipmap.indicator_off);
+                image3.setImageResource(R.mipmap.indicator_off);
+                image4.setImageResource(R.mipmap.indicator_off);
+                image5.setImageResource(R.mipmap.indicator_off);
+            } break;
+            case 1: {
+                image1.setImageResource(R.mipmap.indicator_off);
+                image2.setImageResource(R.mipmap.indicator_on);
+                image3.setImageResource(R.mipmap.indicator_off);
+                image4.setImageResource(R.mipmap.indicator_off);
+                image5.setImageResource(R.mipmap.indicator_off);
+            } break;
+            case 2: {
+                image1.setImageResource(R.mipmap.indicator_off);
+                image2.setImageResource(R.mipmap.indicator_off);
+                image3.setImageResource(R.mipmap.indicator_on);
+                image4.setImageResource(R.mipmap.indicator_off);
+                image5.setImageResource(R.mipmap.indicator_off);
+            } break;
+            case 3: {
+                image1.setImageResource(R.mipmap.indicator_off);
+                image2.setImageResource(R.mipmap.indicator_off);
+                image3.setImageResource(R.mipmap.indicator_off);
+                image4.setImageResource(R.mipmap.indicator_on);
+                image5.setImageResource(R.mipmap.indicator_off);
+            } break;
+            case 4: {
+                image1.setImageResource(R.mipmap.indicator_off);
+                image2.setImageResource(R.mipmap.indicator_off);
+                image3.setImageResource(R.mipmap.indicator_off);
+                image4.setImageResource(R.mipmap.indicator_off);
+                image5.setImageResource(R.mipmap.indicator_on);
+            } break;
         }
     }
 

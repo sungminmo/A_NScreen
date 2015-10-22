@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="169.5dp"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="132.75dp"
+        android:gravity="center_horizontal">
+
+        <FrameLayout
+            android:id="@+id/eight_vod_poster_framelayout1"
+            android:layout_width="82.75dp"
+            android:layout_height="120.5dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="8.75dp" >
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/eight_vod_poster_netwokr_imageview1"
+                android:background="#cacaca"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/eight_vod_poster_framelayout2"
+            android:layout_width="82.75dp"
+            android:layout_height="120.5dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="8.75dp" >
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/eight_vod_poster_netwokr_imageview2"
+                android:background="#cacaca"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/eight_vod_poster_framelayout3"
+            android:layout_width="82.75dp"
+            android:layout_height="120.5dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="8.75dp" >
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/eight_vod_poster_netwokr_imageview3"
+                android:background="#cacaca"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/eight_vod_poster_framelayout4"
+            android:layout_width="82.75dp"
+            android:layout_height="120.5dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="8.75dp" >
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/eight_vod_poster_netwokr_imageview4"
+                android:background="#cacaca"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="21.75dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/eight_vod_poster_title_textview1"
+            android:layout_width="82.75dp"
+            android:layout_height="wrap_content"
+            android:text="title"
+            android:textStyle="bold"
+            android:textSize="10.5sp"
+            android:textColor="#3c3c3c"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="6dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/eight_vod_poster_title_textview2"
+            android:layout_width="82.75dp"
+            android:layout_height="wrap_content"
+            android:text="title"
+            android:textStyle="bold"
+            android:textSize="10.5sp"
+            android:textColor="#3c3c3c"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="6dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/eight_vod_poster_title_textview3"
+            android:layout_width="82.75dp"
+            android:layout_height="wrap_content"
+            android:text="title"
+            android:textStyle="bold"
+            android:textSize="10.5sp"
+            android:textColor="#3c3c3c"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="6dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/eight_vod_poster_title_textview4"
+            android:layout_width="82.75dp"
+            android:layout_height="wrap_content"
+            android:text="title"
+            android:textStyle="bold"
+            android:textSize="10.5sp"
+            android:textColor="#3c3c3c"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="6dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="18.5dp"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/eight_vod_poster_indicator_imageview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/indicator_off" />
+
+        <ImageView
+            android:id="@+id/eight_vod_poster_indicator_imageview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/indicator_off"
+            android:layout_marginLeft="6.25dp" />
+
+        <ImageView
+            android:id="@+id/eight_vod_poster_indicator_imageview3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/indicator_off"
+            android:layout_marginLeft="6.25dp" />
+
+        <ImageView
+            android:id="@+id/eight_vod_poster_indicator_imageview4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/indicator_off"
+            android:layout_marginLeft="6.25dp" />
+
+        <ImageView
+            android:id="@+id/eight_vod_poster_indicator_imageview5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/indicator_off"
+            android:layout_marginLeft="6.25dp" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

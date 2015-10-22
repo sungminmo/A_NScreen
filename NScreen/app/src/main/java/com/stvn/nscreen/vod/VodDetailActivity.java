@@ -3,12 +3,9 @@ package com.stvn.nscreen.vod;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,9 +15,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.FourVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
+import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
@@ -29,12 +29,12 @@ import com.stvn.nscreen.common.CMBaseActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VodDetailActivity extends CMBaseActivity {
@@ -47,6 +47,7 @@ public class VodDetailActivity extends CMBaseActivity {
     private RequestQueue mRequestQueue;
     private ProgressDialog mProgressDialog;
     private String sJson;
+    private ImageLoader mImageLoader;
 
     // UI
     private TextView mTitleTextView;
@@ -67,9 +68,12 @@ public class VodDetailActivity extends CMBaseActivity {
     private LinearLayout mPurchaseLinearLayout;
     private LinearLayout mPlayLinearLayout;
     private LinearLayout mTvOnlyLiearLayout;
+    private ViewPager mViewPager;
 
     // activity
     private String assetId; // intent param
+    private List<JSONObject> relationVods;
+    private FourVodPosterPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,18 +83,22 @@ public class VodDetailActivity extends CMBaseActivity {
         mInstance     = this;
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
+        ImageLoader.ImageCache imageCache = new BitmapLruCache();
+        mImageLoader = new ImageLoader(mRequestQueue, imageCache);
 
-//        sJson   = getIntent().getExtras().getString("sJson");
-//        try {
-//            JSONObject jo = new JSONObject(sJson);
-//            assetId = jo.getString("assetId");
-//            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
-//            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
-//            assetId = "www.hchoice.co.kr|M4132449LFO281926301";
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
+        sJson   = getIntent().getExtras().getString("sJson");
+        try {
+            JSONObject jo = new JSONObject(sJson);
+            assetId = jo.getString("assetId");
+            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
+            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
+            assetId = "www.hchoice.co.kr|M4132449LFO281926301";
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        relationVods = new ArrayList<JSONObject>();
+        mPagerAdapter = new FourVodPosterPagerAdapter(this);
+        mPagerAdapter.setImageLoader(mImageLoader);
 
         setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
         setActionBarTitle(getString(R.string.title_activity_vod_detail));
@@ -113,11 +121,21 @@ public class VodDetailActivity extends CMBaseActivity {
         mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);
         mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);
         mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);
+        mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
+
 
 
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
         // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
-        // requestGetAssetInfo();
+        /**
+         * VOD 상세정보 요청
+         */
+        requestGetAssetInfo();
+
+        /**
+         * 화면 하단의 연관 VOD 요청
+         */
+        requestRecommendContentGroupByAssetId();
     }
 
     private void requestGetAssetInfo() {
@@ -218,6 +236,68 @@ public class VodDetailActivity extends CMBaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    // http://192.168.40.5:8080/HApplicationServer/recommendContentGroupByAssetId.json?
+    // version=1&
+    // terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&
+    // assetId=www.hchoice.co.kr|M4154270LSG347422301&
+    // contentGroupProfile=2
+
+    /**
+     * 연관 VOD
+     */
+    private void requestRecommendContentGroupByAssetId() {
+        //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestRecommendContentGroupByAssetId()"); }
+        String terminalKey = mPref.getValue(JYSharedPreferences.TERMINAL_KEY, "");
+        String encAssetId = null;
+        try {
+            encAssetId  = URLDecoder.decode(assetId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = mPref.getVodServerUrl() + "/recommendContentGroupByAssetId.json?version=1&terminalKey="+terminalKey+"&&assetId="+encAssetId+"&contentGroupProfile=2";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                //mProgressDialog.dismiss();
+                try {
+                    JSONObject jo            = new JSONObject(response);
+
+                    // contentGroupList
+                    JSONArray contentGroupLists = jo.getJSONArray("contentGroupList");
+                    for ( int i = 0; i < contentGroupLists.length(); i++ ) {
+                        if ( i > 19 ) {
+                            break;
+                        }
+                        JSONObject content = contentGroupLists.getJSONObject(i);
+                        relationVods.add(content);
+                        mPagerAdapter.addVod(content);
+                    }
+                    mViewPager.setAdapter(mPagerAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {

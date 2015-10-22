@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.stvn.nscreen.vod.VodDetailActivity"
-    android:background="@color/white">
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -353,6 +359,7 @@
                     android:textColor="#7b5aa3"
                     android:background="@drawable/series_selector" />
 
+
                 <Button
                     android:layout_width="41.25dp"
                     android:layout_height="27.75dp"
@@ -362,6 +369,7 @@
                     android:textSize="14.5sp"
                     android:textColor="#7b5aa3"
                     android:background="@drawable/series_selector" />
+
 
                 <Button
                     android:layout_width="41.25dp"
@@ -373,6 +381,7 @@
                     android:textColor="#7b5aa3"
                     android:background="@drawable/series_selector" />
 
+
                 <Button
                     android:layout_width="41.25dp"
                     android:layout_height="27.75dp"
@@ -382,6 +391,7 @@
                     android:textSize="14.5sp"
                     android:textColor="#7b5aa3"
                     android:background="@drawable/series_selector" />
+
 
             </LinearLayout>
 
@@ -428,14 +438,16 @@
         android:id="@+id/vod_detail_purchase_linearlayout"
         android:gravity="center">
 
-        <Button
+
+    <Button
             android:layout_width="108.25dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="15.5dp"
             android:text="미리보기"
-            android:id="@+id/vod_detail_preplay_button"
             android:layout_marginRight="5.5dp"
             android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor" />
+
 
         <Button
             android:layout_width="108.25dp"
@@ -446,6 +458,7 @@
             android:background="@mipmap/btn_select"
             android:textColor="#FFFFFF" />
 
+
         <Button
             android:layout_width="108.25dp"
             android:layout_height="match_parent"
@@ -453,6 +466,7 @@
             android:id="@+id/vod_detail_jjim_button"
             android:background="@drawable/img_btn_selector_short"
             android:textColor="@drawable/btn_selector_textcolor" />
+
 
     </LinearLayout>
 
@@ -472,6 +486,7 @@
             android:background="@mipmap/btn_select"
             android:textColor="#FFFFFF" />
 
+
     </LinearLayout>
 
     <LinearLayout
@@ -484,29 +499,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="[]는"
+            android:layout_height="match_parent"
+            android:text="TV에서봐"
             android:id="@+id/textView5"
+            android:gravity="center_vertical|center_horizontal"
             android:textSize="14sp"
-            android:textColor="#7b5aa3"
-            android:layout_weight="1"
-            android:gravity="center" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=" TV에서 시청하실 수 있습니다."
-            android:id="@+id/textView16"
-            android:layout_weight="1"
-            android:textColor="#7b5aa3"
-            android:textSize="14sp"
-            android:gravity="center" />
+            android:textColor="#7b5aa3" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="169.5dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="match_parent"
@@ -532,10 +536,14 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/vod_detail_related_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="160.75dp">
+            android:layout_height="169.5dp">
         </android.support.v4.view.ViewPager>
 
     </LinearLayout>
+
+
+</LinearLayout>
+</ScrollView>
 
 
 </LinearLayout>
