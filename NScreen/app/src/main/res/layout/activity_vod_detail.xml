@@ -408,14 +408,14 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="40.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:id="@+id/vod_detail_purchase_linearlayout">
+        android:layout_marginLeft="12.25dp"
+        android:layout_marginRight="12.25dp"
+        android:id="@+id/vod_detail_purchase_linearlayout"
+        android:gravity="center">
 
         <Button
             android:layout_width="108.25dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15.5dp"
             android:text="미리보기"
             android:id="@+id/vod_detail_preplay_button"
             android:layout_marginRight="5.5dp"
@@ -427,7 +427,7 @@
             android:layout_height="match_parent"
             android:text="구매하기"
             android:id="@+id/vod_detail_order_button"
-            android:layout_marginRight="5.5dp"
+            android:layout_marginRight="5.25dp"
             android:background="@mipmap/btn_select"
             android:textColor="#FFFFFF" />
 
