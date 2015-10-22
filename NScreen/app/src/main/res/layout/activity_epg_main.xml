@@ -43,8 +43,8 @@
             android:id="@+id/epg_main_genre_choice_imageButton"
             android:layout_width="fill_parent"
             android:layout_height="40.75dp"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
+            android:layout_marginLeft="12.25dp"
+            android:layout_marginRight="12.25dp"
             android:layout_gravity="center_vertical"
             android:background="@mipmap/btn_nor" />
 

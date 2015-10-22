@@ -7,15 +7,15 @@
         android:id="@+id/epg_main_imagebutton_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="11.5dp"
         android:layout_gravity="center_vertical"
-        android:background="@mipmap/btn_favorite_unselect" />
+        android:background="@mipmap/icon_list_favorite_unselect" />
 
     <TextView
         android:id="@+id/epg_main_textview_channel_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="8.75dp"
         android:layout_marginLeft="42dp"
         android:text="00"
         android:textSize="14.5sp"
@@ -25,7 +25,7 @@
         android:id="@+id/epg_main_imagebutton_channel_logo"
         android:layout_width="48dp"
         android:layout_height="19.25dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="39dp"
         android:layout_marginBottom="8.75dp"
         android:layout_gravity="bottom"
         android:background="#aaaaaa" />
@@ -48,7 +48,7 @@
         android:id="@+id/epg_main_textview_program_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="26dp"
         android:layout_marginLeft="94.75dp"
         android:text="00:00~00:00"
         android:textSize="12sp"
@@ -60,21 +60,21 @@
         android:layout_height="wrap_content"
         android:background="@mipmap/btn_age_all"
         android:layout_marginTop="27.75dp"
-        android:layout_marginLeft="170.5dp" />
+        android:layout_marginLeft="168.5dp" />
 
     <ImageView
         android:id="@+id/epg_main_imageview_program_hdsd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27.75dp"
-        android:layout_marginLeft="199dp"
+        android:layout_marginLeft="197dp"
         android:background="@mipmap/btn_size_hd" />
 
     <ImageView
         android:id="@+id/epg_main_imageview_progress_bg"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
-        android:layout_marginLeft="94.75dp"
+        android:layout_marginLeft="93.75dp"
         android:layout_marginBottom="9.75dp"
         android:layout_marginRight="50dp"
         android:layout_gravity="bottom"
@@ -84,7 +84,7 @@
         android:id="@+id/epg_main_imageview_progress_curent"
         android:layout_width="fill_parent"
         android:layout_height="2.25dp"
-        android:layout_marginLeft="94.75dp"
+        android:layout_marginLeft="93.75dp"
         android:layout_marginBottom="9.75dp"
         android:layout_marginRight="200dp"
         android:layout_gravity="bottom"
@@ -97,5 +97,14 @@
         android:background="@mipmap/btn_list_arrow"
         android:layout_gravity="center_vertical|right"
         android:layout_marginRight="12.75dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView8"
+        android:layout_gravity="left|top"
+        android:layout_marginTop="27.75dp"
+        android:layout_marginLeft="225dp"
+        android:background="@mipmap/icon_record" />
 
 </FrameLayout>
