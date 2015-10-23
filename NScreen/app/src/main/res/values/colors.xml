@@ -35,4 +35,7 @@
 	<!-- VOD DETAIL 시리즈 색 -->
 	<color name="series_unpress_color">#0000</color>
 
+	<!-- Pairing edittext cursor 색 -->
+	<color name="pairing_edittext_color">#7B5AA3</color>
+
 </resources>

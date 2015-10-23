@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.vod.VodDetailActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mPref.put(JYSharedPreferences.TERMINAL_KEY, "9CED3A20FB6A4D7FF35D1AC965F988D2");
 
 
-        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11;
+        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12;
 
         Button1  = (Button) findViewById(R.id.Button1);
         Button2  = (Button) findViewById(R.id.Button2);
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Button9  = (Button) findViewById(R.id.Button9);
         Button10 = (Button) findViewById(R.id.Button10);
         Button11 = (Button) findViewById(R.id.Button11);
+        Button12 = (Button) findViewById(R.id.Button12);
 
         Button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +131,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodDetailActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, PairingMainActivity.class);
                 startActivity(i);
             }
         });
