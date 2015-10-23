@@ -8,12 +8,11 @@ import com.stvn.nscreen.R;
 /**
  * Created by limdavid on 15. 10. 23..
  */
-
-public class PairingMainActivity extends AppCompatActivity {
+public class PairingSubActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pairing_main);
+        setContentView(R.layout.activity_pairing_sub);
     }
 }

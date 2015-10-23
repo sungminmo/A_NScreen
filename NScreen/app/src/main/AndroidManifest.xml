@@ -47,7 +47,9 @@
         </activity>
         </activity>
         <activity android:name=".pairing.PairingMainActivity" >
-    </activity>
+        </activity>
+        <activity android:name=".pairing.PairingSubActivity" >
+        </activity>
         <activity android:name=".search.SearchMainActivity" >
         </activity>
         <!-- 설정 화면 관련 엑티비티 -->

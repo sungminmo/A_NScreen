@@ -9,83 +9,102 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@android:color/white">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/intro_cnm"
-        android:textColor="@android:color/black" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/Button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EpgChoice" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/Button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EpgMain" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/intro_cnm"
+                android:textColor="@android:color/black" />
 
-    <Button
-        android:id="@+id/Button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EpgSub" />
+            <Button
+                android:id="@+id/Button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EpgChoice" />
 
-    <Button
-        android:id="@+id/Button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MyMain" />
+            <Button
+                android:id="@+id/Button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EpgMain" />
 
-    <Button
-        android:id="@+id/Button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MySub" />
+            <Button
+                android:id="@+id/Button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EpgSub" />
 
-    <Button
-        android:id="@+id/Button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PvrMain" />
+            <Button
+                android:id="@+id/Button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MyMain" />
 
-    <Button
-        android:id="@+id/Button7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PvrSub" />
+            <Button
+                android:id="@+id/Button5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MySub" />
 
-    <Button
-        android:id="@+id/Button8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SearchMain" />
+            <Button
+                android:id="@+id/Button6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PvrMain" />
 
-    <Button
-        android:id="@+id/Button9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SettingMain" />
+            <Button
+                android:id="@+id/Button7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PvrSub" />
 
-    <Button
-        android:id="@+id/Button10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="VodMain" />
+            <Button
+                android:id="@+id/Button8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SearchMain" />
 
-    <Button
-        android:id="@+id/Button11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="VodDetail" />
+            <Button
+                android:id="@+id/Button9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SettingMain" />
 
-    <Button
-        android:id="@+id/Button12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ParingMain" />
+            <Button
+                android:id="@+id/Button10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VodMain" />
+
+            <Button
+                android:id="@+id/Button11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VodDetail" />
+
+            <Button
+                android:id="@+id/Button12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PairingMain" />
+
+            <Button
+                android:id="@+id/Button13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PairingSub" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
