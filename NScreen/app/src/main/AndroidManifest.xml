@@ -43,8 +43,12 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity android:name=".my.MyMainActivity" >
-        </activity>
         <activity android:name=".my.MySubActivity" >
+        </activity>
+        </activity>
+        <activity android:name=".pairing.PairingMainActivity" >
+        </activity>
+        <activity android:name=".pairing.PairingSubActivity" >
         </activity>
         <activity android:name=".search.SearchMainActivity" >
         </activity>
