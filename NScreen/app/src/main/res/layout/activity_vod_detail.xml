@@ -499,7 +499,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="[]는"
+            android:text="[] 는 (은)"
             android:id="@+id/textView5"
             android:textSize="14sp"
             android:textColor="#7b5aa3"
