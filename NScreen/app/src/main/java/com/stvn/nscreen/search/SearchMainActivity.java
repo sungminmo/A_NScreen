@@ -1,6 +1,7 @@
 package com.stvn.nscreen.search;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -16,12 +17,31 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
+import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.stvn.nscreen.util.CMLog;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by limdavid on 15. 9. 15..
@@ -41,14 +61,23 @@ public class SearchMainActivity extends CMBaseActivity {
     private View mSearchLayout;
     private FrameLayout mFragmentlayout;
 
+    private String mVersion = "1";
+    private String mTerminalKey = "9CED3A20FB6A4D7FF35D1AC965F988D2";
+    private RequestQueue mRequestQueue;
+    private ProgressDialog mProgressDialog;
+
+    private JYSharedPreferences mPref;
+    private boolean mLockListView = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_main);
         setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
         setActionBarTitle("검색");
+        mRequestQueue = Volley.newRequestQueue(this);
+        mPref = new JYSharedPreferences(this);
         initView();
-        initData();
 
     }
 
@@ -68,18 +97,25 @@ public class SearchMainActivity extends CMBaseActivity {
         mAdapter.setClickListener(clickListener);
         mKeywordListView.setAdapter(mAdapter);
         mKeywordView.addTextChangedListener(mKeywordWatcher);
+        mClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mKeywordView.setText("");
+            }
+        });
 
         mKeywordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
-                        mSearchCount.setText("검색결과가 19건 있습니다.");
                         mKeywordListView.setVisibility(View.GONE);
                         mSearchLayout.setVisibility(View.GONE);
-                        mKeywordView.setText("");
                         hideSoftKeyboard();
-                        showFragment();
+                        if (mKeywordView.getText().length() > 0)
+                            showFragment();
+                        else
+                            Toast.makeText(SearchMainActivity.this, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
                         return true;
                 }
 
@@ -87,25 +123,12 @@ public class SearchMainActivity extends CMBaseActivity {
                 return false;
             }
         });
+        mLockListView = false;
+
         mSearchLayout = (View)findViewById(R.id.search_layout);
         mSearchLayout.setVisibility(View.GONE);
         mFragmentlayout = (FrameLayout)findViewById(R.id.searchFragment);
         switchTab(0);
-    }
-    private void initData()
-    {
-        mKeywordList.add("AAAA");
-        mKeywordList.add("BBBB");
-        mKeywordList.add("CCCC");
-        mKeywordList.add("DDDD");
-        mKeywordList.add("EEEE");
-        mKeywordList.add("FFFF");
-        mKeywordList.add("GGGG");
-        mKeywordList.add("HHHH");
-        mKeywordList.add("IIII");
-        mKeywordList.add("JJJJ");
-        mKeywordList.add("KKKK");
-        mKeywordList.add("LLLL");
     }
 
     TextWatcher mKeywordWatcher = new TextWatcher() {
@@ -123,11 +146,88 @@ public class SearchMainActivity extends CMBaseActivity {
             if(s.length()>0)
             {
                 // 조회로직 추가
-                mKeywordListView.setVisibility(View.VISIBLE);
-                mAdapter.notifyDataSetChanged();
+                if(!mLockListView)
+                    reqKeywordList();
             }
         }
     };
+
+    public void reqKeywordList()
+    {
+        mLockListView = true;
+        mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
+        String url = Constants.SERVER_URL_EPG_REAL+"/HApplicationServer/getSearchWord.xml?version="+mVersion+"&terminalKey="+mTerminalKey+
+                "&searchKeyword="+mKeywordView.getText().toString();
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                parseGetKeywordList(response);
+                mAdapter.notifyDataSetChanged();
+                mProgressDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                CMLog.e("CM", params.toString());
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseGetKeywordList(String response) {
+
+        StringBuilder sb = new StringBuilder();
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while(eventType != XmlPullParser.END_DOCUMENT)
+            {
+                String name = null;
+
+                switch (eventType)
+                {
+                    case XmlPullParser.START_TAG:
+                        name = xpp.getName();
+                        if("searchWord".equals(name)){
+                            mKeywordList.add(xpp.nextText());
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        name = xpp.getName();
+                        break;
+
+                }
+                eventType = xpp.next();
+            }
+            mKeywordListView.setVisibility(View.VISIBLE);
+            mAdapter.notifyDataSetChanged();
+            mLockListView = false;
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void switchTab(int idx)
     {
@@ -148,6 +248,11 @@ public class SearchMainActivity extends CMBaseActivity {
         }
     }
 
+    public void setSearchCountText(int cnt)
+    {
+        mSearchCount.setText("검색결과가 "+cnt+"건 있습니다.");
+    }
+
     public void showFragment()
     {
         switch (mTabSelectIdx)
@@ -159,7 +264,9 @@ public class SearchMainActivity extends CMBaseActivity {
                 mFragment = new SearchProgramFragment();
                 break;
         }
-
+        Bundle bundle = new Bundle();
+        bundle.putString("KEYWORD",mKeywordView.getText().toString());
+        mFragment.setArguments(bundle);
         mKeywordListView.setVisibility(View.GONE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.searchFragment, mFragment);
