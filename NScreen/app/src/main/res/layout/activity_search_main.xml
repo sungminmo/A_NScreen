@@ -64,6 +64,7 @@
                 android:layout_marginLeft="@dimen/dimen_14"
                 android:imeOptions="actionSearch"
                 android:id="@+id/search_edit"
+                android:textColor="@color/text_area_color"
                 />
             <ImageView
                 android:layout_width="wrap_content"

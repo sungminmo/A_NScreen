@@ -9,16 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.common.SearchDataObject;
 
 import java.util.List;
 
-public class SearchVodAdapter extends ArrayAdapter<Integer> {
+public class SearchVodAdapter extends ArrayAdapter<SearchDataObject> {
 
 	LayoutInflater mInflater;
 	private Context mContext;
 
 
-	public SearchVodAdapter(Context context, List<Integer> items)
+	public SearchVodAdapter(Context context, List<SearchDataObject> items)
 	{
 		super(context, 0, items);
 		// TODO Auto-generated constructor stub
@@ -52,10 +53,10 @@ public class SearchVodAdapter extends ArrayAdapter<Integer> {
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		int value = getItem(position);
+		SearchDataObject item = getItem(position);
 		holder.poster.setImageResource(R.mipmap.postersample);
 		int imgresource = R.mipmap.vod_01;
-		switch (value%8)
+		switch (position%8)
 		{
 			case 0:
 				imgresource = R.mipmap.vod_01;

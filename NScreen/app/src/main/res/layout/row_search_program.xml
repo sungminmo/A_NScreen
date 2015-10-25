@@ -87,7 +87,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     >
-                    <ImageView
+                    <com.android.volley.toolbox.NetworkImageView
                         android:layout_width="@dimen/dimen_48"
                         android:layout_height="@dimen/dimen_19"
                         android:id="@+id/ch_logo"
