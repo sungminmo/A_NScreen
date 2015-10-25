@@ -86,7 +86,7 @@ public class CMSettingPurchaseAuthActivity extends CMBaseActivity implements Vie
         } else {
             if (pwd.equals(pwdRe)) {
                 mAuthPwdRe.setSelected(false);
-                mAuthPwdRe.setTextColor(getResources().getColor(R.color.black));
+                mAuthPwdRe.setTextColor(getResources().getColor(R.color.setting_purchase_violet_color));
                 mErrorTxt.setText("");
                 return true;
             } else {
