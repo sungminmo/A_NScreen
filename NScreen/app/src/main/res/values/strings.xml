@@ -24,7 +24,7 @@
     <!-- 설정 -->
     <string name="setting_content">C&amp;M 모바일 서비스를 효율적으로 이용하기 위해\n지역 설정, 인증번호관리, 성인검색 제한설정, 본인인증 기능을 제공합니다.</string>
     <string name="setting_help_area_title">지역설정 이란?</string>
-    <string name="setting_help_area_message">지역 방송사 별로 채널 가이드 내, 채널 번호가 동일하지 않은 경우가 있습니다.\n\n보다 원활한 채널가이드 이용, 프로그램 시청예약 등 편리한 서비스 이용을 위해, 또 지역별로 진행되는 다양한 프로모션 서비스 이용 전, 꼭 지역설정을 해주세요.</string>
+    <string name="setting_help_area_message">지역 별로 채널 가이드에 표시되는 채널 번호가\n동일하지 않는 경우가 있습니다.\n\n보다 원활한 서비스 이용을 위해 꼭\n지역 설정을 해주세요.</string>
     <string name="setting_help_purchase_auth_title">구매인증 비밀번호 관리 란?</string>
     <string name="setting_help_purchase_auth_message">고객 님께서 셋탑박스 연동과 함께 설정 하신 인증번호를 변경하는 서비스 입니다. 개인정보 보호와 콘텐트 이용관련 보안유지를 위해 주기 별로 간단한 인증 후 기존 인증번호를 변경해주세요.</string>
     <string name="setting_help_adult_search_title">성인검색 제한 설정이란?</string>
