@@ -72,6 +72,9 @@
         <activity android:name=".vod.VodBuyActivity">
 
         </activity>
+        <activity android:name=".rmt.RemoteControllerActivity">
+
+        </activity>
     </application>
 
 </manifest>

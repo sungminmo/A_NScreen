@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56.25dp"
+        android:background="@mipmap/title_bar_bg">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="리모컨"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="9dp"
+            android:background="@mipmap/btn_back" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:layout_marginLeft="12.5dp"
+        android:layout_marginRight="12.5dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="현재시청채널 : "
+                android:id="@+id/textView65"
+                android:textSize="14.75dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="13번"
+                android:id="@+id/textView66"
+                android:textSize="14.75sp"
+                android:textColor="#7b5aa3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:layout_width="123.75dp"
+                android:layout_height="40.25dp"
+                android:id="@+id/button11"
+                android:background="@drawable/btn_power_selector"
+                android:layout_marginRight="10.75dp" />
+
+            <FrameLayout
+                android:layout_width="200.75dp"
+                android:layout_height="40.75dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/frameLayout"
+                android:layout_toEndOf="@+id/frameLayout">
+
+                <ImageButton
+                    android:id="@+id/epg_main_genre_choice_imageButton"
+                    android:layout_width="200.75dp"
+                    android:layout_height="40.75dp"
+                    android:layout_marginLeft="12.25dp"
+                    android:layout_marginRight="12.25dp"
+                    android:background="@drawable/img_btn_selector_short"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전체채널"
+                    android:textSize="14.5sp"
+                    android:textColor="#7b5aa3"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="13dp"
+                    android:background="@mipmap/ch_box_arrow" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="349dp"
+        android:id="@+id/remote_controller_listview"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="12.5dp"
+        android:layout_marginLeft="12.5dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100.25dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12.5dp"
+        android:layout_marginRight="12.5dp">
+
+        <Button
+            android:layout_width="155dp"
+            android:layout_height="66.25dp"
+            android:id="@+id/button12"
+            android:background="@drawable/btn_volume_down_selector"
+            android:layout_weight="1"
+            android:layout_marginTop="17.25dp"
+            android:layout_marginBottom="16.75dp" />
+
+        <View
+            android:layout_width="0.75dp"
+            android:layout_height="54.75dp"
+            android:background="#4e3071"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12.75dp"
+            android:gravity="center"
+            android:layout_marginTop="22.75dp"
+            android:layout_marginBottom="6dp" />
+
+        <Button
+            android:layout_width="155dp"
+            android:layout_height="66.25dp"
+            android:id="@+id/button13"
+            android:background="@drawable/btn_volume_up_selector"
+            android:layout_weight="1"
+            android:layout_marginTop="17.25dp"
+            android:layout_marginBottom="16.75dp" />
+    </LinearLayout>
+
+</LinearLayout>

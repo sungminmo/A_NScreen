@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="58dp">
+
+    <ImageButton
+        android:id="@+id/remote_imagebutton_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11.5dp"
+        android:layout_gravity="center_vertical"
+        android:background="@mipmap/icon_favorite_unselect" />
+
+    <TextView
+        android:id="@+id/remote_textview_channel_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8.75dp"
+        android:layout_marginLeft="42dp"
+        android:text="00"
+        android:textSize="14.5sp"
+        android:textColor="#000000" />
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/remote_imageview_channel_logo"
+        android:layout_width="48dp"
+        android:layout_height="19.25dp"
+        android:layout_marginLeft="39dp"
+        android:layout_marginBottom="8.75dp"
+        android:layout_gravity="bottom"
+        android:background="#0000" />
+
+    <TextView
+        android:id="@+id/remote_textview_program_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8.75dp"
+        android:layout_marginLeft="94.75dp"
+        android:layout_marginRight="50dp"
+        android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
+        android:textSize="14.5sp"
+        android:textColor="#000000"
+        android:ellipsize="end"
+        android:lines="1"
+        android:autoText="false" />
+
+    <TextView
+        android:id="@+id/remote_textview_program_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:layout_marginLeft="94.75dp"
+        android:text="00:00~00:00"
+        android:textSize="12sp"
+        android:textColor="#000000" />
+
+    <ImageView
+        android:id="@+id/remote_imageview_program_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/btn_age_all"
+        android:layout_marginTop="27.75dp"
+        android:layout_marginLeft="168.5dp" />
+
+    <ImageView
+        android:id="@+id/remote_imageview_program_hdsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27.75dp"
+        android:layout_marginLeft="197dp"
+        android:background="@mipmap/btn_size_hd" />
+
+    <ImageView
+        android:id="@+id/remote_imageview_progress_bg"
+        android:layout_width="fill_parent"
+        android:layout_height="2.25dp"
+        android:layout_marginLeft="93.75dp"
+        android:layout_marginBottom="9.75dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/progress_bg" />
+
+    <ImageView
+        android:id="@+id/remote_imageview_progress_curent"
+        android:layout_width="fill_parent"
+        android:layout_height="2.25dp"
+        android:layout_marginLeft="93.75dp"
+        android:layout_marginBottom="9.75dp"
+        android:layout_marginRight="200dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/progress_bar" />
+
+    <ImageView
+        android:id="@+id/remote_imageview_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/btn_list_arrow"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="12.75dp" />
+
+</FrameLayout>

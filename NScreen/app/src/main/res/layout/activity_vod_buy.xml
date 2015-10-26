@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="56.25dp"
         android:orientation="horizontal"
-        android:background="@mipmap/title_bar_bg">
+        android:background="@mipmap/title_bar_bg"
+        android:layout_marginBottom="27.25dp">
 
         <TextView
             android:id="@+id/textView"
