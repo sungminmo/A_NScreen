@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:style="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
@@ -33,13 +35,14 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="179dp"
+        android:layout_width="334.5dp"
+        android:layout_height="216.5dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
         android:layout_marginBottom="17.25dp"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:background="#F0F0F2">
 
         <LinearLayout
             android:orientation="vertical"
@@ -83,6 +86,7 @@
                 android:id="@+id/textView40"
                 android:textSize="12.75dp"
                 android:textColor="@drawable/btn_purchase_textcolor" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -218,13 +222,14 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="179dp"
+        android:layout_width="334.5dp"
+        android:layout_height="216.5dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
         android:layout_marginBottom="49.5dp"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:background="#F0F0F2">
 
         <LinearLayout
             android:orientation="vertical"

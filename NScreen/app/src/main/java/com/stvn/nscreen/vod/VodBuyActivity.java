@@ -2,6 +2,7 @@ package com.stvn.nscreen.vod;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.stvn.nscreen.R;
 

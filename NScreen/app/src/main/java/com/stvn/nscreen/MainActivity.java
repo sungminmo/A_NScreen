@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private static       MainActivity        mInstance;
     private              JYSharedPreferences mPref;
 
+    private             Button               Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13, Button14;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         mPref.put(JYSharedPreferences.TERMINAL_KEY, "9CED3A20FB6A4D7FF35D1AC965F988D2");
 
 
-        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13, Button14;
 
         Button1  = (Button) findViewById(R.id.Button1);
         Button2  = (Button) findViewById(R.id.Button2);
