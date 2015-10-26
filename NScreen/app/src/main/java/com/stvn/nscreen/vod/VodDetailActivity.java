@@ -141,7 +141,7 @@ public class VodDetailActivity extends CMBaseActivity {
     private void requestGetAssetInfo() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetAssetInfo()"); }
-        String terminalKey = mPref.getValue(JYSharedPreferences.TERMINAL_KEY, "");
+        String terminalKey = mPref.getWebhasTerminalKey();
         String encAssetId = null;
         try {
             encAssetId  = URLDecoder.decode(assetId, "UTF-8");
@@ -263,7 +263,7 @@ public class VodDetailActivity extends CMBaseActivity {
     private void requestRecommendContentGroupByAssetId() {
         //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestRecommendContentGroupByAssetId()"); }
-        String terminalKey = mPref.getValue(JYSharedPreferences.TERMINAL_KEY, "");
+        String terminalKey = mPref.getWebhasTerminalKey();
         String encAssetId = null;
         try {
             encAssetId  = URLDecoder.decode(assetId, "UTF-8");

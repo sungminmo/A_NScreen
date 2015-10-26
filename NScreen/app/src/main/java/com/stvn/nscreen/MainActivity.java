@@ -3,6 +3,7 @@ package com.stvn.nscreen;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,16 +12,15 @@ import android.widget.Button;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.pairing.PairingSubActivity;
-import com.stvn.nscreen.vod.VodBuyActivity;
 import com.stvn.nscreen.vod.VodDetailActivity;
+
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String              tag = VodDetailActivity.class.getSimpleName();
     private static       MainActivity        mInstance;
     private              JYSharedPreferences mPref;
-
-    private             Button               Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13, Button14;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +30,19 @@ public class MainActivity extends AppCompatActivity {
         mInstance     = this;
         mPref         = new JYSharedPreferences(this);
 
-        /**
-         * 테스트 터미널키 저장하기.
-         */
-        mPref.put(JYSharedPreferences.TERMINAL_KEY, "9CED3A20FB6A4D7FF35D1AC965F988D2");
+        String sWebhasTerminalKey = mPref.getWebhasTerminalKey();
+        Log.d(tag, "sWebhasTerminalKey:"+sWebhasTerminalKey);
+
+        if ( mPref.getValue(JYSharedPreferences.UUID, "").equals("") ) {
+            // UUID 없으면 만들기.
+            UUID uuid = UUID.randomUUID();
+            mPref.put(JYSharedPreferences.UUID, uuid.toString());
+        }
 
 
+
+
+        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13;
 
         Button1  = (Button) findViewById(R.id.Button1);
         Button2  = (Button) findViewById(R.id.Button2);
@@ -50,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         Button11 = (Button) findViewById(R.id.Button11);
         Button12 = (Button) findViewById(R.id.Button12);
         Button13 = (Button) findViewById(R.id.Button13);
-        Button14 = (Button) findViewById(R.id.Button14);
 
         Button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,17 +161,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        Button14.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, VodBuyActivity.class);
-                startActivity(i);
-            }
-        });
     }
-
-    @Override
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
