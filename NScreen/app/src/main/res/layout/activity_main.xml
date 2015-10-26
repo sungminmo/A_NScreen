@@ -103,6 +103,12 @@
                 android:layout_height="wrap_content"
                 android:text="PairingSub" />
 
+            <Button
+                android:id="@+id/Button14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VODBuy" />
+
         </LinearLayout>
 
     </ScrollView>
