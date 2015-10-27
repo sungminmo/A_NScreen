@@ -1,12 +1,19 @@
 package com.stvn.nscreen.rmt;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
 import com.stvn.nscreen.R;
@@ -22,15 +29,30 @@ import java.util.ArrayList;
 public class RemoteControllerListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = RemoteControllerListViewAdapter.class.getSimpleName();
-    private Context mContext         = null;
+    private              Context                       mContext         = null;
     private              View.OnClickListener          mOnClickListener = null;
-    private ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
+    private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
+
+    private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
+
+    private              int                           mSelectedIndex   = -1;
 
     public RemoteControllerListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
+        this.mRequestQueue = Volley.newRequestQueue(mContext);
+        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
+            public void putBitmap(String url, Bitmap bitmap) {
+                mCache.put(url, bitmap);
+            }
+            public Bitmap getBitmap(String url) {
+                return mCache.get(url);
+            }
+        });
     }
 
     @Override
@@ -55,16 +77,27 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
         }
 
         try {
-            ListViewDataObject dobj = (ListViewDataObject)getItem(position);
-            JSONObject jobj = new JSONObject(dobj.sJson);
+            ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
+            JSONObject         jobj         = new JSONObject(dobj.sJson);
 
-            TextView titleTextView = ViewHolder.get(convertView, R.id.remote_textview_program_title);
+            // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
+            NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.remote_imageview_channel_logo);
 
-            titleTextView.setText(jobj.getString("programTitle"));
+            ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
+            TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.remote_textview_channel_number);
+            TextView  titleTextView         = ViewHolder.get(convertView, R.id.remote_textview_program_title);
+
+            //ViewHolder.channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+
+            channelNumberTextView.setText(jobj.getString("channelNumber"));
+            titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
+            channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return convertView;
     }
+    public void setSelectedIndex(int position){ mSelectedIndex = position; }
+    public int  getSelectedIndex() { return mSelectedIndex; }
 }

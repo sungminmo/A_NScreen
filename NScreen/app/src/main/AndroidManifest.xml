@@ -87,6 +87,7 @@
             android:name=".search.SearchMainActivity"
             android:label="@string/title_activity_search_main">
         </activity>
+
         <!-- 설정 화면 관련 엑티비티 -->
         <activity android:name=".setting.CMSettingMainActivity" />
         <activity android:name=".setting.CMSettingRegionActivity" />
