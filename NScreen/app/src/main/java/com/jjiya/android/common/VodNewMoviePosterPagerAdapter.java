@@ -21,14 +21,14 @@ import java.util.List;
 /**
  * Created by limdavid on 15. 10. 22..
  */
-public class EightVodPosterPagerAdapter extends PagerAdapter {
+public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
 
     private LayoutInflater   mLayoutInflater;
 
     private ImageLoader      mImageLoader;
     private List<JSONObject> mVods;
 
-    public EightVodPosterPagerAdapter(Context c){
+    public VodNewMoviePosterPagerAdapter(Context c){
         super();
         mLayoutInflater = LayoutInflater.from(c);
         mVods           = new ArrayList<JSONObject>();
@@ -89,9 +89,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo1 = mVods.get(index1);
                 TextView title1 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview1);
                 title1.setText(jo1.getString("title"));
-//                String imageFileName1 = jo1.getString("imageFileName");
-//                NetworkImageView niv1 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1);
-//                niv1.setImageUrl(imageFileName1, mImageLoader);
+                String imageFileName1 = jo1.getString("imageFileName");
+                NetworkImageView niv1 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1);
+                niv1.setImageUrl(imageFileName1, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview1)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1)).setVisibility(View.INVISIBLE);
@@ -100,9 +100,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo2 = mVods.get(index2);
                 TextView title2 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview2);
                 title2.setText(jo2.getString("title"));
-//                String imageFileName2 = jo2.getString("imageFileName");
-//                NetworkImageView niv2 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2);
-//                niv2.setImageUrl(imageFileName2, mImageLoader);
+                String imageFileName2 = jo2.getString("imageFileName");
+                NetworkImageView niv2 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2);
+                niv2.setImageUrl(imageFileName2, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview2)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2)).setVisibility(View.INVISIBLE);
@@ -111,9 +111,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo3 = mVods.get(index3);
                 TextView title3 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview3);
                 title3.setText(jo3.getString("title"));
-//                String imageFileName3 = jo3.getString("imageFileName");
-//                NetworkImageView niv3 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview3);
-//                niv3.setImageUrl(imageFileName3, mImageLoader);
+                String imageFileName3 = jo3.getString("imageFileName");
+                NetworkImageView niv3 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview3);
+                niv3.setImageUrl(imageFileName3, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview3)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview3)).setVisibility(View.INVISIBLE);
@@ -122,9 +122,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo4 = mVods.get(index4);
                 TextView title4 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview4);
                 title4.setText(jo4.getString("title"));
-//                String imageFileName4 = jo4.getString("imageFileName");
-//                NetworkImageView niv4 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview4);
-//                niv4.setImageUrl(imageFileName4, mImageLoader);
+                String imageFileName4 = jo4.getString("imageFileName");
+                NetworkImageView niv4 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview4);
+                niv4.setImageUrl(imageFileName4, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview4)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview4)).setVisibility(View.INVISIBLE);
@@ -133,9 +133,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo5 = mVods.get(index5);
                 TextView title5 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview5);
                 title5.setText(jo5.getString("title"));
-//                String imageFileName5 = jo5.getString("imageFileName");
-//                NetworkImageView niv5 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview5);
-//                niv5.setImageUrl(imageFileName5, mImageLoader);
+                String imageFileName5 = jo5.getString("imageFileName");
+                NetworkImageView niv5 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview5);
+                niv5.setImageUrl(imageFileName5, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview5)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview5)).setVisibility(View.INVISIBLE);
@@ -144,9 +144,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo6 = mVods.get(index6);
                 TextView title6 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview6);
                 title6.setText(jo6.getString("title"));
-//                String imageFileName6 = jo6.getString("imageFileName");
-//                NetworkImageView niv6 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview6);
-//                niv6.setImageUrl(imageFileName6, mImageLoader);
+                String imageFileName6 = jo6.getString("imageFileName");
+                NetworkImageView niv6 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview6);
+                niv6.setImageUrl(imageFileName6, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview6)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview6)).setVisibility(View.INVISIBLE);
@@ -155,9 +155,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo7 = mVods.get(index7);
                 TextView title7 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview7);
                 title7.setText(jo7.getString("title"));
-//                String imageFileName7 = jo7.getString("imageFileName");
-//                NetworkImageView niv7 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview7);
-//                niv7.setImageUrl(imageFileName7, mImageLoader);
+                String imageFileName7 = jo7.getString("imageFileName");
+                NetworkImageView niv7 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview7);
+                niv7.setImageUrl(imageFileName7, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview7)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview7)).setVisibility(View.INVISIBLE);
@@ -166,9 +166,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 JSONObject jo8 = mVods.get(index8);
                 TextView title8 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview8);
                 title8.setText(jo8.getString("title"));
-//                String imageFileName8 = jo8.getString("imageFileName");
-//                NetworkImageView niv8 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview8);
-//                niv8.setImageUrl(imageFileName8, mImageLoader);
+                String imageFileName8 = jo8.getString("imageFileName");
+                NetworkImageView niv8 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview8);
+                niv8.setImageUrl(imageFileName8, mImageLoader);
             } else {
                 ((TextView)v.findViewById(R.id.eight_vod_poster_title_textview8)).setVisibility(View.INVISIBLE);
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview8)).setVisibility(View.INVISIBLE);
@@ -182,12 +182,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
             UiUtil.setIndicatorImage(position, getCount(), indi1, indi2, indi3, indi4, indi5, null, null, null, null, null);
 
 
-//            if ( position == 0 ) {
-//                prev.setVisibility(View.INVISIBLE);
-//            }
-//            if ( position == (mVods.size()-1) ) {
-//                next.setVisibility(View.INVISIBLE);
-//            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

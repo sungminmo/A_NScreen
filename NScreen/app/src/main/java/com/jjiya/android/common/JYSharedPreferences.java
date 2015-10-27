@@ -132,19 +132,17 @@ public class JYSharedPreferences {
 //        }
 //    }
 
-    public String getEpgServerUrl() {
-        if ( isRealServer() ) {
-            return Constants.SERVER_URL_EPG_REAL;
-        } else {
-            return Constants.SERVER_URL_EPG_DEV;
-        }
+    public String getAircodeServerUrl() {
+        return Constants.SERVER_URL_AIRCODE_REAL;
     }
 
-    public String getVodServerUrl() {
-        if ( isRealServer() ) {
-            return Constants.SERVER_URL_CASTIS_PUBLIC;
-        } else {
-            return Constants.SERVER_URL_CASTIS_VPN;
-        }
+    public String getWebhasServerUrl() {
+        return Constants.SERVER_URL_CASTIS_VPN;         // 삼성C&N 사무실에서는 럼퍼스 서버에 이걸로 접속.
+        // return Constants.SERVER_URL_CASTIS_PUBLIC;
+    }
+
+    public String getRumpersServerUrl() {
+        return Constants.SERVER_URL_RUMPUS_VPN;       // 삼성C&N 사무실에서는 럼퍼스 서버에 이걸로 접속.
+        // return Constants.SERVER_URL_RUMPUS_PUBLIC; // 삼성C&N을 제외한 장소에서느 럼퍼스 서버에 이걸로 접속.
     }
 }

@@ -117,7 +117,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
             ImageView indi3 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview3);
             ImageView indi4 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview4);
             ImageView indi5 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview5);
-            UiUtil.setIndicatorImage(position, getCount(), indi1, indi2, indi3, indi4, indi5);
+            UiUtil.setIndicatorImage(position, getCount(), indi1, indi2, indi3, indi4, indi5, null, null, null, null, null);
 
 
 
@@ -133,7 +133,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
         }
 
 
-        ((ViewPager)pager).addView(v, position);
+        ((ViewPager)pager).addView(v); //((ViewPager)pager).addView(v, position);
 
         return v;
     }

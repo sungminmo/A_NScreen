@@ -156,7 +156,7 @@ public class SearchMainActivity extends CMBaseActivity {
     {
         mLockListView = true;
         mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
-        String url = Constants.SERVER_URL_EPG_REAL+"/HApplicationServer/getSearchWord.xml?version="+mVersion+"&terminalKey="+mTerminalKey+
+        String url = mPref.getWebhasServerUrl()+"getSearchWord.xml?version="+mVersion+"&terminalKey="+mTerminalKey+
                 "&searchKeyword="+mKeywordView.getText().toString();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override

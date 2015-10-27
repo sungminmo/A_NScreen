@@ -130,7 +130,7 @@ public class CMSettingRegionActivity extends CMBaseActivity implements View.OnCl
     private void requestGetChannelAreaList() {
         this.mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
 
-        String url = mPref.getEpgServerUrl() + "/getChannelArea.xml?version=1";
+        String url = mPref.getAircodeServerUrl() + "/getChannelArea.xml?version=1";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

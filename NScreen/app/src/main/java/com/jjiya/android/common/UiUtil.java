@@ -61,73 +61,138 @@ public class UiUtil {
         }
     }
 
-    public static void setIndicatorImage(int iCurrPage, int iTotalPage, ImageView image1, ImageView image2, ImageView image3, ImageView image4, ImageView image5) {
+    public static void setIndicatorImage(int iCurrPage, int iTotalPage,
+                                         ImageView image1, ImageView image2, ImageView image3, ImageView image4, ImageView image5,
+                                         ImageView image6, ImageView image7, ImageView image8, ImageView image9, ImageView image10) {
+        image1.setVisibility(View.GONE);
+        image2.setVisibility(View.GONE);
+        image3.setVisibility(View.GONE);
+        image4.setVisibility(View.GONE);
+        image5.setVisibility(View.GONE);
+        image1.setImageResource(R.mipmap.indicator_off);
+        image2.setImageResource(R.mipmap.indicator_off);
+        image3.setImageResource(R.mipmap.indicator_off);
+        image4.setImageResource(R.mipmap.indicator_off);
+        image5.setImageResource(R.mipmap.indicator_off);
+
+        if ( image6 != null ) {
+            image6.setVisibility(View.GONE);
+            image6.setImageResource(R.mipmap.indicator_off);
+        }
+        if ( image7 != null ) {
+            image7.setVisibility(View.GONE);
+            image7.setImageResource(R.mipmap.indicator_off);
+        }
+        if ( image8 != null ) {
+            image8.setVisibility(View.GONE);
+            image8.setImageResource(R.mipmap.indicator_off);
+        }
+        if ( image9 != null ) {
+            image9.setVisibility(View.GONE);
+            image9.setImageResource(R.mipmap.indicator_off);
+        }
+        if ( image10 != null ) {
+            image10.setVisibility(View.GONE);
+            image10.setImageResource(R.mipmap.indicator_off);
+        }
+
         if ( iTotalPage == 0 ||  iTotalPage == 1 ) {
             image1.setVisibility(View.VISIBLE);
-            image2.setVisibility(View.GONE);
-            image3.setVisibility(View.GONE);
-            image4.setVisibility(View.GONE);
-            image5.setVisibility(View.GONE);
         } else if ( iTotalPage == 2 ) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
-            image3.setVisibility(View.GONE);
-            image4.setVisibility(View.GONE);
-            image5.setVisibility(View.GONE);
         } else if ( iTotalPage == 3 ) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
-            image4.setVisibility(View.GONE);
-            image5.setVisibility(View.GONE);
         } else if ( iTotalPage == 4 ) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
-            image5.setVisibility(View.GONE);
         } else if ( iTotalPage == 5 ) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
             image5.setVisibility(View.VISIBLE);
+        } else if ( iTotalPage == 6 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.VISIBLE);
+            image6.setVisibility(View.VISIBLE);
+            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
+        } else if ( iTotalPage == 7 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.VISIBLE);
+            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
+            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
+        } else if ( iTotalPage == 8 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.VISIBLE);
+            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
+            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
+            if ( image8 != null ) { image8.setVisibility(View.VISIBLE); }
+        } else if ( iTotalPage == 9 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.VISIBLE);
+            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
+            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
+            if ( image8 != null ) { image8.setVisibility(View.VISIBLE); }
+            if ( image9 != null ) { image9.setVisibility(View.VISIBLE); }
+        } else if ( iTotalPage == 10 ) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.VISIBLE);
+            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
+            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
+            if ( image8 != null ) { image8.setVisibility(View.VISIBLE); }
+            if ( image9 != null ) { image9.setVisibility(View.VISIBLE); }
+            if ( image10 != null ) { image10.setVisibility(View.VISIBLE); }
         }
         switch ( iCurrPage ) {
             case 0: {
                 image1.setImageResource(R.mipmap.indicator_on);
-                image2.setImageResource(R.mipmap.indicator_off);
-                image3.setImageResource(R.mipmap.indicator_off);
-                image4.setImageResource(R.mipmap.indicator_off);
-                image5.setImageResource(R.mipmap.indicator_off);
             } break;
             case 1: {
-                image1.setImageResource(R.mipmap.indicator_off);
                 image2.setImageResource(R.mipmap.indicator_on);
-                image3.setImageResource(R.mipmap.indicator_off);
-                image4.setImageResource(R.mipmap.indicator_off);
-                image5.setImageResource(R.mipmap.indicator_off);
             } break;
             case 2: {
-                image1.setImageResource(R.mipmap.indicator_off);
-                image2.setImageResource(R.mipmap.indicator_off);
                 image3.setImageResource(R.mipmap.indicator_on);
-                image4.setImageResource(R.mipmap.indicator_off);
-                image5.setImageResource(R.mipmap.indicator_off);
             } break;
             case 3: {
-                image1.setImageResource(R.mipmap.indicator_off);
-                image2.setImageResource(R.mipmap.indicator_off);
-                image3.setImageResource(R.mipmap.indicator_off);
                 image4.setImageResource(R.mipmap.indicator_on);
-                image5.setImageResource(R.mipmap.indicator_off);
             } break;
             case 4: {
-                image1.setImageResource(R.mipmap.indicator_off);
-                image2.setImageResource(R.mipmap.indicator_off);
-                image3.setImageResource(R.mipmap.indicator_off);
-                image4.setImageResource(R.mipmap.indicator_off);
                 image5.setImageResource(R.mipmap.indicator_on);
+            } break;
+            case 5: {
+                image6.setImageResource(R.mipmap.indicator_on);
+            } break;
+            case 6: {
+                image7.setImageResource(R.mipmap.indicator_on);
+            } break;
+            case 7: {
+                image8.setImageResource(R.mipmap.indicator_on);
+            } break;
+            case 8: {
+                image9.setImageResource(R.mipmap.indicator_on);
+            } break;
+            case 9: {
+                image10.setImageResource(R.mipmap.indicator_on);
             } break;
         }
     }

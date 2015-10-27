@@ -141,7 +141,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     {
         mLockListView = true;
         mProgressDialog	 = ProgressDialog.show(getActivity(),"",getString(R.string.wait_a_moment));
-        String url = Constants.SERVER_URL_EPG_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
+        String url = mPref.getWebhasServerUrl()+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

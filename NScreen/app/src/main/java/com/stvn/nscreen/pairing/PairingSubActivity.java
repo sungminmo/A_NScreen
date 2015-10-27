@@ -109,7 +109,7 @@ public class PairingSubActivity extends AppCompatActivity {
         String authCode    = mAuthCodeEditText.getText().toString();
         String terminalKey = mPref.getWebhasTerminalKey();
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
-        String url = mPref.getVodServerUrl() + "/addUser.json?version=1&terminalKey="+terminalKey+"&userId="+uuid+"&authCode="+authCode;
+        String url = mPref.getWebhasServerUrl() + "/addUser.json?version=1&terminalKey="+terminalKey+"&userId="+uuid+"&authCode="+authCode;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -172,7 +172,7 @@ public class PairingSubActivity extends AppCompatActivity {
     private void requestAuthenticateDevice() {
         if ( mPref.isLogging() ) { Log.d(tag, "requestAddUser()"); }
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
-        String url = mPref.getVodServerUrl() + "/authenticateDevice.json?version=1&secondDeviceId="+uuid;
+        String url = mPref.getWebhasServerUrl() + "/authenticateDevice.json?version=1&secondDeviceId="+uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

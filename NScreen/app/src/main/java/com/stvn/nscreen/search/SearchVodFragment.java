@@ -77,7 +77,7 @@ public class SearchVodFragment extends SearchBaseFragment{
     {
         mLockListView = true;
         mProgressDialog	 = ProgressDialog.show(getActivity(), "", getString(R.string.wait_a_moment));
-        String url = Constants.SERVER_URL_EPG_REAL+"/searchContentGroup.xml?version=1&terminalKey="+mTerminalKey+"&searchKeyword="+mKeyword;
+        String url = mPref.getWebhasServerUrl()+"/searchContentGroup.xml?version=1&terminalKey="+mTerminalKey+"&searchKeyword="+mKeyword;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

@@ -72,7 +72,7 @@ public class EpgSubActivity extends AppCompatActivity {
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
-        String url = mPref.getEpgServerUrl() + "/getChannelSchedule.xml?version=1&channelId=1000&dateIndex=6";
+        String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=1000&dateIndex=6";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

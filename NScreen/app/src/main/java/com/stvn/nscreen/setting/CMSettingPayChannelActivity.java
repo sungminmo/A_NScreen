@@ -82,7 +82,7 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
     private void requestPayChannelList() {
         mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
 
-        String url = mPref.getEpgServerUrl() + "/getChannelList.xml?version=1&areaCode=0&mode=PAY";
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0&mode=PAY";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
