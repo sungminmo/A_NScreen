@@ -86,16 +86,17 @@ public class VodDetailActivity extends CMBaseActivity {
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
         mImageLoader = new ImageLoader(mRequestQueue, imageCache);
 
-        sJson   = getIntent().getExtras().getString("sJson");
-        try {
-            JSONObject jo = new JSONObject(sJson);
-            assetId = jo.getString("assetId");
-            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
-            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
-            assetId = "www.hchoice.co.kr|M4132449LFO281926301";
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        //sJson   = getIntent().getExtras().getString("sJson");
+        assetId   = getIntent().getExtras().getString("assetId");
+//        try {
+//            JSONObject jo = new JSONObject(sJson);
+//            assetId = jo.getString("assetId");
+//            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
+//            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
+//            assetId = "www.hchoice.co.kr|M4132449LFO281926301";
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         relationVods = new ArrayList<JSONObject>();
         mPagerAdapter = new FourVodPosterPagerAdapter(this);
         mPagerAdapter.setImageLoader(mImageLoader);

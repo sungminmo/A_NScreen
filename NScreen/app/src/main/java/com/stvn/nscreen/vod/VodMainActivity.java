@@ -71,8 +71,13 @@ public class VodMainActivity extends CMBaseActivity {
     private              ViewPager                     mPop20ViewPager;
     private              EightVodPosterPagerAdapter    mPop20PagerAdapter; // 인기순위 Top 20
 
-    private              ViewPager                     mNewMoviewViewPager;
-    private              VodNewMoviePosterPagerAdapter mNewMoviewPagerAdapter; // 금주의 신작 영화
+    private              ViewPager                     mNewMovieViewPager;
+    private              VodNewMoviePosterPagerAdapter mNewMoviePagerAdapter; // 금주의 신작 영화
+
+    private              ViewPager                     mThisMonthViewPager;
+    private              VodNewMoviePosterPagerAdapter mThisMonthPagerAdapter; // 이달의 추천 VOD
+
+    
 
 
     @Override
@@ -88,10 +93,12 @@ public class VodMainActivity extends CMBaseActivity {
 
         mBanners               = new ArrayList<JSONObject>();
         mPop20PagerAdapter     = new EightVodPosterPagerAdapter(this);
-        mNewMoviewPagerAdapter = new VodNewMoviePosterPagerAdapter(this);
+        mNewMoviePagerAdapter  = new VodNewMoviePosterPagerAdapter(this);
+        mThisMonthPagerAdapter = new VodNewMoviePosterPagerAdapter(this);
 
         mPop20PagerAdapter.setImageLoader(mImageLoader);
-        mNewMoviewPagerAdapter.setImageLoader(mImageLoader);
+        mNewMoviePagerAdapter.setImageLoader(mImageLoader);
+        mThisMonthPagerAdapter.setImageLoader(mImageLoader);
 
         if ( mPref.isLogging() ) { Log.d(tag, "onCreate()"); }
 
@@ -108,8 +115,12 @@ public class VodMainActivity extends CMBaseActivity {
         mPop20ViewPager.setAdapter(mPop20PagerAdapter);
 
         // 신작영화
-        mNewMoviewViewPager = (ViewPager) findViewById(R.id.vod_main_newmovie_viewpager);
-        mNewMoviewViewPager.setAdapter(mNewMoviewPagerAdapter);
+        mNewMovieViewPager = (ViewPager) findViewById(R.id.vod_main_newmovie_viewpager);
+        mNewMovieViewPager.setAdapter(mNewMoviePagerAdapter);
+        
+        // 이달의 추천 VOD
+        mThisMonthViewPager = (ViewPager) findViewById(R.id.vod_main_thismonth_viewpager);
+        mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
 
         // 배너 요청.
         requestGetServiceBannerList();
@@ -137,7 +148,7 @@ public class VodMainActivity extends CMBaseActivity {
         }
     };
 
-
+    // 배너 요청
     private void requestGetServiceBannerList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String url = mPref.getRumpersServerUrl() + "/getservicebannerlist.asp";
@@ -165,6 +176,7 @@ public class VodMainActivity extends CMBaseActivity {
         mRequestQueue.add(request);
     }
 
+    // 배너 파싱
     private void parseGetServiceBannerList(String response) {
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
@@ -318,6 +330,7 @@ public class VodMainActivity extends CMBaseActivity {
      * http://192.168.40.5:8080/HApplicationServer/getPopularityChart.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&categoryId=713230&requestItems=weekly
      *
      * */
+    // 인기 TOP 20
     private void requestGetPopularityChart() {
         String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
@@ -406,15 +419,51 @@ public class VodMainActivity extends CMBaseActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                try {
+                    JSONObject first            = new JSONObject(response);
+                    JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
+                    for ( int i = 0; i < contentGroupList.length(); i++ ) {
+                        JSONObject jo = (JSONObject)contentGroupList.get(i);
+                        mNewMoviePagerAdapter.addVod(jo);
+                    }
+                    mNewMoviePagerAdapter.notifyDataSetChanged();
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
+                }
+                requestGetContentGroupList2(); // 이달의 추천 VOD
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    // 이달의 추천 VOD
+    private void requestGetContentGroupList2() {
+        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&&categoryId=713229";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 try {
                     JSONObject first            = new JSONObject(response);
                     JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
                     for ( int i = 0; i < contentGroupList.length(); i++ ) {
                         JSONObject jo = (JSONObject)contentGroupList.get(i);
-                        mNewMoviewPagerAdapter.addVod(jo);
+                        mThisMonthPagerAdapter.addVod(jo);
                     }
-                    mNewMoviewPagerAdapter.notifyDataSetChanged();
+                    mThisMonthPagerAdapter.notifyDataSetChanged();
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }

@@ -122,7 +122,6 @@ public class UiUtil {
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
             image5.setVisibility(View.VISIBLE);
-            image6.setVisibility(View.VISIBLE);
             if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
         } else if ( iTotalPage == 7 ) {
             image1.setVisibility(View.VISIBLE);
@@ -180,19 +179,19 @@ public class UiUtil {
                 image5.setImageResource(R.mipmap.indicator_on);
             } break;
             case 5: {
-                image6.setImageResource(R.mipmap.indicator_on);
+                if ( image6 != null ) { image6.setImageResource(R.mipmap.indicator_on); }
             } break;
             case 6: {
-                image7.setImageResource(R.mipmap.indicator_on);
+                if ( image7 != null ) {image7.setImageResource(R.mipmap.indicator_on); }
             } break;
             case 7: {
-                image8.setImageResource(R.mipmap.indicator_on);
+                if ( image8 != null ) {image8.setImageResource(R.mipmap.indicator_on); }
             } break;
             case 8: {
-                image9.setImageResource(R.mipmap.indicator_on);
+                if ( image9 != null ) {image9.setImageResource(R.mipmap.indicator_on); }
             } break;
             case 9: {
-                image10.setImageResource(R.mipmap.indicator_on);
+                if ( image10 != null ) {image10.setImageResource(R.mipmap.indicator_on); }
             } break;
         }
     }
