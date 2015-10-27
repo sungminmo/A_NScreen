@@ -64,6 +64,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="vertical"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -91,6 +92,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="vertical"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -117,6 +119,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="vertical"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -143,6 +146,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="vertical"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -169,6 +173,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="vertical"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -195,6 +200,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="vertical"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -219,6 +225,7 @@
                 android:textSize="12.75dp"
                 android:textColor="@drawable/btn_purchase_textcolor" />
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -251,6 +258,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="horizontal"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -302,6 +310,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="horizontal"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -360,6 +369,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="horizontal"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -418,6 +428,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:clickable="true"
             android:orientation="vertical"
             android:layout_width="309dp"
             android:layout_height="49.25dp"
@@ -471,8 +482,8 @@
                         android:id="@+id/imageView13"
                         android:layout_gravity="right|top"
                         android:background="@drawable/purchase_coupon_selector"
-                        android:layout_marginRight="8.25dp"
-                        android:layout_marginTop="1.25dp" />
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="1.25dp" />
                 </FrameLayout>
 
             </LinearLayout>
@@ -493,6 +504,7 @@
                     android:textColor="@drawable/btn_purchase_textcolor"
                     android:textSize="12.75sp" />
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

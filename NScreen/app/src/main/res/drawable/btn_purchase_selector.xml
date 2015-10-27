@@ -11,5 +11,5 @@
         android:drawable="@mipmap/purchase_select" />
 
     <item android:state_pressed="true"
-        android:drawable="@mipmap/purchase_dimmed" />
+        android:drawable="@mipmap/btn_tab_press" />
 </selector>
