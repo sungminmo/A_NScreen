@@ -15,11 +15,27 @@
     <string name="title_activity_vod_detail">상세정보</string>
 
     <string name="title_activity_epg_main">EpgMainActivity</string>
-
-    <string name="title_activity_detail_channel">DetailChannelActivity</string>
+    <string name="title_activity_epg_choice">EpgChoiceActivity</string>
+    <string name="title_activity_epg_sub">EpgSubActivity</string>
     <string name="search_title">검색</string>
     <string name="search_title_tab_text1">VOD 명 검색</string>
     <string name="search_title_tab_text2">프로그램 명 검색</string>
+
+    <string name="title_activity_pvr_main">PvrMainActivity</string>
+    <string name="title_activity_pvr_sub">PvrSubActivity</string>
+
+    <string name="title_activity_my_main">MyMainActivity</string>
+    <string name="title_activity_my_sub">MySubActivity</string>
+
+    <string name="title_activity_pairing_main">PairingMainActivity</string>
+    <string name="title_activity_pairing_sub">PairingSubActivity</string>
+    <string name="title_activity_pairing_check">PairingCheckActivity</string>
+
+    <string name="title_activity_remote_controller">RemoteControllerActivity</string>
+
+    <string name="title_activity_search_main">SearchMainActivity</string>
+
+    <string name="title_activity_vod_buy">VodBuyActivity</string>
 
     <!-- 설정 -->
     <string name="setting_content">C&amp;M 모바일 서비스를 효율적으로 이용하기 위해\n지역 설정, 인증번호관리, 성인검색 제한설정, 본인인증 기능을 제공합니다.</string>

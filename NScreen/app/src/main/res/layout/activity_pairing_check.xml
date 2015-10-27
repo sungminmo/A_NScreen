@@ -76,12 +76,15 @@
         android:layout_marginRight="12.75dp">
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="334.5dp"
             android:layout_height="39.5dp"
-            android:text="New Button"
+            android:text="확인"
             android:id="@+id/button8"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="12.75dp" />
+            android:layout_marginBottom="12.75dp"
+            android:background="@drawable/p2btn_selector"
+            android:textSize="14.5sp"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </LinearLayout>

@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.jjiya.android.common.JYSharedPreferences;
+import com.stvn.nscreen.pairing.PairingCheckActivity;
 import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.pairing.PairingSubActivity;
+import com.stvn.nscreen.rmt.RemoteControllerActivity;
+import com.stvn.nscreen.vod.VodBuyActivity;
 import com.stvn.nscreen.vod.VodDetailActivity;
 
 import java.util.UUID;
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13;
+        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13, Button14, Button15, Button16;
 
         Button1  = (Button) findViewById(R.id.Button1);
         Button2  = (Button) findViewById(R.id.Button2);
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         Button11 = (Button) findViewById(R.id.Button11);
         Button12 = (Button) findViewById(R.id.Button12);
         Button13 = (Button) findViewById(R.id.Button13);
+        Button14 = (Button) findViewById(R.id.Button14);
+        Button15 = (Button) findViewById(R.id.Button15);
+        Button16 = (Button) findViewById(R.id.Button16);
 
         Button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +164,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, PairingSubActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, PairingCheckActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, VodBuyActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, RemoteControllerActivity.class);
                 startActivity(i);
             }
         });

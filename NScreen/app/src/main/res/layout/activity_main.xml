@@ -107,10 +107,16 @@
                 android:id="@+id/Button14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="VODBuy" />
+                android:text="PairingCheck" />
 
             <Button
                 android:id="@+id/Button15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VODBuy" />
+
+            <Button
+                android:id="@+id/Button16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="remoteController" />
