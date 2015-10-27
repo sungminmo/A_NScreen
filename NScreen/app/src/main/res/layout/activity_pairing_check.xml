@@ -19,7 +19,7 @@
             android:text="셋탑박스 등록"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -54,7 +54,7 @@
             android:id="@+id/textView35"
             android:layout_gravity="center_horizontal"
             android:textSize="16.25sp"
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:layout_marginBottom="5dp" />
 
         <TextView
@@ -64,7 +64,7 @@
             android:id="@+id/textView36"
             android:layout_gravity="center_horizontal"
             android:textSize="16.25sp"
-            android:textColor="#7b5aa3" />
+            android:textColor="@color/violet" />
 
     </LinearLayout>
 

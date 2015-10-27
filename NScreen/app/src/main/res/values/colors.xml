@@ -3,6 +3,7 @@
 	<color name="white">#ffffff</color>
 	<color name="black">#000000</color>
 	<color name="red">#ff3b30</color>
+	<color name="violet">#7b5aa3</color>
 	<color name="transparent">#00000000</color>   
 	<color name="search_programtext_violet">#7b5aa3</color>
 	<color name="search_programtext_grape">#c5c5c5</color>

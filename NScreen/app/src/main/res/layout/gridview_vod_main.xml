@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="11.5sp"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:ellipsize="end"
         android:lines="1"
         android:autoText="false"

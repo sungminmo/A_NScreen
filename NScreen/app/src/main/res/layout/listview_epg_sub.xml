@@ -12,7 +12,7 @@
         android:layout_gravity="left|top"
         android:text="00:00~00:00"
         android:textSize="12sp"
-        android:textColor="#000000" />
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/epg_sub_textview_program_title"
@@ -23,7 +23,7 @@
         android:layout_marginRight="10.75dp"
         android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:lines="1"
         android:ellipsize="end" />
 

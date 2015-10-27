@@ -23,7 +23,7 @@
         <LinearLayout
             android:layout_width="81.5dp"
             android:layout_height="65dp"
-            android:background="#FFFFFF">
+            android:background="@color/white">
 
             <ImageView
                 android:layout_width="48dp"

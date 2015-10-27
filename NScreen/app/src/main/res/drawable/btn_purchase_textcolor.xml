@@ -2,12 +2,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- non focus -->
     <item
-        android:color="#000000" />
+        android:color="@color/black" />
     <!-- select -->
     <item
         android:state_selected="true"
-        android:color="#ffffff" />
+        android:color="@color/white" />
     <!-- press -->
     <item android:state_pressed="true"
-        android:color="#ffffff" />
+        android:color="@color/white" />
 </selector>

@@ -22,7 +22,7 @@
             android:text="베테랑"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="STEP1. 구매상품선택"
                 android:id="@+id/textView37"
-                android:textColor="#7b5aa3"
+                android:textColor="@color/violet"
                 android:textSize="12.5sp" />
         </LinearLayout>
 
@@ -246,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:text="STEP2. 결제방법선택"
                 android:id="@+id/textView38"
-                android:textColor="#7b5aa3"
+                android:textColor="@color/violet"
                 android:textSize="12.5sp" />
         </LinearLayout>
 
@@ -513,7 +513,7 @@
             android:layout_weight="1"
             android:layout_marginRight="6.5dp"
             android:textSize="14.5sp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:background="@drawable/pbtn_selector" />
 
         <Button
@@ -522,7 +522,7 @@
             android:text="결제하기"
             android:id="@+id/button10"
             android:layout_weight="1"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="14.5sp"
             android:background="@drawable/p2btn_selector" />
     </LinearLayout>

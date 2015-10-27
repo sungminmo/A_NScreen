@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/white">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -20,7 +20,7 @@
             android:text="셋탑박스 등록"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -118,7 +118,7 @@
             android:text="비밀번호가 기억나지 않으실 경우, 셋탑박스를 다시 연동하여"
             android:id="@+id/textView20"
             android:textSize="12.5sp"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:layout_marginTop="21dp" />
 
         <TextView
@@ -127,7 +127,7 @@
             android:text="비밀번호를 재설정 하실 수 있습니다."
             android:id="@+id/textView21"
             android:textSize="12.5sp"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:layout_marginBottom="39dp" />
 
         <TextView
@@ -136,14 +136,14 @@
             android:text="구매 비밀번호 신규설정"
             android:id="@+id/textView22"
             android:textSize="16.25sp"
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:layout_marginBottom="17.25dp" />
 
         <EditText
             android:layout_width="261dp"
             android:layout_height="29dp"
             android:id="@+id/pairing_main_purchase_password1_edittext"
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:textSize="16.25sp"
             android:background="@mipmap/setting_pw_box_nor"
             android:layout_marginRight="36.75dp"
@@ -159,14 +159,14 @@
             android:text="구매 비밀번호 입력확인"
             android:id="@+id/textView23"
             android:textSize="16.25sp"
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:layout_marginBottom="17.25dp" />
 
         <EditText
             android:layout_width="261dp"
             android:layout_height="29dp"
             android:id="@+id/pairing_main_purchase_password2_edittext"
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:textSize="16.25sp"
             android:background="@mipmap/setting_pw_box_nor"
             android:layout_marginLeft="36.75dp"
@@ -193,7 +193,7 @@
             android:text="등록취소"
             android:id="@+id/pairing_main_cancle_button"
             android:textSize="14.5sp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:layout_weight="1"
             android:layout_marginRight="10dp"
             android:background="@drawable/pbtn_selector" />
@@ -204,7 +204,7 @@
             android:text="다음단계"
             android:id="@+id/pairing_main_next_button"
             android:textSize="14.5sp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:layout_weight="1"
             android:background="@drawable/p2btn_selector" />
 

@@ -20,7 +20,7 @@
             android:text="채널 가이드"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:text="전체채널"
             android:textSize="14.5sp"
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:layout_gravity="center" />
 
         <ImageView

@@ -18,7 +18,7 @@
             android:text="리모컨"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -50,7 +50,7 @@
                 android:text="현재시청채널 : "
                 android:id="@+id/textView65"
                 android:textSize="14.75dp"
-                android:textColor="#000000" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                 android:text="13번"
                 android:id="@+id/textView66"
                 android:textSize="14.75sp"
-                android:textColor="#7b5aa3" />
+                android:textColor="@color/violet" />
         </LinearLayout>
 
         <LinearLayout
@@ -87,7 +87,7 @@
                     android:layout_height="40.75dp"
                     android:layout_marginLeft="12.25dp"
                     android:layout_marginRight="12.25dp"
-                    android:background="@drawable/img_btn_selector_short"
+                    android:background="@drawable/btn_selector"
                     android:layout_gravity="center" />
 
                 <TextView
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:text="전체채널"
                     android:textSize="14.5sp"
-                    android:textColor="#7b5aa3"
+                    android:textColor="@color/violet"
                     android:layout_gravity="center" />
 
                 <ImageView

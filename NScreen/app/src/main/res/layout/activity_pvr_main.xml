@@ -20,7 +20,7 @@
             android:text="녹화관리"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -47,7 +47,7 @@
             android:layout_height="30.25dp"
             android:layout_marginTop="9.75dp"
             android:layout_marginLeft="6dp"
-            android:background="@drawable/btn_selector"
+            android:background="@drawable/btn_tab_selector"
             android:text="녹화예약관리"
             android:textColor="@drawable/btn_selector_textcolor"/>
 
@@ -56,7 +56,7 @@
             android:layout_width="174dp"
             android:layout_height="30.25dp"
             android:layout_marginTop="9.75dp"
-            android:background="@drawable/btn_selector"
+            android:background="@drawable/btn_tab_selector"
             android:text="녹화물 목록"
             android:textColor="@drawable/btn_selector_textcolor"
             android:layout_marginRight="6dp"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:text="총 120개의 녹화예약 콘텐트가 있습니다."
             android:textSize="11.5sp"
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:layout_marginBottom="2.5dp" />
     </LinearLayout>
 

@@ -19,7 +19,7 @@
             android:text="마이 C&amp;M"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -43,7 +43,7 @@
             android:layout_height="30.25dp"
             android:layout_marginTop="9.75dp"
             android:layout_marginLeft="6dp"
-            android:background="@drawable/btn_selector"
+            android:background="@drawable/btn_tab_selector"
             android:text="VOD구매목록"
             android:textColor="@drawable/btn_selector_textcolor"/>
 
@@ -52,7 +52,7 @@
             android:layout_width="116dp"
             android:layout_height="30.25dp"
             android:layout_marginTop="9.75dp"
-            android:background="@drawable/btn_selector"
+            android:background="@drawable/btn_tab_selector"
             android:text="VOD시청목록"
             android:textColor="@drawable/btn_selector_textcolor"
             android:layout_marginLeft="-1dp" />
@@ -63,7 +63,7 @@
             android:layout_height="30.25dp"
             android:layout_marginRight="6dp"
             android:layout_marginTop="9.75dp"
-            android:background="@drawable/btn_selector"
+            android:background="@drawable/btn_tab_selector"
             android:text="VOD찜목록"
             android:textColor="@drawable/btn_selector_textcolor"
             android:layout_marginLeft="-1dp" />
@@ -82,7 +82,7 @@
             android:layout_marginTop="6.25dp"
             android:layout_gravity="center_horizontal"
             android:text="총 19개의 찜 VOD가 있습니다."
-            android:textColor="#7b5aa3"
+            android:textColor="@color/violet"
             android:textSize="11.5sp" />
     </LinearLayout>
 

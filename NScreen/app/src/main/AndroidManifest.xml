@@ -43,8 +43,8 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity android:name=".my.MyMainActivity" >
-        <activity android:name=".my.MySubActivity" >
         </activity>
+        <activity android:name=".my.MySubActivity" >
         </activity>
         <activity android:name=".pairing.PairingMainActivity" >
         </activity>
