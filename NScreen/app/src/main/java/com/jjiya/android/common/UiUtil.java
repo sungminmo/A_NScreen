@@ -1,5 +1,7 @@
 package com.jjiya.android.common;
 
+import android.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -302,5 +304,57 @@ public class UiUtil {
 
 
         return output+decimalNum;
+    }
+
+    /**
+     * 프로모션스티커 적용하기.
+     * @param promotionSticker
+     * @param isNew
+     * @param assetNew
+     * @param hot
+     * @param assetHot
+     * @param PromotionSticker
+     */
+    public static void setPromotionSticker(String promotionSticker, String isNew, String hot, String assetNew, String assetHot, ImageView PromotionSticker) {
+
+        // string < - > int
+//        String str = "1234";
+//        int    num = 5678;
+//
+//        String str2 = String.valueOf(num);
+//        int    num2 = Integer.parseInt(str);
+
+        /*if ( "11".equals(promotionSticker) ) {
+            mPromotionSticker.setImageResource(R.mipmap.반값);
+        } else*/
+        if ( "12".equals(promotionSticker) ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_07);
+        } else if ( "13".equals(promotionSticker) ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_03);
+        } else if ( "14".equals(promotionSticker) ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_08);
+        } else if ( "15".equals(promotionSticker) ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_04);
+        } else if ( "16".equals(promotionSticker) ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_02);
+//        } else if ( "17".equals(promotionSticker) ) {
+//            PromotionSticker.setImageResource(R.mipmap.선물팡팡);
+        } else if ( "18".equals(promotionSticker) ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_05);
+        } else if ( "00".equals(promotionSticker) ) {
+            if ( "1".equals(isNew) ) {
+                PromotionSticker.setImageResource(R.mipmap.vod_01);
+            } else if ( 0 < Integer.parseInt(assetNew) ) {
+                PromotionSticker.setImageResource(R.mipmap.vod_01);
+            } else if ( "1".equals(hot) ) {
+                PromotionSticker.setImageResource(R.mipmap.vod_02);
+            }  else if ( 0 < Integer.parseInt(assetHot) ) {
+                PromotionSticker.setImageResource(R.mipmap.vod_02);
+            } else {
+                PromotionSticker.setVisibility(View.GONE);
+            }
+        } else {
+            Log.d("uiutill", "모르는 케이스의 promotionSticker 입니다.");
+        }
     }
 }

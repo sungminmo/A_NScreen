@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class VodDetailActivity extends CMBaseActivity {
 
@@ -57,6 +58,7 @@ public class VodDetailActivity extends CMBaseActivity {
     private ImageView mReviewStar3ImageView;
     private ImageView mReviewStar4ImageView;
     private ImageView mReviewStar5ImageView;
+    private ImageView mPromotionSticker;
     private ImageView mHdSdImageView;
     private TextView mPriceTextView;
     private TextView mGenreTextView;
@@ -112,6 +114,7 @@ public class VodDetailActivity extends CMBaseActivity {
         mReviewStar4ImageView = (ImageView)findViewById(R.id.vod_detail_review4);
         mReviewStar5ImageView = (ImageView)findViewById(R.id.vod_detail_review5);
         mHdSdImageView        = (ImageView)findViewById(R.id.vod_detail_hd);
+        mPromotionSticker     = (ImageView)findViewById(R.id.imageView14);
         mPriceTextView        = (TextView)findViewById(R.id.vod_detail_price_textview);
         mGenreTextView        = (TextView)findViewById(R.id.vod_detail_genre_textview);
         mDirectorTextView     = (TextView)findViewById(R.id.vod_detail_director_textview);
@@ -171,6 +174,21 @@ public class VodDetailActivity extends CMBaseActivity {
                     String starring          = asset.getString("starring");
                     String synopsis          = asset.getString("synopsis");
                     boolean seriesLink       = asset.getBoolean("seriesLink");
+                    String promotionSticker  = asset.getString("promotionSticker");
+                    String isNew             = ""; // 0:없음, 1:있음.
+                    Object isNewObj          = asset.get("isNew");
+                    if ( isNewObj != null ) { isNew = asset.getString("isNew"); }
+                    String assetNew          = "0"; // 0:없음, 1:new일부만, 2:new단체
+                    Object assetNewObj       = asset.get("assetNew");
+                    if ( assetNewObj != null ) { assetNew = asset.getString("assetNew"); }
+                    String hot               = ""; // 0:없음, 1:있음.
+                    Object hotObj            = asset.get("hot");
+                    if ( hotObj != null ) { hot = asset.getString("hot"); }
+                    String assetHot          = "0"; // 0:없음, 1:new일부만, 2:new단체
+                    Object assetHotObj       = asset.get("assetHot");
+                    if ( assetNewObj != null ) { assetHot = asset.getString("assetHot"); }
+
+
 
                     // productList
                     JSONArray productList    = asset.getJSONArray("productList");
@@ -199,6 +217,9 @@ public class VodDetailActivity extends CMBaseActivity {
                     }
 
                     // 값들 찍어주기. -----------------------------------------------------------------
+
+                    UiUtil.setPromotionSticker(promotionSticker, isNew, hot, assetNew, assetHot, mPromotionSticker);
+
                     mTitleTextView.setText(asset.getString("title"));
                     if ( "00".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_all);
