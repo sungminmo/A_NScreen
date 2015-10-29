@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -70,6 +71,7 @@ public class EpgMainActivity extends AppCompatActivity {
 
         mListView = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(mItemClickListener);
 
         epg_main_genre_choice_imageButton = (ImageButton) findViewById(R.id.epg_main_genre_choice_imageButton);
 
@@ -83,6 +85,25 @@ public class EpgMainActivity extends AppCompatActivity {
 
         requestGetChannelList();
     }
+
+    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(tag, "mItemClickListener() " + position);
+            ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
+            try {
+                JSONObject jo = new JSONObject(dobj.sJson);
+                String sChannelNumber = jo.getString("channelNumber");
+                String sChannelName   = jo.getString("channelName");
+                Intent intent = new Intent(mInstance, EpgSubActivity.class);
+                intent.putExtra("channelNumber", sChannelNumber);
+                intent.putExtra("channelName", sChannelName);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
@@ -132,6 +153,8 @@ public class EpgMainActivity extends AppCompatActivity {
                         sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
                         sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelName")) {
+                        sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTitle")) {
                         sb.append(",\"channelProgramOnAirTitle\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelInfo")) {

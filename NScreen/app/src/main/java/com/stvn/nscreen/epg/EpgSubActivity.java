@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -44,6 +45,11 @@ public class EpgSubActivity extends AppCompatActivity {
     private              EpgSubListViewAdapter mAdapter;
     private              ListView              mListView;
 
+    private              String                sChannelNumber;
+    private              String                sChannelName;
+
+    private             TextView               epg_sub_channelNumber, epg_sub_channelName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +59,16 @@ public class EpgSubActivity extends AppCompatActivity {
         mPref     = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
 
+        sChannelNumber = getIntent().getExtras().getString("channelNumber");
+        sChannelName = getIntent().getExtras().getString("channelName");
+
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
+
+        epg_sub_channelNumber = (TextView) findViewById(R.id.epg_sub_channelNumber);
+        epg_sub_channelName   = (TextView) findViewById(R.id.epg_sub_channelName);
+
+        epg_sub_channelNumber.setText("CH." + sChannelNumber);
+        epg_sub_channelName.setText(sChannelName);
 
         mAdapter = new EpgSubListViewAdapter(this, null);
           // for test
@@ -72,7 +87,7 @@ public class EpgSubActivity extends AppCompatActivity {
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
-        String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=1000&dateIndex=6";
+        String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=" + sChannelNumber + "&dateIndex=6";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

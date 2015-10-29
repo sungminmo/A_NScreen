@@ -26,22 +26,10 @@
                 android:textColor="@android:color/black" />
 
             <Button
-                android:id="@+id/Button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EpgChoice" />
-
-            <Button
                 android:id="@+id/Button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EpgMain" />
-
-            <Button
-                android:id="@+id/Button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EpgSub" />
+                android:text="EPG" />
 
             <Button
                 android:id="@+id/Button4"

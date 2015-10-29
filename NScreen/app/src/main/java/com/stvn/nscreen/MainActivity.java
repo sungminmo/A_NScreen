@@ -42,14 +42,9 @@ public class MainActivity extends AppCompatActivity {
             mPref.put(JYSharedPreferences.UUID, uuid.toString());
         }
 
+        Button Button2, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13, Button14, Button15, Button16;
 
-
-
-        Button Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13, Button14, Button15, Button16;
-
-        Button1  = (Button) findViewById(R.id.Button1);
         Button2  = (Button) findViewById(R.id.Button2);
-        Button3  = (Button) findViewById(R.id.Button3);
         Button4  = (Button) findViewById(R.id.Button4);
         Button5  = (Button) findViewById(R.id.Button5);
         Button6  = (Button) findViewById(R.id.Button6);
@@ -64,26 +59,10 @@ public class MainActivity extends AppCompatActivity {
         Button15 = (Button) findViewById(R.id.Button15);
         Button16 = (Button) findViewById(R.id.Button16);
 
-        Button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgChoiceActivity.class);
-                startActivity(i);
-            }
-        });
-
         Button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgSubActivity.class);
                 startActivity(i);
             }
         });

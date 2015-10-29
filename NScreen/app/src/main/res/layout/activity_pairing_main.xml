@@ -51,6 +51,25 @@
             android:textColor="#4e3071" />
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="12.75dp"
+        android:layout_marginLeft="12.75dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[필수] 모바일 구매 비밀번호등록"
+            android:id="@+id/textView26"
+            android:textSize="15sp"
+            android:layout_marginLeft="5.75dp"
+            android:textColor="#4e3071" />
+    </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1.25dp"
@@ -105,6 +124,57 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_height="155.5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginRight="12.75dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기존 등록하신 셋탑박스 연동정보가 유지되어"
+            android:id="@+id/textView27"
+            android:textSize="14sp"
+            android:textColor="#7b5aa3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="재 연동하실 필요가 없습니다."
+            android:id="@+id/textView28"
+            android:textSize="14sp"
+            android:textColor="#7b5aa3"
+            android:layout_marginBottom="20.75dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모바일에서 VOD 구매를 실행하기 위해"
+            android:id="@+id/textView29"
+            android:textSize="13sp"
+            android:textColor="#707070" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용하실 비밀번호를 다시 설정해 주세요."
+            android:id="@+id/textView30"
+            android:textSize="13sp"
+            android:textColor="#707070" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="구매비밀번호를 입력하지 않으실 경우, 앱이 자동으로 종료됩니다."
+            android:id="@+id/textView31"
+            android:textSize="13sp"
+            android:textColor="#707070" />
+    </LinearLayout>-
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="279.75dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginRight="12.75dp"
@@ -112,23 +182,53 @@
         android:background="#f0f0f2"
         android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="비밀번호가 기억나지 않으실 경우, 셋탑박스를 다시 연동하여"
-            android:id="@+id/textView20"
-            android:textSize="12.5sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="21dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="비밀번호를 재설정 하실 수 있습니다."
-            android:id="@+id/textView21"
-            android:textSize="12.5sp"
-            android:textColor="@color/black"
-            android:layout_marginBottom="39dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비밀번호가 기억나지 않으실 경우, 셋탑박스를 다시 연동하여"
+                android:id="@+id/textView20"
+                android:textSize="12.5sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="21dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비밀번호를 재설정 하실 수 있습니다."
+                android:id="@+id/textView21"
+                android:textSize="12.5sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="최소 4자리 이상 숫자 + 영문으로"
+                android:id="@+id/textView32"
+                android:textSize="12.5sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="21dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="최대 20자리 까지 입력 가능합니다."
+                android:id="@+id/textView33"
+                android:textSize="12.5sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
