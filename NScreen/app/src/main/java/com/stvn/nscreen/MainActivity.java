@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, VodBuyActivity.class);
+                i.putExtra("assetId","www.hchoice.co.kr|M4154270LSG347422301");
                 startActivity(i);
             }
         });
