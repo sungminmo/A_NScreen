@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
+import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
 
 
@@ -50,6 +52,8 @@ public class EpgMainActivity extends AppCompatActivity {
 
     private              ImageButton            epg_main_genre_choice_imageButton;
 
+    private             TextView                epg_main_genre_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +79,21 @@ public class EpgMainActivity extends AppCompatActivity {
 
         epg_main_genre_choice_imageButton = (ImageButton) findViewById(R.id.epg_main_genre_choice_imageButton);
 
+        epg_main_genre_name               = (TextView) findViewById(R.id.epg_main_genre_name);
+
+        try {
+            epg_main_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
+        } catch (NullPointerException e) {
+            epg_main_genre_name.setText("전체채널");
+        }
+
         epg_main_genre_choice_imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(EpgMainActivity.this, EpgChoiceActivity.class);
-                startActivity(i);
+                Intent intent = new Intent(EpgMainActivity.this, EpgChoiceActivity.class);
+                startActivity(intent);
             }
         });
-
         requestGetChannelList();
     }
 
@@ -108,7 +119,16 @@ public class EpgMainActivity extends AppCompatActivity {
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0";
+        String sGenreCode = "";
+        try {
+            sGenreCode = getIntent().getExtras().getString("sGenreCode");
+        } catch (NullPointerException e) {
+            sGenreCode = "";
+        }
+        if ( "".equals(sGenreCode) ) {
+            sGenreCode = "";
+        }
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0" + sGenreCode;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

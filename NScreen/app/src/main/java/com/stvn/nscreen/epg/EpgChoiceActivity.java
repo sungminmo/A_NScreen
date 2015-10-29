@@ -1,6 +1,7 @@
 package com.stvn.nscreen.epg;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,9 +51,13 @@ public class EpgChoiceActivity extends Activity {
         epg_choice_genre_eight_button = (Button) findViewById(R.id.epg_choice_genre_eight_button);
         epg_choice_genre_nine_button = (Button) findViewById(R.id.epg_choice_genre_nine_button);
 
-        epg_choice_close_imageButton.setOnClickListener(new View.OnClickListener() {
+        epg_choice_genre_all_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "");
+                intent.putExtra("sGenreCode", "전체채널");
+                startActivity(intent);
                 finish();
             }
         });
@@ -62,63 +67,108 @@ public class EpgChoiceActivity extends Activity {
                 finish();
             }
         });
-        epg_choice_genre_one_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         epg_choice_close_imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        epg_choice_genre_one_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=1");
+                intent.putExtra("sGenreName", "지상파/지역");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+        });
         epg_choice_genre_two_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=2");
+                intent.putExtra("sGenreName", "교육/키즈");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
         epg_choice_genre_three_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=3");
+                intent.putExtra("sGenreName", "음악/오락");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
         epg_choice_genre_four_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=4");
+                intent.putExtra("sGenreName", "스포츠/Game");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
         epg_choice_genre_five_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=5");
+                intent.putExtra("sGenreName", "종교/기타");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
         epg_choice_genre_six_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=6");
+                intent.putExtra("sGenreName", "뉴스/다큐");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
         epg_choice_genre_seven_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=7");
+                intent.putExtra("sGenreName", "영화");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
         epg_choice_genre_eight_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=8");
+                intent.putExtra("sGenreName", "드라마/여성");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
         epg_choice_genre_nine_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=9");
+                intent.putExtra("sGenreName", "홈쇼핑");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });

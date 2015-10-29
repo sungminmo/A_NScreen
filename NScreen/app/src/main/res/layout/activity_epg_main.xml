@@ -49,7 +49,7 @@
             android:layout_gravity="center" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/epg_main_genre_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="전체채널"
