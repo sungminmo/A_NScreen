@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="1"
+    android:background="@drawable/widevine_sampleplayer_background3">
+
+    <TableRow android:paddingTop="50dip" >
+        <TextView
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:typeface="serif"
+            android:textSize="30sp"
+            android:paddingLeft="100dip"
+            android:text="drm_server"/>
+        <EditText
+            android:layout_width="600dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/drm_server"
+             />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:typeface="serif"
+            android:textSize="30sp"
+            android:paddingLeft="100dip"
+            android:text="device_id"/>
+        <EditText
+            android:layout_width="600dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/device_id"
+           />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        <TextView
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:typeface="serif"
+            android:textSize="30sp"
+            android:paddingLeft="100dip"
+            android:text="portal_id"/>
+        <EditText
+            android:layout_width="600dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/portal_id"
+               />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        <TextView
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:typeface="serif"
+            android:textSize="30sp"
+            android:paddingLeft="100dip"
+            android:text="content_page"/>
+        <EditText
+            android:layout_width="600dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/content_page"
+               />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        >
+        <Button
+            android:text="update_button"
+            android:id="@+id/update_button"
+        />
+    </TableRow>
+</TableLayout>
