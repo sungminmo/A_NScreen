@@ -26,7 +26,12 @@ import com.stvn.nscreen.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -94,13 +99,103 @@ public class PairingSubActivity extends AppCompatActivity {
                 } else {
                     mCancleButton.setEnabled(false);
                     mNextButton.setEnabled(false);
-                    requestAddUser();
+                    requestClientSetTopBoxRegist();
                 }
 
             }
         });
     }
 
+
+    // 7.1.4 ClientSetTopBoxRegist
+    // 사용할 셋톱을 등록합니다..(VOD서버와의 인터페이스 확인)
+    private void requestClientSetTopBoxRegist() {
+        if ( mPref.isLogging() ) { Log.d(tag, "requestAddUser()"); }
+        mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        String authCode    = mAuthCodeEditText.getText().toString();
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url = mPref.getRumpersServerUrl() + "/ClientSetTopBoxRegist.asp?version=1&terminalKey="+JYSharedPreferences.RUMPERS_TERMINAL_KEY+"&deviceId="+uuid+"A&authCode="+authCode;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(tag, response);
+                parseClientSetTopBoxRegist(response);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                mCancleButton.setEnabled(true);
+                mNextButton.setEnabled(true);
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+                AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.setMessage(error.getMessage());
+                alert.show();
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    //
+    // 배너 파싱
+    private void parseClientSetTopBoxRegist(String response) {
+        StringBuilder sb = new StringBuilder();
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        sb.append("{\"resultCode\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        sb.append(",\"errorString\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("MacAddress")) {
+                        sb.append(",\"MacAddress\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("SetTopBoxKind")) {
+                        sb.append(",\"SetTopBoxKind\":\"").append(xpp.nextText()).append("\"}");
+                        String imsi = sb.toString();
+                        String re   = imsi.replace("http://58.141.255.80", "http://192.168.44.10"); // 삼성동 C&M에서는 공인망 럼퍼스 접속이 안되서, 임시로 리플레이스 처리 함.
+                        JSONObject jo = new JSONObject(re); //JSONObject jo = new JSONObject(sb.toString());
+                        //mBanners.add(jo);
+                        sb.setLength(0);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // 사용하면 안됨.
     // 5.20.4 AddUser
     // (모바일 찜하기) 발급된 인증번호를 이용하여 셋탑에 사용자(스마트폰)를 등록하도록 요청한다
     private void requestAddUser() {

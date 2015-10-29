@@ -179,16 +179,17 @@ public class VodDetailActivity extends CMBaseActivity {
                     Object isNewObj          = asset.get("isNew");
                     if ( isNewObj != null ) { isNew = asset.getString("isNew"); }
                     String assetNew          = "0"; // 0:없음, 1:new일부만, 2:new단체
-                    Object assetNewObj       = asset.get("assetNew");
-                    if ( assetNewObj != null ) { assetNew = asset.getString("assetNew"); }
-                    String hot               = ""; // 0:없음, 1:있음.
-                    Object hotObj            = asset.get("hot");
-                    if ( hotObj != null ) { hot = asset.getString("hot"); }
+                    if ( ! asset.isNull("assetNew") ) {
+                        assetNew = asset.getString("assetNew");
+                    }
                     String assetHot          = "0"; // 0:없음, 1:new일부만, 2:new단체
-                    Object assetHotObj       = asset.get("assetHot");
-                    if ( assetNewObj != null ) { assetHot = asset.getString("assetHot"); }
-
-
+                    if ( ! asset.isNull("assetHot") ) {
+                        assetHot = asset.getString("assetHot");
+                    }
+                    String hot               = ""; // 0:없음, 1:있음.
+                    if ( ! asset.isNull("hot") ) {
+                        hot = asset.getString("hot");
+                    }
 
                     // productList
                     JSONArray productList    = asset.getJSONArray("productList");
@@ -334,4 +335,7 @@ public class VodDetailActivity extends CMBaseActivity {
         };
         mRequestQueue.add(request);
     }
+
+
+
 }
