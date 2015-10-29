@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.FourVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
@@ -60,6 +61,7 @@ public class VodDetailActivity extends CMBaseActivity {
     private ImageView mReviewStar5ImageView;
     private ImageView mPromotionSticker;
     private ImageView mHdSdImageView;
+    private NetworkImageView mMovieImageImageView;
     private TextView mPriceTextView;
     private TextView mGenreTextView;
     private TextView mDirectorTextView;
@@ -116,6 +118,7 @@ public class VodDetailActivity extends CMBaseActivity {
         mReviewStar5ImageView = (ImageView)findViewById(R.id.vod_detail_review5);
         mHdSdImageView        = (ImageView)findViewById(R.id.vod_detail_hd);
         mPromotionSticker     = (ImageView)findViewById(R.id.imageView14);
+        mMovieImageImageView  = (NetworkImageView)findViewById(R.id.vod_detail_imagefilename_imageview);
         mPriceTextView        = (TextView)findViewById(R.id.vod_detail_price_textview);
         mGenreTextView        = (TextView)findViewById(R.id.vod_detail_genre_textview);
         mDirectorTextView     = (TextView)findViewById(R.id.vod_detail_director_textview);
@@ -163,6 +166,7 @@ public class VodDetailActivity extends CMBaseActivity {
 
                     // asset
                     JSONObject asset            = jo.getJSONObject("asset");
+                    String imageFileName        = asset.getString("imageFileName");
                     String rating               = asset.getString("rating");
                     String reviewRatingCount    = asset.getString("reviewRatingCount");
                     String reviewRatingTotal    = asset.getString("reviewRatingTotal");
@@ -175,8 +179,8 @@ public class VodDetailActivity extends CMBaseActivity {
                     boolean seriesLink          = asset.getBoolean("seriesLink");
                     String promotionSticker     = asset.getString("promotionSticker");
 
-                    JSONArray productLists = asset.getJSONArray("productList");
-                    JSONObject product     = (JSONObject)productLists.get(0);
+                    JSONArray productLists      = asset.getJSONArray("productList");
+                    JSONObject product          = (JSONObject)productLists.get(0);
                     Integer viewablePeriodState = product.getInt("viewablePeriodState");
                     String viewablePeriod       = product.getString("viewablePeriod");
 
@@ -205,6 +209,7 @@ public class VodDetailActivity extends CMBaseActivity {
                     //JSONObject product       = productLists.getJSONObject(0);
                     String price             = product.getString("price");
                     String purchasedId       = product.getString("purchasedId");
+                    String purchasedTime     = product.getString("purchasedTime");
 
                     // LinearLayout 감추기/보이기 -----------------------------------------------------
                     if ( seriesLink == true ) {      // 시리즈 보여라
@@ -212,7 +217,7 @@ public class VodDetailActivity extends CMBaseActivity {
                     } else {                         // 시리즈 감춰라.
                         mSeriesLinearLayout.setVisibility(View.GONE);
                     }
-                    if ( "0".equals(purchasedId) ) { // 구매하기 보여랴
+                    if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
                         mPurchaseLinearLayout.setVisibility(View.VISIBLE);
                         mPlayLinearLayout.setVisibility(View.GONE);
                     } else {                         // 구매했다. 감쳐라.
@@ -221,12 +226,14 @@ public class VodDetailActivity extends CMBaseActivity {
                     }
                     // @// TODO: 2015. 10. 21. 지금은 값이 안내려옴. 시청기기 서버작업 되면 수정해야 됨.
                     if ( true ) {                    // TV에서봐 보여랴
-                        mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
+                        mTvOnlyLiearLayout.setVisibility(View.GONE);
                     } else {                         // TV에서봐 감쳐라.
-                        mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
+                        mTvOnlyLiearLayout.setVisibility(View.GONE);
                     }
 
                     // 값들 찍어주기. -----------------------------------------------------------------
+
+                    mMovieImageImageView.setImageUrl(imageFileName, mImageLoader);
 
                     UiUtil.setPromotionSticker(promotionSticker, isNew, hot, assetNew, assetHot, mPromotionSticker);
 

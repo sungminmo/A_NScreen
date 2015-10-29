@@ -23,10 +23,10 @@
             android:layout_width="124.75dp"
             android:layout_height="match_parent">
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="112dp"
                 android:layout_height="163dp"
-                android:id="@+id/imageView7"
+                android:id="@+id/vod_detail_imagefilename_imageview"
                 android:background="#bbbbbb"
                 android:layout_marginLeft="12.75dp"
                 android:layout_marginTop="13.75dp"
@@ -51,7 +51,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16.5dp"
+                android:layout_marginTop="13.75dp"
                 android:gravity="center_vertical">
 
                 <ImageView
@@ -78,7 +78,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14.25dp"
+                android:layout_marginTop="12.5dp"
                 android:background="@color/white"
                 android:gravity="center_vertical" >
 
@@ -323,7 +323,8 @@
         android:layout_height="0.25dp"
         android:background="#b4b6b8"
         android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp" />
+        android:layout_marginRight="12.75dp"
+        android:layout_marginTop="12.75dp" />
 
     <LinearLayout
         android:orientation="vertical"
