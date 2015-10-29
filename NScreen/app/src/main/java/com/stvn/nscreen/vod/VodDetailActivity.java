@@ -71,6 +71,7 @@ public class VodDetailActivity extends CMBaseActivity {
     private LinearLayout mPlayLinearLayout;
     private LinearLayout mTvOnlyLiearLayout;
     private ViewPager mViewPager;
+    private String viewable;
 
     // activity
     private String assetId; // intent param
@@ -127,8 +128,6 @@ public class VodDetailActivity extends CMBaseActivity {
         mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
 
-
-
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
         // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
         /**
@@ -163,20 +162,27 @@ public class VodDetailActivity extends CMBaseActivity {
                     JSONObject jo            = new JSONObject(response);
 
                     // asset
-                    JSONObject asset         = jo.getJSONObject("asset");
-                    String rating            = asset.getString("rating");
-                    String reviewRatingCount = asset.getString("reviewRatingCount");
-                    String reviewRatingTotal = asset.getString("reviewRatingTotal");
-                    boolean HDContent        = asset.getBoolean("HDContent");
-                    String genre             = asset.getString("genre");
-                    String runningTime       = asset.getString("runningTime");
-                    String director          = asset.getString("director");
-                    String starring          = asset.getString("starring");
-                    String synopsis          = asset.getString("synopsis");
-                    boolean seriesLink       = asset.getBoolean("seriesLink");
-                    String promotionSticker  = asset.getString("promotionSticker");
-                    String isNew             = ""; // 0:없음, 1:있음.
-                    Object isNewObj          = asset.get("isNew");
+                    JSONObject asset            = jo.getJSONObject("asset");
+                    String rating               = asset.getString("rating");
+                    String reviewRatingCount    = asset.getString("reviewRatingCount");
+                    String reviewRatingTotal    = asset.getString("reviewRatingTotal");
+                    boolean HDContent           = asset.getBoolean("HDContent");
+                    String genre                = asset.getString("genre");
+                    String runningTime          = asset.getString("runningTime");
+                    String director             = asset.getString("director");
+                    String starring             = asset.getString("starring");
+                    String synopsis             = asset.getString("synopsis");
+                    boolean seriesLink          = asset.getBoolean("seriesLink");
+                    String promotionSticker     = asset.getString("promotionSticker");
+
+                    JSONArray productLists = asset.getJSONArray("productList");
+                    JSONObject product     = (JSONObject)productLists.get(0);
+                    Integer viewablePeriodState = product.getInt("viewablePeriodState");
+                    String viewablePeriod       = product.getString("viewablePeriod");
+
+
+                    String isNew                = ""; // 0:없음, 1:있음.
+                    Object isNewObj             = asset.get("isNew");
                     if ( isNewObj != null ) { isNew = asset.getString("isNew"); }
                     String assetNew          = "0"; // 0:없음, 1:new일부만, 2:new단체
                     if ( ! asset.isNull("assetNew") ) {
@@ -191,9 +197,12 @@ public class VodDetailActivity extends CMBaseActivity {
                         hot = asset.getString("hot");
                     }
 
+                    String runningTimeMinute = String.valueOf((Integer.parseInt(runningTime.substring(0, 2)) * 60) + Integer.parseInt(runningTime.substring(3))) + "분";
+                    runningTime = runningTimeMinute;
+
                     // productList
-                    JSONArray productList    = asset.getJSONArray("productList");
-                    JSONObject product       = productList.getJSONObject(0);
+                    //JSONArray productList    = asset.getJSONArray("productList");
+                    //JSONObject product       = productLists.getJSONObject(0);
                     String price             = product.getString("price");
                     String purchasedId       = product.getString("purchasedId");
 
@@ -221,6 +230,14 @@ public class VodDetailActivity extends CMBaseActivity {
 
                     UiUtil.setPromotionSticker(promotionSticker, isNew, hot, assetNew, assetHot, mPromotionSticker);
 
+                    if( viewablePeriodState == 1 ) {
+                        mViewableTextView.setText("무제한시청");
+                    } else {
+                        viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10))) + "일";
+                        viewablePeriod = viewable;
+                        mViewableTextView.setText(viewablePeriod);
+                    }
+
                     mTitleTextView.setText(asset.getString("title"));
                     if ( "00".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_all);
@@ -234,11 +251,13 @@ public class VodDetailActivity extends CMBaseActivity {
                         AlertDialog alert = ad.create();
                         alert.show();
                     }
-                    Long lreviewRatingCount = Long.parseLong(reviewRatingCount);
-                    Long lreviewRatingTotal = Long.parseLong(reviewRatingTotal);
-                    Long reviewRating = 0l;
-                    if ( lreviewRatingTotal > 0 ) { reviewRating = lreviewRatingCount/lreviewRatingTotal*100l; }
+                    Float lreviewRatingCount = Float.parseFloat(reviewRatingCount);
+                    Float lreviewRatingTotal = Float.parseFloat(reviewRatingTotal);
+                    Float reviewRating = 0f;
+                    if ( lreviewRatingTotal > 0 ) { reviewRating = lreviewRatingTotal / lreviewRatingCount;
+                    }
                     UiUtil.setStarRating(reviewRating, mReviewStar1ImageView, mReviewStar2ImageView, mReviewStar3ImageView, mReviewStar4ImageView, mReviewStar5ImageView);
+
                     if ( HDContent == true ) {
                         mHdSdImageView.setImageResource(R.mipmap.btn_size_hd);
                     } else {

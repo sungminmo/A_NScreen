@@ -311,7 +311,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/vod_detail_device_imageview"
                     android:src="@mipmap/icon_tv"
-                    android:layout_marginRight="5dp" />
+                    android:layout_marginRight="12.75dp" />
 
             </LinearLayout>
         </LinearLayout>
