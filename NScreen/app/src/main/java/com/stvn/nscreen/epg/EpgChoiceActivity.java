@@ -56,7 +56,8 @@ public class EpgChoiceActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mInstance, EpgMainActivity.class);
                 intent.putExtra("sGenreCode", "");
-                intent.putExtra("sGenreCode", "전체채널");
+                intent.putExtra("sGenreName", "전체채널");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             }
