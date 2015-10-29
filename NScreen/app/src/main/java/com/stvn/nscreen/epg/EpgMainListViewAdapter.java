@@ -79,9 +79,14 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
             JSONObject         jobj         = new JSONObject(dobj.sJson);
 
+            String sProgramAge  = jobj.getString("channelProgramGrade");
+            String sChannelInfo = jobj.getString("channelInfo");
+
             // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
             NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
 
+            ImageView programAge  = (ImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_program_age);
+            ImageView Info        = (ImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_program_hdsd);
             ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
@@ -91,6 +96,23 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+            if ( "모두 시청".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_all);
+            } else if ("15세 이상".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_15);
+            } else if ("19세 이상".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_19);
+            } else {
+                programAge.setImageResource(R.mipmap.btn_age_19);
+            }
+
+            if ( "SD".equals(sChannelInfo) ) {
+                Info.setImageResource(R.mipmap.btn_size_sd);
+            } else if ("HD".equals(sChannelInfo) ) {
+                Info.setImageResource(R.mipmap.btn_size_hd);
+            } else {
+                Info.setImageResource(R.mipmap.btn_size_hd);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

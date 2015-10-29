@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
 import com.stvn.nscreen.R;
@@ -26,6 +27,8 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     private              Context                       mContext         = null;
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
+
+    private NetworkImageView epg_sub_imageview_program_age;
 
     public EpgSubListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
@@ -59,10 +62,9 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             ListViewDataObject dobj          = (ListViewDataObject)getItem(position);
             JSONObject         jobj          = new JSONObject(dobj.sJson);
 
-            TextView           titleTextView = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
+            TextView           titleTextView                 = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
 
             titleTextView.setText(jobj.getString("programTitle"));
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

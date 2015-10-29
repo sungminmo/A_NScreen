@@ -1,9 +1,12 @@
 package com.stvn.nscreen.epg;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.LruCache;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -12,6 +15,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
@@ -33,22 +38,24 @@ import java.util.Map;
  */
 public class EpgSubActivity extends AppCompatActivity {
 
-    private static final String                 tag = EpgSubActivity.class.getSimpleName();
-    private static       EpgSubActivity         mInstance;
-    private              JYSharedPreferences    mPref;
+    private static final String                tag = EpgSubActivity.class.getSimpleName();
+    private static       EpgSubActivity        mInstance;
+    private              JYSharedPreferences   mPref;
 
     // network
-    private              RequestQueue           mRequestQueue;
-    private              ProgressDialog         mProgressDialog;
+    private              RequestQueue          mRequestQueue;
+    private              ProgressDialog        mProgressDialog;
+    private              ImageLoader           mImageLoader;
 
     // gui
     private              EpgSubListViewAdapter mAdapter;
     private              ListView              mListView;
 
-    private              String                sChannelNumber;
-    private              String                sChannelName;
+    private              String                sChannelNumber, sChannelName, sChannelLogoImg;
 
-    private             TextView               epg_sub_channelNumber, epg_sub_channelName;
+    private              NetworkImageView      epg_sub_channelLogoImg;
+
+    private              TextView              epg_sub_channelNumber, epg_sub_channelName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +65,30 @@ public class EpgSubActivity extends AppCompatActivity {
         mInstance = this;
         mPref     = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
+        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
+            public void putBitmap(String url, Bitmap bitmap) {
+                mCache.put(url, bitmap);
+            }
+            public Bitmap getBitmap(String url) {
+                return mCache.get(url);
+            }
+        });
 
         sChannelNumber = getIntent().getExtras().getString("channelNumber");
         sChannelName = getIntent().getExtras().getString("channelName");
+        sChannelLogoImg = getIntent().getExtras().getString("channelLogoImg");
 
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
         epg_sub_channelNumber = (TextView) findViewById(R.id.epg_sub_channelNumber);
         epg_sub_channelName   = (TextView) findViewById(R.id.epg_sub_channelName);
+        epg_sub_channelLogoImg = (NetworkImageView) findViewById(R.id.epg_sub_imageview_channel_logo);
 
         epg_sub_channelNumber.setText("CH." + sChannelNumber);
         epg_sub_channelName.setText(sChannelName);
+
+        epg_sub_channelLogoImg.setImageUrl(sChannelLogoImg, mImageLoader);
 
         mAdapter = new EpgSubListViewAdapter(this, null);
           // for test

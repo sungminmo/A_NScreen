@@ -60,11 +60,11 @@
             android:layout_height="65dp"
             android:background="@color/white">
 
-            <ImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="48dp"
                 android:layout_height="19.25dp"
                 android:id="@+id/epg_sub_imageview_channel_logo"
-                android:background="#aaaaaa"
+                android:background="#0000"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="23dp" />
         </LinearLayout>

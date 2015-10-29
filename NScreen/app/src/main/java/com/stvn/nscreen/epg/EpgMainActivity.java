@@ -20,7 +20,6 @@ import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
-import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
 
 
@@ -104,11 +103,13 @@ public class EpgMainActivity extends AppCompatActivity {
             ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
             try {
                 JSONObject jo = new JSONObject(dobj.sJson);
-                String sChannelNumber = jo.getString("channelNumber");
-                String sChannelName   = jo.getString("channelName");
+                String sChannelNumber  = jo.getString("channelNumber");
+                String sChannelName    = jo.getString("channelName");
+                String sChannelLogoImg = jo.getString("channelLogoImg");
                 Intent intent = new Intent(mInstance, EpgSubActivity.class);
                 intent.putExtra("channelNumber", sChannelNumber);
                 intent.putExtra("channelName", sChannelName);
+                intent.putExtra("channelLogoImg", sChannelLogoImg);
                 startActivity(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -185,8 +186,12 @@ public class EpgMainActivity extends AppCompatActivity {
                         sb.append(",\"channelLogoImg\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirID")) {
                         sb.append(",\"channelProgramOnAirID\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTime")) {
-                        sb.append(",\"channelProgramOnAirTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirStartTime")) {
+                        sb.append(",\"channelProgramOnAirStartTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirEndTime")) {
+                        sb.append(",\"channelProgramOnAirEndTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelProgramGrade")) {
+                        sb.append(",\"channelProgramGrade\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelView")) {
                         sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
                         ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
