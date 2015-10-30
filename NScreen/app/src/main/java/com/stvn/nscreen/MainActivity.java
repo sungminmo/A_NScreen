@@ -42,15 +42,12 @@ public class MainActivity extends AppCompatActivity {
             mPref.put(JYSharedPreferences.UUID, uuid.toString());
         }
 
-        Button Button1, Button8, Button10, Button11, Button12, Button13, Button14, Button15;
+        Button Button1, Button8, Button10, Button11, Button15;
 
         Button1  = (Button) findViewById(R.id.Button1);
         Button8  = (Button) findViewById(R.id.Button8);
         Button10 = (Button) findViewById(R.id.Button10);
         Button11 = (Button) findViewById(R.id.Button11);
-        Button12 = (Button) findViewById(R.id.Button12);
-        Button13 = (Button) findViewById(R.id.Button13);
-        Button14 = (Button) findViewById(R.id.Button14);
         Button15 = (Button) findViewById(R.id.Button15);
 
         Button1.setOnClickListener(new View.OnClickListener() {
@@ -82,30 +79,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodDetailActivity.class);
                 i.putExtra("assetId","www.hchoice.co.kr|M4154270LSG347422301");
-                startActivity(i);
-            }
-        });
-
-        Button12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, PairingMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button13.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, PairingSubActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button14.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, PairingCheckActivity.class);
                 startActivity(i);
             }
         });

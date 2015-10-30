@@ -50,24 +50,6 @@
                 android:text="VodDetail" />
 
             <Button
-                android:id="@+id/Button12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PairingMain" />
-
-            <Button
-                android:id="@+id/Button13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PairingSub" />
-
-            <Button
-                android:id="@+id/Button14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PairingCheck" />
-
-            <Button
                 android:id="@+id/Button15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
