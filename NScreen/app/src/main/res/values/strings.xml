@@ -37,6 +37,9 @@
 
     <string name="title_activity_vod_buy">VodBuyActivity</string>
 
+    <string name="title_activity_leftmenu">LeftMenuActivity</string>
+
+
     <!-- 설정 -->
     <string name="setting_content">C&amp;M 모바일 서비스를 효율적으로 이용하기 위해\n지역 설정, 인증번호관리, 성인검색 제한설정, 본인인증 기능을 제공합니다.</string>
     <string name="setting_help_area_title">지역설정 이란?</string>

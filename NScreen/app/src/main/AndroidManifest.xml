@@ -24,6 +24,16 @@
             </intent-filter>
         </activity>
 
+        <!-- LEFT -->
+        <activity
+            android:name=".leftmenu.LeftMenuActivity"
+            android:label="@string/title_activity_leftmenu"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="unspecified"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+
         <!-- EPG -->
         <activity
             android:name=".epg.EpgMainActivity"

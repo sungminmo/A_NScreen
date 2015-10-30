@@ -32,6 +32,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,17 +104,27 @@ public class EpgMainActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.d(tag, "mItemClickListener() " + position);
             ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
+            SimpleDateFormat formatter2 = new SimpleDateFormat("h:mm");
+
             try {
                 JSONObject jo = new JSONObject(dobj.sJson);
                 String sChannelNumber  = jo.getString("channelNumber");
                 String sChannelName    = jo.getString("channelName");
                 String sChannelLogoImg = jo.getString("channelLogoImg");
+                String sChannelProgramOnAirStartTime = jo.getString("channelProgramOnAirStartTime");
+                Date dt = formatter.parse(sChannelProgramOnAirStartTime);
+                String str = formatter2.format(dt).toString();
                 Intent intent = new Intent(mInstance, EpgSubActivity.class);
                 intent.putExtra("channelNumber", sChannelNumber);
                 intent.putExtra("channelName", sChannelName);
                 intent.putExtra("channelLogoImg", sChannelLogoImg);
+
                 startActivity(intent);
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
