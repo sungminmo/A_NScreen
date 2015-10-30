@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.jjiya.android.common.JYSharedPreferences;
@@ -34,6 +35,8 @@ public class LeftMenuActivity extends Activity {
 
     private              Button                 leftmenu_pairing_button;
 
+    private              ImageButton            imageButton2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,14 @@ public class LeftMenuActivity extends Activity {
         leftmenu_my_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_my_linearLayout);
         leftmenu_setting_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_setting_linearLayout);
         leftmenu_pairing_button = (Button) findViewById(R.id.leftmenu_pairing_button);
+        imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
+
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         leftmenu_pairing_button.setOnClickListener(new View.OnClickListener() {
             @Override

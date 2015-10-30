@@ -78,7 +78,7 @@ public class UiUtil {
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 8 && rating <= 10 ) {
+        } else if ( rating > 8 && rating < 10 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
