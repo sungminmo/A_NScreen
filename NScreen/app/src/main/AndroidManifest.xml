@@ -12,7 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light">
 
         <activity
             android:name=".MainActivity"
@@ -24,15 +24,16 @@
             </intent-filter>
         </activity>
 
-        <!-- LEFT -->
-        <activity
-            android:name=".leftmenu.LeftMenuActivity"
-            android:label="@string/title_activity_leftmenu"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="unspecified"
-            android:theme="@android:style/Theme.Dialog"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
+        <!-- 기존의 개발자용 메인 화면 -->
+        <!--<activity-->
+            <!--android:name=".DeveloperMainActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:screenOrientation="portrait">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
         <!-- EPG -->
         <activity

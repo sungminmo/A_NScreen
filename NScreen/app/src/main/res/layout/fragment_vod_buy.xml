@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:style="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56.25dp"
+        android:orientation="horizontal"
+        android:background="@mipmap/title_bar_bg"
+        android:layout_marginBottom="27.25dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="베테랑"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="9dp"
+            android:background="@mipmap/btn_back" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="334.5dp"
+        android:layout_height="216.5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginRight="12.75dp"
+        android:layout_marginBottom="17.25dp"
+        android:gravity="center_horizontal"
+        android:background="#F0F0F2">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="334.5dp"
+            android:layout_height="25dp"
+            android:paddingLeft="12.75dp"
+            android:layout_marginBottom="12.5dp"
+            android:gravity="center_vertical"
+            android:background="#C7B4DA">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STEP1. 구매상품선택"
+                android:id="@+id/textView37"
+                android:textColor="@color/violet"
+                android:textSize="12.5sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:paddingLeft="35dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector"
+            android:id="@+id/vod_buy_step1_one_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단일 회차 구매"
+                android:id="@+id/textView39"
+                android:textSize="16sp"
+                android:textColor="@drawable/btn_selector_textcolor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4,500원 [부가세 별도]"
+                android:id="@+id/textView40"
+                android:textSize="12.75dp"
+                android:textColor="@drawable/btn_purchase_textcolor" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:paddingLeft="35dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector"
+            android:id="@+id/vod_buy_step1_serise_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시리즈 전체회차 구매"
+                android:id="@+id/textView41"
+                android:textSize="16sp"
+                android:textColor="@drawable/btn_selector_textcolor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10,000원 [부가세 별도]"
+                android:id="@+id/textView42"
+                android:textSize="12.75dp"
+                android:textColor="@drawable/btn_purchase_textcolor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:paddingLeft="35dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector"
+            android:id="@+id/vod_buy_step1_oneproduct_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단일상품 구매"
+                android:id="@+id/textView43"
+                android:textSize="16sp"
+                android:textColor="@drawable/btn_selector_textcolor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4,500원 [부가세 별도]"
+                android:id="@+id/textView44"
+                android:textSize="12.75dp"
+                android:textColor="@drawable/btn_purchase_textcolor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:paddingLeft="35dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector"
+            android:id="@+id/vod_buy_step1_packeage_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="묶음 할인상품 구매"
+                android:id="@+id/textView45"
+                android:textSize="16sp"
+                android:textColor="@drawable/btn_selector_textcolor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10,000원 [부가세 별도]"
+                android:id="@+id/textView46"
+                android:textSize="12.75dp"
+                android:textColor="@drawable/btn_purchase_textcolor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:paddingLeft="35dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector"
+            android:id="@+id/vod_buy_step1_month_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="월정액"
+                android:id="@+id/textView47"
+                android:textSize="16sp"
+                android:textColor="@drawable/btn_selector_textcolor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12,000원/월 [부가세 별도]"
+                android:id="@+id/textView48"
+                android:textSize="12.75dp"
+                android:textColor="@drawable/btn_purchase_textcolor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:paddingLeft="35dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector"
+            android:id="@+id/vod_buy_step1_month_all_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="통합 월정액"
+                android:id="@+id/textView49"
+                android:textSize="16sp"
+                android:textColor="@drawable/btn_selector_textcolor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20,000원/월 [부가세 별도]"
+                android:id="@+id/textView50"
+                android:textSize="12.75dp"
+                android:textColor="@drawable/btn_purchase_textcolor" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="334.5dp"
+        android:layout_height="216.5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginRight="12.75dp"
+        android:layout_marginBottom="49.5dp"
+        android:gravity="center_horizontal"
+        android:background="#F0F0F2"
+        android:id="@+id/vod_buy_step2_linearlayout"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="334.5dp"
+            android:layout_height="25dp"
+            android:paddingLeft="12.75dp"
+            android:layout_marginBottom="12.5dp"
+            android:gravity="center_vertical"
+            android:background="#C7B4DA">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STEP2. 결제방법선택"
+                android:id="@+id/textView38"
+                android:textColor="@color/violet"
+                android:textSize="12.5sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="35dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일반결제"
+                    android:id="@+id/textView51"
+                    android:textColor="@drawable/btn_selector_textcolor"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4,500원 [부가세 별도]"
+                    android:id="@+id/textView52"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="12.75sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="씨앤앰 청구서 포함결제"
+                    android:id="@+id/textView53"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="35dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="쿠폰결제"
+                    android:id="@+id/textView54"
+                    android:textColor="@drawable/btn_selector_textcolor"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4,500원"
+                    android:id="@+id/textView55"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="12.75sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="보유 쿠폰 차감결제"
+                    android:id="@+id/textView56"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[잔액부족-복합결제 가능]"
+                    android:id="@+id/textView57"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="12.75sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="35dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TV포인트"
+                    android:id="@+id/textView58"
+                    android:textColor="@drawable/btn_selector_textcolor"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="잔액:12,000원"
+                    android:id="@+id/textView59"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="12.75sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="보유 쿠폰 차감 결제"
+                    android:id="@+id/textView60"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[TV포인트 결제 가능]"
+                    android:id="@+id/textView61"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="309dp"
+            android:layout_height="49.25dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_purchase_selector">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="35dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="일반결제"
+                        android:id="@+id/textView62"
+                        android:textColor="@drawable/btn_selector_textcolor"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="씨앤앰 청구서 포함결제"
+                        android:id="@+id/textView63"
+                        android:textColor="@drawable/btn_purchase_textcolor"
+                        android:layout_gravity="left|center_vertical"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView13"
+                        android:layout_gravity="right|top"
+                        android:background="@drawable/purchase_coupon_selector"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="1.25dp" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="35dp"
+                android:gravity="center_vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4,500원 [부가세 별도]"
+                    android:id="@+id/textView64"
+                    android:textColor="@drawable/btn_purchase_textcolor"
+                    android:textSize="12.75sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="39.25dp"
+        android:layout_marginLeft="12.75dp"
+        android:layout_marginRight="12.75dp"
+        android:layout_marginBottom="17.25dp"
+        android:visibility="visible">
+
+        <Button
+            android:layout_width="164dp"
+            android:layout_height="39.5dp"
+            android:text="구매취소"
+            android:id="@+id/button9"
+            android:layout_weight="1"
+            android:layout_marginRight="6.5dp"
+            android:textSize="14.5sp"
+            android:textColor="@color/white"
+            android:background="@drawable/pbtn_selector" />
+
+        <Button
+            android:layout_width="164dp"
+            android:layout_height="39.5dp"
+            android:text="결제하기"
+            android:id="@+id/button10"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textSize="14.5sp"
+            android:background="@drawable/p2btn_selector" />
+    </LinearLayout>
+
+</LinearLayout>

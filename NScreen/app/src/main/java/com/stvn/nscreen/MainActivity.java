@@ -1,13 +1,22 @@
 package com.stvn.nscreen;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.pairing.PairingCheckActivity;
@@ -16,12 +25,14 @@ import com.stvn.nscreen.pairing.PairingSubActivity;
 import com.stvn.nscreen.rmt.RemoteControllerActivity;
 import com.stvn.nscreen.vod.VodBuyActivity;
 import com.stvn.nscreen.vod.VodDetailActivity;
+import com.stvn.nscreen.vod.VodEmptyFragment;
+import com.stvn.nscreen.vod.VodMainFragment;
 
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String              tag = VodDetailActivity.class.getSimpleName();
+    private static final String              tag = MainActivity.class.getSimpleName();
     private static       MainActivity        mInstance;
     private              JYSharedPreferences mPref;
 
@@ -42,75 +53,75 @@ public class MainActivity extends AppCompatActivity {
             mPref.put(JYSharedPreferences.UUID, uuid.toString());
         }
 
-        Button Button1, Button8, Button10, Button11, Button15;
+        /*
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgMainActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MyMainActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MySubActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrMainActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrSubActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.search.SearchMainActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.setting.CMSettingMainActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodMainActivity.class);
+        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodDetailActivity.class);
+        Intent i = new Intent(MainActivity.this, PairingMainActivity.class);
+        Intent i = new Intent(MainActivity.this, PairingSubActivity.class);
+        Intent i = new Intent(MainActivity.this, PairingCheckActivity.class);
+        Intent i = new Intent(MainActivity.this, VodBuyActivity.class);
+        Intent i = new Intent(MainActivity.this, RemoteControllerActivity.class);
+        */
 
-        Button1  = (Button) findViewById(R.id.Button1);
-        Button8  = (Button) findViewById(R.id.Button8);
-        Button10 = (Button) findViewById(R.id.Button10);
-        Button11 = (Button) findViewById(R.id.Button11);
-        Button15 = (Button) findViewById(R.id.Button15);
-
-        Button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.leftmenu.LeftMenuActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.search.SearchMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodDetailActivity.class);
-                i.putExtra("assetId","www.hchoice.co.kr|M4154270LSG347422301");
-                startActivity(i);
-            }
-        });
-
-        Button15.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, VodBuyActivity.class);
-                i.putExtra("assetId","www.hchoice.co.kr|M4154270LSG347422301");
-                startActivity(i);
-            }
-        });
-    }
-        @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        /* StatusBarColor ----------------------------------------------------------------------- */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);          // clear FLAG_TRANSLUCENT_STATUS flag:
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);  // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.setStatusBarColor(getResources().getColor(R.color.violet));              // finally change the color
         }
 
-        return super.onOptionsItemSelected(item);
+        /* ActionBar TAB mode ------------------------------------------------------------------- */
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.violet)));
+
+        VodMainFragment  vodMainFragment = new VodMainFragment();
+        VodEmptyFragment vodEmptyFragment = new VodEmptyFragment();
+
+        ActionBar.Tab tab1 = actionBar.newTab().setText("추천").setTabListener(new MainTabsListener(vodMainFragment));
+        ActionBar.Tab tab2 = actionBar.newTab().setText("영화").setTabListener(new MainTabsListener(vodEmptyFragment));
+        ActionBar.Tab tab3 = actionBar.newTab().setText("애니키즈").setTabListener(new MainTabsListener(vodEmptyFragment));
+        ActionBar.Tab tab4 = actionBar.newTab().setText("TV다시보기").setTabListener(new MainTabsListener(vodEmptyFragment));
+        ActionBar.Tab tab5 = actionBar.newTab().setText("성인").setTabListener(new MainTabsListener(vodEmptyFragment));
+
+        actionBar.addTab(tab1);
+        actionBar.addTab(tab2);
+        actionBar.addTab(tab3);
+        actionBar.addTab(tab4);
+        actionBar.addTab(tab5);
     }
+
+    class MainTabsListener implements ActionBar.TabListener {
+        private Fragment fragment;
+        public MainTabsListener(Fragment fragment) {
+            this.fragment = fragment;
+        }
+
+        @Override
+        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            //do what you want when tab is reselected, I do nothing
+            //Toast.makeText(mInstance, "Reselected()", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+            ft.replace(R.id.fragment_placeholder, fragment);
+            //Toast.makeText(mInstance, "Selected()", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            ft.remove(fragment);
+            //Toast.makeText(mInstance, "Unselected()", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
