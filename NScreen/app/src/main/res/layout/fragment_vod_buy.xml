@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4,500원 [부가세 별도]"
-                android:id="@+id/textView40"
+                android:id="@+id/vod_buy_step1_one_price"
                 android:textSize="12.75dp"
                 android:textColor="@drawable/btn_purchase_textcolor" />
 

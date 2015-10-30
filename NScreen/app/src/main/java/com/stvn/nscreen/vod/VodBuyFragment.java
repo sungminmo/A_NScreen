@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 
@@ -50,7 +51,9 @@ public class VodBuyFragment extends Fragment {
     private              String               assetId; // intent param
     private              String               isSeriesLink; // 시리즈 여부. ("YES or NO")
     private              String               mTitle; // asset title
-    private              TextView             vod_buy_title_textview;
+    private              String               sListPrice; // 정가
+    private              String               sPrice; // 할인적용가
+    private              TextView             vod_buy_title_textview, vod_buy_step1_one_price;
     private              long                 pointBalance; // TV포인트. getPointBalance 통해서 받아옴.
     private              long                 totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
 
@@ -71,6 +74,8 @@ public class VodBuyFragment extends Fragment {
         assetId = param.getString("assetId");
         isSeriesLink = param.getString("isSeriesLink");
         mTitle = param.getString("mTitle");
+        sListPrice = param.getString("sListPrice");
+        sPrice = param.getString("sPrice");
         pointBalance      = 0l;
         totalMoneyBalance = 0l;
 
@@ -82,9 +87,14 @@ public class VodBuyFragment extends Fragment {
         vod_buy_step1_month_all_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_all_linearlayout);
         vod_buy_step2_linearlayout = (LinearLayout)view.findViewById(R.id.vod_buy_step2_linearlayout);
         vod_buy_title_textview = (TextView)view.findViewById(R.id.vod_buy_title_textview);
+        vod_buy_step1_one_price = (TextView)view.findViewById(R.id.vod_buy_step1_one_price);
 
         vod_buy_title_textview.setText(mTitle);
-
+        if ( sListPrice.equals(sPrice) ) {
+            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원/월 [부가세 별도]");
+        } else {
+            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원/월 [부가세 별도]");
+        }
         if ( "YES".equals(isSeriesLink) ) {
             vod_buy_step1_one_linearlayout.setVisibility(View.VISIBLE);
             vod_buy_step1_serise_linearlayout.setVisibility(View.VISIBLE);

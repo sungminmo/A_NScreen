@@ -82,7 +82,6 @@ public class VodDetailFragment extends Fragment {
     private LinearLayout mTvOnlyLiearLayout;
     private ViewPager mViewPager;
     private String viewable;
-    private String mTitle;
 
     private Button mPurchaseButton; // 구매하기 버튼
 
@@ -91,6 +90,9 @@ public class VodDetailFragment extends Fragment {
     private List<JSONObject> relationVods;
     private FourVodPosterPagerAdapter mPagerAdapter;
     private String isSeriesLink; //시리즈인지 연부. true/false
+    private String mTitle;
+    private String sListPrice;
+    private String sPrice;
 
     public VodDetailFragment() {
         // Required empty public constructor
@@ -166,6 +168,8 @@ public class VodDetailFragment extends Fragment {
                 param.putString("assetId", mInstance.assetId);
                 param.putString("isSeriesLink", isSeriesLink);
                 param.putString("mTitle", mTitle);
+                param.putString("sListPrice", sListPrice);
+                param.putString("sPrice", sPrice);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodBuyFragment vf = new VodBuyFragment();
@@ -322,6 +326,7 @@ public class VodDetailFragment extends Fragment {
                     //JSONArray productList    = asset.getJSONArray("productList");
                     //JSONObject product       = productLists.getJSONObject(0);
                     String price             = product.getString("price");
+                    String listPrice         = product.getString("listPrice");
                     String purchasedId       = product.getString("purchasedId");
                     String purchasedTime     = product.getString("purchasedTime");
 
@@ -391,6 +396,9 @@ public class VodDetailFragment extends Fragment {
                     } else {
                         mHdSdImageView.setImageResource(R.mipmap.btn_size_sd);
                     }
+                    sPrice = price;
+                    sListPrice = listPrice;
+
                     mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
                     mGenreTextView.setText(genre+" / "+runningTime);
                     mDirectorTextView.setText(director);
