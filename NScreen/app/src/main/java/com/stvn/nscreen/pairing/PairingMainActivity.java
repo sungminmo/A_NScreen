@@ -20,6 +20,7 @@ public class PairingMainActivity extends AppCompatActivity {
     private static PairingMainActivity   mInstance;
     private        EditText              mPurchasePassword1Edittext;
     private        EditText              mPurchasePassword2Edittext;
+    private        Button                cancleButton, nextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +31,9 @@ public class PairingMainActivity extends AppCompatActivity {
 
         mPurchasePassword1Edittext = (EditText)findViewById(R.id.pairing_main_purchase_password1_edittext);
         mPurchasePassword2Edittext = (EditText)findViewById(R.id.pairing_main_purchase_password2_edittext);
-        Button cancleButton = (Button)findViewById(R.id.pairing_main_cancle_button);
-        Button nextButton   = (Button)findViewById(R.id.pairing_main_next_button);
+        cancleButton = (Button)findViewById(R.id.pairing_main_cancle_button);
+        nextButton   = (Button)findViewById(R.id.pairing_main_next_button);
+
 
         cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override

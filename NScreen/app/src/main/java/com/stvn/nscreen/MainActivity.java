@@ -42,23 +42,16 @@ public class MainActivity extends AppCompatActivity {
             mPref.put(JYSharedPreferences.UUID, uuid.toString());
         }
 
-        Button Button1, Button2, Button4, Button5, Button6, Button7, Button8, Button9, Button10, Button11, Button12, Button13, Button14, Button15, Button16;
+        Button Button1, Button8, Button10, Button11, Button12, Button13, Button14, Button15;
 
         Button1  = (Button) findViewById(R.id.Button1);
-        Button2  = (Button) findViewById(R.id.Button2);
-        Button4  = (Button) findViewById(R.id.Button4);
-        Button5  = (Button) findViewById(R.id.Button5);
-        Button6  = (Button) findViewById(R.id.Button6);
-        Button7  = (Button) findViewById(R.id.Button7);
         Button8  = (Button) findViewById(R.id.Button8);
-        Button9  = (Button) findViewById(R.id.Button9);
         Button10 = (Button) findViewById(R.id.Button10);
         Button11 = (Button) findViewById(R.id.Button11);
         Button12 = (Button) findViewById(R.id.Button12);
         Button13 = (Button) findViewById(R.id.Button13);
         Button14 = (Button) findViewById(R.id.Button14);
         Button15 = (Button) findViewById(R.id.Button15);
-        Button16 = (Button) findViewById(R.id.Button16);
 
         Button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,58 +61,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MyMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MySubActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrSubActivity.class);
-                startActivity(i);
-            }
-        });
-
         Button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, com.stvn.nscreen.search.SearchMainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.stvn.nscreen.setting.CMSettingMainActivity.class);
                 startActivity(i);
             }
         });
@@ -170,14 +115,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, VodBuyActivity.class);
                 i.putExtra("assetId","www.hchoice.co.kr|M4154270LSG347422301");
-                startActivity(i);
-            }
-        });
-
-        Button16.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, RemoteControllerActivity.class);
                 startActivity(i);
             }
         });

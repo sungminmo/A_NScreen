@@ -72,7 +72,7 @@
         android:layout_width="182.75dp"
         android:layout_height="39.75dp"
         android:text="셋탑박스 연동하기"
-        android:id="@+id/button4"
+        android:id="@+id/leftmenu_pairing_button"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="19.75dp"
         android:layout_marginRight="16dp"

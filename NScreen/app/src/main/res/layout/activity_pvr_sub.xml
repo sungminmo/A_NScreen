@@ -32,7 +32,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="103.75dp"
+            android:layout_marginLeft="95.75dp"
             android:layout_gravity="left|center_vertical"
             android:background="@mipmap/icon_series_title" />
 

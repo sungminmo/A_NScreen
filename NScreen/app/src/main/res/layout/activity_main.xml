@@ -32,46 +32,10 @@
                 android:id="@+id/Button1" />
 
             <Button
-                android:id="@+id/Button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EPG" />
-
-            <Button
-                android:id="@+id/Button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MyMain" />
-
-            <Button
-                android:id="@+id/Button5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MySub" />
-
-            <Button
-                android:id="@+id/Button6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PvrMain" />
-
-            <Button
-                android:id="@+id/Button7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PvrSub" />
-
-            <Button
                 android:id="@+id/Button8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SearchMain" />
-
-            <Button
-                android:id="@+id/Button9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SettingMain" />
 
             <Button
                 android:id="@+id/Button10"
@@ -108,12 +72,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="VODBuy" />
-
-            <Button
-                android:id="@+id/Button16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="remoteController" />
 
         </LinearLayout>
 
