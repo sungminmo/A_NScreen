@@ -72,7 +72,8 @@
             android:paddingLeft="35dp"
             android:gravity="center_vertical"
             android:background="@drawable/btn_purchase_selector"
-            android:id="@+id/vod_buy_step1_one_linearlayout">
+            android:id="@+id/vod_buy_step1_one_linearlayout"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,7 +102,8 @@
             android:paddingLeft="35dp"
             android:gravity="center_vertical"
             android:background="@drawable/btn_purchase_selector"
-            android:id="@+id/vod_buy_step1_serise_linearlayout">
+            android:id="@+id/vod_buy_step1_serise_linearlayout"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -129,7 +131,8 @@
             android:paddingLeft="35dp"
             android:gravity="center_vertical"
             android:background="@drawable/btn_purchase_selector"
-            android:id="@+id/vod_buy_step1_oneproduct_linearlayout">
+            android:id="@+id/vod_buy_step1_oneproduct_linearlayout"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -157,7 +160,8 @@
             android:paddingLeft="35dp"
             android:gravity="center_vertical"
             android:background="@drawable/btn_purchase_selector"
-            android:id="@+id/vod_buy_step1_packeage_linearlayout">
+            android:id="@+id/vod_buy_step1_packeage_linearlayout"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,7 +189,8 @@
             android:paddingLeft="35dp"
             android:gravity="center_vertical"
             android:background="@drawable/btn_purchase_selector"
-            android:id="@+id/vod_buy_step1_month_linearlayout">
+            android:id="@+id/vod_buy_step1_month_linearlayout"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -213,7 +218,8 @@
             android:paddingLeft="35dp"
             android:gravity="center_vertical"
             android:background="@drawable/btn_purchase_selector"
-            android:id="@+id/vod_buy_step1_month_all_linearlayout">
+            android:id="@+id/vod_buy_step1_month_all_linearlayout"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"

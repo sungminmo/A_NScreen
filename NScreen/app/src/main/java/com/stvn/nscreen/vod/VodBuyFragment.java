@@ -47,6 +47,7 @@ public class VodBuyFragment extends Fragment {
 
     // activity
     private              String               assetId; // intent param
+    private              String               isSeriesLink; // 시리즈 여부. ("YES or NO")
     private              long                 pointBalance; // TV포인트. getPointBalance 통해서 받아옴.
     private              long                 totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
 
@@ -65,6 +66,7 @@ public class VodBuyFragment extends Fragment {
 
         Bundle param = getArguments();
         assetId = param.getString("assetId");
+        isSeriesLink = param.getString("isSeriesLink");
         pointBalance      = 0l;
         totalMoneyBalance = 0l;
 
@@ -76,6 +78,10 @@ public class VodBuyFragment extends Fragment {
         vod_buy_step1_month_all_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_all_linearlayout);
 
         vod_buy_step2_linearlayout = (LinearLayout)view.findViewById(R.id.vod_buy_step2_linearlayout);
+
+        if ( "YES".equals(isSeriesLink) ) {
+            vod_buy_step1_serise_linearlayout.setVisibility(View.VISIBLE);
+        }
 
 
         requestGetPointBalance(); // 포인트 잔액을 얻어낸다
@@ -180,6 +186,15 @@ public class VodBuyFragment extends Fragment {
                     int resultCode     = jo.getInt("resultCode");
                     totalMoneyBalance  = jo.getLong("totalMoneyBalance");
                     String errorString = jo.getString("errorString");
+
+
+                    vod_buy_step1_one_linearlayout        = (LinearLayout)view.findViewById(R.id.vod_buy_step1_one_linearlayout);
+                    vod_buy_step1_serise_linearlayout     = (LinearLayout)view.findViewById(R.id.vod_buy_step1_serise_linearlayout);
+                    vod_buy_step1_oneproduct_linearlayout = (LinearLayout)view.findViewById(R.id.vod_buy_step1_oneproduct_linearlayout);
+                    vod_buy_step1_packeage_linearlayout   = (LinearLayout)view.findViewById(R.id.vod_buy_step1_packeage_linearlayout);
+                    vod_buy_step1_month_linearlayout      = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_linearlayout);
+                    vod_buy_step1_month_all_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_all_linearlayout);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

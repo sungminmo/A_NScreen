@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
+import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
@@ -87,6 +89,7 @@ public class VodDetailFragment extends Fragment {
     public  String assetId; // intent param
     private List<JSONObject> relationVods;
     private FourVodPosterPagerAdapter mPagerAdapter;
+    private String isSeriesLink; //시리즈인지 연부. true/false
 
     public VodDetailFragment() {
         // Required empty public constructor
@@ -106,6 +109,7 @@ public class VodDetailFragment extends Fragment {
         Bundle param = getArguments();
         assetId      = param.getString("assetId");
 
+
         //sJson      = getIntent().getExtras().getString("sJson");
         //assetId    = getIntent().getExtras().getString("assetId");
 //        try {
@@ -124,6 +128,8 @@ public class VodDetailFragment extends Fragment {
 
         //setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
         //setActionBarTitle(getString(R.string.title_activity_vod_detail));
+
+        //MainActivity.mInstance.getSupportActionBar().hide();
 
         mTitleTextView        = (TextView)view.findViewById(R.id.vod_detail_title);
         mRatingImageView      = (ImageView)view.findViewById(R.id.vod_detail_rating_imageview);
@@ -157,6 +163,7 @@ public class VodDetailFragment extends Fragment {
 
                 Bundle param = new Bundle();
                 param.putString("assetId", mInstance.assetId);
+                param.putString("isSeriesLink", isSeriesLink);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodBuyFragment vf = new VodBuyFragment();
@@ -317,9 +324,11 @@ public class VodDetailFragment extends Fragment {
 
                     // LinearLayout 감추기/보이기 -----------------------------------------------------
                     if ( seriesLink == true ) {      // 시리즈 보여라
+                        isSeriesLink = "YES";
                         mSeriesLinearLayout.setVisibility(View.VISIBLE);
                     } else {                         // 시리즈 감춰라.
                         mSeriesLinearLayout.setVisibility(View.GONE);
+                        isSeriesLink = "NO";
                     }
                     if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
                         mPurchaseLinearLayout.setVisibility(View.VISIBLE);
@@ -348,7 +357,7 @@ public class VodDetailFragment extends Fragment {
                         viewablePeriod = viewable;
                         mViewableTextView.setText(viewablePeriod);
                     }
-
+                    // MainActivity.mInstance.getSupportActionBar().setTitle(asset.getString("title"));
                     mTitleTextView.setText(asset.getString("title"));
                     if ( "00".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_all);

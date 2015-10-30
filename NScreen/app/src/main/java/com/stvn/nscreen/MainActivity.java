@@ -33,7 +33,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     private static final String              tag = MainActivity.class.getSimpleName();
-    private static       MainActivity        mInstance;
+    public  static       MainActivity        mInstance;
     private              JYSharedPreferences mPref;
 
     @Override

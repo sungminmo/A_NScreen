@@ -1,11 +1,13 @@
 package com.stvn.nscreen.vod;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +36,7 @@ import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.common.VodNewMoviePosterPagerAdapter;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
+import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
@@ -53,7 +56,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VodMainActivity extends CMBaseActivity {
+public class VodMainActivity extends Activity {
 
     private static final String                 tag = VodMainActivity.class.getSimpleName();
     private static       VodMainActivity        mInstance;
@@ -104,7 +107,7 @@ public class VodMainActivity extends CMBaseActivity {
 
 //        setActionBarStyle(CMActionBar.CMActionBarStyle.MAIN);
 //        setActionBarTitle(getString(R.string.title_activity_main));
-        useActionBar(false);
+
 
 
         // 배너
@@ -134,9 +137,9 @@ public class VodMainActivity extends CMBaseActivity {
             }
         });
 
+        MainActivity.mInstance.getSupportActionBar().show();
     }
 
-    // vod_main_pop20_more_linearlayout
 
     private AdapterView.OnItemClickListener assetItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
