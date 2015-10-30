@@ -20,7 +20,6 @@ import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.pvr.PvrMainActivity;
 import com.stvn.nscreen.rmt.RemoteControllerActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
-import com.widevine.sampleplayer.SettingsActivity;
 
 /**
  * Created by limdavid on 15. 10. 30..
@@ -35,7 +34,7 @@ public class LeftMenuActivity extends Activity {
 
     private              Button                 leftmenu_pairing_button;
 
-    private              ImageButton            imageButton2;
+    private              ImageButton            imageButton2, imageButton3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +59,7 @@ public class LeftMenuActivity extends Activity {
         leftmenu_setting_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_setting_linearLayout);
         leftmenu_pairing_button = (Button) findViewById(R.id.leftmenu_pairing_button);
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
+        imageButton3 = (ImageButton) findViewById(R.id.imageButton3);
 
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override

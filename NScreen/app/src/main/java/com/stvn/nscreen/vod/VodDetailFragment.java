@@ -82,6 +82,7 @@ public class VodDetailFragment extends Fragment {
     private LinearLayout mTvOnlyLiearLayout;
     private ViewPager mViewPager;
     private String viewable;
+    private String mTitle;
 
     private Button mPurchaseButton; // 구매하기 버튼
 
@@ -164,6 +165,7 @@ public class VodDetailFragment extends Fragment {
                 Bundle param = new Bundle();
                 param.putString("assetId", mInstance.assetId);
                 param.putString("isSeriesLink", isSeriesLink);
+                param.putString("mTitle", mTitle);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodBuyFragment vf = new VodBuyFragment();
@@ -289,6 +291,7 @@ public class VodDetailFragment extends Fragment {
                     String synopsis             = asset.getString("synopsis");
                     boolean seriesLink          = asset.getBoolean("seriesLink");
                     String promotionSticker     = asset.getString("promotionSticker");
+                    String title                = asset.getString("title");
 
                     JSONArray productLists      = asset.getJSONArray("productList");
                     JSONObject product          = (JSONObject)productLists.get(0);
@@ -358,7 +361,8 @@ public class VodDetailFragment extends Fragment {
                         mViewableTextView.setText(viewablePeriod);
                     }
                     // MainActivity.mInstance.getSupportActionBar().setTitle(asset.getString("title"));
-                    mTitleTextView.setText(asset.getString("title"));
+                    mTitleTextView.setText(title);
+                    mTitle = title;
                     if ( "00".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_all);
                     } else if ( "07".equals(rating) ) {
