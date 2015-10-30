@@ -2,6 +2,7 @@ package com.stvn.nscreen.vod;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,6 +35,9 @@ import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.widevine.sampleplayer.StreamingActivity;
+import com.widevine.sampleplayer.VideoPlayerView;
+import com.widevine.sampleplayer.WidevineSamplePlayer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,6 +88,7 @@ public class VodDetailFragment extends Fragment {
     private String viewable;
 
     private Button mPurchaseButton; // 구매하기 버튼
+    private Button mPlayButton; // 시청하기 버튼
 
     // activity
     public  String assetId; // intent param
@@ -93,6 +98,18 @@ public class VodDetailFragment extends Fragment {
     private String mTitle;
     private String sListPrice;
     private String sPrice;
+
+    // for 결재
+    private String productId;
+    private String goodId;
+
+
+
+    // for player
+    private String fileName; // M4145902.mpg
+    private String contentUri; // http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm
+    private String drmServerUri; // http://proxy.video.toast.com/widevine/drm/dls.do
+    private String drmProtection; // true
 
     public VodDetailFragment() {
         // Required empty public constructor
@@ -170,6 +187,11 @@ public class VodDetailFragment extends Fragment {
                 param.putString("mTitle", mTitle);
                 param.putString("sListPrice", sListPrice);
                 param.putString("sPrice", sPrice);
+                param.putString("productId", productId);
+                param.putString("goodId", goodId);
+
+
+
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodBuyFragment vf = new VodBuyFragment();
@@ -177,6 +199,15 @@ public class VodDetailFragment extends Fragment {
                 ft.replace(R.id.fragment_placeholder, vf);
                 ft.addToBackStack("VodBuyFragment");
                 ft.commit();
+            }
+        });
+
+        // 시청하기 버튼
+        mPlayButton = (Button)view.findViewById(R.id.vod_detail_play_button);
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestContentUri();
             }
         });
 
@@ -191,6 +222,8 @@ public class VodDetailFragment extends Fragment {
          * 화면 하단의 연관 VOD 요청
          */
         requestRecommendContentGroupByAssetId();
+
+
 
         return view;
     }
@@ -283,6 +316,7 @@ public class VodDetailFragment extends Fragment {
 
                     // asset
                     JSONObject asset            = jo.getJSONObject("asset");
+                    fileName                    = asset.getString("fileName");
                     String imageFileName        = asset.getString("imageFileName");
                     String rating               = asset.getString("rating");
                     String reviewRatingCount    = asset.getString("reviewRatingCount");
@@ -299,6 +333,8 @@ public class VodDetailFragment extends Fragment {
 
                     JSONArray productLists      = asset.getJSONArray("productList");
                     JSONObject product          = (JSONObject)productLists.get(0);
+                    productId                   = product.getString("productId");
+                    goodId                      = product.getString("goodId");
                     Integer viewablePeriodState = product.getInt("viewablePeriodState");
                     String viewablePeriod       = product.getString("viewablePeriod");
 
@@ -398,13 +434,11 @@ public class VodDetailFragment extends Fragment {
                     }
                     sPrice = price;
                     sListPrice = listPrice;
-
                     mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
                     mGenreTextView.setText(genre+" / "+runningTime);
                     mDirectorTextView.setText(director);
                     mStarringTextView.setText(starring);
                     mSynopsisTextView.setText(synopsis);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -492,5 +526,75 @@ public class VodDetailFragment extends Fragment {
     }
 
 
+//    private String fileName; // M4145902.mpg
+//    private String contentUri; // http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm
+//    private String drmServerUri; // http://proxy.video.toast.com/widevine/drm/dls.do
+//    private String drmProtection; // true
+
+    private void requestContentUri() {
+        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(),"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestContentUri()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        fileName = "M4145902.mpg";
+        String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/play";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                mProgressDialog.dismiss();
+                try {
+                    JSONObject jo     = new JSONObject(response);
+                    JSONObject drm    = jo.getJSONObject("drm");
+                    JSONObject header = jo.getJSONObject("header");
+                    contentUri        = drm.getString("contentUri");
+                    drmServerUri      = drm.getString("drmServerUri");
+                    boolean bDrm      = drm.getBoolean("drmProtection");
+                    if ( bDrm == true ) {
+                        drmProtection = "true";
+                    } else {
+                        drmProtection = "false";
+                    }
+
+                    // http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm
+//                    Intent intent = new Intent(mInstance.getActivity(), WidevineSamplePlayer.class);
+//                    Intent intent = new Intent(mInstance.getActivity(), StreamingActivity.class);
+
+                    String terminalKey = mPref.getWebhasTerminalKey();
+
+                    Intent intent = new Intent(mInstance.getActivity(), VideoPlayerView.class);
+                    intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
+                    //intent.putExtra("currentpage", currentPage);
+                    //intent.putExtra("title", title);
+                    intent.putExtra("assetId", assetId);
+                    intent.putExtra("contentUri", contentUri);
+                    intent.putExtra("drmServerUri", drmServerUri);
+                    intent.putExtra("drmProtection", drmProtection);
+                    intent.putExtra("terminalKey", terminalKey);
+                    startActivityForResult(intent, 111);
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
 
 }

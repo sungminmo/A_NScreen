@@ -4,12 +4,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ import com.stvn.nscreen.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.BufferUnderflowException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +50,11 @@ public class VodBuyFragment extends Fragment {
     // UI
     private              LinearLayout        vod_buy_step2_linearlayout;
 
+
     // activity
+    // for 결재
+    private              String               productId;
+    private              String               goodId;
     private              String               assetId; // intent param
     private              String               isSeriesLink; // 시리즈 여부. ("YES or NO")
     private              String               mTitle; // asset title
@@ -59,6 +66,7 @@ public class VodBuyFragment extends Fragment {
 
     private              LinearLayout         vod_buy_step1_one_linearlayout, vod_buy_step1_serise_linearlayout, vod_buy_step1_oneproduct_linearlayout, vod_buy_step1_packeage_linearlayout, vod_buy_step1_month_linearlayout, vod_buy_step1_month_all_linearlayout;
     private              LinearLayout         vod_buy_step2_normal_linearlayout, vod_buy_step2_normal_dis_linearlayout, vod_buy_step2_coupon_linearlayout, vod_buy_step2_point_linearlayout;
+
 
 
 
@@ -77,6 +85,8 @@ public class VodBuyFragment extends Fragment {
         mTitle = param.getString("mTitle");
         sListPrice = param.getString("sListPrice");
         sPrice = param.getString("sPrice");
+        productId = param.getString("productId");
+        goodId = param.getString("goodId");
         pointBalance      = 0l;
         totalMoneyBalance = 0l;
 
@@ -230,6 +240,39 @@ public class VodBuyFragment extends Fragment {
             }
         });
 
+        Button purchaseButton = (Button)view.findViewById(R.id.vod_buy_ok_button);
+        purchaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder ad = new AlertDialog.Builder(mInstance.getActivity());
+                ad.setTitle("알림")
+                        .setMessage("구매비밀번호는 작업중 입니다. 확인을 누르시면 결제 됩니다.")
+                        .setCancelable(false)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPurchaseAssetEx2();
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'No'
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = ad.create();
+                alert.show();
+            }
+        });
+        Button cancleButton   = (Button)view.findViewById(R.id.vod_buy_cancle_button);
+        cancleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                fm.popBackStack("VodBuyFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+        });
 
         requestGetPointBalance(); // 포인트 잔액을 얻어낸다
 
@@ -321,7 +364,7 @@ public class VodBuyFragment extends Fragment {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
         terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
-        String url = mPref.getWebhasServerUrl() + "/getCouponBalance2.json?version=1&terminalKey="+terminalKey+"&domainId=CnM";
+        String url = mPref.getWebhasServerUrl() + "/getCouponBalance2.json?version=1&terminalKey=" + terminalKey + "&domainId=CnM";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -329,19 +372,66 @@ public class VodBuyFragment extends Fragment {
                 // {"totalMoneyBalance":0,"transactionId":null,"promotionCouponIssued":false,"autopaySubscription":0,"autopayCouponName":"","errorString":"",
                 // "discountCouponCount":0,"version":"1","extraInfoList":[],"couponList":[],"autopayCouponPrice":0,"resultCode":100,"autopayCouponBonusRate":0}
                 try {
-                    JSONObject jo      = new JSONObject(response);
-                    int resultCode     = jo.getInt("resultCode");
-                    totalMoneyBalance  = jo.getLong("totalMoneyBalance");
+                    JSONObject jo = new JSONObject(response);
+                    int resultCode = jo.getInt("resultCode");
+                    totalMoneyBalance = jo.getLong("totalMoneyBalance");
                     String errorString = jo.getString("errorString");
 
 
-//                    vod_buy_step1_one_linearlayout        = (LinearLayout)view.findViewById(R.id.vod_buy_step1_one_linearlayout);
-//                    vod_buy_step1_serise_linearlayout     = (LinearLayout)view.findViewById(R.id.vod_buy_step1_serise_linearlayout);
-//                    vod_buy_step1_oneproduct_linearlayout = (LinearLayout)view.findViewById(R.id.vod_buy_step1_oneproduct_linearlayout);
-//                    vod_buy_step1_packeage_linearlayout   = (LinearLayout)view.findViewById(R.id.vod_buy_step1_packeage_linearlayout);
-//                    vod_buy_step1_month_linearlayout      = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_linearlayout);
-//                    vod_buy_step1_month_all_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_all_linearlayout);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if (mPref.isLogging()) {
+                    VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage());
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                if (mPref.isLogging()) {
+                    Log.d(tag, "getParams()" + params.toString());
+                }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    /**
+     * http://192.168.40.5:8080/HApplicationServer/
+     * purchaseAssetEx2.xml?
+     * version=2&
+     * terminalKey=8A5D2E45D3874824FF23EC97F78D358&
+     * transactionId=603&
+     * productId=108
+     * &goodId=1544796&
+     * uiComponentDomain=0&
+     * uiComponentId=0
+     */
+    private void requestPurchaseAssetEx2() {
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+        terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
+        String url = mPref.getWebhasServerUrl() + "/purchaseAssetEx2.json?version=2&terminalKey="+terminalKey
+                +"&productId="+productId +"&goodId="+goodId+"&uiComponentDomain=0&uiComponentId=0";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                try {
+                    JSONObject jo      = new JSONObject(response);
+                    int resultCode     = jo.getInt("resultCode");
+
+                    FragmentManager fm = getFragmentManager();
+                    fm.popBackStack("VodBuyFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

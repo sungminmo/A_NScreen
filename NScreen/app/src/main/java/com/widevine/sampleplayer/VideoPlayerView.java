@@ -58,6 +58,12 @@ public class VideoPlayerView extends Activity {
     private int width, height;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("VideoPlayerView", "onResume()");
+    }
+
+    @Override
     public void finish() {
         Intent intent = new Intent();
         intent.putExtra("currentpage",getIntent().getIntExtra("currentpage",0));
@@ -82,6 +88,9 @@ public class VideoPlayerView extends Activity {
             setContentView(R.layout.widevine_sampleplayer_notprovisioned);
         }
         drm.printPluginVersion();
+
+        // swlim aaa
+        startPlayback();
     }
 
     @Override
@@ -104,7 +113,25 @@ public class VideoPlayerView extends Activity {
         enteringFullScreen = false;
         assetUri = this.getIntent().getStringExtra("com.widevine.demo.Path").replaceAll("wvplay", "http");
 
+
+        String assetId = this.getIntent().getStringExtra("assetId");
+        String contentUri = this.getIntent().getStringExtra("contentUri");
+        String drmServerUri = this.getIntent().getStringExtra("drmServerUri");
+        String drmProtection = this.getIntent().getStringExtra("drmProtection");
+        String terminalKey = this.getIntent().getStringExtra("terminalKey");
+        assetUri = contentUri;
+
+
         drm = new WidevineDrm(this);
+
+        // public static String USER_DATA = ",user_id:myjulyyi,content_id:M0431531LFO259395100|www.hchoice.co.kr,device_key:648a16b50911464aaf92801c4ea88b31,so_idx:10";
+        WidevineDrm.Settings.DEVICE_ID = terminalKey;
+        WidevineDrm.Settings.DRM_SERVER_URI = drmServerUri;
+        WidevineDrm.Settings.DEVICE_ID = terminalKey;
+        WidevineDrm.Settings.USER_DATA = ",user_id:"+terminalKey+",content_id:"+assetId+",device_key:"+terminalKey+",so_idx:10";
+
+
+
         logMessage("title: " + this.getIntent().getStringExtra("title") + "\n");
         logMessage("Asset Uri: " + assetUri + "\n");
         logMessage("Drm Server: " + WidevineDrm.Settings.DRM_SERVER_URI + "\n");
@@ -147,13 +174,9 @@ public class VideoPlayerView extends Activity {
         sidePanel = new LinearLayout(this);
         sidePanel.setOrientation(LinearLayout.VERTICAL);
 
-        sidePanel.addView(scrollView, new LinearLayout.LayoutParams(
-                (int)(width * 0.35),
-                (int)(height * 0.5)));
+        sidePanel.addView(scrollView, new LinearLayout.LayoutParams((int)(width * 0.35), (int)(height * 0.5)));
 
-        LinearLayout.LayoutParams paramsSidePanel = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams paramsSidePanel = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         paramsSidePanel.gravity = Gravity.CENTER;
         sidePanel.addView(createButtons(), paramsSidePanel);
 
@@ -168,12 +191,10 @@ public class VideoPlayerView extends Activity {
             view = videoView;
         }
 
-        playerFrame.addView(view, new FrameLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.MATCH_PARENT));
+        playerFrame.addView(view, new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
         bgImage = new ClipImageView(this);
-        bgImage.setBackgroundDrawable(getResources().getDrawable(R.drawable.widevine_sampleplayer_play_shield));
+//        bgImage.setBackgroundDrawable(getResources().getDrawable(R.drawable.widevine_sampleplayer_play_shield));
 
         bgImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -211,20 +232,24 @@ public class VideoPlayerView extends Activity {
                 videoView.seekTo(currentPosition);
             }
         });
-        playerFrame.addView(fullScreen, new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT));
+        playerFrame.addView(fullScreen, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
         fullScreen.setVisibility(View.INVISIBLE);
-        playerFrame.addView(bgImage, new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT));
+        playerFrame.addView(bgImage, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
         main = new LinearLayout(this);
-        main.addView(playerFrame, new LinearLayout.LayoutParams((int)(width * 0.65),
-                LinearLayout.LayoutParams.FILL_PARENT, 1));
-        main.addView(sidePanel, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.FILL_PARENT, 3));
+//        main.addView(playerFrame, new LinearLayout.LayoutParams((int) (width * 0.65), LinearLayout.LayoutParams.FILL_PARENT, 1));
+        main.addView(playerFrame, new LinearLayout.LayoutParams((int) (width), LinearLayout.LayoutParams.FILL_PARENT, 1));
+        main.addView(sidePanel, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT, 3));
+
+        sidePanel.setVisibility(View.GONE);
+
+
+        // swlim aaa
+        drm.acquireRights(contentUri);
+        //enteringFullScreen = true;
+        //startPlayback();
+
+
 
         return main;
     }

@@ -168,7 +168,7 @@ public abstract class AssetActivity extends Activity {
         buttons.addView(prev, params);
         buttons.addView(next, params);
 
-        body.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.widevine_sampleplayer_background3));
+        //body.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.widevine_sampleplayer_background3));
 
         SwipeLinearLayout main = new SwipeLinearLayout(this);
         main.setNext(nextButtonListener);

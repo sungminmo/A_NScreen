@@ -47,7 +47,7 @@ public class WidevineDrm {
         public static String DRM_SERVER_URI = "http://proxy.video.toast.com/widevine/drm/dls.do";
         public static String DEVICE_ID = "01"; // use a unique device ID
         public static String PORTAL_NAME = "markanynhne";
-        public static String USER_DATA = ",user_id:myjulyyi,content_id:M0431531LFO259395100|www.hchoice.co.kr,device_key:648a16b50911464aaf92801c4ea88b31,so_idx:1";
+        public static String USER_DATA = ",user_id:myjulyyi,content_id:M0431531LFO259395100|www.hchoice.co.kr,device_key:648a16b50911464aaf92801c4ea88b31,so_idx:10";
 
     };
 
