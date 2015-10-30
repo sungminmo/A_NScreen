@@ -16,6 +16,7 @@ public class UiUtil {
 
     /**
      * 별점이미지 셋팅하기.
+     *
      * @param rating
      * @param starImage1
      * @param starImage2
@@ -24,67 +25,67 @@ public class UiUtil {
      * @param starImage5
      */
     public static void setStarRating(Float rating, ImageView starImage1, ImageView starImage2, ImageView starImage3, ImageView starImage4, ImageView starImage5) {
-        if ( rating == 0 ) {
+        if (rating == 0) {
             starImage1.setImageResource(R.mipmap.series_star_off);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 0 && rating <= 1 ) {
+        } else if (rating > 0 && rating <= 1) {
             starImage1.setImageResource(R.mipmap.series_star_on_half);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 1 && rating <= 2 ) {
+        } else if (rating > 1 && rating <= 2) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 2 && rating <= 3 ) {
+        } else if (rating > 2 && rating <= 3) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on_half);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 3 && rating <= 4 ) {
+        } else if (rating > 3 && rating <= 4) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 4 && rating <= 5 ) {
+        } else if (rating > 4 && rating <= 5) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on_half);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 5 && rating <= 6 ) {
+        } else if (rating > 5 && rating <= 6) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 6 && rating <= 7 ) {
+        } else if (rating > 6 && rating <= 7) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on_half);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 7 && rating <= 8 ) {
+        } else if (rating > 7 && rating <= 8) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if ( rating > 8 && rating < 10 ) {
+        } else if (rating > 8 && rating < 10) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_on_half);
-        } else if ( rating == 10 ) {
+        } else if (rating == 10) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
@@ -107,139 +108,189 @@ public class UiUtil {
         image4.setImageResource(R.mipmap.indicator_off);
         image5.setImageResource(R.mipmap.indicator_off);
 
-        if ( image6 != null ) {
+        if (image6 != null) {
             image6.setVisibility(View.GONE);
             image6.setImageResource(R.mipmap.indicator_off);
         }
-        if ( image7 != null ) {
+        if (image7 != null) {
             image7.setVisibility(View.GONE);
             image7.setImageResource(R.mipmap.indicator_off);
         }
-        if ( image8 != null ) {
+        if (image8 != null) {
             image8.setVisibility(View.GONE);
             image8.setImageResource(R.mipmap.indicator_off);
         }
-        if ( image9 != null ) {
+        if (image9 != null) {
             image9.setVisibility(View.GONE);
             image9.setImageResource(R.mipmap.indicator_off);
         }
-        if ( image10 != null ) {
+        if (image10 != null) {
             image10.setVisibility(View.GONE);
             image10.setImageResource(R.mipmap.indicator_off);
         }
 
-        if ( iTotalPage == 0 ||  iTotalPage == 1 ) {
+        if (iTotalPage == 0 || iTotalPage == 1) {
             image1.setVisibility(View.VISIBLE);
-        } else if ( iTotalPage == 2 ) {
-            image1.setVisibility(View.VISIBLE);
-            image2.setVisibility(View.VISIBLE);
-        } else if ( iTotalPage == 3 ) {
+        } else if (iTotalPage == 2) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
-            image3.setVisibility(View.VISIBLE);
-        } else if ( iTotalPage == 4 ) {
+        } else if (iTotalPage == 3) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
-            image4.setVisibility(View.VISIBLE);
-        } else if ( iTotalPage == 5 ) {
+        } else if (iTotalPage == 4) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
-            image5.setVisibility(View.VISIBLE);
-        } else if ( iTotalPage == 6 ) {
+        } else if (iTotalPage == 5) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
             image5.setVisibility(View.VISIBLE);
-            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
-        } else if ( iTotalPage == 7 ) {
+        } else if (iTotalPage == 6) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
             image5.setVisibility(View.VISIBLE);
-            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
-            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
-        } else if ( iTotalPage == 8 ) {
+            if (image6 != null) {
+                image6.setVisibility(View.VISIBLE);
+            }
+        } else if (iTotalPage == 7) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
             image5.setVisibility(View.VISIBLE);
-            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
-            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
-            if ( image8 != null ) { image8.setVisibility(View.VISIBLE); }
-        } else if ( iTotalPage == 9 ) {
+            if (image6 != null) {
+                image6.setVisibility(View.VISIBLE);
+            }
+            if (image7 != null) {
+                image7.setVisibility(View.VISIBLE);
+            }
+        } else if (iTotalPage == 8) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
             image5.setVisibility(View.VISIBLE);
-            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
-            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
-            if ( image8 != null ) { image8.setVisibility(View.VISIBLE); }
-            if ( image9 != null ) { image9.setVisibility(View.VISIBLE); }
-        } else if ( iTotalPage == 10 ) {
+            if (image6 != null) {
+                image6.setVisibility(View.VISIBLE);
+            }
+            if (image7 != null) {
+                image7.setVisibility(View.VISIBLE);
+            }
+            if (image8 != null) {
+                image8.setVisibility(View.VISIBLE);
+            }
+        } else if (iTotalPage == 9) {
             image1.setVisibility(View.VISIBLE);
             image2.setVisibility(View.VISIBLE);
             image3.setVisibility(View.VISIBLE);
             image4.setVisibility(View.VISIBLE);
             image5.setVisibility(View.VISIBLE);
-            if ( image6 != null ) { image6.setVisibility(View.VISIBLE); }
-            if ( image7 != null ) { image7.setVisibility(View.VISIBLE); }
-            if ( image8 != null ) { image8.setVisibility(View.VISIBLE); }
-            if ( image9 != null ) { image9.setVisibility(View.VISIBLE); }
-            if ( image10 != null ) { image10.setVisibility(View.VISIBLE); }
+            if (image6 != null) {
+                image6.setVisibility(View.VISIBLE);
+            }
+            if (image7 != null) {
+                image7.setVisibility(View.VISIBLE);
+            }
+            if (image8 != null) {
+                image8.setVisibility(View.VISIBLE);
+            }
+            if (image9 != null) {
+                image9.setVisibility(View.VISIBLE);
+            }
+        } else if (iTotalPage == 10) {
+            image1.setVisibility(View.VISIBLE);
+            image2.setVisibility(View.VISIBLE);
+            image3.setVisibility(View.VISIBLE);
+            image4.setVisibility(View.VISIBLE);
+            image5.setVisibility(View.VISIBLE);
+            if (image6 != null) {
+                image6.setVisibility(View.VISIBLE);
+            }
+            if (image7 != null) {
+                image7.setVisibility(View.VISIBLE);
+            }
+            if (image8 != null) {
+                image8.setVisibility(View.VISIBLE);
+            }
+            if (image9 != null) {
+                image9.setVisibility(View.VISIBLE);
+            }
+            if (image10 != null) {
+                image10.setVisibility(View.VISIBLE);
+            }
         }
-        switch ( iCurrPage ) {
+        switch (iCurrPage) {
             case 0: {
                 image1.setImageResource(R.mipmap.indicator_on);
-            } break;
+            }
+            break;
             case 1: {
                 image2.setImageResource(R.mipmap.indicator_on);
-            } break;
+            }
+            break;
             case 2: {
                 image3.setImageResource(R.mipmap.indicator_on);
-            } break;
+            }
+            break;
             case 3: {
                 image4.setImageResource(R.mipmap.indicator_on);
-            } break;
+            }
+            break;
             case 4: {
                 image5.setImageResource(R.mipmap.indicator_on);
-            } break;
+            }
+            break;
             case 5: {
-                if ( image6 != null ) { image6.setImageResource(R.mipmap.indicator_on); }
-            } break;
+                if (image6 != null) {
+                    image6.setImageResource(R.mipmap.indicator_on);
+                }
+            }
+            break;
             case 6: {
-                if ( image7 != null ) {image7.setImageResource(R.mipmap.indicator_on); }
-            } break;
+                if (image7 != null) {
+                    image7.setImageResource(R.mipmap.indicator_on);
+                }
+            }
+            break;
             case 7: {
-                if ( image8 != null ) {image8.setImageResource(R.mipmap.indicator_on); }
-            } break;
+                if (image8 != null) {
+                    image8.setImageResource(R.mipmap.indicator_on);
+                }
+            }
+            break;
             case 8: {
-                if ( image9 != null ) {image9.setImageResource(R.mipmap.indicator_on); }
-            } break;
+                if (image9 != null) {
+                    image9.setImageResource(R.mipmap.indicator_on);
+                }
+            }
+            break;
             case 9: {
-                if ( image10 != null ) {image10.setImageResource(R.mipmap.indicator_on); }
-            } break;
+                if (image10 != null) {
+                    image10.setImageResource(R.mipmap.indicator_on);
+                }
+            }
+            break;
         }
     }
 
     /**
      * 숫자에 천단위마다 콤마 넣기
+     *
      * @param int
      * @return String
-     * */
+     */
     public static String toNumFormat(int num) {
         DecimalFormat df = new DecimalFormat("#,###");
         return df.format(num);
     }
 
     /**
-     *
      * @param inputNum
      * @return
      */
@@ -264,80 +315,73 @@ public class UiUtil {
     //Adding comma in between every 3 digits to a large number by parsing the number string.
     public static String stringParserCommafy(String inputNum) {
 
-        String commafiedNum="";
-        Character firstChar= inputNum.charAt(0);
+        String commafiedNum = "";
+        Character firstChar = inputNum.charAt(0);
 
         //If there is a positive or negative number sign,
         //then put the number sign to the commafiedNum and remove the sign from inputNum.
-        if(firstChar=='+' || firstChar=='-')
-        {
+        if (firstChar == '+' || firstChar == '-') {
             commafiedNum = commafiedNum + Character.toString(firstChar);
-            inputNum=inputNum.replaceAll("[-\\+]", "");
+            inputNum = inputNum.replaceAll("[-\\+]", "");
         }
 
         //If the input number has decimal places,
         //then split it into two, save the first part to inputNum
         //and save the second part to decimalNum which will be appended to the final result at the end.
-        String [] splittedNum = inputNum.split("\\.");
-        String decimalNum="";
-        if(splittedNum.length==2)
-        {
-            inputNum=splittedNum[0];
-            decimalNum="."+splittedNum[1];
+        String[] splittedNum = inputNum.split("\\.");
+        String decimalNum = "";
+        if (splittedNum.length == 2) {
+            inputNum = splittedNum[0];
+            decimalNum = "." + splittedNum[1];
         }
 
         //The main logic for adding commas to the number.
         int numLength = inputNum.length();
-        for (int i=0; i<numLength; i++) {
-            if ((numLength-i)%3 == 0 && i != 0) {
+        for (int i = 0; i < numLength; i++) {
+            if ((numLength - i) % 3 == 0 && i != 0) {
                 commafiedNum += ",";
             }
             commafiedNum += inputNum.charAt(i);
         }
 
-        return commafiedNum+decimalNum;
+        return commafiedNum + decimalNum;
     }
 
 
     //Adding comma in between every 3 digits to a large number by using regex.
-    public static String regexCommafy(String inputNum)
-    {
+    public static String regexCommafy(String inputNum) {
         String regex = "(\\d)(?=(\\d{3})+$)";
-        String [] splittedNum = inputNum.split("\\.");
-        if(splittedNum.length==2)
-        {
-            return splittedNum[0].replaceAll(regex, "$1,")+"."+splittedNum[1];
-        }
-        else
-        {
+        String[] splittedNum = inputNum.split("\\.");
+        if (splittedNum.length == 2) {
+            return splittedNum[0].replaceAll(regex, "$1,") + "." + splittedNum[1];
+        } else {
             return inputNum.replaceAll(regex, "$1,");
         }
     }
 
     //Adding comma in between every 3 digits to a large number by using DecimalFormat.
-    public static String decimalFormatCommafy(String inputNum)
-    {
+    public static String decimalFormatCommafy(String inputNum) {
         //If the input number has decimal places,
         //then split it into two, save the first part to inputNum
         //and save the second part to decimalNum which will be appended to the final result at the end.
-        String [] splittedNum = inputNum.split("\\.");
-        String decimalNum="";
-        if(splittedNum.length==2)
-        {
-            inputNum=splittedNum[0];
-            decimalNum="."+splittedNum[1];
+        String[] splittedNum = inputNum.split("\\.");
+        String decimalNum = "";
+        if (splittedNum.length == 2) {
+            inputNum = splittedNum[0];
+            decimalNum = "." + splittedNum[1];
         }
 
-        Double inputDouble=Double.parseDouble(inputNum);
+        Double inputDouble = Double.parseDouble(inputNum);
         DecimalFormat myFormatter = new DecimalFormat("###,###");
         String output = myFormatter.format(inputDouble);
 
 
-        return output+decimalNum;
+        return output + decimalNum;
     }
 
     /**
      * 프로모션스티커 적용하기.
+     *
      * @param promotionSticker
      * @param isNew
      * @param assetNew
@@ -354,37 +398,26 @@ public class UiUtil {
 //        String str2 = String.valueOf(num);
 //        int    num2 = Integer.parseInt(str);
 
-        /*if ( "11".equals(promotionSticker) ) {
-            mPromotionSticker.setImageResource(R.mipmap.반값);
-        } else*/
-        if ( "12".equals(promotionSticker) ) {
+        if ("0".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_01);
+        } else if ("11".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_09);
+        } else if ("12".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_07);
-        } else if ( "13".equals(promotionSticker) ) {
+        } else if ("13".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_03);
-        } else if ( "14".equals(promotionSticker) ) {
+        } else if ("14".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_08);
-        } else if ( "15".equals(promotionSticker) ) {
+        } else if ("15".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_04);
-        } else if ( "16".equals(promotionSticker) ) {
+        } else if ("16".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_02);
-//        } else if ( "17".equals(promotionSticker) ) {
-//            PromotionSticker.setImageResource(R.mipmap.선물팡팡);
-        } else if ( "18".equals(promotionSticker) ) {
+        } else if ("17".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_05);
-        } else if ( "00".equals(promotionSticker) ) {
-            if ( "1".equals(isNew) ) {
-                PromotionSticker.setImageResource(R.mipmap.vod_01);
-            } else if ( 0 < Integer.parseInt(assetNew) ) {
-                PromotionSticker.setImageResource(R.mipmap.vod_01);
-            } else if ( "1".equals(hot) ) {
-                PromotionSticker.setImageResource(R.mipmap.vod_02);
-            }  else if ( 0 < Integer.parseInt(assetHot) ) {
-                PromotionSticker.setImageResource(R.mipmap.vod_02);
-            } else {
-                PromotionSticker.setVisibility(View.GONE);
-            }
+        } else if ("18".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_06);
         } else {
-            Log.d("uiutill", "모르는 케이스의 promotionSticker 입니다.");
+            PromotionSticker.setVisibility(View.GONE);
         }
     }
 }
