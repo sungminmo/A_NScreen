@@ -407,9 +407,9 @@ public class VodDetailFragment extends Fragment {
                     if ( "00".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_all);
                     } else if ( "07".equals(rating) ) {
-                        //
+                        mRatingImageView.setImageResource(R.mipmap.btn_age_7);
                     } else if ( "12".equals(rating) ) {
-                        //
+                        mRatingImageView.setImageResource(R.mipmap.btn_age_12);
                     } else if ( "15".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_15);
                     } else if ( "19".equals(rating) ) {
