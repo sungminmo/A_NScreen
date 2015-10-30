@@ -53,11 +53,12 @@ public class VodBuyFragment extends Fragment {
     private              String               mTitle; // asset title
     private              String               sListPrice; // 정가
     private              String               sPrice; // 할인적용가
-    private              TextView             vod_buy_title_textview, vod_buy_step1_one_price;
+    private              TextView             vod_buy_title_textview, vod_buy_step1_one_price, vod_buy_step2_normal_price;
     private              long                 pointBalance; // TV포인트. getPointBalance 통해서 받아옴.
     private              long                 totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
 
     private              LinearLayout         vod_buy_step1_one_linearlayout, vod_buy_step1_serise_linearlayout, vod_buy_step1_oneproduct_linearlayout, vod_buy_step1_packeage_linearlayout, vod_buy_step1_month_linearlayout, vod_buy_step1_month_all_linearlayout;
+    private              LinearLayout         vod_buy_step2_normal_linearlayout, vod_buy_step2_normal_dis_linearlayout, vod_buy_step2_coupon_linearlayout, vod_buy_step2_point_linearlayout;
 
 
 
@@ -85,15 +86,22 @@ public class VodBuyFragment extends Fragment {
         vod_buy_step1_packeage_linearlayout   = (LinearLayout)view.findViewById(R.id.vod_buy_step1_packeage_linearlayout);
         vod_buy_step1_month_linearlayout      = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_linearlayout);
         vod_buy_step1_month_all_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step1_month_all_linearlayout);
+        vod_buy_step2_normal_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step2_normal_linearlayout);
+        vod_buy_step2_normal_dis_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step2_normal_dis_linearlayout);
+        vod_buy_step2_coupon_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step2_coupon_linearlayout);
+        vod_buy_step2_point_linearlayout  = (LinearLayout)view.findViewById(R.id.vod_buy_step2_point_linearlayout);
         vod_buy_step2_linearlayout = (LinearLayout)view.findViewById(R.id.vod_buy_step2_linearlayout);
         vod_buy_title_textview = (TextView)view.findViewById(R.id.vod_buy_title_textview);
         vod_buy_step1_one_price = (TextView)view.findViewById(R.id.vod_buy_step1_one_price);
+        vod_buy_step2_normal_price = (TextView)view.findViewById(R.id.vod_buy_step2_normal_price);
 
         vod_buy_title_textview.setText(mTitle);
         if ( sListPrice.equals(sPrice) ) {
             vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원/월 [부가세 별도]");
+            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원/월 [부가세 별도]");
         } else {
             vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원/월 [부가세 별도]");
+            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원/월 [부가세 별도]");
         }
         if ( "YES".equals(isSeriesLink) ) {
             vod_buy_step1_one_linearlayout.setVisibility(View.VISIBLE);
@@ -103,6 +111,124 @@ public class VodBuyFragment extends Fragment {
             vod_buy_step1_month_linearlayout.setVisibility(View.VISIBLE);
             vod_buy_step1_month_all_linearlayout.setVisibility(View.VISIBLE);
         }
+
+        vod_buy_step1_one_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step1_one_linearlayout.setSelected(true);
+                vod_buy_step1_serise_linearlayout.setSelected(false);
+                vod_buy_step1_oneproduct_linearlayout.setSelected(false);
+                vod_buy_step1_packeage_linearlayout.setSelected(false);
+                vod_buy_step1_month_linearlayout.setSelected(false);
+                vod_buy_step1_month_all_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step1_serise_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step1_one_linearlayout.setSelected(false);
+                vod_buy_step1_serise_linearlayout.setSelected(true);
+                vod_buy_step1_oneproduct_linearlayout.setSelected(false);
+                vod_buy_step1_packeage_linearlayout.setSelected(false);
+                vod_buy_step1_month_linearlayout.setSelected(false);
+                vod_buy_step1_month_all_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step1_oneproduct_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step1_one_linearlayout.setSelected(false);
+                vod_buy_step1_serise_linearlayout.setSelected(false);
+                vod_buy_step1_oneproduct_linearlayout.setSelected(true);
+                vod_buy_step1_packeage_linearlayout.setSelected(false);
+                vod_buy_step1_month_linearlayout.setSelected(false);
+                vod_buy_step1_month_all_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step1_packeage_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step1_one_linearlayout.setSelected(false);
+                vod_buy_step1_serise_linearlayout.setSelected(false);
+                vod_buy_step1_oneproduct_linearlayout.setSelected(false);
+                vod_buy_step1_packeage_linearlayout.setSelected(true);
+                vod_buy_step1_month_linearlayout.setSelected(false);
+                vod_buy_step1_month_all_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step1_month_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step1_one_linearlayout.setSelected(false);
+                vod_buy_step1_serise_linearlayout.setSelected(false);
+                vod_buy_step1_oneproduct_linearlayout.setSelected(false);
+                vod_buy_step1_packeage_linearlayout.setSelected(false);
+                vod_buy_step1_month_linearlayout.setSelected(true);
+                vod_buy_step1_month_all_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step1_month_all_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step1_one_linearlayout.setSelected(false);
+                vod_buy_step1_serise_linearlayout.setSelected(false);
+                vod_buy_step1_oneproduct_linearlayout.setSelected(false);
+                vod_buy_step1_packeage_linearlayout.setSelected(false);
+                vod_buy_step1_month_linearlayout.setSelected(false);
+                vod_buy_step1_month_all_linearlayout.setSelected(true);
+            }
+        });
+
+        vod_buy_step2_normal_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_normal_linearlayout.setSelected(true);
+                vod_buy_step2_normal_dis_linearlayout.setSelected(false);
+                vod_buy_step2_coupon_linearlayout.setSelected(false);
+                vod_buy_step2_point_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step2_normal_dis_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_normal_linearlayout.setSelected(false);
+                vod_buy_step2_normal_dis_linearlayout.setSelected(true);
+                vod_buy_step2_coupon_linearlayout.setSelected(false);
+                vod_buy_step2_point_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step2_coupon_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_normal_linearlayout.setSelected(false);
+                vod_buy_step2_normal_dis_linearlayout.setSelected(false);
+                vod_buy_step2_coupon_linearlayout.setSelected(true);
+                vod_buy_step2_point_linearlayout.setSelected(false);
+            }
+        });
+
+        vod_buy_step2_point_linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vod_buy_step2_normal_linearlayout.setSelected(false);
+                vod_buy_step2_normal_dis_linearlayout.setSelected(false);
+                vod_buy_step2_coupon_linearlayout.setSelected(false);
+                vod_buy_step2_point_linearlayout.setSelected(true);
+            }
+        });
 
 
         requestGetPointBalance(); // 포인트 잔액을 얻어낸다
