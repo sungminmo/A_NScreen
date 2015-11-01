@@ -23,7 +23,7 @@
             android:gravity="center"
             android:background="@drawable/btn_tab_selector"
             android:text="@string/search_title_tab_text1"
-            android:textColor="@drawable/btn_tab_selector_textcolor" />
+            android:textColor="@color/btn_tab_selector_textcolor" />
 
         <Button
             android:id="@+id/button2"
@@ -33,7 +33,7 @@
             android:gravity="center"
             android:background="@drawable/btn_tab_selector"
             android:text="@string/search_title_tab_text2"
-            android:textColor="@drawable/btn_tab_selector_textcolor" />
+            android:textColor="@color/btn_tab_selector_textcolor" />
     </LinearLayout>
 
     <LinearLayout

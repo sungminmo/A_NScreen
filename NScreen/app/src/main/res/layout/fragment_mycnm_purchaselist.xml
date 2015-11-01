@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dimen_10.5">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_6"
+        android:paddingRight="@dimen/dimen_6">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_45.75"
+            android:layout_weight="1"
+            android:id="@+id/purchasetab1"
+            android:duplicateParentState="true"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/purchase_tab_selector"
+                android:gravity="center"
+                android:text="@string/my_cnm_purchase_tab1"
+                android:textColor="@color/btn_subtab_selector_textcolor" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_45.75"
+            android:layout_weight="1"
+            android:id="@+id/purchasetab2"
+            android:duplicateParentState="true"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/purchase_tab_selector"
+                android:gravity="center"
+                android:text="@string/my_cnm_purchase_tab2"
+                android:textColor="@color/btn_subtab_selector_textcolor" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/violet" />
+
+    <TextView
+        android:id="@+id/purchasecount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_10.5"
+        android:gravity="center"
+        android:textColor="@color/search_programtext_violet" />
+
+    <com.stvn.nscreen.common.SwipeListView xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/purchaselistview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="@color/transparent"
+        android:divider="@color/black"
+        android:dividerHeight="1px"
+        android:listSelector="@color/white"
+        swipe:swipeBackView="@+id/back"
+        swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeFrontView="@+id/front"
+        swipe:swipeMode="left"
+        swipe:swipeOffsetLeft="@dimen/dimen_250" />
+</LinearLayout>

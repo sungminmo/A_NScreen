@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dimen_10.5">
+
+
+    <TextView
+        android:id="@+id/purchasecount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_10.5"
+        android:gravity="center"
+        android:textColor="@color/search_programtext_violet" />
+
+    <com.stvn.nscreen.common.SwipeListView xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/purchaselistview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="@color/transparent"
+        android:divider="@color/black"
+        android:dividerHeight="1px"
+        android:listSelector="@color/white"
+        swipe:swipeBackView="@+id/back"
+        swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeFrontView="@+id/front"
+        swipe:swipeMode="left"
+        swipe:swipeOffsetLeft="@dimen/dimen_250" />
+</LinearLayout>

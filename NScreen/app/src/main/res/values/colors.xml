@@ -40,4 +40,10 @@
 	<!-- Pairing edittext cursor 색 -->
 	<color name="pairing_edittext_color">#7B5AA3</color>
 
+	<color name="color8a8c8e">#8a8c8e</color>
+	<color name="colore5e5e5">#e5e5e5</color>
+	<color name="color3c3c3c">#3c3c3c</color>
+	<color name="colorff3b30">#ff3b30</color>
+	<color name="color8d8d8d">#8d8d8d</color>
+
 </resources>

@@ -1,43 +1,96 @@
 package com.stvn.nscreen.my;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.ListView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
-import com.jjiya.android.common.JYSharedPreferences;
-import com.jjiya.android.common.ListViewDataObject;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.common.CMActionBar;
+import com.stvn.nscreen.common.CMBaseActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by limdavid on 15. 9. 15..
  */
-public class MyMainActivity extends AppCompatActivity {
-    private static final String                 tag = MyMainActivity.class.getSimpleName();
-    private static       MyMainActivity         mInstance;
-    private              JYSharedPreferences    mPref;
+public class MyMainActivity extends CMBaseActivity implements View.OnClickListener {
 
-    private              MyMainListViewAdapter  mAdapter;
-    private              ListView               mListView;
+    private Fragment mFragment;
+    private int mTabSelectIdx = -1;
+    private ArrayList<View> mTabList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_main);
+        setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
+        setActionBarTitle("MY C&M");
 
-        mInstance = this;
-        mPref     = new JYSharedPreferences(this);
-        if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
+        initView();
+    }
 
-        mAdapter  = new MyMainListViewAdapter(this, null);
-        // for test
-        for ( int i = 0; i < 1000; i++ ) {
-            String sChannel        = String.format("%02d", i);
-            ListViewDataObject obj = new ListViewDataObject(0, 0, "{\"channelNumber\":\""+sChannel+"\",\"title\":\"전국 노래자랑 광진구편 초대가수 임석원 사회 송해\"}");
-            mAdapter.addItem(obj);
+    private void initView()
+    {
+        mTabList.add((findViewById(R.id.tab1)));
+        mTabList.add((findViewById(R.id.tab2)));
+        mTabList.add((findViewById(R.id.tab3)));
+        for(View v:mTabList)
+            v.setOnClickListener(this);
+
+        showFragment(0);
+    }
+
+    public void showFragment(int idx)
+    {
+        if(idx == mTabSelectIdx)
+            return;
+
+        mTabSelectIdx = idx;
+        setTabSelect(mTabSelectIdx);
+
+        switch (mTabSelectIdx)
+        {
+            case 0:
+                mFragment = new MyPurchaseListFragment();
+                break;
+            case 1:
+                mFragment = new MyWatchListFragment();
+                break;
+            case 2:
+                mFragment = new MyDibListFragment();
+                break;
         }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.mycnmFragment, mFragment);
+        ft.commit();
+    }
 
-        mListView = (ListView)findViewById(R.id.my_main_listview);
-        mListView.setAdapter(mAdapter);
+    private void setTabSelect(int idx)
+    {
+        for(int i=0;i<mTabList.size();i++)
+        {
+            if(i==idx)
+                mTabList.get(i).setSelected(true);
+            else
+                mTabList.get(i).setSelected(false);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId())
+        {
+            case R.id.tab1:
+                showFragment(0);
+                break;
+            case R.id.tab2:
+                showFragment(1);
+                break;
+            case R.id.tab3:
+                showFragment(2);
+                break;
+        }
     }
 }

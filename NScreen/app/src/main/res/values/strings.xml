@@ -54,5 +54,9 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-
+    <string name="my_cnm_tab_text1">VOD구매목록</string>
+    <string name="my_cnm_tab_text2">VOD시청목록</string>
+    <string name="my_cnm_tab_text3">VOD찜목록</string>
+    <string name="my_cnm_purchase_tab1">모바일 구매목록</string>
+    <string name="my_cnm_purchase_tab2">TV 구매목록</string>
 </resources>

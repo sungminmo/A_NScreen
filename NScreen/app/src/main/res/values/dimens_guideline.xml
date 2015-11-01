@@ -65,6 +65,7 @@
     <dimen name="dp42">42.00dp</dimen>
     <dimen name="dp43">43.00dp</dimen>
     <dimen name="dp43.25">43.25dp</dimen>
+    <dimen name="dp43.75">43.75dp</dimen>
     <dimen name="dp44">44.00dp</dimen>
     <dimen name="dp45">45.00dp</dimen>
     <dimen name="dp45.75">45.75dp</dimen>

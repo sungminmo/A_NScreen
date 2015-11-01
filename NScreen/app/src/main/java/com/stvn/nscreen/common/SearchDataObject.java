@@ -4,17 +4,6 @@ package com.stvn.nscreen.common;
  * Created by leejunghoon on 15. 10. 9..
  */
 public class SearchDataObject {
-    /***
-     * <channelName>VIKI_HD</channelName>
-     <channelInfo>HD</channelInfo>
-     <channelLogoImg>http://58.141.255.69:8080/logo/193.png</channelLogoImg>
-     <channelProgramID>S318116647</channelProgramID>
-     <channelProgramTime>2015-10-28 04:30:00</channelProgramTime>
-     <channelProgramTitle>(한)철없는 파출부의 무한욕정</channelProgramTitle>
-     <channelProgramSeq>318116647</channelProgramSeq>
-     <channelProgramGrade>19세 이상</channelProgramGrade>
-     <channelProgramHD>YES</channelProgramHD>
-     */
     private String channelId;
     private String channelNumber;
     private String channelName;

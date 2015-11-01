@@ -69,6 +69,7 @@
     <dimen name="dimen_42">@dimen/dp42</dimen>
     <dimen name="dimen_43">@dimen/dp43</dimen>
     <dimen name="dimen_43.25">@dimen/dp43.25</dimen>
+    <dimen name="dimen_43.75">@dimen/dp43.75</dimen>
     <dimen name="dimen_44">@dimen/dp44</dimen>
     <dimen name="dimen_45">@dimen/dp45</dimen>
     <dimen name="dimen_45.75">@dimen/dp45.75</dimen>
