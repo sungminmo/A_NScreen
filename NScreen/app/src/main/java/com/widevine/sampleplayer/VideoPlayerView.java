@@ -90,6 +90,7 @@ public class VideoPlayerView extends Activity {
         drm.printPluginVersion();
 
         // swlim aaa
+        drm.acquireRights(assetUri);
         startPlayback();
     }
 
@@ -119,6 +120,7 @@ public class VideoPlayerView extends Activity {
         String drmServerUri = this.getIntent().getStringExtra("drmServerUri");
         String drmProtection = this.getIntent().getStringExtra("drmProtection");
         String terminalKey = this.getIntent().getStringExtra("terminalKey");
+        contentUri = "widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm";
         assetUri = contentUri;
 
 
