@@ -138,8 +138,8 @@
         </activity>
         <activity
             android:name=".vod.VodBuyActivity"
-            android:label="@string/title_activity_vod_buy">
-
+            android:label="@string/title_activity_vod_buy"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- player -->

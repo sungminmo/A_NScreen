@@ -2,8 +2,6 @@ package com.stvn.nscreen.vod;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -172,6 +170,7 @@ public class VodDetailActivity extends Activity {
                 //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
                 //startActivity(i);
 
+                /*
                 Bundle param = new Bundle();
                 param.putString("assetId", mInstance.assetId);
                 param.putString("isSeriesLink", isSeriesLink);
@@ -182,7 +181,6 @@ public class VodDetailActivity extends Activity {
                 param.putString("goodId", goodId);
 
 
-
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodBuyFragment vf = new VodBuyFragment();
@@ -190,6 +188,17 @@ public class VodDetailActivity extends Activity {
                 ft.replace(R.id.fragment_placeholder, vf);
                 ft.addToBackStack("VodBuyFragment");
                 ft.commit();
+                */
+
+                Intent intent = new Intent(mInstance, VodBuyActivity.class);
+                intent.putExtra("assetId", mInstance.assetId);
+                intent.putExtra("isSeriesLink", isSeriesLink);
+                intent.putExtra("mTitle", mTitle);
+                intent.putExtra("sListPrice", sListPrice);
+                intent.putExtra("sPrice", sPrice);
+                intent.putExtra("productId", productId);
+                intent.putExtra("goodId", goodId);
+                startActivityForResult(intent, 1000);
             }
         });
 
@@ -213,6 +222,30 @@ public class VodDetailActivity extends Activity {
          * 화면 하단의 연관 VOD 요청
          */
         requestRecommendContentGroupByAssetId();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        switch(requestCode){
+            case 1000: {    // 결제
+                if ( resultCode == RESULT_OK ) {
+                    /**
+                     * VOD 상세정보 요청
+                     */
+                    requestGetAssetInfo();
+                } else if ( resultCode == RESULT_CANCELED ) {
+                    // nothing
+                }
+            } break;
+            case 111: {     // player
+                if ( resultCode == RESULT_OK ) {
+                    // nothing
+                } else if ( resultCode == RESULT_CANCELED ) {
+                    // nothing
+                }
+            } break;
+        }
     }
 
     private void requestGetAssetInfo() {
@@ -348,6 +381,8 @@ public class VodDetailActivity extends Activity {
                     } else {
                         mHdSdImageView.setImageResource(R.mipmap.btn_size_sd);
                     }
+                    sPrice = price;
+                    sListPrice = listPrice;
                     mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
                     mGenreTextView.setText(genre+" / "+runningTime);
                     mDirectorTextView.setText(director);
