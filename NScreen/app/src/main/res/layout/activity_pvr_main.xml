@@ -50,7 +50,7 @@
             android:background="@drawable/btn_tab_selector"
             android:text="녹화예약관리"
             android:textColor="@drawable/btn_selector_textcolor"
-            android:textIsSelectable="true" />
+            android:selectable="true" />
 
         <Button
             android:id="@+id/button2"
@@ -62,7 +62,7 @@
             android:textColor="@drawable/btn_selector_textcolor"
             android:layout_marginRight="6dp"
             android:layout_marginLeft="-1dp"
-            android:textIsSelectable="true" />
+            android:selectable="true" />
 
     </LinearLayout>
 

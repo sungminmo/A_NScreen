@@ -68,7 +68,7 @@
         android:layout_gravity="left|top"
         android:layout_marginTop="61dp" />
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/pvr_main_imagebutton_channel_logo"
         android:layout_width="48dp"
         android:layout_height="19.25dp"

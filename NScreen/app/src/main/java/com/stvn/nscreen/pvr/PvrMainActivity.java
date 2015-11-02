@@ -93,9 +93,9 @@ public class PvrMainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
+                mProgressDialog.dismiss();
                 parseGetRecordReservelist(response);
                 mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -129,30 +129,14 @@ public class PvrMainActivity extends AppCompatActivity {
             int eventType = xpp.getEventType();
             while ( eventType != XmlPullParser.END_DOCUMENT ) {
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (xpp.getName().equalsIgnoreCase("ReserveId")) {
-                        sb.append("{\"ReserveId\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("RecordingType")) {
-                        sb.append(",\"RecordingType\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("SeriesId")) {
-                        sb.append(",\"SeriesId\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("SeriesCount")) {
-                        sb.append(",\"SeriesCount\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("ChannelId")) {
-                        sb.append(",\"ChannelId\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("ChannelName")) {
-                        sb.append(",\"ChannelName\":\"").append(xpp.nextText()).append("\"");
+                    if (xpp.getName().equalsIgnoreCase("RecordingType")) {
+                        sb.append("{\"RecordingType\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("Channel_logo_img")) {
                         sb.append(",\"Channel_logo_img\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("ProgramName")) {
                         sb.append(",\"ProgramName\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("RecordStartTime")) {
-                        sb.append(",\"RecordStartTime\":\"").append(xpp.nextText()).append("\"}");
-                    } else if (xpp.getName().equalsIgnoreCase("RecordEndTime")) {
-                        sb.append(",\"RecordEndTime\":\"").append(xpp.nextText()).append("\"}");
                     } else if (xpp.getName().equalsIgnoreCase("RecordStatus")) {
                         sb.append(",\"RecordStatus\":\"").append(xpp.nextText()).append("\"}");
-                    } else if (xpp.getName().equalsIgnoreCase("RecordHD")) {
-                        sb.append(",\"RecordHD\":\"").append(xpp.nextText()).append("\"}");
                         ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
                         mAdapter.addItem(obj);
                         sb.setLength(0);
