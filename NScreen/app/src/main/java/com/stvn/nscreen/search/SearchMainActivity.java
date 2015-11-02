@@ -24,7 +24,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
@@ -58,7 +57,6 @@ public class SearchMainActivity extends CMBaseActivity {
     private ListView mKeywordListView;
     private ArrayList<String> mKeywordList = new ArrayList<String>();
     private SearchKeywordAdapter mAdapter;
-    private View mSearchLayout;
     private FrameLayout mFragmentlayout;
 
     private String mVersion = "1";
@@ -110,7 +108,6 @@ public class SearchMainActivity extends CMBaseActivity {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         mKeywordListView.setVisibility(View.GONE);
-                        mSearchLayout.setVisibility(View.GONE);
                         hideSoftKeyboard();
                         if (mKeywordView.getText().length() > 0)
                             showFragment();
@@ -125,8 +122,6 @@ public class SearchMainActivity extends CMBaseActivity {
         });
         mLockListView = false;
 
-        mSearchLayout = (View)findViewById(R.id.search_layout);
-        mSearchLayout.setVisibility(View.GONE);
         mFragmentlayout = (FrameLayout)findViewById(R.id.searchFragment);
         switchTab(0);
     }
@@ -232,7 +227,6 @@ public class SearchMainActivity extends CMBaseActivity {
     private void switchTab(int idx)
     {
         mTabSelectIdx = idx;
-        mSearchLayout.setVisibility(View.VISIBLE);
         mKeywordListView.setVisibility(View.VISIBLE);
         mFragmentlayout.setVisibility(View.GONE);
         switch (mTabSelectIdx)

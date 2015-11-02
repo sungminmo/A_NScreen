@@ -23,7 +23,8 @@
             android:gravity="center"
             android:background="@drawable/btn_tab_selector"
             android:text="@string/search_title_tab_text1"
-            android:textColor="@color/btn_tab_selector_textcolor" />
+            android:textColor="@color/btn_tab_selector_textcolor"
+            android:textSize="14.5sp" />
 
         <Button
             android:id="@+id/button2"
@@ -33,7 +34,8 @@
             android:gravity="center"
             android:background="@drawable/btn_tab_selector"
             android:text="@string/search_title_tab_text2"
-            android:textColor="@color/btn_tab_selector_textcolor" />
+            android:textColor="@color/btn_tab_selector_textcolor"
+            android:textSize="14.5sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,21 +66,20 @@
                 android:layout_marginLeft="@dimen/dimen_14"
                 android:imeOptions="actionSearch"
                 android:id="@+id/search_edit"
-                android:textColor="@color/text_area_color"
+                android:textColor="@color/black"
                 />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/btn_close"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/search_close"
                 android:id="@+id/close"
                 />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_1"
-            android:background="@mipmap/sub_menu_part_line"
-            android:layout_marginLeft="@dimen/dimen_21.5"
-            android:layout_marginRight="@dimen/dimen_21.5"
+            android:background="@color/violet"
             android:layout_marginTop="@dimen/dimen_4"
             />
     </LinearLayout>
