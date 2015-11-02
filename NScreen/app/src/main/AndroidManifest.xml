@@ -35,7 +35,10 @@
             <!--</intent-filter>-->
         <!--</activity>-->
 
-        <activity android:name=".leftmenu.LeftMenuActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".leftmenu.LeftMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent">
+        </activity>
 
         <!-- EPG -->
         <activity
