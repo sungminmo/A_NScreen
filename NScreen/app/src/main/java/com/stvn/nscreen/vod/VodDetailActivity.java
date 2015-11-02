@@ -485,8 +485,8 @@ public class VodDetailActivity extends Activity {
                     intent.putExtra("drmServerUri", drmServerUri);
                     intent.putExtra("drmProtection", drmProtection);
                     intent.putExtra("terminalKey", terminalKey);
-                    //startActivityForResult(intent, 111);
-                    startActivity(intent);
+                    startActivityForResult(intent, 111);
+                    //startActivity(intent);
 
 
 
