@@ -67,7 +67,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="26.75dp"
         android:gravity="center">
@@ -79,7 +79,18 @@
             android:text="총 120개의 녹화예약 콘텐트가 있습니다."
             android:textSize="11.5sp"
             android:textColor="@color/violet"
-            android:layout_marginBottom="2.5dp" />
+            android:layout_marginBottom="2.5dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="총 120개의 녹화 콘텐트가 있습니다."
+            android:id="@+id/textView2"
+            android:layout_marginBottom="2.5dp"
+            android:textColor="@color/violet"
+            android:textSize="11.5sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <ListView
