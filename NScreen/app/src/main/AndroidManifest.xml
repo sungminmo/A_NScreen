@@ -35,9 +35,19 @@
             <!--</intent-filter>-->
         <!--</activity>-->
 
+        <!-- leftMenu -->
         <activity android:name=".leftmenu.LeftMenuActivity"
             android:screenOrientation="portrait"
+            android:label="@string/title_activity_leftmenu"
             android:theme="@android:style/Theme.Translucent">
+        </activity>
+        <activity
+            android:name=".leftmenu.LeftMenuDialogActivity"
+            android:label="@string/title_activity_leftmenu_dialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="unspecified"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="stateHidden">
         </activity>
 
         <!-- EPG -->

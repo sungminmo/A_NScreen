@@ -34,7 +34,7 @@ public class LeftMenuActivity extends Activity {
 
     private              Button                 leftmenu_pairing_button;
 
-    private              ImageButton            imageButton2, imageButton3;
+    private              ImageButton            imageButton2, leftmenu_whatBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class LeftMenuActivity extends Activity {
         leftmenu_right = (LinearLayout) findViewById(R.id.leftmenu_right);
         leftmenu_pairing_button = (Button) findViewById(R.id.leftmenu_pairing_button);
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
-        imageButton3 = (ImageButton) findViewById(R.id.imageButton3);
+        leftmenu_whatBtn = (ImageButton) findViewById(R.id.leftmenu_whatBtn);
 
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +125,14 @@ public class LeftMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        leftmenu_whatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mInstance, LeftMenuDialogActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="309dp"
+    android:layout_height="235.25dp"
+    android:background="@mipmap/popup_bg2">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60.75dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="셋탑박스 연동이란 ?"
+            android:id="@+id/textView75"
+            android:textSize="17sp"
+            android:textColor="#7b5aa3"
+            android:layout_gravity="center" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/leftMenu_dialog_closeBtn"
+            android:layout_gravity="right|top"
+            android:layout_marginTop="6.25dp"
+            android:layout_marginRight="6.25dp"
+            android:background="@mipmap/btn_close" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C&amp;M 방송 서비스를 이용하고 계시는"
+            android:id="@+id/textView76"
+            android:textSize="13sp"
+            android:textColor="#3c3c3c" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="고객님의 셋탑박스와 모바일 앱을 연동하여"
+            android:id="@+id/textView77"
+            android:textSize="13sp"
+            android:textColor="#3c3c3c" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VOD 구매, 방송 시청예약 등"
+            android:id="@+id/textView78"
+            android:textSize="13sp"
+            android:textColor="#3c3c3c" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다양한 서비스를 이용하실 수 있습니다."
+            android:id="@+id/textView79"
+            android:textSize="13sp"
+            android:textColor="#3c3c3c" />
+    </LinearLayout>
+</LinearLayout>

@@ -43,6 +43,9 @@
 
     <string name="title_activity_vod_buy">VodBuyActivity</string>
 
+    <string name="title_activity_leftmenu">LeftMenuActivity</string>
+    <string name="title_activity_leftmenu_dialog">LeftMenuDialogActivity</string>
+
     <!-- my cnm -->
     <string name="my_cnm_tab_text1">VOD구매목록</string>
     <string name="my_cnm_tab_text2">VOD시청목록</string>
