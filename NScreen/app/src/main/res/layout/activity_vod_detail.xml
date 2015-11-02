@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/white">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -13,6 +14,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="49.75dp"
+            android:background="@color/violet">
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/vod_detail_topmenu_left_imagebutton"
+                android:src="@mipmap/btn_back"
+                android:background="@color/transparent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/vod_detail_title"
+                android:id="@+id/textView"
+                android:textSize="16.25sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center_vertical|center_horizontal" />
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/vod_fragment_topmenu_right_imagebutton"
+                android:layout_gravity="right"
+                android:background="@color/transparent"
+                android:visibility="invisible" />
+
+
+        </FrameLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -438,7 +473,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="synopsis 오랫동안 쫓던 대형 범죄를 해결한 후 숨을 돌리려는 찰나, 서도철은 재벌 3세 조태오를 만나게 된다. 세상 무서울 것 없는 안하무인의 조태오와 언제나 그의 곁을 지키는 오른팔 최상무. 서도철은 의문의 사건을 쫓던 중 그들이 사건의 배후에 있음을 직감하는데..."
+            android:text="synopsis"
             android:id="@+id/vod_detail_synopsis_textview"
             android:textSize="11.75sp"
             android:textColor="@color/black" />
@@ -497,7 +532,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="시청하기"
-            android:id="@+id/button"
+            android:id="@+id/vod_detail_play_button"
             android:background="@mipmap/btn_select"
             android:textColor="#FFFFFF" />
 

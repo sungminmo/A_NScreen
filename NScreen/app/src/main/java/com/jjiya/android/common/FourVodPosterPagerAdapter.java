@@ -1,6 +1,7 @@
 package com.jjiya.android.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.vod.VodDetailActivity;
 import com.stvn.nscreen.vod.VodDetailFragment;
 
 import org.json.JSONException;
@@ -28,6 +30,7 @@ import java.util.List;
  */
 public class FourVodPosterPagerAdapter extends PagerAdapter {
 
+    private static       VodDetailActivity   mVodDetailActivity;
     private LayoutInflater   mLayoutInflater;
 
     private ImageLoader      mImageLoader;
@@ -43,6 +46,10 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
 
     public void setFragment(Fragment f) {
         mFragment = f;
+    }
+
+    public void setVodDetailActivity(VodDetailActivity a) {
+        mVodDetailActivity = a;
     }
 
     /**
@@ -91,7 +98,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
             int index4 = position*4+3;
 
             if ( mVods.size() > index1 ) {
-                JSONObject jo1 = mVods.get(index1);
+                final JSONObject jo1 = mVods.get(index1);
                 final String assetId1;
                 if ( jo1.isNull("primaryAssetId") ) {
                     assetId1 = jo1.getString("assetId");
@@ -106,6 +113,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId1);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -115,6 +123,11 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId1);
+                        intent.putExtra("jstr", jo1.toString());
+                        mVodDetailActivity.startActivity(intent);
                     }
                 });
             } else {
@@ -122,7 +135,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index2 ) {
-                JSONObject jo2 = mVods.get(index2);
+                final JSONObject jo2 = mVods.get(index2);
                 final String assetId2;
                 if ( jo2.isNull("primaryAssetId") ) {
                     assetId2 = jo2.getString("assetId");
@@ -137,6 +150,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId2);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -146,6 +160,11 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId2);
+                        intent.putExtra("jstr", jo2.toString());
+                        mVodDetailActivity.startActivity(intent);
                     }
                 });
             } else {
@@ -153,7 +172,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index3 ) {
-                JSONObject jo3 = mVods.get(index3);
+                final JSONObject jo3 = mVods.get(index3);
                 final String assetId3;
                 if ( jo3.isNull("primaryAssetId") ) {
                     assetId3 = jo3.getString("assetId");
@@ -168,6 +187,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId3);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -177,6 +197,11 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId3);
+                        intent.putExtra("jstr", jo3.toString());
+                        mVodDetailActivity.startActivity(intent);
                     }
                 });
             } else {
@@ -184,7 +209,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview3)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index4 ) {
-                JSONObject jo4 = mVods.get(index4);
+                final JSONObject jo4 = mVods.get(index4);
                 final String assetId4;
                 if ( jo4.isNull("primaryAssetId") ) {
                     assetId4 = jo4.getString("assetId");
@@ -199,6 +224,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId4);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -208,6 +234,11 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId4);
+                        intent.putExtra("jstr", jo4.toString());
+                        mVodDetailActivity.startActivity(intent);
                     }
                 });
             } else {

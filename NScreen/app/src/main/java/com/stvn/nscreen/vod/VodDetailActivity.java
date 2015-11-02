@@ -1,11 +1,17 @@
 package com.stvn.nscreen.vod;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +32,7 @@ import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.widevine.sampleplayer.VideoPlayerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class VodDetailActivity extends CMBaseActivity {
+public class VodDetailActivity extends Activity {
 
     private static final String              tag = VodDetailActivity.class.getSimpleName();
     private static       VodDetailActivity   mInstance;
@@ -75,10 +82,30 @@ public class VodDetailActivity extends CMBaseActivity {
     private ViewPager mViewPager;
     private String viewable;
 
+    private Button mPurchaseButton; // 구매하기 버튼
+    private Button mPlayButton; // 시청하기 버튼
+
     // activity
     private String assetId; // intent param
     private List<JSONObject> relationVods;
     private FourVodPosterPagerAdapter mPagerAdapter;
+    private String isSeriesLink; //시리즈인지 연부. true/false
+    private String mTitle;
+    private String sListPrice;
+    private String sPrice;
+
+
+    // for 결재
+    private String productId;
+    private String goodId;
+
+
+
+    // for player
+    private String fileName; // M4145902.mpg
+    private String contentUri; // http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm
+    private String drmServerUri; // http://proxy.video.toast.com/widevine/drm/dls.do
+    private String drmProtection; // true
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +132,7 @@ public class VodDetailActivity extends CMBaseActivity {
         relationVods = new ArrayList<JSONObject>();
         mPagerAdapter = new FourVodPosterPagerAdapter(this);
         mPagerAdapter.setImageLoader(mImageLoader);
-
-        setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
-        setActionBarTitle(getString(R.string.title_activity_vod_detail));
+        mPagerAdapter.setVodDetailActivity(this);
 
         mTitleTextView        = (TextView)findViewById(R.id.vod_detail_title);
         mRatingImageView      = (ImageView)findViewById(R.id.vod_detail_rating_imageview);
@@ -130,6 +155,52 @@ public class VodDetailActivity extends CMBaseActivity {
         mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);
         mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
+
+        ImageButton backButton = (ImageButton)findViewById(R.id.vod_detail_topmenu_left_imagebutton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        // 미리보기 | 구매하기 | 찜하기
+        mPurchaseButton       = (Button)findViewById(R.id.vod_detail_order_button);
+        mPurchaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
+                //startActivity(i);
+
+                Bundle param = new Bundle();
+                param.putString("assetId", mInstance.assetId);
+                param.putString("isSeriesLink", isSeriesLink);
+                param.putString("mTitle", mTitle);
+                param.putString("sListPrice", sListPrice);
+                param.putString("sPrice", sPrice);
+                param.putString("productId", productId);
+                param.putString("goodId", goodId);
+
+
+
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodBuyFragment vf = new VodBuyFragment();
+                vf.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, vf);
+                ft.addToBackStack("VodBuyFragment");
+                ft.commit();
+            }
+        });
+
+        // 시청하기 버튼
+        mPlayButton = (Button)findViewById(R.id.vod_detail_play_button);
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestContentUri();
+            }
+        });
 
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
         // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
@@ -166,6 +237,7 @@ public class VodDetailActivity extends CMBaseActivity {
 
                     // asset
                     JSONObject asset            = jo.getJSONObject("asset");
+                    fileName                    = asset.getString("fileName");
                     String imageFileName        = asset.getString("imageFileName");
                     String rating               = asset.getString("rating");
                     String reviewRatingCount    = asset.getString("reviewRatingCount");
@@ -178,9 +250,12 @@ public class VodDetailActivity extends CMBaseActivity {
                     String synopsis             = asset.getString("synopsis");
                     boolean seriesLink          = asset.getBoolean("seriesLink");
                     String promotionSticker     = asset.getString("promotionSticker");
+                    String title                = asset.getString("title");
 
                     JSONArray productLists      = asset.getJSONArray("productList");
                     JSONObject product          = (JSONObject)productLists.get(0);
+                    productId                   = product.getString("productId");
+                    goodId                      = product.getString("goodId");
                     Integer viewablePeriodState = product.getInt("viewablePeriodState");
                     String viewablePeriod       = product.getString("viewablePeriod");
 
@@ -208,13 +283,16 @@ public class VodDetailActivity extends CMBaseActivity {
                     //JSONArray productList    = asset.getJSONArray("productList");
                     //JSONObject product       = productLists.getJSONObject(0);
                     String price             = product.getString("price");
+                    String listPrice         = product.getString("listPrice");
                     String purchasedId       = product.getString("purchasedId");
                     String purchasedTime     = product.getString("purchasedTime");
 
                     // LinearLayout 감추기/보이기 -----------------------------------------------------
                     if ( seriesLink == true ) {      // 시리즈 보여라
+                        isSeriesLink = "YES";
                         mSeriesLinearLayout.setVisibility(View.VISIBLE);
                     } else {                         // 시리즈 감춰라.
+                        isSeriesLink = "NO";
                         mSeriesLinearLayout.setVisibility(View.GONE);
                     }
                     if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
@@ -246,17 +324,17 @@ public class VodDetailActivity extends CMBaseActivity {
                     }
 
                     mTitleTextView.setText(asset.getString("title"));
+                    mTitle = title;
                     if ( "00".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_all);
+                    } else if ( "07".equals(rating) ) {
+                        mRatingImageView.setImageResource(R.mipmap.btn_age_7);
+                    } else if ( "12".equals(rating) ) {
+                        mRatingImageView.setImageResource(R.mipmap.btn_age_12);
                     } else if ( "15".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_15);
                     } else if ( "19".equals(rating) ) {
                         mRatingImageView.setImageResource(R.mipmap.btn_age_19);
-                    } else {
-                        AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
-                        ad.setTitle("알림").setMessage("모르는 rating 케이스:"+rating);
-                        AlertDialog alert = ad.create();
-                        alert.show();
                     }
                     Float lreviewRatingCount = Float.parseFloat(reviewRatingCount);
                     Float lreviewRatingTotal = Float.parseFloat(reviewRatingTotal);
@@ -363,5 +441,75 @@ public class VodDetailActivity extends CMBaseActivity {
     }
 
 
+//    private String fileName; // M4145902.mpg
+//    private String contentUri; // http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm
+//    private String drmServerUri; // http://proxy.video.toast.com/widevine/drm/dls.do
+//    private String drmProtection; // true
 
+    private void requestContentUri() {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestContentUri()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        fileName = "M4145902.mpg";
+        String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/play";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                mProgressDialog.dismiss();
+                try {
+                    JSONObject jo     = new JSONObject(response);
+                    JSONObject drm    = jo.getJSONObject("drm");
+                    JSONObject header = jo.getJSONObject("header");
+                    contentUri        = drm.getString("contentUri");
+                    drmServerUri      = drm.getString("drmServerUri");
+                    boolean bDrm      = drm.getBoolean("drmProtection");
+                    if ( bDrm == true ) {
+                        drmProtection = "true";
+                    } else {
+                        drmProtection = "false";
+                    }
+
+                    // http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm
+//                    Intent intent = new Intent(mInstance.getActivity(), WidevineSamplePlayer.class);
+//                    Intent intent = new Intent(mInstance.getActivity(), StreamingActivity.class);
+
+                    String terminalKey = mPref.getWebhasTerminalKey();
+
+                    Intent intent = new Intent(mInstance, VideoPlayerView.class);
+                    intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
+                    //intent.putExtra("currentpage", currentPage);
+                    //intent.putExtra("title", title);
+                    intent.putExtra("assetId", assetId);
+                    intent.putExtra("contentUri", contentUri);
+                    intent.putExtra("drmServerUri", drmServerUri);
+                    intent.putExtra("drmProtection", drmProtection);
+                    intent.putExtra("terminalKey", terminalKey);
+                    //startActivityForResult(intent, 111);
+                    startActivity(intent);
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
 }

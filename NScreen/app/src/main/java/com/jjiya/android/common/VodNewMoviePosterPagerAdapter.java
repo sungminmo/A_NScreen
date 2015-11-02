@@ -1,6 +1,7 @@
 package com.jjiya.android.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.vod.VodDetailActivity;
 import com.stvn.nscreen.vod.VodDetailFragment;
 
 import org.json.JSONException;
@@ -97,7 +99,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
             int index8 = position*8+7;
 
             if ( mVods.size() > index1 ) {
-                JSONObject jo1 = mVods.get(index1);
+                final JSONObject jo1 = mVods.get(index1);
                 final String assetId1 = jo1.getString("primaryAssetId");
                 TextView title1 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview1);
                 title1.setText(jo1.getString("title"));
@@ -107,6 +109,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId1);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -116,6 +119,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId1);
+                        intent.putExtra("jstr", jo1.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {
@@ -123,7 +131,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index2 ) {
-                JSONObject jo2 = mVods.get(index2);
+                final JSONObject jo2 = mVods.get(index2);
                 final String assetId2 = jo2.getString("primaryAssetId");
                 TextView title2 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview2);
                 title2.setText(jo2.getString("title"));
@@ -133,6 +141,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId2);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -142,6 +151,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId2);
+                        intent.putExtra("jstr", jo2.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {
@@ -149,7 +163,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index3 ) {
-                JSONObject jo3 = mVods.get(index3);
+                final JSONObject jo3 = mVods.get(index3);
                 final String assetId3 = jo3.getString("primaryAssetId");
                 TextView title3 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview3);
                 title3.setText(jo3.getString("title"));
@@ -159,6 +173,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId3);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -168,6 +183,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId3);
+                        intent.putExtra("jstr", jo3.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {
@@ -175,7 +195,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview3)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index4 ) {
-                JSONObject jo4 = mVods.get(index4);
+                final JSONObject jo4 = mVods.get(index4);
                 final String assetId4 = jo4.getString("primaryAssetId");
                 TextView title4 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview4);
                 title4.setText(jo4.getString("title"));
@@ -185,6 +205,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId4);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -194,6 +215,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId4);
+                        intent.putExtra("jstr", jo4.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {
@@ -201,7 +227,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview4)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index5 ) {
-                JSONObject jo5 = mVods.get(index5);
+                final JSONObject jo5 = mVods.get(index5);
                 final String assetId5 = jo5.getString("primaryAssetId");
                 TextView title5 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview5);
                 title5.setText(jo5.getString("title"));
@@ -211,6 +237,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv5.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId5);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -220,6 +247,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId5);
+                        intent.putExtra("jstr", jo5.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {
@@ -227,7 +259,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview5)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index6 ) {
-                JSONObject jo6 = mVods.get(index6);
+                final JSONObject jo6 = mVods.get(index6);
                 final String assetId6 = jo6.getString("primaryAssetId");
                 TextView title6 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview6);
                 title6.setText(jo6.getString("title"));
@@ -237,6 +269,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv6.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId6);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -246,6 +279,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId6);
+                        intent.putExtra("jstr", jo6.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {
@@ -253,7 +291,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview6)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index7 ) {
-                JSONObject jo7 = mVods.get(index7);
+                final JSONObject jo7 = mVods.get(index7);
                 final String assetId7 = jo7.getString("primaryAssetId");
                 TextView title7 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview7);
                 title7.setText(jo7.getString("title"));
@@ -263,6 +301,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv7.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId7);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -272,6 +311,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId7);
+                        intent.putExtra("jstr", jo7.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {
@@ -279,7 +323,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview7)).setVisibility(View.INVISIBLE);
             }
             if ( mVods.size() > index8 ) {
-                JSONObject jo8 = mVods.get(index8);
+                final JSONObject jo8 = mVods.get(index8);
                 final String assetId8 = jo8.getString("primaryAssetId");
                 TextView title8 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview8);
                 title8.setText(jo8.getString("title"));
@@ -289,6 +333,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 niv8.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Bundle param = new Bundle();
                         param.putString("assetId", assetId8);
                         FragmentManager fm = mFragment.getFragmentManager();
@@ -298,6 +343,11 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                         ft.replace(R.id.fragment_placeholder, df);
                         ft.addToBackStack("DetailFragment");
                         ft.commit();
+                        */
+                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId8);
+                        intent.putExtra("jstr", jo8.toString());
+                        mFragment.getActivity().startActivity(intent);
                     }
                 });
             } else {

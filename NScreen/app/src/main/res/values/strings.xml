@@ -16,6 +16,7 @@
     <string name="vod_fragment_topmenu_name3">애니키즈</string>
     <string name="vod_fragment_topmenu_name4">TV다시보기</string>
     <string name="vod_fragment_topmenu_name5">성인</string>
+    <string name="vod_detail_title">상세정보</string>
 
     <!-- VOD -->
     <string name="title_activity_vod_detail">상세정보</string>
@@ -45,6 +46,7 @@
 
     <string name="title_activity_leftmenu">LeftMenuActivity</string>
     <string name="title_activity_leftmenu_dialog">LeftMenuDialogActivity</string>
+
 
     <!-- my cnm -->
     <string name="my_cnm_tab_text1">VOD구매목록</string>
