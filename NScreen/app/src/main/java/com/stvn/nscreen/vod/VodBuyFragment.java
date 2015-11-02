@@ -426,6 +426,7 @@ public class VodBuyFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
+                // {"resultCode":100,"discountCouponPaymentList":[],"transactionId":null,"errorString":"","version":"2","enrolledEventIdList":[]}
                 try {
                     JSONObject jo      = new JSONObject(response);
                     int resultCode     = jo.getInt("resultCode");
