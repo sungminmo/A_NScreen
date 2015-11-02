@@ -1,288 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="218.5dp"
-    android:layout_height="match_parent"
-    android:background="#7b5aa3">
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="39.5dp"
-        android:gravity="center"
-        android:layout_marginLeft="9.25dp"
-        android:layout_marginRight="9.25dp">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton2"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/icon_menu_selector" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.25dp"
-        android:background="#e4d8f2"
-        android:layout_marginRight="9.25dp"
-        android:layout_marginLeft="9.25dp" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="57.5dp"
-        android:gravity="center">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView7"
-            android:background="@mipmap/icon_connect_before"
-            android:layout_marginLeft="27.75dp"
-            android:layout_marginRight="9.75dp" />
+        android:layout_width="218.5dp"
+        android:layout_height="match_parent"
+        android:background="#7b5aa3">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="39.5dp"
+            android:gravity="center"
+            android:layout_marginLeft="9.25dp"
+            android:layout_marginRight="9.25dp">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton2"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/icon_menu_selector" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:background="#e4d8f2"
             android:layout_marginRight="9.25dp"
-            android:gravity="center_vertical">
+            android:layout_marginLeft="9.25dp" />
 
-            <TextView
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="57.5dp"
+            android:gravity="center">
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="원활한 서비스 이용을 위해"
-                android:id="@+id/textView74"
-                android:textSize="12.5sp"
-                android:textColor="#e4d8f2" />
+                android:id="@+id/imageView7"
+                android:background="@mipmap/icon_connect_before"
+                android:layout_marginLeft="27.75dp"
+                android:layout_marginRight="9.75dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="셋탑박스를 연동해주세요."
-                android:id="@+id/textView68"
-                android:textColor="#e4d8f2"
-                android:textSize="12.5sp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="9.25dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="원활한 서비스 이용을 위해"
+                    android:id="@+id/textView74"
+                    android:textSize="12.5sp"
+                    android:textColor="#e4d8f2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="셋탑박스를 연동해주세요."
+                    android:id="@+id/textView68"
+                    android:textColor="#e4d8f2"
+                    android:textSize="12.5sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <Button
+            android:layout_width="182.75dp"
+            android:layout_height="39.75dp"
+            android:text="셋탑박스 연동하기"
+            android:id="@+id/leftmenu_pairing_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="19.75dp"
+            android:layout_marginRight="16dp"
+            android:textSize="15.5sp"
+            android:textColor="#7b5aa3"
+            android:background="@drawable/btn_stb_connect_selector" />
 
-    <Button
-        android:layout_width="182.75dp"
-        android:layout_height="39.75dp"
-        android:text="셋탑박스 연동하기"
-        android:id="@+id/leftmenu_pairing_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="19.75dp"
-        android:layout_marginRight="16dp"
-        android:textSize="15.5sp"
-        android:textColor="#7b5aa3"
-        android:background="@drawable/btn_stb_connect_selector" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="47.75dp"
+            android:gravity="center"
+            android:layout_marginLeft="9.25dp"
+            android:layout_marginRight="9.25dp">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="47.75dp"
-        android:gravity="center"
-        android:layout_marginLeft="9.25dp"
-        android:layout_marginRight="9.25dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="셋탑박스 연동하기란?"
+                android:id="@+id/textView67"
+                android:layout_gravity="center_vertical"
+                android:textSize="12.5sp"
+                android:textColor="#e4d8f2"
+                android:layout_marginRight="6.5dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="셋탑박스 연동하기란?"
-            android:id="@+id/textView67"
-            android:layout_gravity="center_vertical"
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton3"
+                android:background="@drawable/icon_question_selector" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:layout_marginLeft="9.25dp"
+            android:layout_marginRight="9.25dp"
+            android:background="#e4d8f2"
+            android:layout_marginBottom="11dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/setting_menu_selector"
+            android:gravity="center_vertical"
+            android:layout_marginRight="9.25dp"
+            android:layout_marginLeft="9.25dp"
+            android:id="@+id/leftmenu_tv_linearLayout">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView20"
+                android:background="@mipmap/icon_tv2"
+                android:layout_marginLeft="8.75dp"
+                android:layout_marginRight="19dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="채널가이드"
+                android:id="@+id/textView69"
+                android:textColor="#ffffff"
+                android:textSize="14.5sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/setting_menu_selector"
+            android:gravity="center_vertical"
+            android:layout_marginRight="9.25dp"
+            android:layout_marginLeft="9.25dp"
+            android:id="@+id/leftmenu_remote_linearLayout">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView16"
+                android:background="@mipmap/icon_remote"
+                android:layout_marginRight="19dp"
+                android:layout_marginLeft="8.75dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="리모컨"
+                android:id="@+id/textView70"
+                android:textSize="14.5sp"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/setting_menu_selector"
+            android:gravity="center_vertical"
+            android:layout_marginRight="9.25dp"
+            android:layout_marginLeft="9.25dp"
+            android:id="@+id/leftmenu_pvr_linearLayout">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView17"
+                android:background="@mipmap/icon_rec"
+                android:layout_marginLeft="8.75dp"
+                android:layout_marginRight="19dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="녹화"
+                android:id="@+id/textView71"
+                android:textColor="#ffffff"
+                android:textSize="14.5sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/setting_menu_selector"
+            android:gravity="center_vertical"
+            android:layout_marginRight="9.25dp"
+            android:layout_marginLeft="9.25dp"
+            android:id="@+id/leftmenu_my_linearLayout">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView18"
+                android:background="@mipmap/icon_mycnm"
+                android:layout_marginRight="19dp"
+                android:layout_marginLeft="8.75dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MY C&amp;M"
+                android:id="@+id/textView72"
+                android:textSize="14.5sp"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/setting_menu_selector"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="9.25dp"
+            android:layout_marginRight="9.25dp"
+            android:layout_marginBottom="10.75dp"
+            android:id="@+id/leftmenu_setting_linearLayout">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView19"
+                android:background="@mipmap/icon_setting"
+                android:layout_marginLeft="8.75dp"
+                android:layout_marginRight="19dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="설정"
+                android:id="@+id/textView73"
+                android:textColor="#ffffff"
+                android:textSize="14.5sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:layout_marginLeft="9.25dp"
+            android:layout_marginRight="9.25dp"
+            android:background="#e4d8f2"
+            android:layout_marginBottom="22dp" />
+
+        <Button
+            android:layout_width="182.75dp"
+            android:layout_height="26.75dp"
+            android:text="서비스 이용약관"
+            android:id="@+id/button5"
+            android:layout_gravity="center_horizontal"
             android:textSize="12.5sp"
-            android:textColor="#e4d8f2"
-            android:layout_marginRight="6.5dp" />
+            android:textColor="#7b5aa3"
+            android:background="@drawable/btn_service_selector"
+            android:layout_marginBottom="8dp" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton3"
-            android:background="@drawable/icon_question_selector" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.25dp"
-        android:layout_marginLeft="9.25dp"
-        android:layout_marginRight="9.25dp"
-        android:background="#e4d8f2"
-        android:layout_marginBottom="11dp" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/setting_menu_selector"
-        android:gravity="center_vertical"
-        android:layout_marginRight="9.25dp"
-        android:layout_marginLeft="9.25dp"
-        android:id="@+id/leftmenu_tv_linearLayout">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView20"
-            android:background="@mipmap/icon_tv2"
-            android:layout_marginLeft="8.75dp"
-            android:layout_marginRight="19dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="채널가이드"
-            android:id="@+id/textView69"
-            android:textColor="#ffffff"
-            android:textSize="14.5sp" />
-
+        <Button
+            android:layout_width="182.75dp"
+            android:layout_height="26.75dp"
+            android:text="버전정보"
+            android:id="@+id/button6"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#7b5aa3"
+            android:textSize="12.5sp"
+            android:background="@drawable/btn_service_selector"
+            android:layout_marginBottom="54.5dp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/leftmenu_right"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/setting_menu_selector"
-        android:gravity="center_vertical"
-        android:layout_marginRight="9.25dp"
-        android:layout_marginLeft="9.25dp"
-        android:id="@+id/leftmenu_remote_linearLayout">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView16"
-            android:background="@mipmap/icon_remote"
-            android:layout_marginRight="19dp"
-            android:layout_marginLeft="8.75dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="리모컨"
-            android:id="@+id/textView70"
-            android:textSize="14.5sp"
-            android:textColor="#ffffff" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/setting_menu_selector"
-        android:gravity="center_vertical"
-        android:layout_marginRight="9.25dp"
-        android:layout_marginLeft="9.25dp"
-        android:id="@+id/leftmenu_pvr_linearLayout">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView17"
-            android:background="@mipmap/icon_rec"
-            android:layout_marginLeft="8.75dp"
-            android:layout_marginRight="19dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="녹화"
-            android:id="@+id/textView71"
-            android:textColor="#ffffff"
-            android:textSize="14.5sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/setting_menu_selector"
-        android:gravity="center_vertical"
-        android:layout_marginRight="9.25dp"
-        android:layout_marginLeft="9.25dp"
-        android:id="@+id/leftmenu_my_linearLayout">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView18"
-            android:background="@mipmap/icon_mycnm"
-            android:layout_marginRight="19dp"
-            android:layout_marginLeft="8.75dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MY C&amp;M"
-            android:id="@+id/textView72"
-            android:textSize="14.5sp"
-            android:textColor="#ffffff" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/setting_menu_selector"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="9.25dp"
-        android:layout_marginRight="9.25dp"
-        android:layout_marginBottom="10.75dp"
-        android:id="@+id/leftmenu_setting_linearLayout">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView19"
-            android:background="@mipmap/icon_setting"
-            android:layout_marginLeft="8.75dp"
-            android:layout_marginRight="19dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="설정"
-            android:id="@+id/textView73"
-            android:textColor="#ffffff"
-            android:textSize="14.5sp" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.25dp"
-        android:layout_marginLeft="9.25dp"
-        android:layout_marginRight="9.25dp"
-        android:background="#e4d8f2"
-        android:layout_marginBottom="22dp" />
-
-    <Button
-        android:layout_width="182.75dp"
-        android:layout_height="26.75dp"
-        android:text="서비스 이용약관"
-        android:id="@+id/button5"
-        android:layout_gravity="center_horizontal"
-        android:textSize="12.5sp"
-        android:textColor="#7b5aa3"
-        android:background="@drawable/btn_service_selector"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:layout_width="182.75dp"
-        android:layout_height="26.75dp"
-        android:text="버전정보"
-        android:id="@+id/button6"
-        android:layout_gravity="center_horizontal"
-        android:textColor="#7b5aa3"
-        android:textSize="12.5sp"
-        android:background="@drawable/btn_service_selector"
-        android:layout_marginBottom="54.5dp" />
+        android:layout_height="match_parent"
+        android:background="#80000000"></LinearLayout>
 
 </LinearLayout>

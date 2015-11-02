@@ -30,7 +30,7 @@ public class LeftMenuActivity extends Activity {
     private static       LeftMenuActivity       mInstance;
     private              JYSharedPreferences    mPref;
 
-    private              LinearLayout           leftmenu_tv_linearLayout, leftmenu_remote_linearLayout, leftmenu_pvr_linearLayout, leftmenu_my_linearLayout, leftmenu_setting_linearLayout;
+    private              LinearLayout           leftmenu_tv_linearLayout, leftmenu_remote_linearLayout, leftmenu_pvr_linearLayout, leftmenu_my_linearLayout, leftmenu_setting_linearLayout, leftmenu_right;
 
     private              Button                 leftmenu_pairing_button;
 
@@ -40,7 +40,9 @@ public class LeftMenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND, WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
+                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         setContentView(R.layout.activity_leftmenu);
 
         WindowManager.LayoutParams wmlp = getWindow().getAttributes();
@@ -57,6 +59,7 @@ public class LeftMenuActivity extends Activity {
         leftmenu_pvr_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_pvr_linearLayout);
         leftmenu_my_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_my_linearLayout);
         leftmenu_setting_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_setting_linearLayout);
+        leftmenu_right = (LinearLayout) findViewById(R.id.leftmenu_right);
         leftmenu_pairing_button = (Button) findViewById(R.id.leftmenu_pairing_button);
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
         imageButton3 = (ImageButton) findViewById(R.id.imageButton3);
@@ -114,6 +117,13 @@ public class LeftMenuActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mInstance, CMSettingMainActivity.class);
                 startActivity(intent);
+                finish();
+            }
+        });
+
+        leftmenu_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });
