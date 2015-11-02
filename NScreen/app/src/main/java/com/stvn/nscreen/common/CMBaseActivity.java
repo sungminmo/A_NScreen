@@ -51,14 +51,18 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
                 this.mActionBar.setVisibility(View.GONE);
             } else {
                 ActionBar actionBar = getSupportActionBar();
-                actionBar.hide();
+                if (actionBar != null) {
+                    actionBar.hide();
+                }
             }
         } else {
             if (this.usCustomActionBar == true) {
                 this.mActionBar.setVisibility(View.VISIBLE);
             } else {
                 ActionBar actionBar = getSupportActionBar();
-                actionBar.show();
+                if (actionBar != null) {
+                    actionBar.show();
+                }
             }
         }
     }
@@ -90,7 +94,9 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
      * */
     public void useDefaultActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.show();
+        if (actionBar != null) {
+            actionBar.show();
+        }
 
         this.mActionBar.setVisibility(View.GONE);
 
@@ -102,7 +108,9 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
      * */
     public void useCustomActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
 
         this.mActionBar.setVisibility(View.VISIBLE);
 

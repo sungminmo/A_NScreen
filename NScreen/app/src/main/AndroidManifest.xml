@@ -108,8 +108,10 @@
         <activity android:name=".setting.CMSettingMainActivity" />
         <activity android:name=".setting.CMSettingRegionActivity" />
         <activity android:name=".setting.CMSettingPurchaseAuthActivity" />
+        <activity android:name=".setting.CMSettingAdultAuthActivity" />
         <activity android:name=".setting.CMSettingPayChannelActivity" />
         <activity android:name=".setting.CMSettingPayChannelDetailActivity" />
+
         <activity android:name=".vod.VodMainActivity" />
 
         <!-- VOD -->

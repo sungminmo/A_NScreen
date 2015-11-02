@@ -248,6 +248,8 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case R.id.setting_adult_auth_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingAdultAuthActivity.class);
+                startActivity(nextIntent);
                 break;
             }
             case R.id.setting_notice_Index: {
