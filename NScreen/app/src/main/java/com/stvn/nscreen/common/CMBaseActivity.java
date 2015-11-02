@@ -1,6 +1,7 @@
 package com.stvn.nscreen.common;
 
 import android.content.Context;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,11 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
     private LinearLayout mMainView;
     private CMActionBar mActionBar;
 
-
+    private boolean usCustomActionBar;
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(R.layout.activity_base);
+
         this.mMainView = (LinearLayout)findViewById(R.id.base_view);
 
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -34,6 +36,8 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
 
         this.mActionBar = (CMActionBar)findViewById(R.id.common_actionbar);
         this.mActionBar.setActionBarListener(this);
+
+        useCustomActionBar();
     }
 
 
@@ -43,9 +47,19 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
      * */
     public void useActionBar(boolean isUse) {
         if (isUse == false) {
-            this.mActionBar.setVisibility(View.GONE);
+            if (this.usCustomActionBar == true) {
+                this.mActionBar.setVisibility(View.GONE);
+            } else {
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.hide();
+            }
         } else {
-            this.mActionBar.setVisibility(View.VISIBLE);
+            if (this.usCustomActionBar == true) {
+                this.mActionBar.setVisibility(View.VISIBLE);
+            } else {
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.show();
+            }
         }
     }
 
@@ -69,6 +83,30 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
     public void setActionBarInfo(String title, CMActionBar.CMActionBarStyle style) {
         this.mActionBar.setActionBarTitle(title);
         this.mActionBar.setActionBarStyle(style);
+    }
+
+    /**
+     * OS 기본 액션바 사용시 호출
+     * */
+    public void useDefaultActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.show();
+
+        this.mActionBar.setVisibility(View.GONE);
+
+        this.usCustomActionBar = false;
+    }
+
+    /**
+     * Custom 액션바 사용시 호출
+     * */
+    public void useCustomActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+        this.mActionBar.setVisibility(View.VISIBLE);
+
+        this.usCustomActionBar = true;
     }
 
     /**

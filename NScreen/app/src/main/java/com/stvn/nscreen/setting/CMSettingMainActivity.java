@@ -54,7 +54,7 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
 
         String subMessage = "";
         LinearLayout itemRow;
-        ViewGroup mainView = (ViewGroup) findViewById(R.id.setting_layout);;
+        ViewGroup mainView = (ViewGroup) findViewById(R.id.setting_layout);
 
         String areaName = CMSettingData.getInstance().getUserAreaName(CMSettingMainActivity.this);
         itemRow = makeSettingItem(R.id.setting_region_Index, true, "지역설정", "현재설정지역 : ", areaName, R.color.text_area_color, false);

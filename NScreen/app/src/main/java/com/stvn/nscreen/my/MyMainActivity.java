@@ -93,4 +93,9 @@ public class MyMainActivity extends CMBaseActivity implements View.OnClickListen
                 break;
         }
     }
+
+    @Override
+    public void onBackEventPressed() {
+        finish();
+    }
 }
