@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_placeholder"
-    android:name="com.stvn.nscreen.vod.VodFirstTabFragment"
-    tools:layout="@layout/fragment_vod_first_tab"
+    android:name="com.stvn.nscreen.vod.VodMainFirstTabFragment"
+    tools:layout="@layout/fragment_vod_main_first_tab"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 

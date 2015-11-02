@@ -1,0 +1,178 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.stvn.nscreen.vod.VodMainFirstTabFragment">
+
+    <!-- 공통 뷰 (Left버튼, Right버튼, GNB) -->
+    <include
+        layout="@layout/fragment_vod_main_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 배너 -->
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vod_main_event_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="196dp">
+            </android.support.v4.view.ViewPager>
+
+            <!-- 인기 순위 Top20 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:background="#b4b6b8"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp" />
+
+
+            <LinearLayout
+                android:id="@+id/vod_main_pop20_more_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.75dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="인기순위 Top20"
+                    android:id="@+id/textView3"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16.5dp"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"
+                    android:id="@+id/textView4"
+                    android:textSize="12sp"
+                    android:textColor="#8a8c8e"
+                    android:layout_marginRight="7.75dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView6"
+                    android:src="@mipmap/btn_list_arrow"
+                    android:layout_marginRight="9.75dp" />
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vod_main_pop20_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="335.5dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp">
+            </android.support.v4.view.ViewPager>
+
+
+            <!-- 금주의 신작영화 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:background="#b4b6b8"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp" />
+
+
+            <LinearLayout
+                android:id="@+id/vod_main_newmovie_more_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.75dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="금주의 신작영화"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16.5dp"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"
+                    android:textSize="12sp"
+                    android:textColor="#8a8c8e"
+                    android:layout_marginRight="7.75dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/btn_list_arrow"
+                    android:layout_marginRight="9.75dp" />
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vod_main_newmovie_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="335.5dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp">
+            </android.support.v4.view.ViewPager>
+
+            <!-- 이달의 추천VOD -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:background="#b4b6b8"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp" />
+
+
+            <LinearLayout
+                android:id="@+id/vod_main_thismonth_more_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.75dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이달의 추천 VOD"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16.5dp"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"
+                    android:textSize="12sp"
+                    android:textColor="#8a8c8e"
+                    android:layout_marginRight="7.75dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/btn_list_arrow"
+                    android:layout_marginRight="9.75dp" />
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vod_main_thismonth_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="335.5dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp">
+            </android.support.v4.view.ViewPager>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

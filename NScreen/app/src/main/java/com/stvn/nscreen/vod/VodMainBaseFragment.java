@@ -15,17 +15,24 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.leftmenu.LeftMenuActivity;
 import com.stvn.nscreen.search.SearchMainActivity;
 
+import org.json.JSONObject;
+
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VodFirstTabFragment extends Fragment {
+public class VodMainBaseFragment extends Fragment {
 
+    //
+    public List<JSONObject> categorys;
+
+    // UI
     TextView textView1, textView2, textView3, textView4, textView5;
-    View     lineview1, lineview2, lineview3, lineview4, lineview5;
+    View lineview1, lineview2, lineview3, lineview4, lineview5;
     ImageButton leftImageButton, rightImageButton;
 
-
-    public VodFirstTabFragment() {
+    public VodMainBaseFragment() {
         // Required empty public constructor
     }
 
@@ -33,19 +40,27 @@ public class VodFirstTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_vod_first_tab, container, false);
+        View view = inflater.inflate(R.layout.fragment_vod_main_base, container, false);
 
-        textView1 = (TextView)view.findViewById(R.id.vod_fragment_topmenu_textView1);
-        textView2 = (TextView)view.findViewById(R.id.vod_fragment_topmenu_textView2);
-        textView3 = (TextView)view.findViewById(R.id.vod_fragment_topmenu_textView3);
-        textView4 = (TextView)view.findViewById(R.id.vod_fragment_topmenu_textView4);
-        textView5 = (TextView)view.findViewById(R.id.vod_fragment_topmenu_textView5);
+        return view;
+    }
 
-        lineview1 = (View)view.findViewById(R.id.vod_fragment_topmenu_lineview1);
-        lineview2 = (View)view.findViewById(R.id.vod_fragment_topmenu_lineview2);
-        lineview3 = (View)view.findViewById(R.id.vod_fragment_topmenu_lineview3);
-        lineview4 = (View)view.findViewById(R.id.vod_fragment_topmenu_lineview4);
-        lineview5 = (View)view.findViewById(R.id.vod_fragment_topmenu_lineview5);
+    /**
+     * VOD 메인의 공통 화면 UI 설정
+     */
+    public View initializeBaseView(View view) {
+
+        textView1 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView1);
+        textView2 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView2);
+        textView3 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView3);
+        textView4 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView4);
+        textView5 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView5);
+
+        lineview1 = (View) view.findViewById(R.id.vod_fragment_topmenu_lineview1);
+        lineview2 = (View) view.findViewById(R.id.vod_fragment_topmenu_lineview2);
+        lineview3 = (View) view.findViewById(R.id.vod_fragment_topmenu_lineview3);
+        lineview4 = (View) view.findViewById(R.id.vod_fragment_topmenu_lineview4);
+        lineview5 = (View) view.findViewById(R.id.vod_fragment_topmenu_lineview5);
 
         textView1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +164,7 @@ public class VodFirstTabFragment extends Fragment {
             }
         });
 
-        leftImageButton = (ImageButton)view.findViewById(R.id.vod_fragment_topmenu_left_imagebutton);
+        leftImageButton = (ImageButton) view.findViewById(R.id.vod_fragment_topmenu_left_imagebutton);
         leftImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +173,7 @@ public class VodFirstTabFragment extends Fragment {
             }
         });
 
-        rightImageButton = (ImageButton)view.findViewById(R.id.vod_fragment_topmenu_right_imagebutton);
+        rightImageButton = (ImageButton) view.findViewById(R.id.vod_fragment_topmenu_right_imagebutton);
         rightImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,6 +184,4 @@ public class VodFirstTabFragment extends Fragment {
 
         return view;
     }
-
-
 }
