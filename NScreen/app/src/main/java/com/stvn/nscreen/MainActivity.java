@@ -1,32 +1,13 @@
 package com.stvn.nscreen;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.jjiya.android.common.JYSharedPreferences;
-import com.stvn.nscreen.pairing.PairingCheckActivity;
-import com.stvn.nscreen.pairing.PairingMainActivity;
-import com.stvn.nscreen.pairing.PairingSubActivity;
-import com.stvn.nscreen.rmt.RemoteControllerActivity;
-import com.stvn.nscreen.vod.VodBuyActivity;
-import com.stvn.nscreen.vod.VodDetailActivity;
-import com.stvn.nscreen.vod.VodEmptyFragment;
-import com.stvn.nscreen.vod.VodMainFragment;
 
 import java.util.UUID;
 
@@ -40,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         mInstance     = this;
         mPref         = new JYSharedPreferences(this);
@@ -79,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /* ActionBar TAB mode ------------------------------------------------------------------- */
+        /*
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         //actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.violet)));
@@ -97,8 +81,10 @@ public class MainActivity extends AppCompatActivity {
         actionBar.addTab(tab3);
         actionBar.addTab(tab4);
         actionBar.addTab(tab5);
+        */
     }
 
+    /*
     class MainTabsListener implements ActionBar.TabListener {
         private Fragment fragment;
         public MainTabsListener(Fragment fragment) {
@@ -123,5 +109,5 @@ public class MainActivity extends AppCompatActivity {
             //Toast.makeText(mInstance, "Unselected()", Toast.LENGTH_SHORT).show();
         }
     }
-
+    */
 }

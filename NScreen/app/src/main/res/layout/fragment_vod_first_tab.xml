@@ -1,0 +1,184 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.stvn.nscreen.vod.VodFirstTabFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/violet">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="49.75dp"
+            android:background="@color/violet">
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/vod_fragment_topmenu_left_imagebutton"
+                android:src="@mipmap/icon_menu_normal"
+                android:background="@color/transparent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/vod_fragment1_title"
+                android:id="@+id/textView"
+                android:textSize="16.25sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center_vertical|center_horizontal" />
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/vod_fragment_topmenu_right_imagebutton"
+                android:layout_gravity="right"
+                android:src="@mipmap/icon_search_normal"
+                android:background="@color/transparent" />
+
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:background="@color/violet"
+            android:gravity="center_horizontal">
+
+            <Space android:layout_width="9.75dp" android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="45.75dp"
+                android:layout_height="match_parent"
+                android:text="@string/vod_fragment_topmenu_name1"
+                android:id="@+id/vod_fragment_topmenu_textView1"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:gravity="center_horizontal" />
+
+            <Space android:layout_width="7dp" android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="45.75dp"
+                android:layout_height="match_parent"
+                android:text="@string/vod_fragment_topmenu_name2"
+                android:id="@+id/vod_fragment_topmenu_textView2"
+                android:textSize="14sp"
+                android:textColor="@color/violet_topmenu_unselected"
+                android:gravity="center_horizontal" />
+
+            <Space android:layout_width="6.75dp" android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="71.5dp"
+                android:layout_height="match_parent"
+                android:text="@string/vod_fragment_topmenu_name3"
+                android:id="@+id/vod_fragment_topmenu_textView3"
+                android:textSize="14sp"
+                android:textColor="@color/violet_topmenu_unselected"
+                android:gravity="center_horizontal" />
+
+            <Space android:layout_width="6.75dp" android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="91.75dp"
+                android:layout_height="match_parent"
+                android:text="@string/vod_fragment_topmenu_name4"
+                android:id="@+id/vod_fragment_topmenu_textView4"
+                android:textSize="14sp"
+                android:textColor="@color/violet_topmenu_unselected"
+                android:gravity="center_horizontal" />
+
+            <Space android:layout_width="7.25dp" android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="45.75dp"
+                android:layout_height="match_parent"
+                android:text="@string/vod_fragment_topmenu_name5"
+                android:id="@+id/vod_fragment_topmenu_textView5"
+                android:textSize="14sp"
+                android:textColor="@color/violet_topmenu_unselected"
+                android:gravity="center_horizontal" />
+
+            <Space android:layout_width="9.75dp" android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/violet"
+            android:gravity="center_horizontal">
+
+            <Space android:layout_width="9.75dp" android:layout_height="3dp" />
+
+            <View
+                android:layout_width="45.75dp"
+                android:layout_height="3dp"
+                android:id="@+id/vod_fragment_topmenu_lineview1"
+                android:background="@color/white"
+                android:layout_weight="0.1" />
+
+            <Space android:layout_width="7dp" android:layout_height="3dp" />
+
+            <View
+                android:layout_width="45.75dp"
+                android:layout_height="3dp"
+                android:id="@+id/vod_fragment_topmenu_lineview2"
+                android:background="@color/transparent"
+                android:layout_weight="0.1" />
+
+            <Space android:layout_width="6.75dp" android:layout_height="3dp" />
+
+            <View
+                android:layout_width="71.5dp"
+                android:layout_height="3dp"
+                android:id="@+id/vod_fragment_topmenu_lineview3"
+                android:background="@color/transparent"
+                android:layout_weight="0.15"/>
+
+            <Space android:layout_width="6.75dp" android:layout_height="3dp" />
+
+            <View
+                android:layout_width="91.75dp"
+                android:layout_height="3dp"
+                android:id="@+id/vod_fragment_topmenu_lineview4"
+                android:background="@color/transparent"
+                android:layout_weight="0.17"/>
+
+            <Space android:layout_width="7.25dp" android:layout_height="3dp" />
+
+            <View
+                android:layout_width="45.75dp"
+                android:layout_height="3dp"
+                android:id="@+id/vod_fragment_topmenu_lineview5"
+                android:background="@color/transparent"
+                android:layout_weight="0.1"/>
+
+            <Space android:layout_width="9.75dp" android:layout_height="3dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:background="#c3aedd"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6.25dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5.75dp"
+            android:background="@color/violet" />
+
+    </LinearLayout>
+
+</FrameLayout>
