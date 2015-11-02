@@ -66,11 +66,7 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         itemRow = makeSettingToggleItem(R.id.setting_adult_search_Index, true, "성인검색 제한설정", CMSettingData.getInstance().getAdultSearchRestriction(this));
         mainView.addView(itemRow);
 
-        if (CMSettingData.getInstance().isAdultAuth(this)) {
-            subMessage = "";
-        } else {
-            subMessage = "성인인증이 필요합니다.";
-        }
+        subMessage = getAdultAuthString(CMSettingData.getInstance().isAdultAuth(this));
 
         itemRow = makeSettingItem(R.id.setting_adult_auth_Index, true, "성인인증", "", subMessage, R.color.red, false);
         mainView.addView(itemRow);
@@ -165,6 +161,17 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
     }
 
     /**
+     * 성인인증 여부에 따른 화면 표출 문구 반환
+     * */
+    private String getAdultAuthString(boolean isAuthed) {
+        if (isAuthed) {
+            return "";
+        } else {
+            return "성인인증이 필요합니다.";
+        }
+    }
+
+    /**
      * 지역명 설정
      * */
     private void setAreaName(String strArea) {
@@ -182,6 +189,15 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
         switchButton.setChecked(isToggleOn);
     }
 
+    /**
+     * 성인인증값 변경
+     * */
+    private void setAdultAuth(boolean isAuthed) {
+        View itemView = findViewById(R.id.setting_adult_auth_Index);
+        TextView authText = (TextView)itemView.findViewById(R.id.setting_item_title_sub2);
+        authText.setText(getAdultAuthString(isAuthed));
+    }
+
     @Override
     public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
         switch (buttonView.getId()) {
@@ -190,20 +206,19 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 if (tag == R.id.setting_adult_search_Index) {
                     if (isChecked == false) {
                         if (CMSettingData.getInstance().isAdultAuth(CMSettingMainActivity.this) == false) {
+                            buttonView.setChecked(true);
                             CMAlertUtil.Alert(CMSettingMainActivity.this,
                                     "성인인증 필요",
                                     "성인검색 제한 설정을 해제하기 위해서는 성인인증이 필요합니다.", "성인인증을 진행하시겠습니까?", "예", "아니오", false, true,
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // TODO: 본인인증(성인인증) 관련 페이지 적용 처리 필요 15.10.09
-                                            CMSettingData.getInstance().setAdultSearchRestriction(CMSettingMainActivity.this, isChecked);
+                                            Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingAdultAuthActivity.class);
+                                            startActivityForResult(nextIntent, CMSetting_Adult_Search_Tag);
                                         }
                                     }, new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            buttonView.setChecked(true);
-                                        }
+                                        public void onClick(DialogInterface dialog, int which) {}
                                     });
                         } else {
                             CMSettingData.getInstance().setAdultSearchRestriction(CMSettingMainActivity.this, isChecked);
@@ -244,12 +259,9 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 });
                 break;
             }
-            case R.id.setting_adult_search_Index: {
-                break;
-            }
             case R.id.setting_adult_auth_Index: {
                 Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingAdultAuthActivity.class);
-                startActivity(nextIntent);
+                startActivityForResult(nextIntent, CMSetting_Adult_Auth_Tag);
                 break;
             }
             case R.id.setting_notice_Index: {
@@ -305,11 +317,20 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case CMSetting_Adult_Search_Tag: {
+                if (resultCode == Activity.RESULT_OK) {
+                    boolean isAuth = CMSettingData.getInstance().isAdultAuth(this);
+                    if (isAuth == true) {
+                        CMSettingData.getInstance().setAdultSearchRestriction(CMSettingMainActivity.this, false);
+                        setAdultSearchRestriction(false);
+                    }
+                }
                 break;
             }
             case CMSetting_Adult_Auth_Tag: {
-                boolean isAuth = !CMSettingData.getInstance().isAdultAuth(this);
-                CMSettingData.getInstance().setAdultAuth(this, isAuth);
+                if (resultCode == Activity.RESULT_OK) {
+                    boolean isAuth = CMSettingData.getInstance().isAdultAuth(CMSettingMainActivity.this);
+                    setAdultAuth(isAuth);
+                }
                 break;
             }
             case CMSetting_Notice_Tag: {

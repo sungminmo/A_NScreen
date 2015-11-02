@@ -485,7 +485,6 @@ public class VodDetailActivity extends Activity {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestContentUri()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
-        fileName = "M4145902.mpg";
         String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/play";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -511,8 +510,16 @@ public class VodDetailActivity extends Activity {
 
                     String terminalKey = mPref.getWebhasTerminalKey();
 
+                    /*
+                    assets.add(new AssetItem("http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm", 1));
+                    assets.add(new AssetItem("widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm", 1));
+                    투모로우랜드 "widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm"
+                     */
+                    contentUri = contentUri.replace("http://","widevine://");
+
                     Intent intent = new Intent(mInstance, VideoPlayerView.class);
-                    intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
+                    //intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
+                    intent.putExtra("com.widevine.demo.Path", contentUri);
                     //intent.putExtra("currentpage", currentPage);
                     //intent.putExtra("title", title);
                     intent.putExtra("assetId", assetId);
