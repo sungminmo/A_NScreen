@@ -33,8 +33,8 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
-    private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
+    private              RequestQueue                  mRequestQueue;
+    private              ImageLoader                   mImageLoader;
 
     private              int                           mSelectedIndex   = -1;
 

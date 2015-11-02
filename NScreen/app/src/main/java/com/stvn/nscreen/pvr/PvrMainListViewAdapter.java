@@ -1,12 +1,18 @@
 package com.stvn.nscreen.pvr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
 import com.stvn.nscreen.R;
@@ -19,18 +25,32 @@ import java.util.ArrayList;
 /**
  * Created by limdavid on 15. 9. 15..
  */
+
 public class PvrMainListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = PvrMainListViewAdapter.class.getSimpleName();
-    private Context mContext         = null;
+    private              Context                       mContext         = null;
     private              View.OnClickListener          mOnClickListener = null;
-    private ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
+    private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
+
+    private              RequestQueue                  mRequestQueue;
+    private              ImageLoader                   mImageLoader;
 
     public PvrMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
+        this.mRequestQueue = Volley.newRequestQueue(mContext);
+        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
+            public void putBitmap(String url, Bitmap bitmap) {
+                mCache.put(url, bitmap);
+            }
+            public Bitmap getBitmap(String url) {
+                return mCache.get(url);
+            }
+        });
     }
 
     @Override
@@ -56,11 +76,13 @@ public class PvrMainListViewAdapter extends BaseAdapter {
 
         try {
             ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
-            JSONObject jobj         = new JSONObject(dobj.sJson);
+            JSONObject         jobj         = new JSONObject(dobj.sJson);
 
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
+            NetworkImageView channelLogo = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
 
-            titleTextView.setText(jobj.getString("title"));
+            titleTextView.setText(jobj.getString("ProgramName"));
+            channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);
 
         } catch (JSONException e) {
             e.printStackTrace();

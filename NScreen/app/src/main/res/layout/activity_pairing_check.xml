@@ -21,14 +21,6 @@
             android:textStyle="bold"
             android:textColor="@color/white" />
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="9dp"
-            android:background="@mipmap/btn_back" />
-
     </FrameLayout>
 
     <LinearLayout
@@ -79,7 +71,7 @@
             android:layout_width="334.5dp"
             android:layout_height="39.5dp"
             android:text="확인"
-            android:id="@+id/button8"
+            android:id="@+id/pairing_check_okBtn"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="12.75dp"
             android:background="@drawable/p2btn_selector"

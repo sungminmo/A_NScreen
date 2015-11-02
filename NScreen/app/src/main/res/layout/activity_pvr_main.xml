@@ -23,7 +23,7 @@
             android:textColor="@color/white" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/pvr_main_backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -49,7 +49,8 @@
             android:layout_marginLeft="6dp"
             android:background="@drawable/btn_tab_selector"
             android:text="녹화예약관리"
-            android:textColor="@drawable/btn_selector_textcolor"/>
+            android:textColor="@drawable/btn_selector_textcolor"
+            android:textIsSelectable="true" />
 
         <Button
             android:id="@+id/button2"
@@ -60,7 +61,8 @@
             android:text="녹화물 목록"
             android:textColor="@drawable/btn_selector_textcolor"
             android:layout_marginRight="6dp"
-            android:layout_marginLeft="-1dp" />
+            android:layout_marginLeft="-1dp"
+            android:textIsSelectable="true" />
 
     </LinearLayout>
 

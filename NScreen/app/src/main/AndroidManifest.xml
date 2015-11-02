@@ -107,6 +107,13 @@
             android:name=".rmt.RemoteControllerActivity"
             android:label="@string/title_activity_remote_controller">
         </activity>
+        <activity
+            android:name=".rmt.RemoteControllerChoiceActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="unspecified"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
 
         <!-- SEARCH -->
         <activity

@@ -52,9 +52,9 @@ public class EpgMainActivity extends AppCompatActivity {
     private              EpgMainListViewAdapter mAdapter;
     private              ListView               mListView;
 
-    private              ImageButton            epg_main_genre_choice_imageButton;
+    private              ImageButton            epg_main_genre_choice_imageButton, epg_main_backBtn;
 
-    private             TextView                epg_main_genre_name;
+    private              TextView               epg_main_genre_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,7 @@ public class EpgMainActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(mItemClickListener);
 
         epg_main_genre_choice_imageButton = (ImageButton) findViewById(R.id.epg_main_genre_choice_imageButton);
+        epg_main_backBtn                  = (ImageButton) findViewById(R.id.epg_main_backBtn);
 
         epg_main_genre_name               = (TextView) findViewById(R.id.epg_main_genre_name);
 
@@ -94,6 +95,13 @@ public class EpgMainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(EpgMainActivity.this, EpgChoiceActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        epg_main_backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
         requestGetChannelList();

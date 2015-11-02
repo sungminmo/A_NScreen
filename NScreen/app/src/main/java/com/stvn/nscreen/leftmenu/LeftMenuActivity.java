@@ -32,7 +32,7 @@ public class LeftMenuActivity extends Activity {
 
     private              LinearLayout           leftmenu_tv_linearLayout, leftmenu_remote_linearLayout, leftmenu_pvr_linearLayout, leftmenu_my_linearLayout, leftmenu_setting_linearLayout, leftmenu_right;
 
-    private              Button                 leftmenu_pairing_button;
+    private              Button                 leftmenu_pairing_button1, leftmenu_pairing_button2;
 
     private              ImageButton            imageButton2, leftmenu_whatBtn;
 
@@ -54,15 +54,28 @@ public class LeftMenuActivity extends Activity {
             Log.d(tag, "onCreate()");
         }
 
+
+
         leftmenu_tv_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_tv_linearLayout);
         leftmenu_remote_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_remote_linearLayout);
         leftmenu_pvr_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_pvr_linearLayout);
         leftmenu_my_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_my_linearLayout);
         leftmenu_setting_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_setting_linearLayout);
         leftmenu_right = (LinearLayout) findViewById(R.id.leftmenu_right);
-        leftmenu_pairing_button = (Button) findViewById(R.id.leftmenu_pairing_button);
+        leftmenu_pairing_button1 = (Button) findViewById(R.id.leftmenu_pairing_button1);
+        leftmenu_pairing_button2 = (Button) findViewById(R.id.leftmenu_pairing_button2);
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
         leftmenu_whatBtn = (ImageButton) findViewById(R.id.leftmenu_whatBtn);
+
+        String pwd = mPref.getValue(JYSharedPreferences.PURCHASE_PASSWORD, "");
+
+        if ( "".equals(pwd) ) {
+            leftmenu_pairing_button1.setVisibility(View.VISIBLE);
+            leftmenu_pairing_button2.setVisibility(View.GONE);
+        } else {
+            leftmenu_pairing_button1.setVisibility(View.GONE);
+            leftmenu_pairing_button2.setVisibility(View.VISIBLE);
+        }
 
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +84,16 @@ public class LeftMenuActivity extends Activity {
             }
         });
 
-        leftmenu_pairing_button.setOnClickListener(new View.OnClickListener() {
+        leftmenu_pairing_button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mInstance, PairingMainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        leftmenu_pairing_button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mInstance, PairingMainActivity.class);

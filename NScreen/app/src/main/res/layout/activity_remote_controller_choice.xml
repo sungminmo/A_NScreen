@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="348dp"
+    android:layout_height="459dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:gravity="center_horizontal">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="58dp">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="23dp"
+            android:gravity="center"
+            android:text="시청을 원하시는 채널장르를 선택하실 수 있습니다."
+            android:textSize="13.25sp"
+            android:textColor="@color/black"
+            android:textIsSelectable="true" />
+
+        <ImageButton
+            android:id="@+id/remote_controller_choice_close_imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13.25dp"
+            android:layout_marginRight="13.25dp"
+            android:layout_gravity="right"
+            android:background="@mipmap/btn_close" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="249dp"
+        android:layout_height="40.75dp"
+        android:layout_marginLeft="49.5dp"
+        android:layout_marginRight="49.5dp"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="전체채널"
+            android:id="@+id/remote_controller_choice_genre_all_button"
+            android:background="@drawable/btn_selector"
+            android:textColor="@drawable/btn_selector_textcolor" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="249dp"
+        android:layout_height="40.75dp"
+        android:layout_marginRight="49.5dp"
+        android:layout_marginLeft="49.5dp"
+        android:layout_marginBottom="27.25dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="선호채널"
+            android:id="@+id/remote_controller_choice_genre_like_button"
+            android:background="@drawable/btn_selector"
+            android:textColor="@drawable/btn_selector_textcolor" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_one_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="27.25dp"
+            android:layout_marginRight="27.75dp"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_03"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_two_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_marginRight="27.5dp"
+            android:layout_toRightOf="@id/remote_controller_choice_genre_one_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_11"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_three_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_toRightOf="@id/remote_controller_choice_genre_two_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_06"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_four_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_below="@+id/remote_controller_choice_genre_one_button"
+            android:layout_alignLeft="@+id/remote_controller_choice_genre_one_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_08"
+            android:textSize="10.25sp"
+            android:layout_marginBottom="27.25dp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_five_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_alignTop="@+id/remote_controller_choice_genre_four_button"
+            android:layout_alignLeft="@+id/remote_controller_choice_genre_two_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_10"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_six_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_below="@+id/remote_controller_choice_genre_three_button"
+            android:layout_alignTop="@+id/remote_controller_choice_genre_four_button"
+            android:layout_alignLeft="@+id/remote_controller_choice_genre_three_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_09"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_seven_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_below="@+id/remote_controller_choice_genre_four_button"
+            android:layout_alignLeft="@+id/remote_controller_choice_genre_four_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_05"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_eight_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_below="@+id/remote_controller_choice_genre_five_button"
+            android:layout_alignTop="@+id/remote_controller_choice_genre_seven_button"
+            android:layout_alignLeft="@+id/remote_controller_choice_genre_five_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_07"
+            android:textSize="10.25sp" />
+
+        <Button
+            android:id="@+id/remote_controller_choice_genre_nine_button"
+            android:layout_width="64.75dp"
+            android:layout_height="65dp"
+            android:layout_alignTop="@+id/remote_controller_choice_genre_eight_button"
+            android:layout_alignLeft="@+id/remote_controller_choice_genre_six_button"
+            android:gravity="bottom|center_horizontal"
+            android:background="@drawable/epg_choice_btn_selector_04"
+            android:textSize="10.25sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

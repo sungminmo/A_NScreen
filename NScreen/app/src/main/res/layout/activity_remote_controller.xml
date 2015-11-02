@@ -21,7 +21,7 @@
             android:textColor="@color/white" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/remote_controller_backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -91,13 +91,13 @@
                     android:layout_gravity="center" />
 
                 <TextView
-                    android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="전체채널"
                     android:textSize="14.5sp"
                     android:textColor="@color/violet"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:id="@+id/remote_controller_genre_name" />
 
                 <ImageView
                     android:id="@+id/imageView2"

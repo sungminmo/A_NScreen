@@ -77,13 +77,27 @@
             android:layout_width="182.75dp"
             android:layout_height="39.75dp"
             android:text="셋탑박스 연동하기"
-            android:id="@+id/leftmenu_pairing_button"
+            android:id="@+id/leftmenu_pairing_button1"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="19.75dp"
             android:layout_marginRight="16dp"
             android:textSize="15.5sp"
             android:textColor="#7b5aa3"
-            android:background="@drawable/btn_stb_connect_selector" />
+            android:background="@drawable/btn_stb_connect_selector"
+            android:visibility="gone" />
+
+        <Button
+            android:layout_width="182.75dp"
+            android:layout_height="39.75dp"
+            android:text="셋탑박스 재 연동"
+            android:id="@+id/leftmenu_pairing_button2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="19.75dp"
+            android:layout_marginRight="16dp"
+            android:textSize="15.5sp"
+            android:textColor="#7b5aa3"
+            android:background="@drawable/btn_stb_connect_selector"
+            android:visibility="gone" />
 
         <LinearLayout
             android:orientation="horizontal"

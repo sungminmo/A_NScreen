@@ -44,19 +44,21 @@ import java.util.Map;
 
 public class RemoteControllerActivity extends AppCompatActivity{
 
-    private static final String                 tag = RemoteControllerActivity.class.getSimpleName();
-    private static       RemoteControllerActivity         mInstance;
-    private JYSharedPreferences mPref;
+    private static final String                          tag = RemoteControllerActivity.class.getSimpleName();
+    private static       RemoteControllerActivity        mInstance;
+    private              JYSharedPreferences             mPref;
 
     // network
-    private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
+    private              RequestQueue                    mRequestQueue;
+    private              ProgressDialog                  mProgressDialog;
 
     // gui
-    private RemoteControllerListViewAdapter mAdapter;
-    private ListView mListView;
+    private              RemoteControllerListViewAdapter mAdapter;
+    private              ListView                        mListView;
 
-    private ImageButton remote_controller_genre_choice_imageButton;
+    private              ImageButton                     remote_controller_genre_choice_imageButton, remote_controller_backBtn;
+
+    private              TextView                        remote_controller_genre_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,14 +85,31 @@ public class RemoteControllerActivity extends AppCompatActivity{
         mListView.setOnItemClickListener(mItemClickListener);
 
         remote_controller_genre_choice_imageButton = (ImageButton) findViewById(R.id.remote_controller_genre_choice_imageButton);
+        remote_controller_backBtn = (ImageButton) findViewById(R.id.remote_controller_backBtn);
+
+        remote_controller_genre_name = (TextView) findViewById(R.id.remote_controller_genre_name);
+
+        try {
+            remote_controller_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
+        } catch (NullPointerException e) {
+            remote_controller_genre_name.setText("전체채널");
+        }
 
         remote_controller_genre_choice_imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(RemoteControllerActivity.this, EpgChoiceActivity.class);
+                Intent i = new Intent(RemoteControllerActivity.this, RemoteControllerChoiceActivity.class);
                 startActivity(i);
             }
         });
+
+        remote_controller_backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         requestGetChannelList();
     }
 

@@ -79,6 +79,8 @@ public class PairingSubActivity extends AppCompatActivity {
         mCancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, PairingMainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -110,18 +112,21 @@ public class PairingSubActivity extends AppCompatActivity {
     // 7.1.4 ClientSetTopBoxRegist
     // 사용할 셋톱을 등록합니다..(VOD서버와의 인터페이스 확인)
     private void requestClientSetTopBoxRegist() {
-        if ( mPref.isLogging() ) { Log.d(tag, "requestAddUser()"); }
+        if ( mPref.isLogging() ) { Log.d(tag, "requestClientSetTopBoxRegist()"); }
         mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         String authCode    = mAuthCodeEditText.getText().toString();
         String terminalKey = mPref.getWebhasTerminalKey();
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
-        String url = mPref.getRumpersServerUrl() + "/ClientSetTopBoxRegist.asp?version=1&terminalKey="+JYSharedPreferences.RUMPERS_TERMINAL_KEY+"&deviceId="+uuid+"A&authCode="+authCode;
+        String url = mPref.getRumpersServerUrl() + "/ClientSetTopBoxRegist.asp?version=1&deviceId="+uuid+"&authKey="+authCode;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                mProgressDialog.dismiss();
                 Log.d(tag, response);
                 parseClientSetTopBoxRegist(response);
-
+                Intent intent = new Intent(mInstance, PairingCheckActivity.class);
+                startActivity(intent);
+                finish();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -153,7 +158,7 @@ public class PairingSubActivity extends AppCompatActivity {
 
     //
     // 배너 파싱
-    private void parseClientSetTopBoxRegist(String response) {
+    private void  parseClientSetTopBoxRegist(String response) {
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
@@ -265,7 +270,7 @@ public class PairingSubActivity extends AppCompatActivity {
     // 5.1.2 authenticateDevice
     // 2nd 단말 클라이언트를 인증하고 TerminalKey를 얻는다
     private void requestAuthenticateDevice() {
-        if ( mPref.isLogging() ) { Log.d(tag, "requestAddUser()"); }
+        if ( mPref.isLogging() ) { Log.d(tag, "requestAuthenticateDevice()"); }
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
         String url = mPref.getWebhasServerUrl() + "/authenticateDevice.json?version=1&secondDeviceId="+uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
