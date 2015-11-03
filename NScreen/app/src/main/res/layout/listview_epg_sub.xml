@@ -10,7 +10,6 @@
         android:layout_marginTop="24.25dp"
         android:layout_marginLeft="10.75dp"
         android:layout_gravity="left|top"
-        android:text="00:00~00:00"
         android:textSize="12sp"
         android:textColor="@color/black" />
 
@@ -31,16 +30,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27.75dp"
-        android:layout_marginLeft="94.5dp"
-        android:background="@mipmap/btn_age_all" />
+        android:layout_marginLeft="94.5dp" />
 
     <ImageView
         android:id="@+id/epg_sub_imageview_program_hdsd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27.75dp"
-        android:layout_marginLeft="123dp"
-        android:background="@mipmap/btn_size_hd" />
+        android:layout_marginLeft="123dp" />
 
     <ImageView
         android:id="@+id/epg_sub_imageview_progress_bg"

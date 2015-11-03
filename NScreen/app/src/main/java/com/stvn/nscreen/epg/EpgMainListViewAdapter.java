@@ -116,7 +116,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
                 programAge.setImageResource(R.mipmap.btn_age_7);
             } else if ("12세 이상".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_12);
-            } if ("15세 이상".equals(sProgramAge) ) {
+            } else if ("15세 이상".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_15);
             } else if ("19세 이상".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_19);
