@@ -155,9 +155,9 @@ public class EpgMainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
+                mProgressDialog.dismiss();
                 parseGetChannelList(response);
                 mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override

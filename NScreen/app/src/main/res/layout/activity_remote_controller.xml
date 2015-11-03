@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="13번"
-                android:id="@+id/textView66"
+                android:id="@+id/remote_controller_channel_textview"
                 android:textSize="14.75sp"
                 android:textColor="@color/violet" />
         </LinearLayout>

@@ -21,7 +21,10 @@ import com.stvn.nscreen.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by limdavid on 15. 10. 26..
@@ -80,18 +83,41 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
             JSONObject         jobj         = new JSONObject(dobj.sJson);
 
-            // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
+            String sProgramAge  = jobj.getString("channelProgramGrade");
+            String sChannelInfo = jobj.getString("channelInfo");
+
             NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.remote_imageview_channel_logo);
 
+            ImageView programAge  = ViewHolder.get(convertView, R.id.remote_imageview_program_age);
+            ImageView Info        = ViewHolder.get(convertView, R.id.remote_imageview_program_hdsd);
             ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
             TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.remote_textview_channel_number);
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.remote_textview_program_title);
+            TextView programTimeTextView = ViewHolder.get(convertView, R.id.remote_textview_program_time);
 
-            //ViewHolder.channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+
+            if ( "모두 시청".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_all);
+            } else if ("7세 이상".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_7);
+            } else if ("12세 이상".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_12);
+            } if ("15세 이상".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_15);
+            } else if ("19세 이상".equals(sProgramAge) ) {
+                programAge.setImageResource(R.mipmap.btn_age_19);
+            }
+
+            if ( "SD".equals(sChannelInfo) ) {
+                Info.setImageResource(R.mipmap.btn_size_sd);
+            } else if ("HD".equals(sChannelInfo) || "SD,HD".equals(sChannelInfo) ) {
+                Info.setImageResource(R.mipmap.btn_size_hd);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

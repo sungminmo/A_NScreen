@@ -81,7 +81,7 @@ public class PvrMainActivity extends AppCompatActivity {
 
         textView2 = (TextView) findViewById(R.id.textView2);
         textView7 = (TextView) findViewById(R.id.textView7);
-        
+
         mListView = (ListView)findViewById(R.id.pvr_main_listview);
         mListView.setAdapter(mAdapter);
 
@@ -105,9 +105,7 @@ public class PvrMainActivity extends AppCompatActivity {
                 textView7.setVisibility(View.GONE);
                 requestGetrecordlist();
             }
-        }); {
-
-        }
+        });
     }
 
     private void requestGetRecordReservelist() {
@@ -228,6 +226,8 @@ public class PvrMainActivity extends AppCompatActivity {
                 if (eventType == XmlPullParser.START_TAG) {
                     if (xpp.getName().equalsIgnoreCase("RecordId")) {
                         sb.append("{\"RecordId\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("RecordingType")) {
+                        sb.append(",\"RecordingType\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("Channel_logo_img")) {
                         sb.append(",\"Channel_logo_img\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("ProgramName")) {

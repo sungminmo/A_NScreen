@@ -58,7 +58,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
 
     private              ImageButton                     remote_controller_genre_choice_imageButton, remote_controller_backBtn;
 
-    private              TextView                        remote_controller_genre_name;
+    private              TextView                        remote_controller_genre_name, remote_controller_channel_textview;
+    private              String                          sChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +89,15 @@ public class RemoteControllerActivity extends AppCompatActivity{
         remote_controller_backBtn = (ImageButton) findViewById(R.id.remote_controller_backBtn);
 
         remote_controller_genre_name = (TextView) findViewById(R.id.remote_controller_genre_name);
+        remote_controller_channel_textview = (TextView) findViewById(R.id.remote_controller_channel_textview);
 
         try {
+            sChannel = getIntent().getExtras().getString("Channel");
+            remote_controller_channel_textview.setText(sChannel + "번");
             remote_controller_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
         } catch (NullPointerException e) {
+            sChannel = "";
+            remote_controller_channel_textview.setText("번");
             remote_controller_genre_name.setText("전체채널");
         }
 
@@ -99,6 +105,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(RemoteControllerActivity.this, RemoteControllerChoiceActivity.class);
+                i.putExtra("Channel", sChannel);
                 startActivity(i);
             }
         });
@@ -134,10 +141,12 @@ public class RemoteControllerActivity extends AppCompatActivity{
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String tk   = mPref.getWebhasTerminalKey();
         String url  = mPref.getRumpersServerUrl() + "/dev.SetRemoteChannelControl.asp?deviceId=" + uuid + "&channelId=" + sChannelNumber + "&version=1&terminalKey=" + tk;
+        sChannel = sChannelNumber;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
+                // mProgressDialog.dismiss();
                 AlertDialog.Builder alert = new AlertDialog.Builder(RemoteControllerActivity.this);
                 alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
@@ -145,9 +154,9 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         dialog.dismiss(); //닫기
                     }
                 });
-                alert.setMessage("번이 선택되었습니다.");
+                alert.setMessage(sChannel + "번이 선택되었습니다.");
                 alert.show();
-                // mProgressDialog.dismiss();
+                remote_controller_channel_textview.setText(sChannel + "번");
             }
         }, new Response.ErrorListener() {
             @Override
@@ -171,14 +180,23 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0";
+        String sGenreCode = "";
+        try {
+            sGenreCode = getIntent().getExtras().getString("sGenreCode");
+        } catch (NullPointerException e) {
+            sGenreCode = "";
+        }
+        if ( "".equals(sGenreCode) ) {
+            sGenreCode = "";
+        }
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0" + sGenreCode;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
+                mProgressDialog.dismiss();
                 parseGetChannelList(response);
                 mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -216,6 +234,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
                         sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelName")) {
+                        sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTitle")) {
                         sb.append(",\"channelProgramOnAirTitle\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelInfo")) {
@@ -226,8 +246,12 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         sb.append(",\"channelLogoImg\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirID")) {
                         sb.append(",\"channelProgramOnAirID\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTime")) {
-                        sb.append(",\"channelProgramOnAirTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirStartTime")) {
+                        sb.append(",\"channelProgramOnAirStartTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirEndTime")) {
+                        sb.append(",\"channelProgramOnAirEndTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("channelProgramGrade")) {
+                        sb.append(",\"channelProgramGrade\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelView")) {
                         sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
                         ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());

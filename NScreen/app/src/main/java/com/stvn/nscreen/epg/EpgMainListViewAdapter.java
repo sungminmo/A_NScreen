@@ -85,8 +85,8 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
             NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
 
-            ImageView programAge  = (ImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_program_age);
-            ImageView Info        = (ImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_program_hdsd);
+            ImageView programAge  = ViewHolder.get(convertView, R.id.epg_main_imageview_program_age);
+            ImageView Info        = ViewHolder.get(convertView, R.id.epg_main_imageview_program_hdsd);
             ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
@@ -110,10 +110,9 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
             if ( "SD".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_sd);
-            } else if ("HD".equals(sChannelInfo) ) {
+            } else if ("HD".equals(sChannelInfo) || "SD,HD".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_hd);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

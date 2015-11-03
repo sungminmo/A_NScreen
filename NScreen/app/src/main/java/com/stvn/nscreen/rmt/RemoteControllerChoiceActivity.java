@@ -24,7 +24,9 @@ public class RemoteControllerChoiceActivity extends Activity {
 
     private              ImageButton            remote_controller_choice_close_imageButton;
 
-    private Button remote_controller_choice_genre_all_button, remote_controller_choice_genre_like_button, remote_controller_choice_genre_one_button, remote_controller_choice_genre_two_button, remote_controller_choice_genre_three_button, remote_controller_choice_genre_four_button, remote_controller_choice_genre_five_button, remote_controller_choice_genre_six_button, remote_controller_choice_genre_seven_button, remote_controller_choice_genre_eight_button, remote_controller_choice_genre_nine_button;
+    private              String                 sChannel;
+
+    private              Button                 remote_controller_choice_genre_all_button, remote_controller_choice_genre_like_button, remote_controller_choice_genre_one_button, remote_controller_choice_genre_two_button, remote_controller_choice_genre_three_button, remote_controller_choice_genre_four_button, remote_controller_choice_genre_five_button, remote_controller_choice_genre_six_button, remote_controller_choice_genre_seven_button, remote_controller_choice_genre_eight_button, remote_controller_choice_genre_nine_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class RemoteControllerChoiceActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND, WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         setContentView(R.layout.activity_remote_controller_choice);
+
+        sChannel  = getIntent().getExtras().getString("Channel");
 
         mInstance = this;
         mPref     = new JYSharedPreferences(this);
@@ -57,6 +61,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "");
                 intent.putExtra("sGenreName", "전체채널");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -80,6 +85,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=1");
                 intent.putExtra("sGenreName", "지상파/지역");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -91,6 +97,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=2");
                 intent.putExtra("sGenreName", "교육/키즈");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -102,6 +109,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=3");
                 intent.putExtra("sGenreName", "음악/오락");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -113,6 +121,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=4");
                 intent.putExtra("sGenreName", "스포츠/Game");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -124,6 +133,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=5");
                 intent.putExtra("sGenreName", "종교/기타");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -135,6 +145,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=6");
                 intent.putExtra("sGenreName", "뉴스/다큐");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -146,6 +157,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=7");
                 intent.putExtra("sGenreName", "영화");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -157,6 +169,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=8");
                 intent.putExtra("sGenreName", "드라마/여성");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -168,6 +181,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                 intent.putExtra("sGenreCode", "&genreCode=9");
                 intent.putExtra("sGenreName", "홈쇼핑");
+                intent.putExtra("Channel", sChannel);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
