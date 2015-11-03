@@ -18,7 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8.75dp"
         android:layout_marginLeft="42dp"
-        android:text="00"
         android:textSize="14.5sp"
         android:textColor="@color/black" />
 
@@ -38,7 +37,6 @@
         android:layout_marginTop="8.75dp"
         android:layout_marginLeft="94.75dp"
         android:layout_marginRight="50dp"
-        android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
         android:textSize="14.5sp"
         android:textColor="@color/black"
         android:ellipsize="end"
@@ -51,7 +49,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
         android:layout_marginLeft="94.75dp"
-        android:text="00:00~00:00"
         android:textSize="12sp"
         android:textColor="@color/black" />
 

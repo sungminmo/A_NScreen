@@ -98,7 +98,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
-            TextView channelProgramOnAirStartTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
+            TextView channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
 
             Date dt1 = formatter.parse(ProgramOnAirStartTime);
             Date dt2 = formatter.parse(ProgramOnAirEndTime);
@@ -108,7 +108,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
-            channelProgramOnAirStartTime.setText(str1 + "~" + str2);
+            channelProgramOnAirTime.setText(str1 + "~" + str2);
 
             if ( "모두 시청".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_all);

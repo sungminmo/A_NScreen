@@ -15,7 +15,10 @@ import com.stvn.nscreen.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by limdavid on 15. 9. 11..
@@ -58,14 +61,30 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_sub, parent, false);
         }
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter2 = new SimpleDateFormat("HH:mm");
+
         try {
             ListViewDataObject dobj          = (ListViewDataObject)getItem(position);
             JSONObject         jobj          = new JSONObject(dobj.sJson);
 
+            String ProgramBroadcastingStartTime = jobj.getString("programBroadcastingStartTime");
+            String ProgramBroadcastingEndTime = jobj.getString("programBroadcastingEndTime");
+
             TextView           titleTextView                 = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
+            TextView channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_sub_textview_program_time);
+
+            Date dt1 = formatter.parse(ProgramBroadcastingStartTime);
+            Date dt2 = formatter.parse(ProgramBroadcastingEndTime);
+            String str1 = formatter2.format(dt1).toString();
+            String str2 = formatter2.format(dt2).toString();
 
             titleTextView.setText(jobj.getString("programTitle"));
+            channelProgramOnAirTime.setText(str1 + "~" + str2);
+
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return convertView;
