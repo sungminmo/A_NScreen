@@ -69,7 +69,7 @@
             <Button
                 android:layout_width="123.75dp"
                 android:layout_height="40.25dp"
-                android:id="@+id/button11"
+                android:id="@+id/remote_controller_power_button"
                 android:background="@drawable/btn_power_selector"
                 android:layout_marginRight="10.75dp" />
 
@@ -130,7 +130,7 @@
         <Button
             android:layout_width="155dp"
             android:layout_height="66.25dp"
-            android:id="@+id/button12"
+            android:id="@+id/remote_controller_volume_down_button"
             android:background="@drawable/btn_volume_down_selector"
             android:layout_weight="1"
             android:layout_marginTop="17.25dp"
@@ -149,7 +149,7 @@
         <Button
             android:layout_width="155dp"
             android:layout_height="66.25dp"
-            android:id="@+id/button13"
+            android:id="@+id/remote_controller_volume_up_button"
             android:background="@drawable/btn_volume_up_selector"
             android:layout_weight="1"
             android:layout_marginTop="17.25dp"

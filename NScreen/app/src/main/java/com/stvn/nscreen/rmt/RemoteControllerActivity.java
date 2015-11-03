@@ -9,13 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
@@ -59,7 +67,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              ImageButton                     remote_controller_genre_choice_imageButton, remote_controller_backBtn;
 
     private              TextView                        remote_controller_genre_name, remote_controller_channel_textview;
-    private              String                          sChannel;
+    private              String                          sChannel, sPower, sVolume;
+    private              Button                          remote_controller_power_button, remote_controller_volume_up_button, remote_controller_volume_down_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +92,10 @@ public class RemoteControllerActivity extends AppCompatActivity{
 
         remote_controller_genre_name               = (TextView) findViewById(R.id.remote_controller_genre_name);
         remote_controller_channel_textview         = (TextView) findViewById(R.id.remote_controller_channel_textview);
+
+        remote_controller_power_button             = (Button) findViewById(R.id.remote_controller_power_button);
+        remote_controller_volume_up_button         = (Button) findViewById(R.id.remote_controller_volume_up_button);
+        remote_controller_volume_down_button       = (Button) findViewById(R.id.remote_controller_volume_down_button);
 
         try {
             sChannel = getIntent().getExtras().getString("Channel");
@@ -111,6 +124,29 @@ public class RemoteControllerActivity extends AppCompatActivity{
         });
 
         requestGetChannelList();
+
+        remote_controller_power_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestSetRemotePowerControl(sPower);
+            }
+        });
+
+        remote_controller_volume_down_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sVolume = "DN";
+                requestSetRemoteVolumeControl(sVolume);
+            }
+        });
+
+        remote_controller_volume_up_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sVolume = "UP";
+                requestSetRemoteVolumeControl(sVolume);
+            }
+        });
     }
 
     private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
@@ -129,7 +165,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
     };
 
     private void requestSetRemoteChannelControl(String sChannelNumber) {
-        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String tk   = mPref.getWebhasTerminalKey();
@@ -139,22 +175,25 @@ public class RemoteControllerActivity extends AppCompatActivity{
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
-                // mProgressDialog.dismiss();
-                AlertDialog.Builder alert = new AlertDialog.Builder(RemoteControllerActivity.this);
-                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); //닫기
-                    }
-                });
-                alert.setMessage(sChannel + "번이 선택되었습니다.");
-                alert.show();
+                mProgressDialog.dismiss();
+
                 remote_controller_channel_textview.setText(sChannel + "번");
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -261,5 +300,90 @@ public class RemoteControllerActivity extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void requestSetRemotePowerControl(String power) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemotePowerControl()"); }
+        String uuid  = mPref.getValue(JYSharedPreferences.UUID, "");
+        String tk    = mPref.getWebhasTerminalKey();
+        String url   = mPref.getRumpersServerUrl() + "/SetRemotePowerControl.asp?Version=1&deviceId=" + uuid + "&terminalKey=" + tk + "&power=" + power;
+
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                mProgressDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void requestSetRemoteVolumeControl(String volume) {
+
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteVolumeControl()"); }
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String tk   = mPref.getWebhasTerminalKey();
+        String url  = mPref.getRumpersServerUrl() + "/SetRemoteVolumeControl.asp?deviceId=" + uuid + "&version=1&terminalKey=" + tk + "&volume=" + volume;
+
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                mProgressDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
     }
 }
