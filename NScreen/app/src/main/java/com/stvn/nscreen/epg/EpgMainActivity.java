@@ -67,7 +67,7 @@ public class EpgMainActivity extends AppCompatActivity {
 
         if ( mPref.isLogging() ) { Log.d(tag, "onCreate()"); }
 
-        mAdapter  = new EpgMainListViewAdapter(this, null);
+        mAdapter      = new EpgMainListViewAdapter(this, null);
         // for test
 //        for ( int i = 0; i < 1000; i++ ) {
 //            String sChannel        = String.format("%02d", i);
@@ -75,7 +75,7 @@ public class EpgMainActivity extends AppCompatActivity {
 //            mAdapter.addItem(obj);
 //        }
 
-        mListView = (ListView)findViewById(R.id.epg_main_listview);
+        mListView    = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(mItemClickListener);
 
@@ -83,7 +83,7 @@ public class EpgMainActivity extends AppCompatActivity {
         epg_main_backBtn                  = (ImageButton) findViewById(R.id.epg_main_backBtn);
 
         epg_main_genre_name               = (TextView) findViewById(R.id.epg_main_genre_name);
-        epg_main_textview_program_time = (TextView) findViewById(R.id.epg_main_textview_program_time);
+        epg_main_textview_program_time    = (TextView) findViewById(R.id.epg_main_textview_program_time);
 
         try {
             epg_main_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
@@ -115,12 +115,12 @@ public class EpgMainActivity extends AppCompatActivity {
             ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
 
             try {
-                JSONObject jo = new JSONObject(dobj.sJson);
-                String sChannelNumber  = jo.getString("channelNumber");
-                String sChannelName    = jo.getString("channelName");
-                String sChannelLogoImg = jo.getString("channelLogoImg");
+                JSONObject jo              = new JSONObject(dobj.sJson);
+                String     sChannelNumber  = jo.getString("channelNumber");
+                String     sChannelName    = jo.getString("channelName");
+                String     sChannelLogoImg = jo.getString("channelLogoImg");
 
-                Intent intent = new Intent(mInstance, EpgSubActivity.class);
+                Intent     intent          = new Intent(mInstance, EpgSubActivity.class);
                 intent.putExtra("channelNumber", sChannelNumber);
                 intent.putExtra("channelName", sChannelName);
                 intent.putExtra("channelLogoImg", sChannelLogoImg);

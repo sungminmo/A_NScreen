@@ -24,7 +24,7 @@ public class EpgChoiceActivity extends Activity {
 
     private              ImageButton            epg_choice_close_imageButton;
 
-    private Button epg_choice_genre_all_button, epg_choice_genre_like_button, epg_choice_genre_one_button, epg_choice_genre_two_button, epg_choice_genre_three_button, epg_choice_genre_four_button, epg_choice_genre_five_button, epg_choice_genre_six_button, epg_choice_genre_seven_button, epg_choice_genre_eight_button, epg_choice_genre_nine_button;
+    private              Button                 epg_choice_genre_all_button, epg_choice_genre_like_button, epg_choice_genre_one_button, epg_choice_genre_two_button, epg_choice_genre_three_button, epg_choice_genre_four_button, epg_choice_genre_five_button, epg_choice_genre_six_button, epg_choice_genre_seven_button, epg_choice_genre_eight_button, epg_choice_genre_nine_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +37,19 @@ public class EpgChoiceActivity extends Activity {
         mPref     = new JYSharedPreferences(this);
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
-        epg_choice_close_imageButton = (ImageButton) findViewById(R.id.epg_choice_close_imageButton);
+        epg_choice_close_imageButton  = (ImageButton) findViewById(R.id.epg_choice_close_imageButton);
 
-        epg_choice_genre_all_button = (Button) findViewById(R.id.epg_choice_genre_all_button);
-        epg_choice_genre_like_button = (Button) findViewById(R.id.epg_choice_genre_like_button);
-        epg_choice_genre_one_button = (Button) findViewById(R.id.epg_choice_genre_one_button);
-        epg_choice_genre_two_button = (Button) findViewById(R.id.epg_choice_genre_two_button);
+        epg_choice_genre_all_button   = (Button) findViewById(R.id.epg_choice_genre_all_button);
+        epg_choice_genre_like_button  = (Button) findViewById(R.id.epg_choice_genre_like_button);
+        epg_choice_genre_one_button   = (Button) findViewById(R.id.epg_choice_genre_one_button);
+        epg_choice_genre_two_button   = (Button) findViewById(R.id.epg_choice_genre_two_button);
         epg_choice_genre_three_button = (Button) findViewById(R.id.epg_choice_genre_three_button);
-        epg_choice_genre_four_button = (Button) findViewById(R.id.epg_choice_genre_four_button);
-        epg_choice_genre_five_button = (Button) findViewById(R.id.epg_choice_genre_five_button);
-        epg_choice_genre_six_button = (Button) findViewById(R.id.epg_choice_genre_six_button);
+        epg_choice_genre_four_button  = (Button) findViewById(R.id.epg_choice_genre_four_button);
+        epg_choice_genre_five_button  = (Button) findViewById(R.id.epg_choice_genre_five_button);
+        epg_choice_genre_six_button   = (Button) findViewById(R.id.epg_choice_genre_six_button);
         epg_choice_genre_seven_button = (Button) findViewById(R.id.epg_choice_genre_seven_button);
         epg_choice_genre_eight_button = (Button) findViewById(R.id.epg_choice_genre_eight_button);
-        epg_choice_genre_nine_button = (Button) findViewById(R.id.epg_choice_genre_nine_button);
+        epg_choice_genre_nine_button  = (Button) findViewById(R.id.epg_choice_genre_nine_button);
 
         epg_choice_genre_all_button.setOnClickListener(new View.OnClickListener() {
             @Override

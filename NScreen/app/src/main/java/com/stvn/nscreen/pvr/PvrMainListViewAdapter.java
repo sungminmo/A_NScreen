@@ -41,8 +41,8 @@ public class PvrMainListViewAdapter extends BaseAdapter {
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
-        this.mRequestQueue = Volley.newRequestQueue(mContext);
-        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+        this.mRequestQueue    = Volley.newRequestQueue(mContext);
+        this.mImageLoader     = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
@@ -75,11 +75,11 @@ public class PvrMainListViewAdapter extends BaseAdapter {
         }
 
         try {
-            ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
-            JSONObject         jobj         = new JSONObject(dobj.sJson);
+            ListViewDataObject dobj          = (ListViewDataObject)getItem(position);
+            JSONObject         jobj          = new JSONObject(dobj.sJson);
 
-            TextView  titleTextView         = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
-            NetworkImageView channelLogo = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
+            TextView           titleTextView = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
+            NetworkImageView   channelLogo   = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
 
             titleTextView.setText(jobj.getString("ProgramName"));
             channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);

@@ -74,22 +74,15 @@ public class RemoteControllerActivity extends AppCompatActivity{
 
         mAdapter = new RemoteControllerListViewAdapter(this, null);
 
-        // for test
-//        for (int i = 0; i < 1000; i++) {
-//            String sChannel        = String.format("%02d", i);
-//            ListViewDataObject obj = new ListViewDataObject(0, 0, "{\"channelNumber\":\"" + sChannel + "\",\"title\":\"전국 노래자랑 광진구편 초대가수 임석원 사회 송해\"}");
-//            mAdapter.addItem(obj);
-//        }
-
         mListView = (ListView)findViewById(R.id.remote_controller_listview);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(mItemClickListener);
 
         remote_controller_genre_choice_imageButton = (ImageButton) findViewById(R.id.remote_controller_genre_choice_imageButton);
-        remote_controller_backBtn = (ImageButton) findViewById(R.id.remote_controller_backBtn);
+        remote_controller_backBtn                  = (ImageButton) findViewById(R.id.remote_controller_backBtn);
 
-        remote_controller_genre_name = (TextView) findViewById(R.id.remote_controller_genre_name);
-        remote_controller_channel_textview = (TextView) findViewById(R.id.remote_controller_channel_textview);
+        remote_controller_genre_name               = (TextView) findViewById(R.id.remote_controller_genre_name);
+        remote_controller_channel_textview         = (TextView) findViewById(R.id.remote_controller_channel_textview);
 
         try {
             sChannel = getIntent().getExtras().getString("Channel");

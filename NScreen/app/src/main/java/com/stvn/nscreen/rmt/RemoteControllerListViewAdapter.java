@@ -46,8 +46,8 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
-        this.mRequestQueue = Volley.newRequestQueue(mContext);
-        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+        this.mRequestQueue    = Volley.newRequestQueue(mContext);
+        this.mImageLoader     = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
@@ -80,22 +80,20 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
         }
 
         try {
-            ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
-            JSONObject         jobj         = new JSONObject(dobj.sJson);
+            ListViewDataObject dobj                  = (ListViewDataObject)getItem(position);
+            JSONObject         jobj                  = new JSONObject(dobj.sJson);
 
-            String sProgramAge  = jobj.getString("channelProgramGrade");
-            String sChannelInfo = jobj.getString("channelInfo");
+            String             sProgramAge           = jobj.getString("channelProgramGrade");
+            String             sChannelInfo          = jobj.getString("channelInfo");
 
-            NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.remote_imageview_channel_logo);
+            NetworkImageView   channelLogo           = (NetworkImageView) ViewHolder.get(convertView, R.id.remote_imageview_channel_logo);
 
-            ImageView programAge  = ViewHolder.get(convertView, R.id.remote_imageview_program_age);
-            ImageView Info        = ViewHolder.get(convertView, R.id.remote_imageview_program_hdsd);
-            ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
-            TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.remote_textview_channel_number);
-            TextView  titleTextView         = ViewHolder.get(convertView, R.id.remote_textview_program_title);
-            TextView programTimeTextView = ViewHolder.get(convertView, R.id.remote_textview_program_time);
-
-
+            ImageView          programAge            = ViewHolder.get(convertView, R.id.remote_imageview_program_age);
+            ImageView          Info                  = ViewHolder.get(convertView, R.id.remote_imageview_program_hdsd);
+            ImageView          favoriteImageView     = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
+            TextView           channelNumberTextView = ViewHolder.get(convertView, R.id.remote_textview_channel_number);
+            TextView           titleTextView         = ViewHolder.get(convertView, R.id.remote_textview_program_title);
+            TextView          programTimeTextView    = ViewHolder.get(convertView, R.id.remote_textview_program_time);
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
@@ -118,7 +116,6 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             } else if ("HD".equals(sChannelInfo) || "SD,HD".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_hd);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

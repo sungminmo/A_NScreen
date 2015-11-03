@@ -22,9 +22,9 @@ import java.util.ArrayList;
 public class PvrSubListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = PvrSubListViewAdapter.class.getSimpleName();
-    private Context mContext         = null;
+    private              Context                       mContext         = null;
     private              View.OnClickListener          mOnClickListener = null;
-    private ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
+    private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
     public PvrSubListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
@@ -55,10 +55,10 @@ public class PvrSubListViewAdapter extends BaseAdapter {
         }
 
         try {
-            ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
-            JSONObject jobj         = new JSONObject(dobj.sJson);
+            ListViewDataObject dobj           = (ListViewDataObject)getItem(position);
+            JSONObject         jobj           = new JSONObject(dobj.sJson);
 
-            TextView titleTextView         = ViewHolder.get(convertView, R.id.pvr_sub_textview_program_title);
+            TextView           titleTextView  = ViewHolder.get(convertView, R.id.pvr_sub_textview_program_title);
 
             titleTextView.setText(jobj.getString("title"));
 

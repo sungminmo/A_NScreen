@@ -62,10 +62,10 @@ public class EpgSubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epg_sub);
 
-        mInstance = this;
-        mPref     = new JYSharedPreferences(this);
-        mRequestQueue = Volley.newRequestQueue(this);
-        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+        mInstance               = this;
+        mPref                   = new JYSharedPreferences(this);
+        mRequestQueue           = Volley.newRequestQueue(this);
+        this.mImageLoader       = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
@@ -75,14 +75,14 @@ public class EpgSubActivity extends AppCompatActivity {
             }
         });
 
-        sChannelNumber = getIntent().getExtras().getString("channelNumber");
-        sChannelName = getIntent().getExtras().getString("channelName");
-        sChannelLogoImg = getIntent().getExtras().getString("channelLogoImg");
+        sChannelNumber         = getIntent().getExtras().getString("channelNumber");
+        sChannelName           = getIntent().getExtras().getString("channelName");
+        sChannelLogoImg        = getIntent().getExtras().getString("channelLogoImg");
 
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
-        epg_sub_channelNumber = (TextView) findViewById(R.id.epg_sub_channelNumber);
-        epg_sub_channelName   = (TextView) findViewById(R.id.epg_sub_channelName);
+        epg_sub_channelNumber  = (TextView) findViewById(R.id.epg_sub_channelNumber);
+        epg_sub_channelName    = (TextView) findViewById(R.id.epg_sub_channelName);
         epg_sub_channelLogoImg = (NetworkImageView) findViewById(R.id.epg_sub_imageview_channel_logo);
 
         epg_sub_channelNumber.setText("CH." + sChannelNumber);
@@ -90,22 +90,16 @@ public class EpgSubActivity extends AppCompatActivity {
 
         epg_sub_channelLogoImg.setImageUrl(sChannelLogoImg, mImageLoader);
 
-        mAdapter = new EpgSubListViewAdapter(this, null);
-          // for test
-//        for (int i = 0; i < 1000; i++) {
-//            String sChannel        = String.format("%02d", i);
-//            ListViewDataObject obj = new ListViewDataObject(0, 0, "{\"channelNumber\":\"" + sChannel + "\",\"title\":\"전국 노래자랑 광진구편 초대가수 임석원 사회 송해\"}");
-//            mAdapter.addItem(obj);
-//        }
+        mAdapter              = new EpgSubListViewAdapter(this, null);
 
-        mListView = (ListView)findViewById(R.id.epg_sub_listview);
+        mListView             = (ListView)findViewById(R.id.epg_sub_listview);
         mListView.setAdapter(mAdapter);
 
         requestGetChannelList();
     }
 
     private void requestGetChannelList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
         String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=" + sChannelNumber + "&dateIndex=6&areaCode=0";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
@@ -137,7 +131,7 @@ public class EpgSubActivity extends AppCompatActivity {
     }
 
     private void parseGetChannelList(String response) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder        sb      = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
             factory = XmlPullParserFactory.newInstance();

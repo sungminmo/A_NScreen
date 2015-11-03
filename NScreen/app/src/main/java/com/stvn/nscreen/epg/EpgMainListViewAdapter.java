@@ -45,8 +45,8 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
-        this.mRequestQueue = Volley.newRequestQueue(mContext);
-        this.mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+        this.mRequestQueue    = Volley.newRequestQueue(mContext);
+        this.mImageLoader     = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
@@ -78,32 +78,31 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_main, parent, false);
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat formatter2 = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
 
         try {
-            ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
-            JSONObject         jobj         = new JSONObject(dobj.sJson);
+            ListViewDataObject dobj                    = (ListViewDataObject)getItem(position);
+            JSONObject         jobj                    = new JSONObject(dobj.sJson);
 
-            String sProgramAge  = jobj.getString("channelProgramGrade");
-            String sChannelInfo = jobj.getString("channelInfo");
-            String ProgramOnAirStartTime = jobj.getString("channelProgramOnAirStartTime");
-            String ProgramOnAirEndTime = jobj.getString("channelProgramOnAirEndTime");
+            String             sProgramAge             = jobj.getString("channelProgramGrade");
+            String             sChannelInfo            = jobj.getString("channelInfo");
+            String             ProgramOnAirStartTime   = jobj.getString("channelProgramOnAirStartTime");
+            String             ProgramOnAirEndTime     = jobj.getString("channelProgramOnAirEndTime");
 
-            // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
-            NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
+            NetworkImageView   channelLogo             = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
 
-            ImageView programAge  = ViewHolder.get(convertView, R.id.epg_main_imageview_program_age);
-            ImageView Info        = ViewHolder.get(convertView, R.id.epg_main_imageview_program_hdsd);
-            ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
-            TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
-            TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
-            TextView channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
+            ImageView          programAge              = ViewHolder.get(convertView, R.id.epg_main_imageview_program_age);
+            ImageView          Info                    = ViewHolder.get(convertView, R.id.epg_main_imageview_program_hdsd);
+            ImageView          favoriteImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
+            TextView           channelNumberTextView   = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
+            TextView           titleTextView           = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
+            TextView           channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
 
-            Date dt1 = formatter.parse(ProgramOnAirStartTime);
-            Date dt2 = formatter.parse(ProgramOnAirEndTime);
-            String str1 = formatter2.format(dt1).toString();
-            String str2 = formatter2.format(dt2).toString();
+            Date               dt1                     = formatter.parse(ProgramOnAirStartTime);
+            Date               dt2                     = formatter.parse(ProgramOnAirEndTime);
+            String             str1                    = formatter2.format(dt1).toString();
+            String             str2                    = formatter2.format(dt2).toString();
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));

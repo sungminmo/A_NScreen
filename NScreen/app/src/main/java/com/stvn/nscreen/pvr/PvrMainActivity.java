@@ -69,20 +69,20 @@ public class PvrMainActivity extends AppCompatActivity {
             }
         });
 
-        mInstance = this;
-        mPref     = new JYSharedPreferences(this);
+        mInstance     = this;
+        mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
-        mAdapter  = new PvrMainListViewAdapter(this, null);
+        mAdapter      = new PvrMainListViewAdapter(this, null);
 
-        button1 = (Button) findViewById(R.id.button1);
-        button2 = (Button) findViewById(R.id.button2);
+        button1       = (Button) findViewById(R.id.button1);
+        button2       = (Button) findViewById(R.id.button2);
 
-        textView2 = (TextView) findViewById(R.id.textView2);
-        textView7 = (TextView) findViewById(R.id.textView7);
+        textView2     = (TextView) findViewById(R.id.textView2);
+        textView7     = (TextView) findViewById(R.id.textView7);
 
-        mListView = (ListView)findViewById(R.id.pvr_main_listview);
+        mListView     = (ListView)findViewById(R.id.pvr_main_listview);
         mListView.setAdapter(mAdapter);
 
         button1.setOnClickListener(new View.OnClickListener() {
@@ -109,11 +109,11 @@ public class PvrMainActivity extends AppCompatActivity {
     }
 
     private void requestGetRecordReservelist() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
-        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
-        String tk   = mPref.getWebhasTerminalKey();
-        String url  = mPref.getRumpersServerUrl() + "/getrecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
+        String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
+        String          tk      = mPref.getWebhasTerminalKey();
+        String          url     = mPref.getRumpersServerUrl() + "/getrecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -142,7 +142,7 @@ public class PvrMainActivity extends AppCompatActivity {
     }
 
     private void parseGetRecordReservelist(String response) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder        sb      = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
             factory = XmlPullParserFactory.newInstance();
@@ -179,11 +179,11 @@ public class PvrMainActivity extends AppCompatActivity {
     }
 
     private void requestGetrecordlist() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetrecordlist()"); }
-        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
-        String tk   = mPref.getWebhasTerminalKey();
-        String url  = mPref.getRumpersServerUrl() + "/getrecordlist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
+        String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
+        String          tk      = mPref.getWebhasTerminalKey();
+        String          url     = mPref.getRumpersServerUrl() + "/getrecordlist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -212,7 +212,7 @@ public class PvrMainActivity extends AppCompatActivity {
     }
 
     private void parseGetrecordlist(String response) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder        sb      = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
             factory = XmlPullParserFactory.newInstance();

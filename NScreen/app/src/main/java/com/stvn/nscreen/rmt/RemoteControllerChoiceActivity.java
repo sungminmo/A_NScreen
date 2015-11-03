@@ -41,19 +41,19 @@ public class RemoteControllerChoiceActivity extends Activity {
         mPref     = new JYSharedPreferences(this);
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
-        remote_controller_choice_close_imageButton = (ImageButton) findViewById(R.id.remote_controller_choice_close_imageButton);
+        remote_controller_choice_close_imageButton  = (ImageButton) findViewById(R.id.remote_controller_choice_close_imageButton);
 
-        remote_controller_choice_genre_all_button = (Button) findViewById(R.id.remote_controller_choice_genre_all_button);
-        remote_controller_choice_genre_like_button = (Button) findViewById(R.id.remote_controller_choice_genre_like_button);
-        remote_controller_choice_genre_one_button = (Button) findViewById(R.id.remote_controller_choice_genre_one_button);
-        remote_controller_choice_genre_two_button = (Button) findViewById(R.id.remote_controller_choice_genre_two_button);
+        remote_controller_choice_genre_all_button   = (Button) findViewById(R.id.remote_controller_choice_genre_all_button);
+        remote_controller_choice_genre_like_button  = (Button) findViewById(R.id.remote_controller_choice_genre_like_button);
+        remote_controller_choice_genre_one_button   = (Button) findViewById(R.id.remote_controller_choice_genre_one_button);
+        remote_controller_choice_genre_two_button   = (Button) findViewById(R.id.remote_controller_choice_genre_two_button);
         remote_controller_choice_genre_three_button = (Button) findViewById(R.id.remote_controller_choice_genre_three_button);
-        remote_controller_choice_genre_four_button = (Button) findViewById(R.id.remote_controller_choice_genre_four_button);
-        remote_controller_choice_genre_five_button = (Button) findViewById(R.id.remote_controller_choice_genre_five_button);
-        remote_controller_choice_genre_six_button = (Button) findViewById(R.id.remote_controller_choice_genre_six_button);
+        remote_controller_choice_genre_four_button  = (Button) findViewById(R.id.remote_controller_choice_genre_four_button);
+        remote_controller_choice_genre_five_button  = (Button) findViewById(R.id.remote_controller_choice_genre_five_button);
+        remote_controller_choice_genre_six_button   = (Button) findViewById(R.id.remote_controller_choice_genre_six_button);
         remote_controller_choice_genre_seven_button = (Button) findViewById(R.id.remote_controller_choice_genre_seven_button);
         remote_controller_choice_genre_eight_button = (Button) findViewById(R.id.remote_controller_choice_genre_eight_button);
-        remote_controller_choice_genre_nine_button = (Button) findViewById(R.id.remote_controller_choice_genre_nine_button);
+        remote_controller_choice_genre_nine_button  = (Button) findViewById(R.id.remote_controller_choice_genre_nine_button);
 
         remote_controller_choice_genre_all_button.setOnClickListener(new View.OnClickListener() {
             @Override
