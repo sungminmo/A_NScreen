@@ -81,7 +81,7 @@ public class PvrMainActivity extends AppCompatActivity {
 
         textView2 = (TextView) findViewById(R.id.textView2);
         textView7 = (TextView) findViewById(R.id.textView7);
-
+        
         mListView = (ListView)findViewById(R.id.pvr_main_listview);
         mListView.setAdapter(mAdapter);
 
@@ -90,8 +90,8 @@ public class PvrMainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 button1.setSelected(true);
                 button2.setSelected(false);
-                textView2.setVisibility(View.VISIBLE);
-                textView7.setVisibility(View.GONE);
+                textView2.setVisibility(View.GONE);
+                textView7.setVisibility(View.VISIBLE);
                 requestGetRecordReservelist();
             }
         });
@@ -101,8 +101,8 @@ public class PvrMainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 button1.setSelected(false);
                 button2.setSelected(true);
-                textView2.setVisibility(View.GONE);
-                textView7.setVisibility(View.VISIBLE);
+                textView2.setVisibility(View.VISIBLE);
+                textView7.setVisibility(View.GONE);
                 requestGetrecordlist();
             }
         }); {
