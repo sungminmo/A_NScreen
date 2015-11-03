@@ -133,7 +133,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String tk   = mPref.getWebhasTerminalKey();
-        String url  = mPref.getRumpersServerUrl() + "/dev.SetRemoteChannelControl.asp?deviceId=" + uuid + "&channelId=" + sChannelNumber + "&version=1&terminalKey=" + tk;
+        String url  = mPref.getRumpersServerUrl() + "/SetRemoteChannelControl.asp?deviceId=" + uuid + "&channelId=" + sChannelNumber + "&version=1&terminalKey=" + tk;
         sChannel = sChannelNumber;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override

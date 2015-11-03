@@ -79,12 +79,17 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_remote_controller, parent, false);
         }
 
+        SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
+
         try {
             ListViewDataObject dobj                  = (ListViewDataObject)getItem(position);
             JSONObject         jobj                  = new JSONObject(dobj.sJson);
 
             String             sProgramAge           = jobj.getString("channelProgramGrade");
             String             sChannelInfo          = jobj.getString("channelInfo");
+            String             ProgramOnAirStartTime   = jobj.getString("channelProgramOnAirStartTime");
+            String             ProgramOnAirEndTime     = jobj.getString("channelProgramOnAirEndTime");
 
             NetworkImageView   channelLogo           = (NetworkImageView) ViewHolder.get(convertView, R.id.remote_imageview_channel_logo);
 
@@ -93,11 +98,17 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             ImageView          favoriteImageView     = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
             TextView           channelNumberTextView = ViewHolder.get(convertView, R.id.remote_textview_channel_number);
             TextView           titleTextView         = ViewHolder.get(convertView, R.id.remote_textview_program_title);
-            TextView          programTimeTextView    = ViewHolder.get(convertView, R.id.remote_textview_program_time);
+            TextView           programTimeTextView    = ViewHolder.get(convertView, R.id.remote_textview_program_time);
+
+            Date               dt1                     = formatter.parse(ProgramOnAirStartTime);
+            Date               dt2                     = formatter.parse(ProgramOnAirEndTime);
+            String             str1                    = formatter2.format(dt1).toString();
+            String             str2                    = formatter2.format(dt2).toString();
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+            programTimeTextView.setText(str1 + "~" + str2);
 
             if ( "모두 시청".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_all);
@@ -117,6 +128,8 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
                 Info.setImageResource(R.mipmap.btn_size_hd);
             }
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return convertView;
