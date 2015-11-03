@@ -21,7 +21,10 @@ import com.stvn.nscreen.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by swlim on 2015. 9. 11..
@@ -75,12 +78,17 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_main, parent, false);
         }
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter2 = new SimpleDateFormat("HH:mm");
+
         try {
             ListViewDataObject dobj         = (ListViewDataObject)getItem(position);
             JSONObject         jobj         = new JSONObject(dobj.sJson);
 
             String sProgramAge  = jobj.getString("channelProgramGrade");
             String sChannelInfo = jobj.getString("channelInfo");
+            String ProgramOnAirStartTime = jobj.getString("channelProgramOnAirStartTime");
+            String ProgramOnAirEndTime = jobj.getString("channelProgramOnAirEndTime");
 
             // ImageView channelLogo = (NetworkImageView)convertView.findViewById(R.id.epg_main_imagebutton_channel_logo);
             NetworkImageView channelLogo = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
@@ -90,12 +98,18 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             ImageView favoriteImageView     = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             TextView  channelNumberTextView = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView  titleTextView         = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
+            TextView channelProgramOnAirStartTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
 
-            //ViewHolder.channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+            Date dt1 = formatter.parse(ProgramOnAirStartTime);
+            Date dt2 = formatter.parse(ProgramOnAirEndTime);
+            String str1 = formatter2.format(dt1).toString();
+            String str2 = formatter2.format(dt2).toString();
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
+            channelProgramOnAirStartTime.setText(str1 + "~" + str2);
+
             if ( "모두 시청".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_all);
             } else if ("7세 이상".equals(sProgramAge) ) {
@@ -114,6 +128,8 @@ public class EpgMainListViewAdapter extends BaseAdapter {
                 Info.setImageResource(R.mipmap.btn_size_hd);
             }
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return convertView;

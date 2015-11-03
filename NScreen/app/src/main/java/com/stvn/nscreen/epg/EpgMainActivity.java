@@ -54,7 +54,7 @@ public class EpgMainActivity extends AppCompatActivity {
 
     private              ImageButton            epg_main_genre_choice_imageButton, epg_main_backBtn;
 
-    private              TextView               epg_main_genre_name;
+    private              TextView               epg_main_genre_name, epg_main_textview_program_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,7 @@ public class EpgMainActivity extends AppCompatActivity {
         epg_main_backBtn                  = (ImageButton) findViewById(R.id.epg_main_backBtn);
 
         epg_main_genre_name               = (TextView) findViewById(R.id.epg_main_genre_name);
+        epg_main_textview_program_time = (TextView) findViewById(R.id.epg_main_textview_program_time);
 
         try {
             epg_main_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
@@ -113,17 +114,12 @@ public class EpgMainActivity extends AppCompatActivity {
             Log.d(tag, "mItemClickListener() " + position);
             ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
-            SimpleDateFormat formatter2 = new SimpleDateFormat("h:mm");
-
             try {
                 JSONObject jo = new JSONObject(dobj.sJson);
                 String sChannelNumber  = jo.getString("channelNumber");
                 String sChannelName    = jo.getString("channelName");
                 String sChannelLogoImg = jo.getString("channelLogoImg");
-                String sChannelProgramOnAirStartTime = jo.getString("channelProgramOnAirStartTime");
-                Date dt = formatter.parse(sChannelProgramOnAirStartTime);
-                String str = formatter2.format(dt).toString();
+
                 Intent intent = new Intent(mInstance, EpgSubActivity.class);
                 intent.putExtra("channelNumber", sChannelNumber);
                 intent.putExtra("channelName", sChannelName);
@@ -131,8 +127,6 @@ public class EpgMainActivity extends AppCompatActivity {
 
                 startActivity(intent);
             } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
