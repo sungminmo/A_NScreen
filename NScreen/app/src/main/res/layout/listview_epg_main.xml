@@ -80,18 +80,7 @@
         android:layout_marginLeft="93.75dp"
         android:layout_marginBottom="9.75dp"
         android:layout_marginRight="50dp"
-        android:layout_gravity="bottom"
-        android:background="@drawable/progress_bg" />
-
-    <ImageView
-        android:id="@+id/epg_main_imageview_progress_curent"
-        android:layout_width="fill_parent"
-        android:layout_height="2.25dp"
-        android:layout_marginLeft="93.75dp"
-        android:layout_marginBottom="9.75dp"
-        android:layout_marginRight="200dp"
-        android:layout_gravity="bottom"
-        android:background="@drawable/progress_bar" />
+        android:layout_gravity="bottom" />
 
     <ImageView
         android:id="@+id/epg_main_imageview_more"
@@ -109,5 +98,17 @@
         android:layout_marginTop="27.75dp"
         android:layout_marginLeft="225dp"
         android:background="@mipmap/icon_record" />
+
+    <ProgressBar
+        android:layout_width="fill_parent"
+        android:layout_height="2.25dp"
+        android:id="@+id/progressBar"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="93.75dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="9.75dp"
+        android:max="100"
+        android:progress="50"
+        android:progressDrawable="@color/violet" />
 
 </FrameLayout>

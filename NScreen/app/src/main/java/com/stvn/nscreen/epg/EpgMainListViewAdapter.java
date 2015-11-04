@@ -2,12 +2,15 @@ package com.stvn.nscreen.epg;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -39,6 +42,8 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
     private              RequestQueue                  mRequestQueue;
     private              ImageLoader                   mImageLoader;
+
+    private ProgressBar progBar = null;
 
     public EpgMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
@@ -78,6 +83,8 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_main, parent, false);
         }
 
+        Date dt = new Date();
+
         SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
 
@@ -103,6 +110,19 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             Date               dt2                     = formatter.parse(ProgramOnAirEndTime);
             String             str1                    = formatter2.format(dt1).toString();
             String             str2                    = formatter2.format(dt2).toString();
+            String             str3                    = formatter2.format(dt).toString();
+
+            Integer i1 = (Integer.parseInt(str1.substring(0,2)) * 60) + (Integer.parseInt(str1.substring(3)));
+            Integer i2 = (Integer.parseInt(str2.substring(0,2)) * 60) + (Integer.parseInt(str2.substring(3)));
+            Integer i3 = (Integer.parseInt(str3.substring(0,2)) * 60) + (Integer.parseInt(str3.substring(3)));
+
+            progBar = ViewHolder.get(convertView, R.id.progressBar);
+            progBar.setMax(100);
+            if ( i3 > i1 ) {
+                progBar.setProgress((i3 - i1) / (i2 - i1));
+            } else if ( i3 <= i1 ) {
+                progBar.setProgress(0);
+            }
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
