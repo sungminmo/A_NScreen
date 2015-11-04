@@ -137,6 +137,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mList.remove(itemIndex);
+                    mListView.dismiss(itemIndex);
                     mAdapter.notifyDataSetChanged();
                 }
             });
@@ -155,6 +156,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mList.remove(itemIndex);
+                            mListView.dismiss(itemIndex);
                             mAdapter.notifyDataSetChanged();
                         }
                     }, null);
