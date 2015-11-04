@@ -51,7 +51,7 @@ public class EpgMainActivity extends AppCompatActivity {
 
     private              ImageButton            epg_main_genre_choice_imageButton, epg_main_backBtn;
 
-    private              TextView               epg_main_genre_name, epg_main_textview_program_time;
+    private              TextView               epg_main_genre_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,6 @@ public class EpgMainActivity extends AppCompatActivity {
         epg_main_backBtn                  = (ImageButton) findViewById(R.id.epg_main_backBtn);
 
         epg_main_genre_name               = (TextView) findViewById(R.id.epg_main_genre_name);
-        epg_main_textview_program_time    = (TextView) findViewById(R.id.epg_main_textview_program_time);
 
         try {
             epg_main_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
