@@ -2,6 +2,7 @@ package com.stvn.nscreen.my;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -110,27 +111,27 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 Log.d("ljh", "onClickFrontView");
             }
 
+            /**
+             * Swipe 처리 유
+             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
+             * Swipe None : SwipeListView.SWIPE_MODE_NONE
+             * */
             @Override
             public int onChangeSwipeMode(int position) {
-                int swipeMode = 0;
-                switch (position%2)
-                {
-                    case 0:// 기본설정된 Swipe모드
-                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-                        break;
-                    case 1:// Swipe None
-                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
-                        break;
-                }
-                return swipeMode;
+                return super.onChangeSwipeMode(position);
             }
 
-            @Override
+            /**
+             * 삭제 처리
+             * */
             public void onDismiss(int[] reverseSortedPositions) {
                 for (int position : reverseSortedPositions) {
                     mList.remove(position);
                 }
                 mAdapter.notifyDataSetChanged();
+
+                int count = mList.size();
+                setPurchaseListCountText(count);
             }
 
             @Override
@@ -183,7 +184,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    removeWatchList(itemIndex);
+                    mListView.dismiss(itemIndex);
                 }
             }, true);
         }
@@ -199,7 +200,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            removeWatchList(itemIndex);
+                            mListView.dismiss(itemIndex);
                         }
                     }, new DialogInterface.OnClickListener() {
                         @Override
@@ -209,16 +210,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     });
         }
 
-    }
-
-    /**
-     * 조회 목록 리스트 제거 및 화면 갱신
-     * */
-    private void removeWatchList(int itemIndex) {
-        mListView.dismiss(itemIndex);
-
-        int count = mList.size();
-        setPurchaseListCountText(count);
     }
 
     /**
@@ -236,12 +227,12 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
         mListView.closeOpenedItems();
 
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                initData();
-//            }
-//        });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initData();
+            }
+        }, 300);
     }
 
     @Override

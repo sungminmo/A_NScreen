@@ -95,27 +95,28 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                 Log.d("ljh", "onClickFrontView");
             }
 
+            /**
+             * Swipe 처리 유
+             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
+             * Swipe None : SwipeListView.SWIPE_MODE_NONE
+             * */
             @Override
             public int onChangeSwipeMode(int position) {
-                int swipeMode = 0;
-                switch (position%2)
-                {
-                    case 0:// 기본설정된 Swipe모드
-                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-                        break;
-                    case 1:// Swipe None
-                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
-                        break;
-                }
-                return swipeMode;
+                return super.onChangeSwipeMode(position);
             }
 
+            /**
+             * 삭제 처리
+             * */
             @Override
             public void onDismiss(int[] reverseSortedPositions) {
                 for (int position : reverseSortedPositions) {
                     mList.remove(position);
                 }
                 mAdapter.notifyDataSetChanged();
+
+                int count = mList.size();
+                setWatchListCountText(count);
             }
 
             @Override
@@ -160,7 +161,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
             CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    removeWatchList(itemIndex);
+                    mListView.dismiss(itemIndex);
                 }
             }, true);
         }
@@ -175,7 +176,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            removeWatchList(itemIndex);
+                            mListView.dismiss(itemIndex);
                         }
                     }, new DialogInterface.OnClickListener() {
                         @Override
@@ -185,16 +186,6 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                     });
         }
 
-    }
-
-    /**
-     * 조회 목록 리스트 제거 및 화면 갱신
-     * */
-    private void removeWatchList(int itemIndex) {
-        mListView.dismiss(itemIndex);
-
-        int count = mList.size();
-        setWatchListCountText(count);
     }
 
     @Override
