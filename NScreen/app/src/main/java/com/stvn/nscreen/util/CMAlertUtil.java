@@ -53,8 +53,14 @@ public class CMAlertUtil {
         mDialog.show();
     }
 
-    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener) {
-        CMAlertDialog mDialog = new CMAlertDialog(ctx);
+    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener, boolean isOneButton) {
+
+        CMAlertDialog.CMDialogType type = CMAlertDialog.CMDialogType.DialogType2;
+        if (isOneButton) {
+            type = CMAlertDialog.CMDialogType.DialogType4;
+        }
+
+        CMAlertDialog mDialog = new CMAlertDialog(ctx, type);
         mDialog.setTitle(title);
         mDialog.setMessage(msg1,msg2);
         mDialog.setPositiveButton("확인", listener);

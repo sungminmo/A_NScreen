@@ -7,7 +7,7 @@
     >
 
     <LinearLayout
-        android:layout_width="@dimen/dimen_320"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/type1"
@@ -110,6 +110,12 @@
             android:paddingRight="@dimen/dimen_4"
             >
             <Button
+                android:id="@+id/type2_empty_l"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:visibility="gone" />
+            <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -132,6 +138,12 @@
                 android:gravity="center"
                 android:layout_marginLeft="@dimen/dimen_4"
                 />
+            <Button
+                android:id="@+id/type2_empty_r"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

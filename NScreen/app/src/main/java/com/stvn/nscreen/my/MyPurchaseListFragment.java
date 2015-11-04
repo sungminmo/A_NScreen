@@ -152,7 +152,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     mListView.dismiss(itemIndex);
                     mAdapter.notifyDataSetChanged();
                 }
-            });
+            }, true);
         }
         // TODO:유효기간 만료가 아닐 때
         else {
