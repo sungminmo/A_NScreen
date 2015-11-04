@@ -1,8 +1,11 @@
 package com.stvn.nscreen.my;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spannable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import java.util.ArrayList;
 
@@ -59,6 +62,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             public void onOpened(int position, boolean toRight) {
                 Log.d("ljh", "onOpend");
             }
+
             @Override
             public void onClosed(int position, boolean fromRight) {
                 Log.d("ljh", "onClosed");
@@ -122,12 +126,52 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
         mAdapter.notifyDataSetChanged();
         mLockListView = false;
     }
+
+    /**
+     * 찜목록 삭제 처리
+     * TODO:해당 찜목록정보에서 유효기간 확인 후 해당 내용에 대한 처리를 한다.
+     * */
+    private void deleteDibItem(final int itemIndex) {
+//        mList.get(itemIndex);
+        // TODO:유효기간 만료 일 때
+        if (itemIndex %2 == 0) {
+            String alertTitle = getString(R.string.my_cnm_alert_title_expired);
+            String alertMessage = getString(R.string.my_cnm_alert_message_expired);
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mList.remove(itemIndex);
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+        // TODO:유효기간 만료가 아닐 때
+        else {
+            String programTitle = "프로그램타이틀";
+
+            String alertTitle = "VOD 구매목록 삭제";
+            String alertMessage1 = "선택하신 VOD를 구매목록에서 삭제하시겠습니까?";
+//            String alertMessage2 = programTitle + "\n삭제하신 VOD는 복구가 불가능합니다.";
+            Spannable alertMessage2 = (Spannable) Html.fromHtml(programTitle + "<br/><font color=\"red\">삭제하신 VOD는 복구가 불가능합니다.</font>");
+
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, "예", "아니오", true, false,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mList.remove(itemIndex);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }, null);
+        }
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.btn1:
-                Toast.makeText(getActivity(), "삭제버튼" + v.getTag().toString(), Toast.LENGTH_SHORT).show();
+                deleteDibItem((int) v.getTag());
                 break;
 
         }
