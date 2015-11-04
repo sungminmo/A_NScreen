@@ -53,7 +53,9 @@
     <dimen name="dimen_30">@dimen/dp30</dimen>
     <dimen name="dimen_30.25">@dimen/dp30.25</dimen>
     <dimen name="dimen_31">@dimen/dp31</dimen>
+    <dimen name="dimen_31.75">@dimen/dp31.75</dimen>
     <dimen name="dimen_32">@dimen/dp32</dimen>
+    <dimen name="dimen_32.25">@dimen/dp32.25</dimen>
     <dimen name="dimen_33">@dimen/dp33</dimen>
     <dimen name="dimen_33.25">@dimen/dp33.25</dimen>
     <dimen name="dimen_34">@dimen/dp34</dimen>

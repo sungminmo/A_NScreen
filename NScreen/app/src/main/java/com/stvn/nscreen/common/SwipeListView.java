@@ -681,6 +681,11 @@ public class SwipeListView extends ListView {
             touchState = TOUCH_STATE_SCROLLING_Y;
             lastMotionX = x;
             lastMotionY = y;
+
+            if(swipeListViewListener!=null)
+            {
+                swipeListViewListener.onListScrolled();
+            }
         }
     }
 

@@ -61,6 +61,8 @@
     <string name="my_cnm_purchase_tab1">모바일 구매목록</string>
     <string name="my_cnm_purchase_tab2">TV 구매목록</string>
 
+    <string name="my_cnm_alert_title_expired">VOD 유효기간 만료</string>
+    <string name="my_cnm_alert_message_expired">선택하신 VOD는 유효기간이 만료되어\n시청 및 구매가 제한된 상품입니다. 해당 VOD는 목록에서 삭제됩니다.</string>
 
     <!-- 설정 -->
     <string name="setting_content">C&amp;M 모바일 서비스를 효율적으로 이용하기 위해\n지역 설정, 인증번호관리, 성인검색 제한설정, 본인인증 기능을 제공합니다.</string>

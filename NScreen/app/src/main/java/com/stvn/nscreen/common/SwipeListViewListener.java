@@ -100,4 +100,10 @@ public interface SwipeListViewListener {
      */
     void onLastListItem();
 
+    /***
+     * User is in List Scrolled
+     */
+    void onListScrolled();
+
+
 }

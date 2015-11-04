@@ -1,5 +1,6 @@
 package com.stvn.nscreen.my;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
             public void onOpened(int position, boolean toRight) {
                 Log.d("ljh", "onOpend");
             }
+
             @Override
             public void onClosed(int position, boolean fromRight) {
                 Log.d("ljh", "onClosed");
@@ -75,6 +77,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onStartOpen(int position, int action, boolean right) {
+                mListView.closeOpenedItems();
                 Log.d("ljh", "onStartOpen");
             }
 
@@ -96,6 +99,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
             @Override
             public int onChangeSwipeMode(int position) {
 
+
                 return super.onChangeSwipeMode(position);
             }
 
@@ -105,6 +109,12 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
 //                    data.remove(position);
 //                }
                 mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onListScrolled() {
+                super.onListScrolled();
+                mListView.closeOpenedItems();
             }
 
         });
@@ -119,12 +129,53 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
         mAdapter.notifyDataSetChanged();
         mLockListView = false;
     }
+
+    /**
+     * 시청목록 삭제 처리
+     * TODO:해당 시청목록정보에서 유효기간 확인 후 해당 내용에 대한 처리를 한다.
+     * */
+    private void deleteWatchItem(final int itemIndex) {
+//        mList.get(itemIndex);
+        // TODO:유효기간 만료 일 때
+        if (itemIndex %2 == 0) {
+            String alertTitle = getString(R.string.my_cnm_alert_title_expired);
+            String alertMessage = getString(R.string.my_cnm_alert_message_expired);
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mList.remove(itemIndex);
+                    mListView.dismiss(itemIndex);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }, true);
+        }
+        // TODO:유효기간 만료가 아닐 때
+        else {
+            String programTitle = "프로그램타이틀";
+
+            String alertTitle = "VOD 시청목록 삭제";
+            String alertMessage1 = "선택하신 VOD를 시청목록에서 삭제하시겠습니까?\n" + programTitle;
+
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", "예", "아니오", true, false,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mList.remove(itemIndex);
+                            mListView.dismiss(itemIndex);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }, null);
+        }
+
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.btn1:
-                Toast.makeText(getActivity(), "삭제버튼" + v.getTag().toString(), Toast.LENGTH_SHORT).show();
+                deleteWatchItem((int) v.getTag());
                 break;
 
         }

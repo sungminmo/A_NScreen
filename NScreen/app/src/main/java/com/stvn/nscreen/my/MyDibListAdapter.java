@@ -4,19 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.common.SwipeListView;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class MyDibListAdapter extends ArrayAdapter<String> {
+public class MyDibListAdapter extends BaseAdapter {
 
 	LayoutInflater mInflater;
 	private Context mContext;
 	private View.OnClickListener mClicklitener;
+	ArrayList<String> mList = new ArrayList<String>();
 
 	public View.OnClickListener getmClicklitener() {
 		return mClicklitener;
@@ -26,12 +28,22 @@ public class MyDibListAdapter extends ArrayAdapter<String> {
 		this.mClicklitener = mClicklitener;
 	}
 
-	public MyDibListAdapter(Context context, List<String> items)
+	public MyDibListAdapter(Context context, ArrayList<String> items)
 	{
-		super(context, 0, items);
 		// TODO Auto-generated constructor stub
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
+		mList = items;
+	}
+
+	@Override
+	public int getCount() {
+		return mList.size();
+	}
+
+	@Override
+	public String getItem(int position) {
+		return mList.get(position);
 	}
 
 	@Override
@@ -55,13 +67,15 @@ public class MyDibListAdapter extends ArrayAdapter<String> {
 			holder.rowtime = (TextView)convertView.findViewById(R.id.row_time);
 			holder.rowname = (TextView)convertView.findViewById(R.id.row_name);
 			holder.btn = (Button)convertView.findViewById(R.id.btn1);
-
+			holder.btn.setText("찜해제");
 			convertView.setTag(holder);
 		}
 		else
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
+
+		((SwipeListView)parent).recycle(convertView, position);
 		String item = getItem(position);
 		holder.btn.setTag(position);
 		holder.btn.setOnClickListener(mClicklitener);

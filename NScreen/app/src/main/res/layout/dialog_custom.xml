@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/dimen_20"
-            android:paddingBottom="@dimen/dimen_20"
+            android:paddingBottom="@dimen/dimen_15"
             android:paddingLeft="@dimen/dimen_10"
             android:paddingRight="@dimen/dimen_10"
             android:id="@+id/type1_text"
@@ -81,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/dimen_10"
-            android:paddingBottom="@dimen/dimen_5"
+            android:paddingBottom="@dimen/dimen_15"
             android:paddingLeft="@dimen/dimen_5"
             android:paddingRight="@dimen/dimen_5"
             android:id="@+id/type2_text"
@@ -92,8 +92,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dimen_10"
-            android:paddingBottom="@dimen/dimen_5"
+            android:paddingBottom="@dimen/dimen_15"
             android:paddingLeft="@dimen/dimen_5"
             android:paddingRight="@dimen/dimen_5"
             android:id="@+id/type2_text2"
@@ -109,6 +108,12 @@
             android:paddingLeft="@dimen/dimen_4"
             android:paddingRight="@dimen/dimen_4"
             >
+            <Button
+                android:id="@+id/type2_empty_l"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:visibility="gone" />
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -132,6 +137,12 @@
                 android:gravity="center"
                 android:layout_marginLeft="@dimen/dimen_4"
                 />
+            <Button
+                android:id="@+id/type2_empty_r"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

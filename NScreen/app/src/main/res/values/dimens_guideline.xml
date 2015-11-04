@@ -49,7 +49,9 @@
     <dimen name="dp30">30.00dp</dimen>
     <dimen name="dp30.25">30.25dp</dimen>
     <dimen name="dp31">31.00dp</dimen>
+    <dimen name="dp31.75">31.75dp</dimen>
     <dimen name="dp32">32.00dp</dimen>
+    <dimen name="dp32.25">32.25dp</dimen>
     <dimen name="dp33">33.00dp</dimen>
     <dimen name="dp33.25">33.25dp</dimen>
     <dimen name="dp34">34.00dp</dimen>
