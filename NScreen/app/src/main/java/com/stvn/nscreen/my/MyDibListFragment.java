@@ -159,8 +159,9 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
         // TODO:유효기간 만료 일 때
         if (itemIndex %2 == 0) {
             String alertTitle = getString(R.string.my_cnm_alert_title_expired);
-            String alertMessage = getString(R.string.my_cnm_alert_message_expired);
-            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
+            String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+            String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mListView.dismiss(itemIndex);
@@ -172,9 +173,9 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             String programTitle = "프로그램타이틀";
 
             String alertTitle = "VOD 찜 목록 삭제";
-            String alertMessage1 = "선택하신 VOD를 목록에서 삭제하시겠습니까?\n" + programTitle;
+            String alertMessage = "선택하신 VOD를\n목록에서 삭제하시겠습니까?";
 
-            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", "예", "아니오", true, false,
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, programTitle, "예", "아니오", true, false,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
