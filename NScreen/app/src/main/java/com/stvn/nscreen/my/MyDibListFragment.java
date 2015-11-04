@@ -53,7 +53,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
         mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
         mAdapter = new MyDibListAdapter(getActivity(),mList);
         mAdapter.setmClicklitener(this);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(this);
 
@@ -81,6 +81,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onStartOpen(int position, int action, boolean right) {
+                mListView.closeOpenedItems();
                 Log.d("ljh", "onStartOpen");
             }
 
@@ -114,6 +115,11 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                 mAdapter.notifyDataSetChanged();
             }
 
+            @Override
+            public void onListScrolled() {
+                super.onListScrolled();
+                mListView.closeOpenedItems();
+            }
         });
     }
 
