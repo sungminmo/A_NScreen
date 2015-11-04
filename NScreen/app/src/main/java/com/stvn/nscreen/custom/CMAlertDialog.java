@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -201,6 +202,28 @@ public class CMAlertDialog extends Dialog{
     }
 
     public void setMessage(String msg1,String msg2,boolean isbold1,boolean isbold2)
+    {
+        mType2_Content1.setText(msg1);
+        mType2_Content2.setText(msg2);
+        if(isbold1)
+            mType2_Content1.setTypeface(null,Typeface.BOLD);
+        if(isbold2)
+            mType2_Content2.setTypeface(null,Typeface.BOLD);
+
+        if (mType.compareTo(CMDialogType.DialogType3) == 0) {
+            mType3_Content1.setText(msg1);
+            mType3_Content2.setText(msg2);
+
+            if (isbold1) {
+                mType3_Content1.setTypeface(null, Typeface.BOLD);
+            }
+            if (isbold2) {
+                mType3_Content2.setTypeface(null, Typeface.BOLD);
+            }
+        }
+    }
+
+    public void setMessage(String msg1,Spannable msg2,boolean isbold1,boolean isbold2)
     {
         mType2_Content1.setText(msg1);
         mType2_Content2.setText(msg2);
