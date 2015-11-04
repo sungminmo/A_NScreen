@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -35,8 +36,16 @@ public class CMAlertDialog extends Dialog{
     private CMDialogType mType;
     private int mType3_min_length, mType3_max_length;
     private String mType3_Field_Text;
+
+    /**
+     * DialogType1 : 확인 또는 취소 버튼 없이 우측 상단 X 버튼만 가지는 다이얼로그
+     * DialogType2 : 확인 취소 버튼을 가지는 다이얼로그
+     * DialogType3 : 입력박스 및 확인 취소 버튼을 가지는 다이얼로그
+     * DialogType4 : 확인 버튼을 가지는 다이얼로그
+     */
+
     public enum CMDialogType{
-        DialogType1, DialogType2, DialogType3
+        DialogType1, DialogType2, DialogType3, DialogType4
     };
 
 
@@ -106,6 +115,19 @@ public class CMAlertDialog extends Dialog{
                     }
                 });
                 break;
+            case DialogType4:
+                mType1.setVisibility(View.GONE);
+                mType2.setVisibility(View.VISIBLE);
+                mType2_Ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+                mType2_Cancel.setVisibility(View.GONE);
+                findViewById(R.id.type2_empty_l).setVisibility(View.INVISIBLE);
+                findViewById(R.id.type2_empty_r).setVisibility(View.INVISIBLE);
+                break;
             case DialogType3:
                 mType1.setVisibility(View.GONE);
                 mType2.setVisibility(View.GONE);
@@ -149,7 +171,7 @@ public class CMAlertDialog extends Dialog{
             case DialogType1:
                 mType1_Title.setText(title);
                 break;
-            case DialogType2:
+            case DialogType2: case DialogType4:
                 mType2_Title.setText(title);
                 break;
             case DialogType3:
@@ -160,11 +182,21 @@ public class CMAlertDialog extends Dialog{
 
     public void setMessage(String msg1,String msg2) {
         mType2_Content1.setText(msg1);
-        mType2_Content2.setText(msg2);
+
+        if (TextUtils.isEmpty(msg2)) {
+            mType2_Content2.setVisibility(View.GONE);
+        } else {
+            mType2_Content2.setText(msg2);
+        }
 
         if (mType == CMDialogType.DialogType3) {
             mType3_Content1.setText(msg1);
-            mType3_Content2.setText(msg2);
+
+            if (TextUtils.isEmpty(msg2)) {
+                mType3_Content2.setVisibility(View.GONE);
+            } else {
+                mType3_Content2.setText(msg2);
+            }
         }
     }
 
