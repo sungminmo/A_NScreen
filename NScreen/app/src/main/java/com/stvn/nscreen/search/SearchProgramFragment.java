@@ -97,10 +97,12 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             @Override
             public void onMove(int position, float x) {
                 Log.d("ljh", "onMove");
+
             }
 
             @Override
             public void onStartOpen(int position, int action, boolean right) {
+                mListView.closeOpenedItems();
                 Log.d("ljh", "onStartOpen");
             }
 
@@ -121,8 +123,17 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
             @Override
             public int onChangeSwipeMode(int position) {
-
-                return super.onChangeSwipeMode(position);
+                int swipeMode = 0;
+                switch (position%2)
+                {
+                    case 0:// 기본설정된 Swipe모드
+                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
+                        break;
+                    case 1:// Swipe None
+                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
+                        break;
+                }
+                return swipeMode;
             }
 
             @Override
@@ -131,6 +142,12 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 //                    data.remove(position);
 //                }
                 mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onListScrolled() {
+                super.onListScrolled();
+                mListView.closeOpenedItems();
             }
 
         });
