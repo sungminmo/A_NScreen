@@ -55,11 +55,13 @@ public class CMAlertDialog extends Dialog{
         super(context, R.style.CustomAlertDialog);
         setContentView(R.layout.dialog_custom);
         mType = CMDialogType.DialogType2;
+        setCancelable(false);
         initView();
     }
     public CMAlertDialog(Context context,CMDialogType type) {
         super(context, R.style.CustomAlertDialog);
         setContentView(R.layout.dialog_custom);
+        setCancelable(false);
         mType = type;
         initView();
     }

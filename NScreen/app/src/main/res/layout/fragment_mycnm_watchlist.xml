@@ -27,6 +27,7 @@
         android:listSelector="@color/colore4d8f2"
         swipe:swipeBackView="@+id/back"
         swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeOpenOnLongPress="false"
         swipe:swipeFrontView="@+id/front"
         swipe:swipeMode="left"
         swipe:swipeOffsetLeft="@dimen/dimen_250" />

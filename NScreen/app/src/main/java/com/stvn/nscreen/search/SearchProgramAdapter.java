@@ -18,6 +18,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchDataObject;
+import com.stvn.nscreen.common.SwipeListView;
 import com.stvn.nscreen.util.CMUtil;
 
 import java.util.List;
@@ -79,6 +80,8 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchDataObject> {
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
+
+		((SwipeListView)parent).recycle(convertView, position);
 		SearchDataObject item = getItem(position);
 		holder.chlogo.setImageUrl(item.getChannelLogoImg(), mImageLoader);
 		holder.chaaneltext.setText(item.getChannelNumber());
