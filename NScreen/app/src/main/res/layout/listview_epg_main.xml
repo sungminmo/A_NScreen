@@ -4,13 +4,20 @@
     android:layout_height="58dp"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageButton
-        android:id="@+id/epg_main_imagebutton_favorite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="11.5dp"
-        android:layout_gravity="center_vertical"
-        android:background="@mipmap/icon_list_favorite_unselect" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|center_vertical">
+
+        <ImageButton
+            android:id="@+id/epg_main_imagebutton_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11.5dp"
+            android:background="@mipmap/icon_list_favorite_unselect"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/epg_main_textview_channel_number"
