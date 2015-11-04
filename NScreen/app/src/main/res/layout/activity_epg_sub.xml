@@ -77,21 +77,12 @@
                 android:layout_marginTop="23dp" />
         </LinearLayout>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton3"
-            android:background="@mipmap/date_arrow_before"
-            android:layout_marginLeft="87.5dp"
-            android:layout_gravity="center_vertical" />
-
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:id="@+id/scrollView3"
-            android:layout_marginLeft="105dp"
-            android:scrollbars="none"
-            android:layout_marginRight="23.5dp">
+            android:layout_marginLeft="81.5dp"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -103,7 +94,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:layout_marginLeft="23.5dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -315,7 +307,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:layout_marginRight="23.5dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -348,6 +341,14 @@
             </LinearLayout>
 
         </HorizontalScrollView>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton3"
+            android:background="@mipmap/date_arrow_before"
+            android:layout_marginLeft="87.5dp"
+            android:layout_gravity="center_vertical" />
 
         <ImageButton
             android:layout_width="wrap_content"
