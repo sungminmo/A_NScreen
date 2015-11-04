@@ -76,6 +76,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onStartOpen(int position, int action, boolean right) {
+                mListView.closeOpenedItems();
                 Log.d("ljh", "onStartOpen");
             }
 
@@ -97,6 +98,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
             @Override
             public int onChangeSwipeMode(int position) {
 
+
                 return super.onChangeSwipeMode(position);
             }
 
@@ -106,6 +108,12 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
 //                    data.remove(position);
 //                }
                 mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onListScrolled() {
+                super.onListScrolled();
+                mListView.closeOpenedItems();
             }
 
         });

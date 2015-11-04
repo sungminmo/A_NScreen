@@ -94,6 +94,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             @Override
             public void onStartOpen(int position, int action, boolean right) {
+                mListView.closeOpenedItems();
                 Log.d("ljh", "onStartOpen");
             }
 
@@ -115,6 +116,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             @Override
             public int onChangeSwipeMode(int position) {
 
+
                 return super.onChangeSwipeMode(position);
             }
 
@@ -124,6 +126,12 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 //                    data.remove(position);
 //                }
                 mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onListScrolled() {
+                super.onListScrolled();
+                mListView.closeOpenedItems();
             }
 
         });
