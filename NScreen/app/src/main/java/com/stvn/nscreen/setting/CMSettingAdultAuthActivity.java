@@ -13,6 +13,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.stvn.nscreen.util.CMLog;
 
 /**
  * 설정화면 > 성인인증
@@ -55,6 +56,7 @@ public class CMSettingAdultAuthActivity extends CMBaseActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
+            CMLog.d("wd", url);
             Uri pageURI = Uri.parse(url);
 
             if (CMConstants.CM_CUSTOM_SCHEME.equals(pageURI.getScheme())) {
@@ -67,6 +69,8 @@ public class CMSettingAdultAuthActivity extends CMBaseActivity {
                         setResult(Activity.RESULT_OK);
                         CMSettingData.getInstance().setAdultAuth(CMSettingAdultAuthActivity.this, false);
                     }
+                    finish();
+                    return true;
                 }
             }
 
