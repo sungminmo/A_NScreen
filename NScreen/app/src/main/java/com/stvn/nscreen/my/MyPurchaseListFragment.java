@@ -116,9 +116,17 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             @Override
             public int onChangeSwipeMode(int position) {
-
-
-                return super.onChangeSwipeMode(position);
+                int swipeMode = 0;
+                switch (position%2)
+                {
+                    case 0:// 기본설정된 Swipe모드
+                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
+                        break;
+                    case 1:// Swipe None
+                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
+                        break;
+                }
+                return swipeMode;
             }
 
             @Override
