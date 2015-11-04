@@ -67,6 +67,7 @@ public class MyWatchListAdapter extends BaseAdapter {
 			holder.rowtime = (TextView)convertView.findViewById(R.id.row_time);
 			holder.rowname = (TextView)convertView.findViewById(R.id.row_name);
 			holder.btn = (Button)convertView.findViewById(R.id.btn1);
+			holder.btn.setText("삭제");
 			convertView.setTag(holder);
 		}
 		else

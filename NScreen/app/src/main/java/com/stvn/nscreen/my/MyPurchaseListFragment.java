@@ -4,11 +4,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spannable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
@@ -60,6 +63,13 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         mAdapter.setmClicklitener(this);
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(this);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
         mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
             @Override
             public void onOpened(int position, boolean toRight) {
@@ -152,9 +162,8 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             String alertTitle = "VOD 구매목록 삭제";
             String alertMessage1 = "선택하신 VOD를 구매목록에서 삭제하시겠습니까?";
-            String alertMessage2 = programTitle + "\n삭제하신 VOD는 복구가 불가능합니다.";
-//            String alertMessage2 = Html.fromHtml(programTitle + "<br/><font color=\"red\">삭제하신 VOD는 복구가 불가능합니다.</font>");
-
+//            String alertMessage2 = programTitle + "\n삭제하신 VOD는 복구가 불가능합니다.";
+            Spannable alertMessage2 = (Spannable)Html.fromHtml(programTitle + "<br/><font color=\"red\">삭제하신 VOD는 복구가 불가능합니다.</font>");
             CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, "예", "아니오", true, false,
                     new DialogInterface.OnClickListener() {
                         @Override
