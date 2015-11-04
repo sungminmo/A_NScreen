@@ -17,4 +17,5 @@ public class Constants {
 
 
     public static final String CODE_WEBHAS_OK = "100";
+    public static final String CODE_RUMPUS_OK = "100";
 }
