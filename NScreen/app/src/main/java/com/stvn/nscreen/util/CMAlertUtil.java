@@ -3,6 +3,7 @@ package com.stvn.nscreen.util;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.Spannable;
+import android.widget.Toast;
 
 import com.stvn.nscreen.custom.CMAlertDialog;
 
@@ -15,6 +16,33 @@ public class CMAlertUtil {
     public interface InputDialogClickListener {
         public void positiveClickEvent(DialogInterface dialog, String text);
         public void negativeClickEvent(DialogInterface dialog);
+    }
+
+    private static Toast toast;
+    /**
+     * ToastShort 알림기능-짦은문장
+     *
+     * @param Context
+     *            context
+     * @param String
+     *            message
+     */
+    public static void ToastShort(Context context, String message) {
+        toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    /**
+     * ToastShort 알림기능-긴문장
+     *
+     * @param Context
+     *            context
+     * @param String
+     *            message
+     */
+    public static void ToastLong(Context context, String message) {
+        toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     /****
