@@ -47,7 +47,6 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
     private void initView()
     {
         mPurchasecount = (TextView)getView().findViewById(R.id.purchasecount);
-        mPurchasecount.setText("19개의 VOD구매목록이 있습니다.");
 
         mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
         mAdapter = new MyDibListAdapter(getActivity(),mList);
@@ -91,7 +90,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onClickFrontView(int position) {
-                Log.d("ljh", "onClickFrontView");
+                CMAlertUtil.ToastShort(getActivity(), position + "번째 리스트 클릭");
             }
 
             @Override
@@ -116,9 +115,9 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onDismiss(int[] reverseSortedPositions) {
-//                for (int position : reverseSortedPositions) {
-//                    data.remove(position);
-//                }
+                for (int position : reverseSortedPositions) {
+                    mList.remove(position);
+                }
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -132,12 +131,22 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
 
     private void initData()
     {
-        for(int i=0;i<20;i++)
+        int count = 20;
+        for(int i=0;i<count;i++)
         {
             mList.add(""+i);
         }
         mAdapter.notifyDataSetChanged();
         mLockListView = false;
+
+        setDibListCountText(count);
+    }
+
+    /**
+     * 조회 개수 문구 설정
+     * */
+    private void setDibListCountText(int count) {
+        mPurchasecount.setText(count + "개의 VOD 찜목록이 있습니다.");
     }
 
     /**
@@ -153,9 +162,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mList.remove(itemIndex);
-                    mListView.dismiss(itemIndex);
-                    mAdapter.notifyDataSetChanged();
+                    removeWatchList(itemIndex);
                 }
             }, true);
         }
@@ -170,13 +177,26 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mList.remove(itemIndex);
-                            mListView.dismiss(itemIndex);
-                            mAdapter.notifyDataSetChanged();
+                            removeWatchList(itemIndex);
                         }
-                    }, null);
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mListView.closeOpenedItems();
+                        }
+                    });
         }
 
+    }
+
+    /**
+     * 조회 목록 리스트 제거 및 화면 갱신
+     * */
+    private void removeWatchList(int itemIndex) {
+        mListView.dismiss(itemIndex);
+
+        int count = mList.size();
+        setDibListCountText(count);
     }
 
     @Override

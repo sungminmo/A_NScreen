@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
@@ -27,7 +26,10 @@ import java.util.ArrayList;
 
 public class MyPurchaseListFragment extends Fragment implements View.OnClickListener,AbsListView.OnScrollListener {
 
-    LayoutInflater mInflater;
+    private final int TAB_MOBILE = 0;
+    private final int TAB_TV = 1;
+
+    private LayoutInflater mInflater;
     private View mPurchasetab1;
     private View mPurchasetab2;
     private TextView mPurchasecount;
@@ -35,6 +37,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     private MyPurchaseListAdapter mAdapter;
     private ArrayList<String> mList = new ArrayList<>();
     private boolean mLockListView = true;
+    private int mTabIndex;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,13 +67,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         mAdapter.setmClicklitener(this);
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(this);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
         mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
             @Override
             public void onOpened(int position, boolean toRight) {
@@ -106,7 +102,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             @Override
             public void onClickFrontView(int position) {
-                Log.d("ljh", "onClickFrontView");
+                CMAlertUtil.ToastShort(getActivity(), position + "번째 리스트 클릭");
             }
 
             @Override
@@ -131,9 +127,9 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             @Override
             public void onDismiss(int[] reverseSortedPositions) {
-//                for (int position : reverseSortedPositions) {
-//                    data.remove(position);
-//                }
+                for (int position : reverseSortedPositions) {
+                    mList.remove(position);
+                }
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -144,14 +140,34 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             }
 
         });
+
+        changeTabWithIndex(TAB_MOBILE);
     }
 
     private void initData() {
-        for(int i=0;i<20;i++) {
+
+        mList.clear();
+        mAdapter.notifyDataSetChanged();
+
+        int count = 20;
+        if (mTabIndex == TAB_TV) {
+            count = 7;
+        }
+
+        for(int i=0;i<count;i++) {
             mList.add(""+i);
         }
-        mAdapter.notifyDataSetChanged();
+
         mLockListView = false;
+        mAdapter.notifyDataSetChanged();
+        setPurchaseListCountText(count);
+    }
+
+    /**
+     * 조회 개수 문구 설정
+     * */
+    private void setPurchaseListCountText(int count) {
+        mPurchasecount.setText(count + "개의 VOD 구매목록이 있습니다.");
     }
 
     /**
@@ -167,9 +183,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mList.remove(itemIndex);
-                    mListView.dismiss(itemIndex);
-                    mAdapter.notifyDataSetChanged();
+                    removeWatchList(itemIndex);
                 }
             }, true);
         }
@@ -185,13 +199,49 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mList.remove(itemIndex);
-                            mListView.dismiss(itemIndex);
-                            mAdapter.notifyDataSetChanged();
+                            removeWatchList(itemIndex);
                         }
-                    }, null);
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mListView.closeOpenedItems();
+                        }
+                    });
         }
 
+    }
+
+    /**
+     * 조회 목록 리스트 제거 및 화면 갱신
+     * */
+    private void removeWatchList(int itemIndex) {
+        mListView.dismiss(itemIndex);
+
+        int count = mList.size();
+        setPurchaseListCountText(count);
+    }
+
+    /**
+     * 모바일 구매목록/TV 구매목록 탭 이벤트
+     * */
+    private void changeTabWithIndex(int index) {
+        mTabIndex = index;
+        if (TAB_MOBILE == index) {
+            mPurchasetab1.setSelected(true);
+            mPurchasetab2.setSelected(false);
+        } else if (TAB_TV == index) {
+            mPurchasetab1.setSelected(false);
+            mPurchasetab2.setSelected(true);
+        }
+
+        mListView.closeOpenedItems();
+
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                initData();
+//            }
+//        });
     }
 
     @Override
@@ -199,17 +249,14 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         switch (v.getId())
         {
             case R.id.purchasetab1:                 // 모바일 구매목록
-                mPurchasetab1.setSelected(true);
-                mPurchasetab2.setSelected(false);
+                changeTabWithIndex(TAB_MOBILE);
                 break;
             case R.id.purchasetab2:                 // TV구매목록
-                mPurchasetab1.setSelected(false);
-                mPurchasetab2.setSelected(true);
+                changeTabWithIndex(TAB_TV);
                 break;
             case R.id.btn1:
                 deletePurchaseItem((int)v.getTag());
                 break;
-
         }
 
     }
