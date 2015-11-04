@@ -37,6 +37,7 @@ import java.util.Map;
  * 설정화면 > 유료채널 안내 관리
  * Created by kimwoodam on 2015. 9. 30..
  */
+
 public class CMSettingPayChannelActivity extends CMBaseActivity implements AdapterView.OnItemClickListener {
 
     private ListView mListView;

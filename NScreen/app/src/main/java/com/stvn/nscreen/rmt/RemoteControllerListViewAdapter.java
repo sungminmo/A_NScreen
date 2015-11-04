@@ -29,6 +29,7 @@ import java.util.Date;
 /**
  * Created by limdavid on 15. 10. 26..
  */
+
 public class RemoteControllerListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = RemoteControllerListViewAdapter.class.getSimpleName();

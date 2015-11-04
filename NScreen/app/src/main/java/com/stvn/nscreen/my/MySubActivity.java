@@ -12,6 +12,7 @@ import com.stvn.nscreen.R;
 /**
  * Created by limdavid on 15. 9. 16..
  */
+
 public class MySubActivity extends AppCompatActivity {
     private static final String                 tag = MySubActivity.class.getSimpleName();
     private static       MySubActivity         mInstance;

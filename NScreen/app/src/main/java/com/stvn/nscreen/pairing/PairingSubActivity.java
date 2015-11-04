@@ -19,11 +19,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
-import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
@@ -33,13 +31,13 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by limdavid on 15. 10. 23..
  */
+
 public class PairingSubActivity extends AppCompatActivity {
 
     private static final String              tag = PairingSubActivity.class.getSimpleName();

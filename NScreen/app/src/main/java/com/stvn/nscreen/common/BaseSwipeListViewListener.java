@@ -3,6 +3,7 @@ package com.stvn.nscreen.common;
 /**
  * Created by leejunghoon on 15. 10. 3..
  */
+
 public class BaseSwipeListViewListener implements SwipeListViewListener {
     @Override
     public void onOpened(int position, boolean toRight) {

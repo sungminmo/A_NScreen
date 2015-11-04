@@ -8,6 +8,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 /**
  * Created by kimwoodam on 2015. 10. 9..
  */
+
 public class CMSettingData {
     private final static CMSettingData mInstance = new CMSettingData();
     private CMSettingData() {

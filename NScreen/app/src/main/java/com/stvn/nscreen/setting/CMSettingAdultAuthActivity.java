@@ -18,6 +18,7 @@ import com.stvn.nscreen.common.CMBaseActivity;
  * 설정화면 > 성인인증
  * Created by kimwoodam on 2015. 11. 2..
  */
+
 public class CMSettingAdultAuthActivity extends CMBaseActivity {
 
     private JYSharedPreferences mPref;

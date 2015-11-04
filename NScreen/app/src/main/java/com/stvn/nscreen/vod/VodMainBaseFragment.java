@@ -1,6 +1,5 @@
 package com.stvn.nscreen.vod;
 
-
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class VodMainBaseFragment extends Fragment {
 
     //

@@ -22,6 +22,7 @@ import com.stvn.nscreen.util.CMAlertUtil;
 /**
  * Created by leejunghoon on 15. 10. 9..
  */
+
 public class CMAlertDialog extends Dialog{
 
     private LinearLayout mType1,mType2,mType3;

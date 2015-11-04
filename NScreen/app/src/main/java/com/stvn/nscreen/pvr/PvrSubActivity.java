@@ -12,6 +12,7 @@ import com.stvn.nscreen.R;
 /**
  * Created by limdavid on 15. 9. 15..
  */
+
 public class PvrSubActivity extends AppCompatActivity {
     private static final String                 tag = PvrSubActivity.class.getSimpleName();
     private static       PvrSubActivity         mInstance;

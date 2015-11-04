@@ -1,8 +1,6 @@
 package com.stvn.nscreen.rmt;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,8 +27,6 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.epg.EpgChoiceActivity;
-import com.stvn.nscreen.epg.EpgSubListViewAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;

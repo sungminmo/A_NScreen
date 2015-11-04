@@ -19,6 +19,7 @@ import com.stvn.nscreen.R;
  * 공통으로 사용되는 상단 액션바
  * Created by kimwoodam on 2015. 9. 17..
  */
+
 public class CMActionBar extends LinearLayout implements View.OnClickListener {
 
     private Context mContext;

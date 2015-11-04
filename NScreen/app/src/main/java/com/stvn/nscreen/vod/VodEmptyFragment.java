@@ -1,6 +1,5 @@
 package com.stvn.nscreen.vod;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import com.stvn.nscreen.R;
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class VodEmptyFragment extends Fragment {
 
 

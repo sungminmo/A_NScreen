@@ -1,7 +1,6 @@
 package com.stvn.nscreen.vod;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,8 +27,6 @@ import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.common.CMActionBar;
-import com.stvn.nscreen.common.CMBaseActivity;
 import com.widevine.sampleplayer.VideoPlayerView;
 
 import org.json.JSONArray;
@@ -42,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class VodDetailActivity extends Activity {
 

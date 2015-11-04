@@ -20,6 +20,7 @@ import java.util.ArrayList;
  * 설정화면 > 지역설정 > 리스트 어댑터
  * Created by kimwoodam on 2015. 9. 30..
  */
+
 public class CMSettingRegionAdapter extends ArrayAdapter<ListViewDataObject> {
     LayoutInflater mInflater;
     private Context mContext;

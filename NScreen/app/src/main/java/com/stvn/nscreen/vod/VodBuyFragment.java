@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.stvn.nscreen.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.BufferUnderflowException;
 import java.util.HashMap;
 import java.util.Map;
 

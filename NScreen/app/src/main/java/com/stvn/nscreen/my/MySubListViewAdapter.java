@@ -19,6 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by limdavid on 15. 9. 16..
  */
+
 public class MySubListViewAdapter extends BaseAdapter {
 
     private static final String tag = MySubListViewAdapter.class.getSimpleName();

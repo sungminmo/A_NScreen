@@ -29,6 +29,7 @@ import static com.nineoldandroids.view.ViewPropertyAnimator.animate;
 /**
  * Touch listener impl for the SwipeListView
  */
+
 public class SwipeListViewTouchListener implements View.OnTouchListener {
 
     private static final int DISPLACE_CHOICE = 80;

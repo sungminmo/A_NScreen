@@ -16,6 +16,7 @@ import com.stvn.nscreen.util.CMAlertUtil;
  * 설정화면 > 구매인증 비밀번호 관리
  * Created by kimwoodam on 2015. 9. 30..
  */
+
 public class CMSettingPurchaseAuthActivity extends CMBaseActivity implements View.OnClickListener {
 
     private EditText mAuthPwd, mAuthPwdRe;

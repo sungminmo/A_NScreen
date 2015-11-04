@@ -22,6 +22,7 @@ import com.stvn.nscreen.util.CMAlertUtil;
  * Created by kimwoodam on 2015. 9. 19..
  * TODO:메뉴 클릭 이벤트 및 메뉴별 화면 작업, 이미지 및 레이아웃 관련 전체적 수정 작업 필요 15.09.23 kimwoodam
  */
+
 public class CMSettingMainActivity extends CMBaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private final int CMSetting_Region_Tag = 100;

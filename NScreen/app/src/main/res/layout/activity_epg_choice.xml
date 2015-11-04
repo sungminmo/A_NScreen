@@ -47,7 +47,8 @@
             android:text="전체채널"
             android:id="@+id/epg_choice_genre_all_button"
             android:background="@drawable/btn_selector"
-            android:textColor="@drawable/btn_selector_textcolor" />
+            android:textColor="@drawable/btn_selector_textcolor"
+            android:selectable="true" />
 
     </FrameLayout>
 
@@ -64,7 +65,8 @@
             android:text="선호채널"
             android:id="@+id/epg_choice_genre_like_button"
             android:background="@drawable/btn_selector"
-            android:textColor="@drawable/btn_selector_textcolor" />
+            android:textColor="@drawable/btn_selector_textcolor"
+            android:selectable="true" />
 
     </FrameLayout>
 
@@ -81,7 +83,8 @@
             android:layout_marginRight="27.75dp"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_03"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_two_button"
@@ -91,7 +94,8 @@
             android:layout_toRightOf="@id/epg_choice_genre_one_button"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_11"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_three_button"
@@ -100,7 +104,8 @@
             android:layout_toRightOf="@id/epg_choice_genre_two_button"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_06"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_four_button"
@@ -111,7 +116,8 @@
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_08"
             android:textSize="10.25sp"
-            android:layout_marginBottom="27.25dp" />
+            android:layout_marginBottom="27.25dp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_five_button"
@@ -121,7 +127,8 @@
             android:layout_alignLeft="@+id/epg_choice_genre_two_button"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_10"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_six_button"
@@ -132,7 +139,8 @@
             android:layout_alignLeft="@+id/epg_choice_genre_three_button"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_09"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_seven_button"
@@ -142,7 +150,8 @@
             android:layout_alignLeft="@+id/epg_choice_genre_four_button"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_05"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_eight_button"
@@ -153,7 +162,8 @@
             android:layout_alignLeft="@+id/epg_choice_genre_five_button"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_07"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
         <Button
             android:id="@+id/epg_choice_genre_nine_button"
@@ -163,7 +173,8 @@
             android:layout_alignLeft="@+id/epg_choice_genre_six_button"
             android:gravity="bottom|center_horizontal"
             android:background="@drawable/epg_choice_btn_selector_04"
-            android:textSize="10.25sp" />
+            android:textSize="10.25sp"
+            android:selectable="true" />
 
     </RelativeLayout>
 

@@ -1,6 +1,5 @@
 package com.stvn.nscreen.vod;
 
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -49,6 +48,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     private static final String                  tag = VodMainFragment.class.getSimpleName();

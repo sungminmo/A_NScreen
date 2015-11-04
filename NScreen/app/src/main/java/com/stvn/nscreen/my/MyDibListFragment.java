@@ -21,6 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by leejunghoon on 15. 10. 31..
  */
+
 public class MyDibListFragment extends Fragment implements View.OnClickListener,AbsListView.OnScrollListener{
     LayoutInflater mInflater;
     private TextView mPurchasecount;

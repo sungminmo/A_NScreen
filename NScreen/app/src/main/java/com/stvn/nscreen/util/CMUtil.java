@@ -9,6 +9,7 @@ import java.util.Date;
 /**
  * Created by leejunghoon on 15. 10. 24..
  */
+
 public class CMUtil {
 
     public static int parseInt(String str)

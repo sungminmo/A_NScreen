@@ -45,6 +45,7 @@ import java.util.Map;
 /**
  * Created by limdavid on 15. 9. 15..
  */
+
 public class SearchMainActivity extends CMBaseActivity {
     private static final String                     tag = SearchMainActivity.class.getSimpleName();
     private              SearchBaseFragment         mFragment;

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by limdavid on 15. 9. 15..
  */
+
 public class MyMainActivity extends CMBaseActivity implements View.OnClickListener {
 
     private Fragment mFragment;

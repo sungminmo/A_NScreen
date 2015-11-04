@@ -26,6 +26,7 @@ import java.util.ArrayList;
  * 설정화면 > 유료채널 안내 > 리스트 어댑터
  * Created by kimwoodam on 2015. 9. 30..
  */
+
 public class CMSettingPayChannelAdapter extends ArrayAdapter<ListViewDataObject> {
     LayoutInflater mInflater;
     private Context mContext;

@@ -8,6 +8,7 @@ import com.stvn.nscreen.custom.CMAlertDialog;
 /**
  * Created by leejunghoon on 15. 10. 9..
  */
+
 public class CMAlertUtil {
 
     public interface InputDialogClickListener {

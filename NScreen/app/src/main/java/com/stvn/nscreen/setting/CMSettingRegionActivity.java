@@ -38,6 +38,7 @@ import java.util.Map;
  * 설정화면 > 지역설정
  * Created by kimwoodam on 2015. 9. 30..
  */
+
 public class CMSettingRegionActivity extends CMBaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private TextView mRegionName;

@@ -6,6 +6,7 @@ import android.util.Log;
  * debug message 로그 출력
  * Created by kimwoodam on 2015. 9. 19..
  */
+
 public class CMLog {
 
     private static boolean DEBUG_VIEW_MODE = true;

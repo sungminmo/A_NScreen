@@ -5,10 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.jjiya.android.common.ListViewDataObject;
-import com.jjiya.android.common.ViewHolder;
 import com.stvn.nscreen.R;
 
 import org.json.JSONException;
@@ -19,6 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by limdavid on 15. 9. 15..
  */
+
 public class SearchMainListViewAdapter extends BaseAdapter {
 
     private static final String tag = SearchMainListViewAdapter.class.getSimpleName();

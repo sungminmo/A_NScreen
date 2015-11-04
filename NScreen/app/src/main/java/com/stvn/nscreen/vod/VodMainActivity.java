@@ -7,16 +7,11 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -29,17 +24,13 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.EightVodPosterPagerAdapter;
-import com.jjiya.android.common.FourVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
-import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.common.VodNewMoviePosterPagerAdapter;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.common.CMActionBar;
-import com.stvn.nscreen.common.CMBaseActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,7 +117,7 @@ public class VodMainActivity extends Activity {
         mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
 
         // 배너 요청.
-        requestGetServiceBannerList();
+        // requestGetServiceBannerList();
 
 
         ((LinearLayout)findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {

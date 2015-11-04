@@ -14,6 +14,7 @@ import com.stvn.nscreen.R;
  * 공통 처리를 위한 최상위 부모 액티티
  * Created by kimwoodam on 2015. 9. 19..
  */
+
 public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMActionBarListener {
 
     private LinearLayout mMainView;

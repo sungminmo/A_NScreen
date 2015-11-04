@@ -12,7 +12,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
@@ -34,6 +33,7 @@ import java.util.Map;
 /**
  * Created by leejunghoon on 15. 9. 19..
  */
+
 public class SearchVodFragment extends SearchBaseFragment{
 
     private LayoutInflater mInflater;

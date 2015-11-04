@@ -14,6 +14,7 @@ import com.stvn.nscreen.common.CMBaseActivity;
  * 설정화면 > 유료채널 안내 > 채널 상세 화면
  * Created by kimwoodam on 2015. 9. 30..
  */
+
 public class CMSettingPayChannelDetailActivity extends CMBaseActivity implements View.OnClickListener {
 
     private ImageView mChannelImage;

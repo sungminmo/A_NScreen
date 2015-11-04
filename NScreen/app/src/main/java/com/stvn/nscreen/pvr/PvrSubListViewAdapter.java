@@ -19,6 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by limdavid on 15. 9. 15..
  */
+
 public class PvrSubListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = PvrSubListViewAdapter.class.getSimpleName();
