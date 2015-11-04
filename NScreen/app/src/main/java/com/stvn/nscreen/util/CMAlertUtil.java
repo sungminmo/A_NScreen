@@ -2,6 +2,7 @@ package com.stvn.nscreen.util;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.Spannable;
 
 import com.stvn.nscreen.custom.CMAlertDialog;
 
@@ -40,7 +41,7 @@ public class CMAlertUtil {
     public static void Alert(Context ctx, String title,String msg1, String msg2)
     {
         CMAlertDialog mDialog = new CMAlertDialog(ctx);
-        mDialog.setMessage(msg1,msg2);
+        mDialog.setMessage(msg1, msg2);
         mDialog.setTitle(title);
         mDialog.show();
     }
@@ -53,8 +54,14 @@ public class CMAlertUtil {
         mDialog.show();
     }
 
-    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener) {
-        CMAlertDialog mDialog = new CMAlertDialog(ctx);
+    public static void Alert(Context ctx,String title,String msg1,String msg2,DialogInterface.OnClickListener listener, boolean isOneButton) {
+
+        CMAlertDialog.CMDialogType type = CMAlertDialog.CMDialogType.DialogType2;
+        if (isOneButton) {
+            type = CMAlertDialog.CMDialogType.DialogType4;
+        }
+
+        CMAlertDialog mDialog = new CMAlertDialog(ctx, type);
         mDialog.setTitle(title);
         mDialog.setMessage(msg1,msg2);
         mDialog.setPositiveButton("확인", listener);
@@ -111,6 +118,17 @@ public class CMAlertUtil {
         mDialog.setMessage(msg1, msg2, isbold1, isbold2);
         mDialog.setInputSetting(4, 20, true);
         mDialog.setInputDlgButton(ok, cancel, listener);
+        mDialog.show();
+    }
+
+
+    public static void Alert(Context ctx,String title,String msg1,Spannable msg2,String ok,String cancel,boolean isbold1,boolean isbold2,DialogInterface.OnClickListener listener,DialogInterface.OnClickListener canclelistener)
+    {
+        CMAlertDialog mDialog = new CMAlertDialog(ctx);
+        mDialog.setTitle(title);
+        mDialog.setMessage(msg1, msg2, isbold1, isbold2);
+        mDialog.setPositiveButton(ok, listener);
+        mDialog.setNegativeButton(cancel, canclelistener);
         mDialog.show();
     }
 }

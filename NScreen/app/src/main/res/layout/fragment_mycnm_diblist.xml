@@ -2,17 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/dimen_10.5">
-
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/purchasecount"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_10.5"
+        android:layout_height="@dimen/dimen_31.75"
         android:gravity="center"
         android:textColor="@color/search_programtext_violet" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/colorc5c5c5" />
 
     <com.stvn.nscreen.common.SwipeListView xmlns:swipe="http://schemas.android.com/apk/res-auto"
         android:id="@+id/purchaselistview"
@@ -20,9 +22,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:cacheColorHint="@color/transparent"
-        android:divider="@color/black"
+        android:divider="@color/colorc5c5c5"
         android:dividerHeight="1px"
-        android:listSelector="@color/white"
+        android:listSelector="@color/colore4d8f2"
         swipe:swipeBackView="@+id/back"
         swipe:swipeCloseAllItemsWhenMoveList="true"
         swipe:swipeFrontView="@+id/front"
