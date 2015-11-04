@@ -83,7 +83,7 @@ public class MyPurchaseListAdapter extends BaseAdapter {
 		holder.btn.setTag(position);
 		holder.btn.setOnClickListener(mClicklitener);
 
-		holder.rowdate.setText("08.28 (금)");
+		holder.rowdate.setText("08."+item+" (금)");
 		holder.rowtime.setText("16:15");
 
 		holder.rowname.setText("뉴스파이터");

@@ -77,9 +77,9 @@
         android:cacheColorHint="@color/transparent"
         android:divider="@color/colorc5c5c5"
         android:dividerHeight="1px"
-        android:listSelector="@color/colore4d8f2"
         swipe:swipeBackView="@+id/back"
         swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeOpenOnLongPress="false"
         swipe:swipeFrontView="@+id/front"
         swipe:swipeMode="left"
         swipe:swipeOffsetLeft="@dimen/dimen_250" />
