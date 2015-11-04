@@ -156,11 +156,14 @@ public class CMAlertDialog extends Dialog{
             case DialogType1:
                 mType1_Content.setText(msg);
                 break;
-            case DialogType2:
+            case DialogType2: case DialogType4:
                 mType2_Content1.setText(msg);
+                mType2_Content2.setVisibility(View.GONE);
                 break;
             case DialogType3:
                 mType3_Content1.setText(msg);
+                mType3_Content2.setVisibility(View.GONE);
+
                 break;
         }
     }
@@ -204,21 +207,31 @@ public class CMAlertDialog extends Dialog{
     public void setMessage(String msg1,String msg2,boolean isbold1,boolean isbold2)
     {
         mType2_Content1.setText(msg1);
-        mType2_Content2.setText(msg2);
         if(isbold1)
             mType2_Content1.setTypeface(null,Typeface.BOLD);
-        if(isbold2)
-            mType2_Content2.setTypeface(null,Typeface.BOLD);
+
+        if (TextUtils.isEmpty(msg2)) {
+            mType2_Content2.setVisibility(View.GONE);
+        } else {
+            mType2_Content2.setText(msg2);
+            if(isbold2)
+                mType2_Content2.setTypeface(null,Typeface.BOLD);
+        }
+
 
         if (mType.compareTo(CMDialogType.DialogType3) == 0) {
             mType3_Content1.setText(msg1);
-            mType3_Content2.setText(msg2);
-
             if (isbold1) {
                 mType3_Content1.setTypeface(null, Typeface.BOLD);
             }
-            if (isbold2) {
-                mType3_Content2.setTypeface(null, Typeface.BOLD);
+
+            if (TextUtils.isEmpty(msg2)) {
+                mType3_Content2.setVisibility(View.GONE);
+            } else {
+                mType3_Content2.setText(msg2);
+                if (isbold2) {
+                    mType3_Content2.setTypeface(null, Typeface.BOLD);
+                }
             }
         }
     }
@@ -226,21 +239,30 @@ public class CMAlertDialog extends Dialog{
     public void setMessage(String msg1,Spannable msg2,boolean isbold1,boolean isbold2)
     {
         mType2_Content1.setText(msg1);
-        mType2_Content2.setText(msg2);
         if(isbold1)
             mType2_Content1.setTypeface(null,Typeface.BOLD);
-        if(isbold2)
-            mType2_Content2.setTypeface(null,Typeface.BOLD);
+
+        if (TextUtils.isEmpty(msg2)) {
+            mType2_Content2.setVisibility(View.GONE);
+        } else {
+            mType2_Content2.setText(msg2);
+            if(isbold2)
+                mType2_Content2.setTypeface(null,Typeface.BOLD);
+        }
 
         if (mType.compareTo(CMDialogType.DialogType3) == 0) {
             mType3_Content1.setText(msg1);
-            mType3_Content2.setText(msg2);
-
             if (isbold1) {
                 mType3_Content1.setTypeface(null, Typeface.BOLD);
             }
-            if (isbold2) {
-                mType3_Content2.setTypeface(null, Typeface.BOLD);
+
+            if (TextUtils.isEmpty(msg2)) {
+                mType3_Content2.setVisibility(View.GONE);
+            } else {
+                mType3_Content2.setText(msg2);
+                if (isbold2) {
+                    mType3_Content2.setTypeface(null, Typeface.BOLD);
+                }
             }
         }
     }
