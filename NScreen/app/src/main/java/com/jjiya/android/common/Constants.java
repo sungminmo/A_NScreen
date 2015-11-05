@@ -12,7 +12,7 @@ public class Constants {
     public static final String SERVER_URL_RUMPUS_VPN     = "http://192.168.44.10/smapplicationserver";
 
     // (VOD)
-    public static final String SERVER_URL_CASTIS_PUBLIC  = "http://58.141.255.80/HApplicationServer";
+    public static final String SERVER_URL_CASTIS_PUBLIC  = "http://58.141.255.79:8080/HApplicationServer";
     public static final String SERVER_URL_CASTIS_VPN     = "http://192.168.40.5:8080/HApplicationServer";
 
 

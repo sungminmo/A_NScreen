@@ -106,7 +106,6 @@ public class PairingSubActivity extends AppCompatActivity {
         });
     }
 
-
     // 7.1.4 ClientSetTopBoxRegist
     // 사용할 셋톱을 등록합니다..(VOD서버와의 인터페이스 확인)
     private void requestClientSetTopBoxRegist() {

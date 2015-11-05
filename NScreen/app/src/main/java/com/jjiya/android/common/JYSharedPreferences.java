@@ -137,12 +137,12 @@ public class JYSharedPreferences {
     }
 
     public String getWebhasServerUrl() {
-        return Constants.SERVER_URL_CASTIS_VPN;         // 삼성C&N 사무실에서는 럼퍼스 서버에 이걸로 접속.
-        // return Constants.SERVER_URL_CASTIS_PUBLIC;
+        // return Constants.SERVER_URL_CASTIS_VPN;         // 삼성C&M 사무실에서는 캐스트이즈 서버에 이걸로 접속.
+        return Constants.SERVER_URL_CASTIS_PUBLIC;         // 삼성C&M을 제외한 장소에서는 캐스트이즈 서버에 이걸로 접속.
     }
 
     public String getRumpersServerUrl() {
-        return Constants.SERVER_URL_RUMPUS_VPN;       // 삼성C&N 사무실에서는 럼퍼스 서버에 이걸로 접속.
-        // return Constants.SERVER_URL_RUMPUS_PUBLIC; // 삼성C&N을 제외한 장소에서느 럼퍼스 서버에 이걸로 접속.
+        return Constants.SERVER_URL_RUMPUS_VPN;       // 삼성C&M 사무실에서는 럼퍼스 서버에 이걸로 접속.
+        // return Constants.SERVER_URL_RUMPUS_PUBLIC; // 삼성C&M을 제외한 장소에서는 럼퍼스 서버에 이걸로 접속.
     }
 }
