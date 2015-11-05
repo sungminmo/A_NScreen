@@ -126,10 +126,10 @@ public class PvrMainActivity extends AppCompatActivity {
         mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
-        String          tk      = mPref.getWebhasTerminalKey();
+        String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         // for test
-        //String          url     = mPref.getRumpersServerUrl() + "/getRecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
-        String          url     = "http://192.168.44.10/SMApplicationserver/getrecordReservelist.asp?Version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&deviceId=68590725-3b42-4cea-ab80-84c91c01bad2";
+        //String          url     = "http://192.168.44.10/SMApplicationserver/getrecordReservelist.asp?Version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&deviceId=68590725-3b42-4cea-ab80-84c91c01bad2";
+        String          url     = mPref.getRumpersServerUrl() + "/getRecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
