@@ -18,4 +18,6 @@ public class Constants {
 
     public static final String CODE_WEBHAS_OK = "100";
     public static final String CODE_RUMPUS_OK = "100";
+
+    public static final String CODE_RUMPUS_ERROR_205_Not_Found_authCode = "205";    // 셋탑의 인증번호를 폰에서 틀리게 올렸을대 내려오는 응답코드.
 }

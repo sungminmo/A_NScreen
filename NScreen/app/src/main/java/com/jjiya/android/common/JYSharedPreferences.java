@@ -39,6 +39,7 @@ public class JYSharedPreferences {
     public final static String VoVolunteerActivityIsCompletMode = "VoVolunteerActivityIsCompletMode"; // VoVolunteerActivityIsCompletMode : true, false
 
     public final static String RUMPERS_TERMINAL_KEY = "MjAxMS0wNC0xNl8yMTk0NDY4Nl9Dbk1UZXN0QXBwXyAg";   // 고정키값. 모든 앱이 같은 값을 사용 함.
+    public final static String RUMPERS_SETOPBOX_KIND = "RUMPERS_SETOPBOX_KIND";
 
     // Public TerminalKey = 8A5D2E45D3874824FF23EC97F78D358
     // Private terminalKey = C5E6DBF75F13A2C1D5B2EFDB2BC940
@@ -142,7 +143,20 @@ public class JYSharedPreferences {
     }
 
     public String getRumpersServerUrl() {
-        return Constants.SERVER_URL_RUMPUS_VPN;       // 삼성C&M 사무실에서는 럼퍼스 서버에 이걸로 접속.
-        // return Constants.SERVER_URL_RUMPUS_PUBLIC; // 삼성C&M을 제외한 장소에서는 럼퍼스 서버에 이걸로 접속.
+        //return Constants.SERVER_URL_RUMPUS_VPN;       // 삼성C&M 사무실에서는 럼퍼스 서버에 이걸로 접속.
+        return Constants.SERVER_URL_RUMPUS_PUBLIC; // 삼성C&M을 제외한 장소에서는 럼퍼스 서버에 이걸로 접속.
+    }
+
+    /**
+     * 페어링 한적이 있기? 없기?
+     * 캐스트이즈 private terminal key 가 있는지 여부로 판단한다.
+     * @return  있지. 없지.
+     */
+    public boolean isPairingCompleted() {
+        if ( "".equals(getValue(WEBHAS_PRIVATE_TERMINAL_KEY, "")) ) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

@@ -47,6 +47,7 @@ public class PairingSubActivity extends AppCompatActivity {
     // network
     private              RequestQueue        mRequestQueue;
     private              ProgressDialog      mProgressDialog;
+    private              Map<String, Object> mNetworkError;
 
     private String mPurchasePassword;
 
@@ -62,6 +63,7 @@ public class PairingSubActivity extends AppCompatActivity {
         mInstance         = this;
         mPref             = new JYSharedPreferences(this);
         mRequestQueue     = Volley.newRequestQueue(this);
+        mNetworkError     = new HashMap<String, Object>();
 
         if ( getIntent().getExtras() != null ) {
             mPurchasePassword = getIntent().getExtras().getString("purchasePassword", "");
@@ -86,7 +88,7 @@ public class PairingSubActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( mAuthCodeEditText.getText().toString().length() < 6  ) {
+                if (mAuthCodeEditText.getText().toString().length() < 6) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                     alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
                         @Override
@@ -110,20 +112,51 @@ public class PairingSubActivity extends AppCompatActivity {
     // 사용할 셋톱을 등록합니다..(VOD서버와의 인터페이스 확인)
     private void requestClientSetTopBoxRegist() {
         if ( mPref.isLogging() ) { Log.d(tag, "requestClientSetTopBoxRegist()"); }
-        mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        mProgressDialog	   = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         String authCode    = mAuthCodeEditText.getText().toString();
         String terminalKey = mPref.getWebhasTerminalKey();
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
-        String url = mPref.getRumpersServerUrl() + "/ClientSetTopBoxRegist.asp?version=1&deviceId="+uuid+"&authKey="+authCode;
+        String url         = mPref.getRumpersServerUrl() + "/ClientSetTopBoxRegist.asp?version=1&deviceId="+uuid+"&authKey="+authCode;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
+                mCancleButton.setEnabled(true);
+                mNextButton.setEnabled(true);
                 Log.d(tag, response);
                 parseClientSetTopBoxRegist(response);
-                Intent intent = new Intent(mInstance, PairingCheckActivity.class);
-                startActivity(intent);
-                finish();
+
+                String resultCode = (String) mNetworkError.get("resultCode");
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
+                    // addUser 성공 했으면, 바로 5.1.2 AuthenticateDevice 호출해서 webhas private tk 받기.
+                    requestAuthenticateDevice();
+                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found_authCode.equals(resultCode) ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode));
+                    alert.show();
+                } else if ( "211".equals(resultCode) ) {   // @TODO 반드시 삭제해야됨. 현재 서버가 정상처리인데 211로 에러 내려옴.
+                    // 임시처리
+                    requestAuthenticateDevice();
+                } else {
+                    String errorString = (String)mNetworkError.get("errorString");
+                    StringBuilder sb   = new StringBuilder();
+                    sb.append("API: ClientSetTopBoxRegist\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(sb.toString());
+                    alert.show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -154,7 +187,7 @@ public class PairingSubActivity extends AppCompatActivity {
     }
 
     //
-    // 배너 파싱
+    // ClientSetTopBoxRegist 파싱
     private void  parseClientSetTopBoxRegist(String response) {
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
@@ -169,17 +202,21 @@ public class PairingSubActivity extends AppCompatActivity {
             while ( eventType != XmlPullParser.END_DOCUMENT ) {
                 if (eventType == XmlPullParser.START_TAG) {
                     if (xpp.getName().equalsIgnoreCase("resultCode")) {
-                        sb.append("{\"resultCode\":\"").append(xpp.nextText()).append("\"");
+                        String resultCode = xpp.nextText();
+                        mNetworkError.put("resultCode", resultCode);
+                        sb.append("{\"resultCode\":\"").append(resultCode).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("errorString")) {
-                        sb.append(",\"errorString\":\"").append(xpp.nextText()).append("\"");
+                        String errorString = xpp.nextText();
+                        mNetworkError.put("errorString", errorString);
+                        sb.append(",\"errorString\":\"").append(errorString).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("MacAddress")) {
-                        sb.append(",\"MacAddress\":\"").append(xpp.nextText()).append("\"");
+                        String MacAddress = xpp.nextText();
+                        mNetworkError.put("MacAddress", MacAddress);
+                        sb.append(",\"MacAddress\":\"").append(MacAddress).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("SetTopBoxKind")) {
-                        sb.append(",\"SetTopBoxKind\":\"").append(xpp.nextText()).append("\"}");
-                        String imsi = sb.toString();
-                        String re   = imsi.replace("http://58.141.255.80", "http://192.168.44.10"); // 삼성동 C&M에서는 공인망 럼퍼스 접속이 안되서, 임시로 리플레이스 처리 함.
-                        JSONObject jo = new JSONObject(re); //JSONObject jo = new JSONObject(sb.toString());
-                        //mBanners.add(jo);
+                        String SetTopBoxKind = xpp.nextText();
+                        mNetworkError.put("SetTopBoxKind", SetTopBoxKind);
+                        sb.append(",\"SetTopBoxKind\":\"").append(SetTopBoxKind).append("\"}");
                         sb.setLength(0);
                     }
                 }
@@ -191,13 +228,11 @@ public class PairingSubActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
 
-    // 사용하면 안됨.
+    /** AddUser는 럼퍼스에서 캐스트이즈에 요청하는 API 이므로 폰에서 사용하면 안됨. ********************************
     // 5.20.4 AddUser
     // (모바일 찜하기) 발급된 인증번호를 이용하여 셋탑에 사용자(스마트폰)를 등록하도록 요청한다
     private void requestAddUser() {
@@ -263,6 +298,7 @@ public class PairingSubActivity extends AppCompatActivity {
         };
         mRequestQueue.add(request);
     }
+     **********************************************************************************************/
 
     // 5.1.2 authenticateDevice
     // 2nd 단말 클라이언트를 인증하고 TerminalKey를 얻는다
@@ -273,7 +309,7 @@ public class PairingSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(tag, response);
+                Log.d(tag, response); // {"resultCode":100,"terminalKey":"8BC2BCD8C9113936A9FABBA5FD0B2C4","transactionId":null,"errorString":"","version":"1"}
                 mProgressDialog.dismiss();
                 mCancleButton.setEnabled(true);
                 mNextButton.setEnabled(true);
@@ -281,12 +317,19 @@ public class PairingSubActivity extends AppCompatActivity {
                     JSONObject jo = new JSONObject(response);
                     String resultCode = jo.getString("resultCode");
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        String SetTopBoxKind = (String)mNetworkError.get("SetTopBoxKind");
+                        mPref.put(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, SetTopBoxKind);
                         String terminalKey = jo.getString("terminalKey");
                         mPref.put(JYSharedPreferences.WEBHAS_PRIVATE_TERMINAL_KEY, terminalKey); // 터미널키 저장.
                         mPref.put(JYSharedPreferences.PURCHASE_PASSWORD, mPurchasePassword);     // 구매비번 저장.
                         // 그다음은 페어링 완료 UI 처리 해야 됨.
+                        Intent intent = new Intent(mInstance, PairingCheckActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         String errorString = jo.getString("errorString");
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("API: requestAuthenticateDevice\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
                         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                         alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
                             @Override

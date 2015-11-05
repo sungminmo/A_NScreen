@@ -11,10 +11,15 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
@@ -49,6 +54,7 @@ public class PvrMainActivity extends AppCompatActivity {
     // network
     private              RequestQueue           mRequestQueue;
     private              ProgressDialog         mProgressDialog;
+    private              Map<String, Object>    mNetworkError;
 
     private              PvrMainListViewAdapter mAdapter;
     private              ListView               mListView;
@@ -74,6 +80,7 @@ public class PvrMainActivity extends AppCompatActivity {
         mInstance     = this;
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
+        mNetworkError = new HashMap<String, Object>();
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
         mAdapter      = new PvrMainListViewAdapter(this, null);
@@ -130,7 +137,7 @@ public class PvrMainActivity extends AppCompatActivity {
                 mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
-                    String msg = "getRecordReservelist resultCode:"+sResultCode;
+                    String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
                     AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
                     ad.setTitle("알림").setMessage(msg).setCancelable(false)
                             .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -149,6 +156,15 @@ public class PvrMainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -170,6 +186,9 @@ public class PvrMainActivity extends AppCompatActivity {
         StringBuilder        sb2         = new StringBuilder(); // for array
         XmlPullParserFactory factory     = null;
         List<String>         strings     = new ArrayList<String>();
+
+        response = response.replace("<![CDATA[","");
+        response = response.replace("]]>","");
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -183,9 +202,9 @@ public class PvrMainActivity extends AppCompatActivity {
                     if (xpp.getName().equalsIgnoreCase("response")) {
                         //
                     } else if (xpp.getName().equalsIgnoreCase("resultCode")) {
-                        sResultCode = xpp.nextText();
+                        sResultCode = xpp.nextText(); mNetworkError.put("resultCode",sResultCode);
                     } else if (xpp.getName().equalsIgnoreCase("errorString")) {
-                        //
+                        mNetworkError.put("errorString",xpp.nextText());
                     } else if (xpp.getName().equalsIgnoreCase("Reserve_Item")) {
                         //
                     } else if (xpp.getName().equalsIgnoreCase("RecordingType")) {

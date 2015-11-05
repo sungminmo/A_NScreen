@@ -36,10 +36,7 @@
         <!--</activity>-->
 
         <!-- leftMenu -->
-        <activity android:name=".leftmenu.LeftMenuActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_leftmenu"
-            android:theme="@android:style/Theme.Translucent">
+        <activity android:name=".leftmenu.LeftMenuActivity" android:screenOrientation="portrait" android:label="@string/title_activity_leftmenu">
         </activity>
         <activity
             android:name=".leftmenu.LeftMenuDialogActivity"

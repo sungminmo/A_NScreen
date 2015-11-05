@@ -1,8 +1,12 @@
 package com.stvn.nscreen.leftmenu;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -41,9 +45,14 @@ public class LeftMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND, WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         setContentView(R.layout.activity_leftmenu);
+
+
+
+        // getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
 
         WindowManager.LayoutParams wmlp = getWindow().getAttributes();
         wmlp.gravity = Gravity.LEFT;
@@ -67,9 +76,7 @@ public class LeftMenuActivity extends Activity {
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
         leftmenu_whatBtn = (ImageButton) findViewById(R.id.leftmenu_whatBtn);
 
-        String pwd = mPref.getValue(JYSharedPreferences.PURCHASE_PASSWORD, "");
-
-        if ( "".equals(pwd) ) {
+        if ( mPref.isPairingCompleted() == true ) {
             leftmenu_pairing_button1.setVisibility(View.VISIBLE);
             leftmenu_pairing_button2.setVisibility(View.GONE);
         } else {
@@ -113,9 +120,36 @@ public class LeftMenuActivity extends Activity {
         leftmenu_remote_linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
-                startActivity(intent);
-                finish();
+                String SetTopBoxKind = mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "").toLowerCase();
+                if ( mPref.isPairingCompleted() == false ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.error_not_paring_compleated));
+                    alert.show();
+
+                } else {
+                    // 페어링은 했지만, HD/PVR이 아니면 화면 진입 못함.
+                    if ( "HD".toLowerCase().equals(SetTopBoxKind) || "PVR".toLowerCase().equals(SetTopBoxKind) ) {
+                        Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_compatibility_stb));
+                        alert.show();
+                    }
+                }
             }
         });
         leftmenu_pvr_linearLayout.setOnClickListener(new View.OnClickListener() {

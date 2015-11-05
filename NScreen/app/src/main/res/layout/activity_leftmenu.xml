@@ -43,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView7"
                 android:background="@mipmap/icon_connect_before"
-                android:layout_marginLeft="27.75dp"
-                android:layout_marginRight="9.75dp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="6dp" />
 
             <LinearLayout
                 android:orientation="vertical"
