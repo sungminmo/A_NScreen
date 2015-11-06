@@ -213,6 +213,16 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         });
                         alert.setMessage(getString(R.string.error_not_ability_change_channel_vod));
                         alert.show();
+                    } else if ( "2".equals(mStbState) ) { // 독립형.
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_ability_change_channel_independence));
+                        alert.show();
                     } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
                         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                         alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
@@ -225,16 +235,16 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         alert.show();
                     }
 
-                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found_authCode.equals(resultCode) ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setMessage(getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode));
-                    alert.show();
+//                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found_authCode.equals(resultCode) ) {
+//                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+//                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//                    alert.setMessage(getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode));
+//                    alert.show();
                 } else {
                     String errorString = (String)mNetworkError.get("errorString");
                     StringBuilder sb   = new StringBuilder();

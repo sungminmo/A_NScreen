@@ -29,6 +29,7 @@
     <string name="error_not_compatibility_stb">리모컨 미 지원 상품\n고객님의 셋탑박스에서는 리모컨 기능을 지원하지 않습니다.</string>
     <string name="error_not_ability_change_channel_vod">VOD 시청중에는 채널이 변경되지 않습니다.</string>
     <string name="error_not_ability_change_channel_data">데이터 방송 시청 중에는 채널이 변경되지 않습니다.</string>
+    <string name="error_not_ability_change_channel_independence">독립형 셋탑박스는 채널이 변경되지 않습니다.</string>
 
 
     <!-- RUMPUS ERROR Respone -->
