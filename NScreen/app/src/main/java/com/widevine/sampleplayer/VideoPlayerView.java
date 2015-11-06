@@ -57,13 +57,17 @@ public class VideoPlayerView extends Activity {
     private boolean useMediaCodec;
     private int width, height;
 
-    // swlim
-    private StringBuffer mStringBuffer;
-
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("VideoPlayerView", "onResume()");
+    }
+
+    @Override
+    protected void onPause() {
+        Log.v("VideoPlayerView", "------------------- onPause ----------------");
+        super.onPause(); // swlim
+        onStop();
     }
 
     @Override
@@ -77,7 +81,7 @@ public class VideoPlayerView extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStringBuffer = new StringBuffer();
+
         Display display = getWindowManager().getDefaultDisplay();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -91,10 +95,16 @@ public class VideoPlayerView extends Activity {
         } else {
             setContentView(R.layout.widevine_sampleplayer_notprovisioned);
         }
+
         //drm.printPluginVersion();
         // swlim aaa
         drm.acquireRights(assetUri);
-        startPlayback();
+        try {
+            Thread.sleep(100);
+            startPlayback();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -255,16 +265,16 @@ public class VideoPlayerView extends Activity {
                 videoView.seekTo(currentPosition);
             }
         });
-        playerFrame.addView(fullScreen, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-        fullScreen.setVisibility(View.INVISIBLE);
-        playerFrame.addView(bgImage, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        //playerFrame.addView(fullScreen, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        //fullScreen.setVisibility(View.INVISIBLE);
+        //playerFrame.addView(bgImage, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
         main = new LinearLayout(this);
 //        main.addView(playerFrame, new LinearLayout.LayoutParams((int) (width * 0.65), LinearLayout.LayoutParams.FILL_PARENT, 1));
         main.addView(playerFrame, new LinearLayout.LayoutParams((int) (width), LinearLayout.LayoutParams.FILL_PARENT, 1));
-        main.addView(sidePanel, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT, 3));
+//        main.addView(sidePanel, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT, 3));
 
-        sidePanel.setVisibility(View.GONE);
+//        sidePanel.setVisibility(View.GONE);
 
 
         // swlim aaa
@@ -277,9 +287,7 @@ public class VideoPlayerView extends Activity {
         return main;
     }
 
-    public void callStartPlayBack(){
-        //startPlayback();
-    }
+
 
     private void startPlayback() {
         logMessage("Playback start.");
@@ -522,11 +530,7 @@ public class VideoPlayerView extends Activity {
         hRefresh.sendEmptyMessage(REFRESH);
     }
 
-    @Override
-    protected void onPause() {
-        Log.v("VideoPlayerView", "------------------- onPause ----------------");
-        onStop();
-    }
+
 
     private void logMessage(String message) {
         Log.d(TAG, message);

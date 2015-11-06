@@ -30,10 +30,6 @@ public class WidevineDrm {
     }
 
     // swlim
-    public long getWVDrmInfoRequestStatusKey() {
-        return mWVDrmInfoRequestStatusKey;
-    }
-    // swlim
     VideoPlayerView mVideoPlayerViewActivity;
     public void setVideoPlayerView(VideoPlayerView ac ) {
         this.mVideoPlayerViewActivity = ac;
