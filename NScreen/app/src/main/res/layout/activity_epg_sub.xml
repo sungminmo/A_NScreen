@@ -95,7 +95,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:layout_marginLeft="23.5dp">
+                    android:layout_marginLeft="23.5dp"
+                    android:id="@+id/epg_sub_date_linearlayout1">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -110,8 +111,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.04"
-                        android:id="@+id/textView40"
+                        android:text=" "
+                        android:id="@+id/epg_sub_date1"
                         android:layout_marginRight="26.5dp"
                         android:textSize="14.5sp"
                         android:textColor="@drawable/epg_sub_date_selector_textcolor"
@@ -132,7 +133,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:id="@+id/epg_sub_date_linearlayout2">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -147,8 +149,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.05"
-                        android:id="@+id/textView52"
+                        android:text=" "
+                        android:id="@+id/epg_sub_date2"
                         android:layout_marginRight="26.5dp"
                         android:textSize="14.5sp"
                         android:textColor="@drawable/epg_sub_date_selector_textcolor"
@@ -167,7 +169,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:id="@+id/epg_sub_date_linearlayout3">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -182,8 +185,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.06"
-                        android:id="@+id/textView66"
+                        android:text=" "
+                        android:id="@+id/epg_sub_date3"
                         android:layout_marginRight="26.5dp"
                         android:textSize="14.5sp"
                         android:textColor="@drawable/epg_sub_date_selector_textcolor"
@@ -202,7 +205,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:id="@+id/epg_sub_date_linearlayout4">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -217,8 +221,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.07"
-                        android:id="@+id/textView81"
+                        android:text=" "
+                        android:id="@+id/epg_sub_date4"
                         android:layout_marginRight="26.5dp"
                         android:textSize="14.5sp"
                         android:textColor="@drawable/epg_sub_date_selector_textcolor"
@@ -237,7 +241,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:id="@+id/epg_sub_date_linearlayout5">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -252,8 +257,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.08"
-                        android:id="@+id/textView82"
+                        android:text=" "
+                        android:id="@+id/epg_sub_date5"
                         android:layout_marginRight="26.5dp"
                         android:textSize="14.5sp"
                         android:textColor="@drawable/epg_sub_date_selector_textcolor"
@@ -272,7 +277,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:id="@+id/epg_sub_date_linearlayout6">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -287,8 +293,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.09"
-                        android:id="@+id/textView83"
+                        android:text=" "
+                        android:id="@+id/epg_sub_date6"
                         android:layout_marginRight="26.5dp"
                         android:textSize="14.5sp"
                         android:textColor="@drawable/epg_sub_date_selector_textcolor"
@@ -308,7 +314,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:layout_marginRight="23.5dp">
+                    android:layout_marginRight="23.5dp"
+                    android:id="@+id/epg_sub_date_linearlayout7">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -323,8 +330,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.10"
-                        android:id="@+id/textView84"
+                        android:text=" "
+                        android:id="@+id/epg_sub_date7"
                         android:textSize="14.5sp"
                         android:textColor="@drawable/epg_sub_date_selector_textcolor"
                         android:layout_marginBottom="10dp" />
