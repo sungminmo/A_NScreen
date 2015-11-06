@@ -2,8 +2,6 @@ package com.stvn.nscreen.epg;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,8 +40,6 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
     private              RequestQueue                  mRequestQueue;
     private              ImageLoader                   mImageLoader;
-
-    private ProgressBar progBar = null;
 
     public EpgMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
@@ -105,29 +101,31 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             TextView           channelNumberTextView   = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView           titleTextView           = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
             TextView           channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
+            ProgressBar        progBar = ViewHolder.get(convertView, R.id.progressBar);
 
-            Date               dt1                     = formatter.parse(ProgramOnAirStartTime);
-            Date               dt2                     = formatter.parse(ProgramOnAirEndTime);
-            String             str1                    = formatter2.format(dt1).toString();
-            String             str2                    = formatter2.format(dt2).toString();
-            String             str3                    = formatter2.format(dt).toString();
+            Date               dt11                     = formatter.parse(ProgramOnAirStartTime);
+            Date               dt12                     = formatter.parse(ProgramOnAirEndTime);
+            String             dt21                     = formatter2.format(dt11).toString();
+            String             dt22                     = formatter2.format(dt12).toString();
+            String             dt23                     = formatter2.format(dt).toString();
 
-            Integer i1 = (Integer.parseInt(str1.substring(0,2)) * 60) + (Integer.parseInt(str1.substring(3)));
-            Integer i2 = (Integer.parseInt(str2.substring(0,2)) * 60) + (Integer.parseInt(str2.substring(3)));
-            Integer i3 = (Integer.parseInt(str3.substring(0,2)) * 60) + (Integer.parseInt(str3.substring(3)));
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
 
-            progBar = ViewHolder.get(convertView, R.id.progressBar);
-            progBar.setMax(100);
-            if ( i3 > i1 ) {
-                progBar.setProgress((i3 - i1) / (i2 - i1));
-            } else if ( i3 <= i1 ) {
-                progBar.setProgress(0);
+            if ( Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2)) ) {
+                dt22 += 1440;
             }
+
+            float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+
+            progBar.setProgress((int)(f1 * 100));
+
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
-            channelProgramOnAirTime.setText(str1 + "~" + str2);
+            channelProgramOnAirTime.setText(dt21 + "~" + dt22);
 
             if ( "모두 시청".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_all);
@@ -153,5 +151,4 @@ public class EpgMainListViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
-
 }
