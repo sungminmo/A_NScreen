@@ -78,6 +78,7 @@ public class VodDetailActivity extends Activity {
     private TextView mDirectorTextView;
     private TextView mStarringTextView;
     private TextView mViewableTextView;
+    private ImageView mMobileImageView;
     private LinearLayout mSeriesLinearLayout;
     private TextView mSynopsisTextView;
     private LinearLayout mPurchaseLinearLayout;
@@ -161,6 +162,7 @@ public class VodDetailActivity extends Activity {
         mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);
         mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);
         mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);
+        mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
 
         ImageButton backButton = (ImageButton)findViewById(R.id.vod_detail_topmenu_left_imagebutton);
@@ -328,6 +330,8 @@ public class VodDetailActivity extends Activity {
                     boolean seriesLink          = asset.getBoolean("seriesLink");
                     String promotionSticker     = asset.getString("promotionSticker");
                     String title                = asset.getString("title");
+                    String publicationRight     = asset.getString("publicationRight"); // 1: TV ONLY, 2 MOBILE
+
 
                     JSONArray productLists      = asset.getJSONArray("productList");
                     JSONObject product          = (JSONObject)productLists.get(0);
@@ -432,7 +436,9 @@ public class VodDetailActivity extends Activity {
                     mDirectorTextView.setText(director);
                     mStarringTextView.setText(starring);
                     mSynopsisTextView.setText(synopsis);
-
+                    if ( "2".equals(publicationRight) ) {
+                        mMobileImageView.setVisibility(View.VISIBLE);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
