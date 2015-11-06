@@ -304,7 +304,6 @@ public class VodBuyFragment extends Fragment {
     private void requestGetPointBalance() {
         mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(),"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
-        terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
         String url = mPref.getWebhasServerUrl() + "/getPointBalance.json?version=1&terminalKey="+terminalKey+"&domainId=CnM";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -361,7 +360,6 @@ public class VodBuyFragment extends Fragment {
     private void requestGetCouponBalance2() {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
-        terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
         String url = mPref.getWebhasServerUrl() + "/getCouponBalance2.json?version=1&terminalKey=" + terminalKey + "&domainId=CnM";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -407,7 +405,7 @@ public class VodBuyFragment extends Fragment {
      * http://192.168.40.5:8080/HApplicationServer/
      * purchaseAssetEx2.xml?
      * version=2&
-     * terminalKey=8A5D2E45D3874824FF23EC97F78D358&
+     * terminalKey=
      * transactionId=603&
      * productId=108
      * &goodId=1544796&
@@ -417,7 +415,6 @@ public class VodBuyFragment extends Fragment {
     private void requestPurchaseAssetEx2() {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
-        terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
         String url = mPref.getWebhasServerUrl() + "/purchaseAssetEx2.json?version=2&terminalKey="+terminalKey
                 +"&productId="+productId +"&goodId="+goodId+"&uiComponentDomain=0&uiComponentId=0";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {

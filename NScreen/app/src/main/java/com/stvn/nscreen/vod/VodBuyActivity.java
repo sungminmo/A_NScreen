@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -273,6 +274,15 @@ public class VodBuyActivity extends Activity {
                 finish();
             }
         });
+        ((ImageButton)findViewById(R.id.vod_buy_back_imagebutton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("jstr", "");
+                setResult(RESULT_CANCELED, intent);
+                finish();
+            }
+        });
 
         requestGetPointBalance(); // 포인트 잔액을 얻어낸다
     }
@@ -287,7 +297,6 @@ public class VodBuyActivity extends Activity {
     private void requestGetPointBalance() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
-        terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
         String url = mPref.getWebhasServerUrl() + "/getPointBalance.json?version=1&terminalKey="+terminalKey+"&domainId=CnM";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -344,7 +353,6 @@ public class VodBuyActivity extends Activity {
     private void requestGetCouponBalance2() {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
-        terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
         String url = mPref.getWebhasServerUrl() + "/getCouponBalance2.json?version=1&terminalKey="+terminalKey+"&domainId=CnM";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -384,7 +392,7 @@ public class VodBuyActivity extends Activity {
      * http://192.168.40.5:8080/HApplicationServer/
      * purchaseAssetEx2.xml?
      * version=2&
-     * terminalKey=8A5D2E45D3874824FF23EC97F78D358&
+     * terminalKey=
      * transactionId=603&
      * productId=108
      * &goodId=1544796&
@@ -394,7 +402,6 @@ public class VodBuyActivity extends Activity {
     private void requestPurchaseAssetEx2() {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
-        terminalKey = "8A5D2E45D3874824FF23EC97F78D358";
         String url = mPref.getWebhasServerUrl() + "/purchaseAssetEx2.json?version=2&terminalKey="+terminalKey
                 +"&productId="+productId +"&goodId="+goodId+"&uiComponentDomain=0&uiComponentId=0";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {

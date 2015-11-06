@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
@@ -77,11 +78,13 @@ public class LeftMenuActivity extends Activity {
         leftmenu_whatBtn = (ImageButton) findViewById(R.id.leftmenu_whatBtn);
 
         if ( mPref.isPairingCompleted() == true ) {
-            leftmenu_pairing_button1.setVisibility(View.VISIBLE);
-            leftmenu_pairing_button2.setVisibility(View.GONE);
-        } else {
+            ((TextView)findViewById(R.id.leftmenu_pairing_textview1)).setText("셋탑박스와 연동중입니다.");
+            ((TextView)findViewById(R.id.leftmenu_pairing_textview1)).setText("");
             leftmenu_pairing_button1.setVisibility(View.GONE);
             leftmenu_pairing_button2.setVisibility(View.VISIBLE);
+        } else {
+            leftmenu_pairing_button1.setVisibility(View.VISIBLE);
+            leftmenu_pairing_button2.setVisibility(View.GONE);
         }
 
         imageButton2.setOnClickListener(new View.OnClickListener() {

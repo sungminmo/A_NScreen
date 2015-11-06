@@ -415,6 +415,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
     }
 
     private void parseGetChannelList(String response) {
+        int iChannelNumber = 0;
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
@@ -430,6 +431,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     if (xpp.getName().equalsIgnoreCase("channelId")) {
                         sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
+                        String sChanneNumber = xpp.nextText();
+                        iChannelNumber = Integer.valueOf(sChanneNumber);
                         sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelName")) {
                         sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
@@ -451,7 +454,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         sb.append(",\"channelProgramGrade\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelView")) {
                         sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
-                        ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
+                        ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), iChannelNumber, sb.toString());
                         mAdapter.addItem(obj);
                         sb.setLength(0);
                     }

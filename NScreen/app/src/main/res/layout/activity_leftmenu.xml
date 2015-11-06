@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="원활한 서비스 이용을 위해"
-                    android:id="@+id/textView74"
+                    android:id="@+id/leftmenu_pairing_textview1"
                     android:textSize="12.5sp"
                     android:textColor="#e4d8f2" />
 
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="셋탑박스를 연동해주세요."
-                    android:id="@+id/textView68"
+                    android:id="@+id/leftmenu_pairing_textview2"
                     android:textColor="#e4d8f2"
                     android:textSize="12.5sp" />
 
@@ -84,7 +84,7 @@
             android:textSize="15.5sp"
             android:textColor="#7b5aa3"
             android:background="@drawable/btn_stb_connect_selector"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <Button
             android:layout_width="182.75dp"

@@ -6,10 +6,19 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 
+import com.stvn.nscreen.bean.WishObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 /**
@@ -18,6 +27,9 @@ import java.io.OutputStreamWriter;
 public class JYSharedPreferences {
 
     static Context mContext;
+
+    // Realm
+    private Realm mRealm;
 
     private final boolean bLogging = true; // 개발시에는 true 로.
     //private final boolean bLogging = false; // release 시에는 false 로.
@@ -49,6 +61,7 @@ public class JYSharedPreferences {
 
     public JYSharedPreferences(Context c) {
         mContext = c;
+        mRealm   = Realm.getInstance(c);
     }
 
     public boolean isLogging() {
@@ -158,5 +171,46 @@ public class JYSharedPreferences {
         } else {
             return true;
         }
+    }
+
+    public boolean isWishAsset(String assetId) {
+        RealmResults<WishObject> results = mRealm.where(WishObject.class).equalTo("sAssetId", assetId).findAll();
+        if ( results.size() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * getWishList로 전체 찜 목록을 가져왔을때 호출되는 함수.
+     * 기존의 Wish들을 삭제하고, 파라메터의 어레이로 다시 채운다.
+     * @param arr
+     */
+    public void setAllWishList(JSONArray arr) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+
+        // remove all
+        realm.beginTransaction();
+        realm.allObjects(WishObject.class).clear();
+        for ( int i = 0; i < arr.length(); i++ ) {
+            try {
+                JSONObject jo      = arr.getJSONObject(i);
+                JSONObject asset   = jo.getJSONObject("asset");
+                String     assetId = asset.getString("assetId");
+                // 객체를 생성하거나 데이터를 수정하는 작업을 수행한다.
+                WishObject wish = realm.createObject(WishObject.class); // Create a new object
+                wish.setsAssetId(assetId);
+                wish.setsPhoneNumber(jo.getString("phoneNumber"));
+                wish.setsUserId(jo.getString("userId"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        // 트랜잭션 종료
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
     }
 }

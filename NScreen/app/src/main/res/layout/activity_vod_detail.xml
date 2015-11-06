@@ -496,7 +496,8 @@
             android:text="미리보기"
             android:layout_marginRight="5.5dp"
             android:background="@drawable/img_btn_selector_short"
-            android:textColor="@drawable/btn_selector_textcolor" />
+            android:textColor="@drawable/btn_selector_textcolor"
+            android:textSize="14.5sp" />
 
 
         <Button
@@ -506,7 +507,8 @@
             android:id="@+id/vod_detail_order_button"
             android:layout_marginRight="5.25dp"
             android:background="@mipmap/btn_select"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="14.5sp" />
 
 
         <Button
@@ -515,7 +517,11 @@
             android:text="찜하기"
             android:id="@+id/vod_detail_jjim_button"
             android:background="@drawable/img_btn_selector_short"
-            android:textColor="@drawable/btn_selector_textcolor" />
+            android:textColor="@drawable/btn_selector_textcolor"
+            android:drawableRight="@mipmap/v_unpick"
+            android:paddingRight="10dp"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
 
     </LinearLayout>
@@ -534,7 +540,8 @@
             android:text="시청하기"
             android:id="@+id/vod_detail_play_button"
             android:background="@mipmap/btn_select"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
 
 
     </LinearLayout>

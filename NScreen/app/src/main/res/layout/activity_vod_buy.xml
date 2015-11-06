@@ -24,7 +24,7 @@
             android:textColor="@color/white" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/vod_buy_back_imagebutton"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"

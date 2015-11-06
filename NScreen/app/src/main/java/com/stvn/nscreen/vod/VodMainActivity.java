@@ -116,9 +116,6 @@ public class VodMainActivity extends Activity {
         mThisMonthViewPager = (ViewPager) findViewById(R.id.vod_main_thismonth_viewpager);
         mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
 
-        // 배너 요청.
-        // requestGetServiceBannerList();
-
 
         ((LinearLayout)findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +125,9 @@ public class VodMainActivity extends Activity {
             }
         });
 
-        MainActivity.mInstance.getSupportActionBar().show();
+        //MainActivity.mInstance.getSupportActionBar().show();
+        // 배너 요청.
+        requestGetServiceBannerList();
     }
 
 
@@ -145,7 +144,8 @@ public class VodMainActivity extends Activity {
     // 배너 요청
     private void requestGetServiceBannerList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
-        String url = mPref.getRumpersServerUrl() + "/getservicebannerlist.asp";
+        StringBuffer sb = new StringBuffer().append("terminalKey=").append(JYSharedPreferences.RUMPERS_TERMINAL_KEY);
+        String url = mPref.getRumpersServerUrl() + "/getservicebannerlist.asp?"+sb.toString();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
