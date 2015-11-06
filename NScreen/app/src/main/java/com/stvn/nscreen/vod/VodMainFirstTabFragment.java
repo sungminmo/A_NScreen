@@ -2,11 +2,13 @@ package com.stvn.nscreen.vod;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.EightVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
@@ -421,11 +424,40 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
      * */
     // 인기 TOP 20
     private void requestGetPopularityChart() {
-        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        //String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                parseGetPopularityChart(response);
+                //parseGetPopularityChart(response);
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    String resultCode = jo.getString("resultCode");
+                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        JSONObject weeklyChart = jo.getJSONObject("weeklyChart");
+                        JSONArray popularityList = weeklyChart.getJSONArray("popularityList");
+                        for ( int i = 0; i < popularityList.length(); i++ ) {
+                            JSONObject popularity = popularityList.getJSONObject(i);
+                            mPop20PagerAdapter.addVod(popularity);
+                        }
+                    } else {
+                        String errorString = jo.getString("errorString");
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(sb.toString());
+                        alert.show();
+                    }
+
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
+                }
                 mPop20PagerAdapter.notifyDataSetChanged();
                 requestGetContentGroupList(); // 금주의 신작영화 요청.
             }

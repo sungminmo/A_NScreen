@@ -104,9 +104,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId1 = jo1.getString("assetId");
                 TextView title1 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview1);
                 title1.setText(jo1.getString("title"));
-//                String imageFileName1 = jo1.getString("imageFileName");
+                String imageFileName1 = jo1.getString("imageFileName");
                 NetworkImageView niv1 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1);
-//                niv1.setImageUrl(imageFileName1, mImageLoader);
+                niv1.setImageUrl(imageFileName1, mImageLoader);
                 niv1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -136,9 +136,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId2 = jo2.getString("assetId");
                 TextView title2 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview2);
                 title2.setText(jo2.getString("title"));
-//                String imageFileName2 = jo2.getString("imageFileName");
+                String imageFileName2 = jo2.getString("imageFileName");
                 NetworkImageView niv2 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2);
-//                niv2.setImageUrl(imageFileName2, mImageLoader);
+                niv2.setImageUrl(imageFileName2, mImageLoader);
                 niv2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -168,9 +168,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId3 = jo3.getString("assetId");
                 TextView title3 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview3);
                 title3.setText(jo3.getString("title"));
-//                String imageFileName3 = jo3.getString("imageFileName");
+                String imageFileName3 = jo3.getString("imageFileName");
                 NetworkImageView niv3 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview3);
-//                niv3.setImageUrl(imageFileName3, mImageLoader);
+                niv3.setImageUrl(imageFileName3, mImageLoader);
                 niv3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -200,9 +200,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId4 = jo4.getString("assetId");
                 TextView title4 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview4);
                 title4.setText(jo4.getString("title"));
-//                String imageFileName4 = jo4.getString("imageFileName");
+                String imageFileName4 = jo4.getString("imageFileName");
                 NetworkImageView niv4 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview4);
-//                niv4.setImageUrl(imageFileName4, mImageLoader);
+                niv4.setImageUrl(imageFileName4, mImageLoader);
                 niv4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -232,9 +232,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId5 = jo5.getString("assetId");
                 TextView title5 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview5);
                 title5.setText(jo5.getString("title"));
-//                String imageFileName5 = jo5.getString("imageFileName");
+                String imageFileName5 = jo5.getString("imageFileName");
                 NetworkImageView niv5 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview5);
-//                niv5.setImageUrl(imageFileName5, mImageLoader);
+                niv5.setImageUrl(imageFileName5, mImageLoader);
                 niv5.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -264,9 +264,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId6 = jo6.getString("assetId");
                 TextView title6 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview6);
                 title6.setText(jo6.getString("title"));
-//                String imageFileName6 = jo6.getString("imageFileName");
+                String imageFileName6 = jo6.getString("imageFileName");
                 NetworkImageView niv6 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview6);
-//                niv6.setImageUrl(imageFileName6, mImageLoader);
+                niv6.setImageUrl(imageFileName6, mImageLoader);
                 niv6.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -296,9 +296,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId7 = jo7.getString("assetId");
                 TextView title7 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview7);
                 title7.setText(jo7.getString("title"));
-//                String imageFileName7 = jo7.getString("imageFileName");
+                String imageFileName7 = jo7.getString("imageFileName");
                 NetworkImageView niv7 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview7);
-//                niv7.setImageUrl(imageFileName7, mImageLoader);
+                niv7.setImageUrl(imageFileName7, mImageLoader);
                 niv7.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -328,9 +328,9 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 final String assetId8 = jo8.getString("assetId");
                 TextView title8 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview8);
                 title8.setText(jo8.getString("title"));
-//                String imageFileName8 = jo8.getString("imageFileName");
+                String imageFileName8 = jo8.getString("imageFileName");
                 NetworkImageView niv8 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview8);
-//                niv8.setImageUrl(imageFileName8, mImageLoader);
+                niv8.setImageUrl(imageFileName8, mImageLoader);
                 niv8.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
