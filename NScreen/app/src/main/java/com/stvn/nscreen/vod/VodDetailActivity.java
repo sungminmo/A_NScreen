@@ -90,6 +90,7 @@ public class VodDetailActivity extends Activity {
     private String viewable;
 
     private Button mPurchaseButton; // 구매하기 버튼
+    private Button mPrePlayButton;  // 미리보기 버튼
     private Button mPlayButton;     // 시청하기 버튼
     private Button mJimButton;      // 찜하기 버튼
 
@@ -115,6 +116,7 @@ public class VodDetailActivity extends Activity {
     private String contentUri; // http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm
     private String drmServerUri; // http://proxy.video.toast.com/widevine/drm/dls.do
     private String drmProtection; // true
+    private boolean isPrePlay; // 미리보기? 아니면 전체보기 임.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +128,8 @@ public class VodDetailActivity extends Activity {
         mRequestQueue = Volley.newRequestQueue(this);
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
         mImageLoader  = new ImageLoader(mRequestQueue, imageCache);
+
+        isPrePlay     = true;
 
 
         //sJson   = getIntent().getExtras().getString("sJson");
@@ -176,6 +180,16 @@ public class VodDetailActivity extends Activity {
             }
         });
 
+        // 미리보기 버튼
+        mPrePlayButton = (Button)findViewById(R.id.vod_detail_preplay_button);
+        mPrePlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPrePlay = true;
+                requestContentUri();
+            }
+        });
+
         // 미리보기 | 구매하기 | 찜하기
         mPurchaseButton       = (Button)findViewById(R.id.vod_detail_order_button);
         mPurchaseButton.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +235,7 @@ public class VodDetailActivity extends Activity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isPrePlay = false;
                 requestContentUri();
             }
         });
@@ -660,7 +675,13 @@ public class VodDetailActivity extends Activity {
     private void requestContentUri() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestContentUri()"); }
-        String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/play";
+        String action = "preview";
+        if ( isPrePlay == true ) {
+            action = "preview";
+        } else {
+            action = "play";
+        }
+        String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/"+action;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -718,6 +739,12 @@ public class VodDetailActivity extends Activity {
                         intent.putExtra("drmServerUri", drmServerUri);
                         intent.putExtra("drmProtection", drmProtection);
                         intent.putExtra("terminalKey", terminalKey);
+                        if ( isPrePlay == true ) {
+                            intent.putExtra("isPrePlay", "YES");
+                        } else {
+                            intent.putExtra("isPrePlay", "NO");
+                        }
+                        intent.putExtra("title", mTitle);
                         startActivityForResult(intent, 111);
                         //startActivity(intent);
                     }
