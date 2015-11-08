@@ -4,7 +4,7 @@ package com.stvn.nscreen.common;
  * Created by leejunghoon on 15. 10. 9..
  */
 
-public class SearchDataObject {
+public class SearchProgramDataObject {
     private String channelId;
     private String channelNumber;
     private String channelName;
@@ -107,7 +107,7 @@ public class SearchDataObject {
 
     @Override
     public String toString() {
-        return "SearchDataObject{" +
+        return "SearchProgramDataObject{" +
                 "channelId='" + channelId + '\'' +
                 ", channelNumber='" + channelNumber + '\'' +
                 ", channelName='" + channelName + '\'' +

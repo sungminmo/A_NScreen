@@ -1,6 +1,8 @@
 package com.stvn.nscreen.search;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,23 +10,41 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.common.SearchDataObject;
+import com.stvn.nscreen.common.SearchVodDataObject;
 
 import java.util.List;
 
-public class SearchVodAdapter extends ArrayAdapter<SearchDataObject> {
+public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject.ContentGroup> {
 
 	LayoutInflater mInflater;
 	private Context mContext;
+	private RequestQueue mRequestQueue;
+	private ImageLoader mImageLoader;
 
 
-	public SearchVodAdapter(Context context, List<SearchDataObject> items)
+	public SearchVodAdapter(Context context, List<SearchVodDataObject.ContentGroup> items)
 	{
 		super(context, 0, items);
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
 		mInflater = LayoutInflater.from(context);
+		mRequestQueue = Volley.newRequestQueue(mContext);
+		mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+			private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
+
+			public void putBitmap(String url, Bitmap bitmap) {
+				mCache.put(url, bitmap);
+			}
+
+			public Bitmap getBitmap(String url) {
+				return mCache.get(url);
+			}
+		});
 	}
 
 	@Override
@@ -45,7 +65,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchDataObject> {
 			convertView = mInflater.inflate(R.layout.row_search_vod, null);
 			holder = new ViewHolder();
 			holder.programname = (TextView)convertView.findViewById(R.id.programname);
-			holder.poster = (ImageView)convertView.findViewById(R.id.poster);
+			holder.poster = (NetworkImageView)convertView.findViewById(R.id.poster);
 			holder.event = (ImageView)convertView.findViewById(R.id.event_icon);
 			convertView.setTag(holder);
 		}
@@ -53,8 +73,9 @@ public class SearchVodAdapter extends ArrayAdapter<SearchDataObject> {
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		SearchDataObject item = getItem(position);
+		SearchVodDataObject.ContentGroup item = getItem(position);
 		holder.poster.setImageResource(R.mipmap.postersample);
+		holder.poster.setImageUrl(item.getImageFileName(), mImageLoader);
 		int imgresource = R.mipmap.vod_01;
 		switch (position%8)
 		{
@@ -84,14 +105,14 @@ public class SearchVodAdapter extends ArrayAdapter<SearchDataObject> {
 				break;
 		}
 		holder.event.setImageResource(imgresource);
-		holder.programname.setText("건축학개론");
+		holder.programname.setText(item.getTitle());
 
 		return convertView;
 	}
 	
 	class ViewHolder {
 		TextView programname;
-		ImageView poster;
+		NetworkImageView poster;
 		ImageView event;
 	}
 	

@@ -3,9 +3,12 @@ package com.stvn.nscreen.search;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,30 +20,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
-import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
-import com.stvn.nscreen.util.CMLog;
+import com.stvn.nscreen.common.GsonRequest;
+import com.stvn.nscreen.common.KeyWordDataObject;
+import com.stvn.nscreen.common.VolleyHelper;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by limdavid on 15. 9. 15..
@@ -59,6 +53,7 @@ public class SearchMainActivity extends CMBaseActivity {
     private ArrayList<String> mKeywordList = new ArrayList<String>();
     private SearchKeywordAdapter mAdapter;
     private FrameLayout mFragmentlayout;
+    private TextView mKeywordEmptyView;
 
     private String mVersion = "1";
     private String mTerminalKey = "9CED3A20FB6A4D7FF35D1AC965F988D2";
@@ -68,6 +63,11 @@ public class SearchMainActivity extends CMBaseActivity {
     private JYSharedPreferences mPref;
     private boolean mLockListView = true;
 
+    private VolleyHelper mVolleyHelper;
+    private final int GET_KEYWORD_REQ = 0x99;
+    private String mKeyword;
+    private boolean mListClicked = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +75,7 @@ public class SearchMainActivity extends CMBaseActivity {
         setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
         setActionBarTitle("검색");
         mRequestQueue = Volley.newRequestQueue(this);
+        mVolleyHelper = VolleyHelper.getInstance(this);
         mPref = new JYSharedPreferences(this);
         initView();
 
@@ -96,10 +97,15 @@ public class SearchMainActivity extends CMBaseActivity {
         mAdapter.setClickListener(clickListener);
         mKeywordListView.setAdapter(mAdapter);
         mKeywordView.addTextChangedListener(mKeywordWatcher);
+        mKeywordEmptyView = (TextView)findViewById(R.id.keyword_emptyview);
+        mKeywordEmptyView.setVisibility(View.VISIBLE);
+        mKeywordListView.setVisibility(View.GONE);
         mClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mKeywordView.setText("");
+                mSearchCount.setText("");
+                mFragmentlayout.setVisibility(View.GONE);
             }
         });
 
@@ -109,22 +115,45 @@ public class SearchMainActivity extends CMBaseActivity {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         mKeywordListView.setVisibility(View.GONE);
+                        mKeywordHandler.removeMessages(GET_KEYWORD_REQ);
                         hideSoftKeyboard();
-                        if (mKeywordView.getText().length() > 0)
+                        if (mKeywordView.getText().length() > 0) {
+                            mKeyword = mKeywordView.getText().toString();
                             showFragment();
-                        else
-                            Toast.makeText(SearchMainActivity.this, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mKeywordEmptyView.setVisibility(View.VISIBLE);
+                        }
                         return true;
+
                 }
-
-
                 return false;
             }
         });
-        mLockListView = false;
+        mKeywordView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                mFragmentlayout.setVisibility(View.GONE);
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_DEL:
+                        mSearchCount.setText("");
+                        mKeywordListView.setVisibility(View.INVISIBLE);
+                        mKeywordHandler.removeMessages(GET_KEYWORD_REQ);
+                        break;
+                }
+                return false;
+            }
+        });
 
+        mLockListView = false;
         mFragmentlayout = (FrameLayout)findViewById(R.id.searchFragment);
         switchTab(0);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+             mKeywordView.setText("");
+            }
+        },200);
     }
 
     TextWatcher mKeywordWatcher = new TextWatcher() {
@@ -141,9 +170,22 @@ public class SearchMainActivity extends CMBaseActivity {
         public void afterTextChanged(Editable s) {
             if(s.length()>0)
             {
+                mKeyword = mKeywordView.getText().toString();
+                mKeywordHandler.removeMessages(GET_KEYWORD_REQ);
+                if(mKeywordEmptyView.getVisibility()==View.VISIBLE)
+                    mKeywordEmptyView.setVisibility(View.GONE);
                 // 조회로직 추가
-                if(!mLockListView)
-                    reqKeywordList();
+                if(!mListClicked)
+                {
+                    mKeywordHandler.sendEmptyMessageDelayed(GET_KEYWORD_REQ, 800);
+                    mFragmentlayout.setVisibility(View.GONE);
+                }else
+                    mListClicked = false;
+            }else
+            {
+                mKeywordListView.setVisibility(View.GONE);
+//                mFragmentlayout.setVisibility(View.VISIBLE);
+                mKeywordEmptyView.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -151,84 +193,63 @@ public class SearchMainActivity extends CMBaseActivity {
     public void reqKeywordList()
     {
         mLockListView = true;
+        mKeywordList.clear();
         mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
-        String url = mPref.getWebhasServerUrl()+"/getSearchWord.xml?version="+mVersion+"&terminalKey="+mTerminalKey+
-                "&searchKeyword="+mKeywordView.getText().toString();
-        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/getSearchWord.json?version=1&terminalKey=8A5D2E45D3874824FF23EC97F78D358&includeAdultCategory=0&searchKeyword="+mKeywordView.getText().toString();
+        mKeywordView.setEnabled(false);
+        final GsonRequest gsonRequest = new GsonRequest(url, KeyWordDataObject.class,null,new Response.Listener<KeyWordDataObject>(){
             @Override
-            public void onResponse(String response) {
-                //Log.d(tag, response);
-                parseGetKeywordList(response);
-                mAdapter.notifyDataSetChanged();
+            public void onResponse(KeyWordDataObject response) {
+                mKeywordList.clear();
+                for(String str : response.getSearchWordList())
+                {
+                    mKeywordList.add(str);
+                }
+                if(mKeywordList.size()>0)
+                {
+                    mKeywordListView.setVisibility(View.VISIBLE);
+                    mKeywordEmptyView.setVisibility(View.GONE);
+                }else
+                {
+                    mKeywordListView.setVisibility(View.GONE);
+                    mKeywordEmptyView.setVisibility(View.GONE);
+                }
+                mAdapter.notifyDataSetChanged();;
+                mKeywordView.setEnabled(true);
                 mProgressDialog.dismiss();
             }
-        }, new Response.ErrorListener() {
+        }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
+                mKeywordView.setEnabled(true);
                 mProgressDialog.dismiss();
             }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("version", String.valueOf(1));
-                params.put("areaCode", String.valueOf(0));
-                CMLog.e("CM", params.toString());
-                return params;
-            }
-        };
-        mRequestQueue.add(request);
+        });
+
+        mVolleyHelper.addToRequestQueue(gsonRequest);
     }
 
-    private void parseGetKeywordList(String response) {
-
-        StringBuilder sb = new StringBuilder();
-        XmlPullParserFactory factory = null;
-        try {
-            factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-
-            XmlPullParser xpp = factory.newPullParser();
-            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
-
-            int eventType = xpp.getEventType();
-            while(eventType != XmlPullParser.END_DOCUMENT)
+    private Handler mKeywordHandler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what)
             {
-                String name = null;
-
-                switch (eventType)
-                {
-                    case XmlPullParser.START_TAG:
-                        name = xpp.getName();
-                        if("searchWord".equals(name)){
-                            mKeywordList.add(xpp.nextText());
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        name = xpp.getName();
-                        break;
-
-                }
-                eventType = xpp.next();
+                case GET_KEYWORD_REQ :
+                    reqKeywordList();
+                    break;
             }
-            mKeywordListView.setVisibility(View.VISIBLE);
-            mAdapter.notifyDataSetChanged();
-            mLockListView = false;
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
-
+    };
 
     private void switchTab(int idx)
     {
         mTabSelectIdx = idx;
-        mKeywordListView.setVisibility(View.VISIBLE);
+        if(!TextUtils.isEmpty(mKeyword))
+            mKeywordListView.setVisibility(View.VISIBLE);
+        else
+            mKeywordListView.setVisibility(View.GONE);
         mFragmentlayout.setVisibility(View.GONE);
         switch (mTabSelectIdx)
         {
@@ -260,7 +281,7 @@ public class SearchMainActivity extends CMBaseActivity {
                 break;
         }
         Bundle bundle = new Bundle();
-        bundle.putString("KEYWORD",mKeywordView.getText().toString());
+        bundle.putString("KEYWORD",mKeyword);
         mFragment.setArguments(bundle);
         mKeywordListView.setVisibility(View.GONE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -276,7 +297,13 @@ public class SearchMainActivity extends CMBaseActivity {
             switch (v.getId())
             {
                 case R.id.keyword:
+                    mKeyword =text;
+                    mListClicked = true;
                     mKeywordView.setText(text);
+                    mKeywordListView.setVisibility(View.GONE);
+                    hideSoftKeyboard();
+                    if(!TextUtils.isEmpty(mKeyword))
+                        showFragment();
                     break;
                 case R.id.keywordclose:
                     mKeywordList.remove(text);

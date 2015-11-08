@@ -144,10 +144,8 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         changeTabWithIndex(TAB_MOBILE);
     }
 
-    private void initData() {
 
-        mList.clear();
-        mAdapter.notifyDataSetChanged();
+    private void initData() {
 
         int count = 20;
         if (mTabIndex == TAB_TV) {
@@ -160,6 +158,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
         mLockListView = false;
         mAdapter.notifyDataSetChanged();
+        mListView.closeOpenedItems();;
         setPurchaseListCountText(count);
     }
 
@@ -235,13 +234,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         }
 
         mListView.closeOpenedItems();
-
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                initData();
-//            }
-//        });
     }
 
     @Override

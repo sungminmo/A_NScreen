@@ -71,6 +71,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/dimen_5"
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/search_close"
                 android:id="@+id/close"
@@ -84,27 +85,55 @@
             />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchcount"
-        android:textColor="@color/search_programtext_violet"
-        android:layout_marginTop="@dimen/dimen_10.5"
-        android:gravity="center"
-        />
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/searchlistview"
-        android:visibility="gone"
-        />
-
-    <FrameLayout
-        android:id="@+id/searchFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone"
-        />
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchcount"
+            android:textColor="@color/search_programtext_violet"
+            android:layout_marginTop="@dimen/dimen_10.5"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:visibility="visible"
+            />
+
+        <FrameLayout
+            android:id="@+id/searchFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchcount"
+            android:visibility="visible"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/searchcount"
+            android:textSize="16.25sp"
+            android:textColor="@color/color7b5aa3"
+            android:gravity="top|center_horizontal"
+            android:text="@string/search_keyword_empty_msg"
+            android:paddingTop="@dimen/dimen_119.5"
+            android:id="@+id/keyword_emptyview"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/searchlistview"
+            android:dividerHeight="@dimen/dimen_1"
+            android:divider="@color/search_programtext_grape"
+            android:layout_marginLeft="@dimen/dimen_18.5"
+            android:layout_marginRight="@dimen/dimen_18.5"
+            android:background="@color/white"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
+
 </LinearLayout>

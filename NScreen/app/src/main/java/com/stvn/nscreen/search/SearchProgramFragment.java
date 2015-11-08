@@ -14,11 +14,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
-import com.stvn.nscreen.common.SearchDataObject;
+import com.stvn.nscreen.common.SearchProgramDataObject;
 import com.stvn.nscreen.common.SwipeListView;
 import com.stvn.nscreen.util.CMLog;
 import com.stvn.nscreen.util.CMUtil;
@@ -42,7 +43,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
     private LayoutInflater mInflater;
     private SwipeListView mListView;
-    private ArrayList<SearchDataObject> mProgramlist = new ArrayList<SearchDataObject>();
+    private ArrayList<SearchProgramDataObject> mProgramlist = new ArrayList<SearchProgramDataObject>();
     private SearchProgramAdapter mAdapter;
     private RequestQueue mRequestQueue;
     private ProgressDialog mProgressDialog;
@@ -123,17 +124,17 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
             @Override
             public int onChangeSwipeMode(int position) {
-                int swipeMode = 0;
-                switch (position%2)
-                {
-                    case 0:// 기본설정된 Swipe모드
-                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-                        break;
-                    case 1:// Swipe None
-                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
-                        break;
-                }
-                return swipeMode;
+//                int swipeMode = 0;
+//                switch (position%2)
+//                {
+//                    case 0:// 기본설정된 Swipe모드
+//                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
+//                        break;
+//                    case 1:// Swipe None
+//                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
+//                        break;
+//                }
+                return super.onChangeSwipeMode(position);
             }
 
             @Override
@@ -157,7 +158,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     {
         mLockListView = true;
         mProgressDialog	 = ProgressDialog.show(getActivity(),"",getString(R.string.wait_a_moment));
-        String url = mPref.getWebhasServerUrl()+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
+        String url = Constants.SERVER_URL_AIRCODE_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -186,7 +187,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     }
 
     private void parseGetSearchList(String response) {
-
+        mTotCnt = 0;
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
@@ -197,7 +198,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
 
             int eventType = xpp.getEventType();
-            SearchDataObject object = null;
+            SearchProgramDataObject object = null;
             while(eventType != XmlPullParser.END_DOCUMENT)
             {
                 String name = null;
@@ -209,7 +210,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                         if("totalCount".equals(name)){
                             mTotCnt = CMUtil.parseInt(xpp.nextText());
                         }else if("scheduleItem".equals(name)){
-                            object = new SearchDataObject();
+                            object = new SearchProgramDataObject();
                         }else if("channelId".equals(name)){
                             object.setChannelId(xpp.nextText());
                         }else if("channelNumber".equals(name)){
@@ -260,6 +261,30 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             e.printStackTrace();
         }
     }
+
+    View.OnClickListener mSwipeButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId())
+            {
+                case R.id.watch_tv:         // TV로 시청
+                    break;
+                case R.id.rec_start:        // 녹화시작
+                    break;
+                case R.id.rec_stop:         // 녹화중지
+                    break;
+                case R.id.set_reservation_rec: //예약녹화설정
+                    break;
+                case R.id.cancel_reservation_rec: // 예약녹화취소
+                    break;
+                case R.id.set_reservation_watch: //예약시청설정
+                    break;
+                case R.id.cancel_reservation_watch: //예약시청취소
+                    break;
+            }
+        }
+    };
+
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
