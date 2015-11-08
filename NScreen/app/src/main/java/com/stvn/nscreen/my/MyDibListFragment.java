@@ -98,27 +98,28 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                 Log.d("ljh", "onClickFrontView");
             }
 
+            /**
+             * Swipe 처리 유
+             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
+             * Swipe None : SwipeListView.SWIPE_MODE_NONE
+             * */
             @Override
             public int onChangeSwipeMode(int position) {
-                int swipeMode = 0;
-                switch (position%2)
-                {
-                    case 0:// 기본설정된 Swipe모드
-                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-                        break;
-                    case 1:// Swipe None
-                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
-                        break;
-                }
-                return swipeMode;
+                return super.onChangeSwipeMode(position);
             }
 
+            /**
+             * 삭제 처리
+             * */
             @Override
             public void onDismiss(int[] reverseSortedPositions) {
                 for (int position : reverseSortedPositions) {
                     mList.remove(position);
                 }
                 mAdapter.notifyDataSetChanged();
+
+                int count = mList.size();
+                setDibListCountText(count);
             }
 
             @Override
@@ -158,11 +159,12 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
         // TODO:유효기간 만료 일 때
         if (itemIndex %2 == 0) {
             String alertTitle = getString(R.string.my_cnm_alert_title_expired);
-            String alertMessage = getString(R.string.my_cnm_alert_message_expired);
-            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
+            String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+            String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    removeWatchList(itemIndex);
+                    mListView.dismiss(itemIndex);
                 }
             }, true);
         }
@@ -171,13 +173,13 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             String programTitle = "프로그램타이틀";
 
             String alertTitle = "VOD 찜 목록 삭제";
-            String alertMessage1 = "선택하신 VOD를 목록에서 삭제하시겠습니까?\n" + programTitle;
+            String alertMessage = "선택하신 VOD를\n목록에서 삭제하시겠습니까?";
 
-            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", "예", "아니오", true, false,
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, programTitle, "예", "아니오", true, false,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            removeWatchList(itemIndex);
+                            mListView.dismiss(itemIndex);
                         }
                     }, new DialogInterface.OnClickListener() {
                         @Override
@@ -187,16 +189,6 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                     });
         }
 
-    }
-
-    /**
-     * 조회 목록 리스트 제거 및 화면 갱신
-     * */
-    private void removeWatchList(int itemIndex) {
-        mListView.dismiss(itemIndex);
-
-        int count = mList.size();
-        setDibListCountText(count);
     }
 
     @Override

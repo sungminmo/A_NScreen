@@ -25,6 +25,7 @@ public class EpgChoiceActivity extends Activity {
     private              ImageButton            epg_choice_close_imageButton;
 
     private              Button                 epg_choice_genre_all_button, epg_choice_genre_like_button, epg_choice_genre_one_button, epg_choice_genre_two_button, epg_choice_genre_three_button, epg_choice_genre_four_button, epg_choice_genre_five_button, epg_choice_genre_six_button, epg_choice_genre_seven_button, epg_choice_genre_eight_button, epg_choice_genre_nine_button;
+    private              String                 sGenreName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,11 @@ public class EpgChoiceActivity extends Activity {
         epg_choice_genre_like_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, EpgMainActivity.class);
+                intent.putExtra("sGenreCode", "");
+                intent.putExtra("sGenreName", "선호채널");
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
@@ -175,3 +181,4 @@ public class EpgChoiceActivity extends Activity {
         });
     }
 }
+

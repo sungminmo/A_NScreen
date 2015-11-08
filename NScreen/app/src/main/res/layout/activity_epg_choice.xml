@@ -20,8 +20,7 @@
             android:gravity="center"
             android:text="시청을 원하시는 채널장르를 선택하실 수 있습니다."
             android:textSize="13.25sp"
-            android:textColor="@color/black"
-            android:textIsSelectable="true" />
+            android:textColor="@color/black" />
 
         <ImageButton
             android:id="@+id/epg_choice_close_imageButton"

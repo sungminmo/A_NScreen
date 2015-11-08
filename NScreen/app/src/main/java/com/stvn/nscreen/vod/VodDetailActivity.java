@@ -2,9 +2,11 @@ package com.stvn.nscreen.vod;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -480,7 +482,6 @@ public class VodDetailActivity extends Activity {
     private void requestContentUri() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestContentUri()"); }
-        String terminalKey = mPref.getWebhasTerminalKey();
         String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/play";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -489,44 +490,59 @@ public class VodDetailActivity extends Activity {
                 mProgressDialog.dismiss();
                 try {
                     JSONObject jo     = new JSONObject(response);
-                    JSONObject drm    = jo.getJSONObject("drm");
                     JSONObject header = jo.getJSONObject("header");
-                    contentUri        = drm.getString("contentUri");
-                    drmServerUri      = drm.getString("drmServerUri");
-                    boolean bDrm      = drm.getBoolean("drmProtection");
-                    if ( bDrm == true ) {
-                        drmProtection = "true";
+                    int resultCode    = header.getInt("resultCode");
+                    if ( resultCode != 0 ) {
+                        String showMessage = header.getString("showMessage");
+                        String resultMessages = header.getString("resultMessages");
+                        AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
+                        ad.setTitle("알림")
+                                .setMessage(showMessage+"\n"+resultMessages)
+                                .setCancelable(false)
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        AlertDialog alert = ad.create();
+                        alert.show();
                     } else {
-                        drmProtection = "false";
-                    }
-
-                    // http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm
+                        JSONObject drm    = jo.getJSONObject("drm");
+                        contentUri        = drm.getString("contentUri");
+                        drmServerUri      = drm.getString("drmServerUri");
+                        boolean bDrm      = drm.getBoolean("drmProtection");
+                        if ( bDrm == true ) {
+                            drmProtection = "true";
+                        } else {
+                            drmProtection = "false";
+                        }
+                        // http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm
 //                    Intent intent = new Intent(mInstance.getActivity(), WidevineSamplePlayer.class);
 //                    Intent intent = new Intent(mInstance.getActivity(), StreamingActivity.class);
 
-                    String terminalKey = mPref.getWebhasTerminalKey();
+                        String terminalKey = mPref.getWebhasTerminalKey();
 
                     /*
                     assets.add(new AssetItem("http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm", 1));
                     assets.add(new AssetItem("widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm", 1));
                     투모로우랜드 "widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm"
                      */
-                    contentUri = contentUri.replace("http://","widevine://");
+                        contentUri = contentUri.replace("http://","widevine://");
 
-                    Intent intent = new Intent(mInstance, VideoPlayerView.class);
-                    //intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
-                    intent.putExtra("com.widevine.demo.Path", contentUri);
-                    //intent.putExtra("currentpage", currentPage);
-                    //intent.putExtra("title", title);
-                    intent.putExtra("assetId", assetId);
-                    intent.putExtra("contentUri", contentUri);
-                    intent.putExtra("drmServerUri", drmServerUri);
-                    intent.putExtra("drmProtection", drmProtection);
-                    intent.putExtra("terminalKey", terminalKey);
-                    startActivityForResult(intent, 111);
-                    //startActivity(intent);
-
-
+                        Intent intent = new Intent(mInstance, VideoPlayerView.class);
+                        //intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
+                        intent.putExtra("com.widevine.demo.Path", contentUri);
+                        //intent.putExtra("currentpage", currentPage);
+                        //intent.putExtra("title", title);
+                        intent.putExtra("assetId", assetId);
+                        intent.putExtra("contentUri", contentUri);
+                        intent.putExtra("drmServerUri", drmServerUri);
+                        intent.putExtra("drmProtection", drmProtection);
+                        intent.putExtra("terminalKey", terminalKey);
+                        startActivityForResult(intent, 111);
+                        //startActivity(intent);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

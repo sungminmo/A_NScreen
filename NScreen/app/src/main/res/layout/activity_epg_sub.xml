@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:orientation="horizontal"
-        android:background="#c6b3dd">
+        android:background="@drawable/ch_date_bg">
 
         <LinearLayout
             android:layout_width="81.5dp"
@@ -76,6 +76,287 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="23dp" />
         </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:id="@+id/scrollView3"
+            android:layout_marginLeft="81.5dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:layout_marginLeft="23.5dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView21"
+                        android:layout_marginLeft="14dp"
+                        android:background="@mipmap/ch_date_select"
+                        android:layout_marginTop="8.5dp"
+                        android:layout_marginBottom="9.5dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11.04"
+                        android:id="@+id/textView40"
+                        android:layout_marginRight="26.5dp"
+                        android:textSize="14.5sp"
+                        android:textColor="@drawable/epg_sub_date_selector_textcolor"
+                        android:selectAllOnFocus="true"
+                        android:layout_marginBottom="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView28"
+                        android:background="@drawable/epg_sub_ch_date_dot_selector"
+                        android:adjustViewBounds="false"
+                        android:layout_marginLeft="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView22"
+                        android:background="@mipmap/ch_date_select"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginTop="8.5dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11.05"
+                        android:id="@+id/textView52"
+                        android:layout_marginRight="26.5dp"
+                        android:textSize="14.5sp"
+                        android:textColor="@drawable/epg_sub_date_selector_textcolor"
+                        android:layout_marginBottom="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView29"
+                        android:background="@drawable/epg_sub_ch_date_dot_selector"
+                        android:layout_marginLeft="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView23"
+                        android:background="@mipmap/ch_date_select"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginTop="8.5dp"
+                        android:layout_marginBottom="9.5dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11.06"
+                        android:id="@+id/textView66"
+                        android:layout_marginRight="26.5dp"
+                        android:textSize="14.5sp"
+                        android:textColor="@drawable/epg_sub_date_selector_textcolor"
+                        android:layout_marginBottom="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView30"
+                        android:layout_marginLeft="14dp"
+                        android:background="@drawable/epg_sub_ch_date_dot_selector" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView24"
+                        android:background="@mipmap/ch_date_select"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginTop="8.5dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11.07"
+                        android:id="@+id/textView81"
+                        android:layout_marginRight="26.5dp"
+                        android:textSize="14.5sp"
+                        android:textColor="@drawable/epg_sub_date_selector_textcolor"
+                        android:layout_marginBottom="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView31"
+                        android:background="@drawable/epg_sub_ch_date_dot_selector"
+                        android:layout_marginLeft="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView25"
+                        android:background="@mipmap/ch_date_select"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginTop="8.5dp"
+                        android:layout_marginBottom="9.5dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11.08"
+                        android:id="@+id/textView82"
+                        android:layout_marginRight="26.5dp"
+                        android:textSize="14.5sp"
+                        android:textColor="@drawable/epg_sub_date_selector_textcolor"
+                        android:layout_marginBottom="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView32"
+                        android:background="@drawable/epg_sub_ch_date_dot_selector"
+                        android:layout_marginLeft="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView26"
+                        android:background="@mipmap/ch_date_select"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginTop="8.5dp"
+                        android:layout_marginBottom="9.5dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11.09"
+                        android:id="@+id/textView83"
+                        android:layout_marginRight="26.5dp"
+                        android:textSize="14.5sp"
+                        android:textColor="@drawable/epg_sub_date_selector_textcolor"
+                        android:layout_marginBottom="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView33"
+                        android:background="@drawable/epg_sub_ch_date_dot_selector"
+                        android:layout_marginLeft="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:layout_marginRight="23.5dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView27"
+                        android:background="@mipmap/ch_date_select"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginTop="8.5dp"
+                        android:layout_marginBottom="9.5dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11.10"
+                        android:id="@+id/textView84"
+                        android:textSize="14.5sp"
+                        android:textColor="@drawable/epg_sub_date_selector_textcolor"
+                        android:layout_marginBottom="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView34"
+                        android:background="@drawable/epg_sub_ch_date_dot_selector"
+                        android:layout_marginLeft="14dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton3"
+            android:background="@mipmap/date_arrow_before"
+            android:layout_marginLeft="87.5dp"
+            android:layout_gravity="center_vertical" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton4"
+            android:background="@mipmap/date_arrow_next"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="6dp" />
 
     </FrameLayout>
 

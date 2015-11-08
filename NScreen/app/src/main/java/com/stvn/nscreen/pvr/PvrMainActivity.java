@@ -1,8 +1,6 @@
 package com.stvn.nscreen.pvr;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,8 +21,6 @@ import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -88,6 +84,7 @@ public class PvrMainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAdapter.clear();
                 button1.setSelected(true);
                 button2.setSelected(false);
                 textView2.setVisibility(View.GONE);
@@ -99,6 +96,7 @@ public class PvrMainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAdapter.clear();
                 button1.setSelected(false);
                 button2.setSelected(true);
                 textView2.setVisibility(View.VISIBLE);

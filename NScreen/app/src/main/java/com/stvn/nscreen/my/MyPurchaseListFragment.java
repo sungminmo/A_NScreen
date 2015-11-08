@@ -2,6 +2,7 @@ package com.stvn.nscreen.my;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -110,27 +111,27 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 Log.d("ljh", "onClickFrontView");
             }
 
+            /**
+             * Swipe 처리 유
+             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
+             * Swipe None : SwipeListView.SWIPE_MODE_NONE
+             * */
             @Override
             public int onChangeSwipeMode(int position) {
-                int swipeMode = 0;
-                switch (position%2)
-                {
-                    case 0:// 기본설정된 Swipe모드
-                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-                        break;
-                    case 1:// Swipe None
-                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
-                        break;
-                }
-                return swipeMode;
+                return super.onChangeSwipeMode(position);
             }
 
-            @Override
+            /**
+             * 삭제 처리
+             * */
             public void onDismiss(int[] reverseSortedPositions) {
                 for (int position : reverseSortedPositions) {
                     mList.remove(position);
                 }
                 mAdapter.notifyDataSetChanged();
+
+                int count = mList.size();
+                setPurchaseListCountText(count);
             }
 
             @Override
@@ -178,11 +179,12 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         // TODO:유효기간 만료 일 때
         if (itemIndex %2 == 0) {
             String alertTitle = getString(R.string.my_cnm_alert_title_expired);
-            String alertMessage = getString(R.string.my_cnm_alert_message_expired);
-            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage, "", new DialogInterface.OnClickListener() {
+            String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+            String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
+            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    removeWatchList(itemIndex);
+                    mListView.dismiss(itemIndex);
                 }
             }, true);
         }
@@ -192,13 +194,12 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             String alertTitle = "VOD 구매목록 삭제";
             String alertMessage1 = "선택하신 VOD를 구매목록에서 삭제하시겠습니까?";
-//            String alertMessage2 = programTitle + "\n삭제하신 VOD는 복구가 불가능합니다.";
             Spannable alertMessage2 = (Spannable)Html.fromHtml(programTitle + "<br/><font color=\"red\">삭제하신 VOD는 복구가 불가능합니다.</font>");
             CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, "예", "아니오", true, false,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            removeWatchList(itemIndex);
+                            mListView.dismiss(itemIndex);
                         }
                     }, new DialogInterface.OnClickListener() {
                         @Override
@@ -208,16 +209,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     });
         }
 
-    }
-
-    /**
-     * 조회 목록 리스트 제거 및 화면 갱신
-     * */
-    private void removeWatchList(int itemIndex) {
-        mListView.dismiss(itemIndex);
-
-        int count = mList.size();
-        setPurchaseListCountText(count);
     }
 
     /**
@@ -234,6 +225,13 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         }
 
         mListView.closeOpenedItems();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initData();
+            }
+        }, 300);
     }
 
     @Override
