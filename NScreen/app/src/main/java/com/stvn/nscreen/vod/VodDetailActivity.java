@@ -37,6 +37,7 @@ import com.widevine.sampleplayer.VideoPlayerView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -84,6 +85,7 @@ public class VodDetailActivity extends Activity {
     private LinearLayout mPurchaseLinearLayout;
     private LinearLayout mPlayLinearLayout;
     private LinearLayout mTvOnlyLiearLayout;
+    private TextView mTvOnlyTextView;
     private ViewPager mViewPager;
     private String viewable;
 
@@ -157,11 +159,12 @@ public class VodDetailActivity extends Activity {
         mDirectorTextView     = (TextView)findViewById(R.id.vod_detail_director_textview);
         mStarringTextView     = (TextView)findViewById(R.id.vod_detail_starring_textview);
         mViewableTextView     = (TextView)findViewById(R.id.vod_detail_viewable_textview);
-        mSeriesLinearLayout   = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout);
+        mSeriesLinearLayout   = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout);    // 시리즈 회차 버튼
         mSynopsisTextView     = (TextView)findViewById(R.id.vod_detail_synopsis_textview);
-        mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);
-        mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);
-        mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);
+        mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);  // 미리비기/구매하기/찜하기
+        mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);      // 시청하기
+        mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);    // TV에서 시청가능합니다.
+        mTvOnlyTextView       = (TextView)findViewById(R.id.vod_detail_tvonly_textview);
         mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
 
@@ -369,6 +372,10 @@ public class VodDetailActivity extends Activity {
                     String purchasedTime     = product.getString("purchasedTime");
 
                     // LinearLayout 감추기/보이기 -----------------------------------------------------
+                    // mSeriesLinearLayout   // 시리즈 회차 버튼
+                    // mPurchaseLinearLayout // 미리비기/구매하기/찜하기
+                    // mPlayLinearLayout     // 시청하기
+                    // mTvOnlyLiearLayout    // TV에서 시청가능합니다.
                     if ( seriesLink == true ) {      // 시리즈 보여라
                         isSeriesLink = "YES";
                         mSeriesLinearLayout.setVisibility(View.VISIBLE);
@@ -383,11 +390,9 @@ public class VodDetailActivity extends Activity {
                         mPurchaseLinearLayout.setVisibility(View.GONE);
                         mPlayLinearLayout.setVisibility(View.VISIBLE);
                     }
-                    // @// TODO: 2015. 10. 21. 지금은 값이 안내려옴. 시청기기 서버작업 되면 수정해야 됨.
-                    if ( true ) {                    // TV에서봐 보여랴
-                        mTvOnlyLiearLayout.setVisibility(View.GONE);
-                    } else {                         // TV에서봐 감쳐라.
-                        mTvOnlyLiearLayout.setVisibility(View.GONE);
+                    if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
+                        mTvOnlyTextView.setText("["+title+"] 는 (은)");
+                        mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
                     }
 
                     // 값들 찍어주기. -----------------------------------------------------------------

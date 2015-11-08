@@ -376,7 +376,8 @@
         android:id="@+id/vod_detail_series_linearlayout"
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
-        android:layout_marginTop="3dp">
+        android:layout_marginTop="3dp"
+        android:visibility="gone">
 
         <View
             android:layout_width="match_parent"
@@ -495,7 +496,8 @@
         android:layout_marginLeft="12.25dp"
         android:layout_marginRight="12.25dp"
         android:id="@+id/vod_detail_purchase_linearlayout"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
 
         <Button android:id="@+id/vod_detail_preplay_button"
@@ -540,7 +542,8 @@
         android:layout_height="40.75dp"
         android:layout_marginLeft="12.25dp"
         android:layout_marginRight="12.25dp"
-        android:id="@+id/vod_detail_play_linearlayout" >
+        android:id="@+id/vod_detail_play_linearlayout"
+        android:visibility="gone">
 
         <Button
             android:layout_width="match_parent"
@@ -560,13 +563,14 @@
         android:layout_height="40.75dp"
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
-        android:id="@+id/vod_detail_tvonly_linearlayout">
+        android:id="@+id/vod_detail_tvonly_linearlayout"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="[] 는 (은)"
-            android:id="@+id/textView5"
+            android:id="@+id/vod_detail_tvonly_textview"
             android:textSize="14sp"
             android:textColor="@color/violet"
             android:layout_weight="1"
