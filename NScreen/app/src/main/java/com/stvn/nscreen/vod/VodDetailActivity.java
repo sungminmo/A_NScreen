@@ -83,6 +83,7 @@ public class VodDetailActivity extends Activity {
     private LinearLayout mSeriesLinearLayout;
     private TextView mSynopsisTextView;
     private LinearLayout mPurchaseLinearLayout;
+    private LinearLayout mPurchaseLinearLayout2;
     private LinearLayout mPlayLinearLayout;
     private LinearLayout mTvOnlyLiearLayout;
     private TextView mTvOnlyTextView;
@@ -90,9 +91,11 @@ public class VodDetailActivity extends Activity {
     private String viewable;
 
     private Button mPurchaseButton; // 구매하기 버튼
+    private Button mPurchaseButton2; // 구매하기 버튼
     private Button mPrePlayButton;  // 미리보기 버튼
     private Button mPlayButton;     // 시청하기 버튼
     private Button mJimButton;      // 찜하기 버튼
+    private Button mJimButton2;      // 찜하기 버튼
 
 
     // activity
@@ -165,7 +168,8 @@ public class VodDetailActivity extends Activity {
         mViewableTextView     = (TextView)findViewById(R.id.vod_detail_viewable_textview);
         mSeriesLinearLayout   = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout);    // 시리즈 회차 버튼
         mSynopsisTextView     = (TextView)findViewById(R.id.vod_detail_synopsis_textview);
-        mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);  // 미리비기/구매하기/찜하기
+        mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);  // 미리보기/구매하기/찜하기
+        mPurchaseLinearLayout2 = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout2);  // 구매하기/찜하기
         mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);      // 시청하기
         mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);    // TV에서 시청가능합니다.
         mTvOnlyTextView       = (TextView)findViewById(R.id.vod_detail_tvonly_textview);
@@ -193,6 +197,45 @@ public class VodDetailActivity extends Activity {
         // 미리보기 | 구매하기 | 찜하기
         mPurchaseButton       = (Button)findViewById(R.id.vod_detail_order_button);
         mPurchaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
+                //startActivity(i);
+
+                /*
+                Bundle param = new Bundle();
+                param.putString("assetId", mInstance.assetId);
+                param.putString("isSeriesLink", isSeriesLink);
+                param.putString("mTitle", mTitle);
+                param.putString("sListPrice", sListPrice);
+                param.putString("sPrice", sPrice);
+                param.putString("productId", productId);
+                param.putString("goodId", goodId);
+
+
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodBuyFragment vf = new VodBuyFragment();
+                vf.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, vf);
+                ft.addToBackStack("VodBuyFragment");
+                ft.commit();
+                */
+
+                Intent intent = new Intent(mInstance, VodBuyActivity.class);
+                intent.putExtra("assetId", mInstance.assetId);
+                intent.putExtra("isSeriesLink", isSeriesLink);
+                intent.putExtra("mTitle", mTitle);
+                intent.putExtra("sListPrice", sListPrice);
+                intent.putExtra("sPrice", sPrice);
+                intent.putExtra("productId", productId);
+                intent.putExtra("goodId", goodId);
+                startActivityForResult(intent, 1000);
+            }
+        });
+
+        mPurchaseButton2       = (Button)findViewById(R.id.vod_detail_order_button2);
+        mPurchaseButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
@@ -259,6 +302,28 @@ public class VodDetailActivity extends Activity {
                     img.setBounds( 0, 0, 25, 25 );
                     mJimButton.setCompoundDrawables( null, null, img, null );
                     mJimButton.setText("찜하기");
+                }
+            }
+        });
+
+        mJimButton2 = (Button)findViewById(R.id.vod_detail_jjim_button);
+        mJimButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( mPref.isWishAsset(assetId) == false ) {
+                    // 찜 안한 VOD
+                    requestAddRemoveWishItem("addWishItem");
+                    Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                    img.setBounds( 0, 0, 25, 25 );
+                    mJimButton2.setCompoundDrawables( null, null, img, null );
+                    mJimButton2.setText("찜해제");
+                } else {
+                    // 찜 한 VOD
+                    requestAddRemoveWishItem("removeWishItem");
+                    Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
+                    img.setBounds( 0, 0, 25, 25 );
+                    mJimButton2.setCompoundDrawables( null, null, img, null );
+                    mJimButton2.setText("찜하기");
                 }
             }
         });
@@ -385,6 +450,7 @@ public class VodDetailActivity extends Activity {
                     String listPrice         = product.getString("listPrice");
                     String purchasedId       = product.getString("purchasedId");
                     String purchasedTime     = product.getString("purchasedTime");
+                    String viewPeriod     = product.getString("viewPeriod");
 
                     // LinearLayout 감추기/보이기 -----------------------------------------------------
                     // mSeriesLinearLayout   // 시리즈 회차 버튼
@@ -399,8 +465,13 @@ public class VodDetailActivity extends Activity {
                         mSeriesLinearLayout.setVisibility(View.GONE);
                     }
                     if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
+                        if ("".equals(viewPeriod)) {
+                            mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                            mPlayLinearLayout.setVisibility(View.GONE);
+                        } else {
                         mPurchaseLinearLayout.setVisibility(View.VISIBLE);
                         mPlayLinearLayout.setVisibility(View.GONE);
+                        }
                     } else {                         // 구매했다. 감쳐라.
                         mPurchaseLinearLayout.setVisibility(View.GONE);
                         mPlayLinearLayout.setVisibility(View.VISIBLE);

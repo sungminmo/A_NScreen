@@ -346,14 +346,13 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/vod_detail_device_imageview"
                     android:src="@mipmap/icon_tv"
-                    android:layout_marginRight="12.75dp" />
+                    android:layout_marginRight="3dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/vod_detail_device_mobile_imageview"
                     android:src="@mipmap/icon_mobile"
-                    android:layout_marginRight="12.75dp"
                     android:visibility="invisible" />
 
             </LinearLayout>
@@ -489,7 +488,45 @@
 
     </ScrollView>
 
-    <LinearLayout
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40.75dp"
+            android:layout_marginLeft="12.25dp"
+            android:layout_marginRight="12.25dp"
+            android:id="@+id/vod_detail_purchase_linearlayout2"
+            android:gravity="center"
+            android:visibility="visible">
+
+            <Button
+                android:layout_width="108.25dp"
+                android:layout_height="match_parent"
+                android:text="구매하기"
+                android:id="@+id/vod_detail_order_button2"
+                android:layout_marginRight="5.25dp"
+                android:background="@mipmap/btn_select"
+                android:textColor="#FFFFFF"
+                android:textSize="14.5sp"
+                android:layout_weight="1" />
+
+
+            <Button
+                android:layout_width="108.25dp"
+                android:layout_height="match_parent"
+                android:text="찜하기"
+                android:id="@+id/vod_detail_jjim_button2"
+                android:background="@drawable/img_btn_selector_short"
+                android:textColor="@drawable/btn_selector_textcolor"
+                android:drawableRight="@mipmap/v_unpick"
+                android:paddingRight="10dp"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="40.75dp"
@@ -497,7 +534,7 @@
         android:layout_marginRight="12.25dp"
         android:id="@+id/vod_detail_purchase_linearlayout"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <Button android:id="@+id/vod_detail_preplay_button"
@@ -543,7 +580,7 @@
         android:layout_marginLeft="12.25dp"
         android:layout_marginRight="12.25dp"
         android:id="@+id/vod_detail_play_linearlayout"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <Button
             android:layout_width="match_parent"
@@ -564,7 +601,7 @@
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
         android:id="@+id/vod_detail_tvonly_linearlayout"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="match_parent"
