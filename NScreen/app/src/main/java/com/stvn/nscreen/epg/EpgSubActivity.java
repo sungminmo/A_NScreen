@@ -377,61 +377,79 @@ public class EpgSubActivity extends AppCompatActivity {
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                ListViewDataObject item = (ListViewDataObject)mAdapter.getItem(position);
+                ListViewDataObject item = (ListViewDataObject) mAdapter.getItem(position);
                 int iMenuType = mAdapter.getItemViewType(position);
-                switch ( iMenuType ) {
+                switch (iMenuType) {
                     case 0: { // TV로 시청 / 즉시녹화
-                        if ( index == 0 ) { // left button
+                        if (index == 0) { // left button
                             requestSetRemoteChannelControl(sChannelId);
                         } else { // right button
                             requestSetRecord(sChannelId);
                         }
-                    } break;
+                    }
+                    break;
                     case 1: { // TV로 시청 / 녹화중지
-                        if ( index == 0 ) { // left button
+                        if (index == 0) { // left button
                             requestSetRemoteChannelControl(sChannelId);
                         } else { // right button
                             requestSetRecordStop(sChannelId);
                         }
-                    } break;
+                    }
+                    break;
                     case 2: { // 시청예약 / 녹화예약
-                        if ( index == 0 ) { // left button
-
+                        if (index == 0) { // left button
                         } else { // right button
-                            requestSetRecordStop(sChannelId);
+                            try {
+                                JSONObject jo = new JSONObject(item.sJson);
+                                String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
+                                requestSetRecordReserve(sChannelId, programBroadcastingStartTime);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    } break;
+                    }
+                    break;
                     case 3: { // 시청예약 / 녹화예약취소
-                        if ( index == 0 ) { // left button
+                        if (index == 0) { // left button
 
                         } else { // right button
                             try {
                                 JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
                                 String starttime = null;
                                 starttime = reservjo.getString("RecordStartTime");
-                                String seriesid  = reservjo.getString("SeriesId");
+                                String seriesid = reservjo.getString("SeriesId");
                                 requestSetRecordCancelReserve(sChannelId, starttime, seriesid);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-                    } break;
+                    }
+                    break;
                     case 4: { // 시청예약취소 / 녹화예약
-                        if ( index == 0 ) { // left button
-
+                        if (index == 0) { // left button
                         } else { // right button
-                            requestSetRecord(sChannelId);
+                            try {
+                                JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
+                                String starttime = null;
+                                starttime = reservjo.getString("RecordStartTime");
+                                requestSetRecordReserve(sChannelId, starttime);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    } break;
+                    }
+                    break;
                     case 5: { // 시청예약취소 / 녹화예약취소
-                        if ( index == 0 ) { // left button
+                        if (index == 0) { // left button
 
                         } else { // right button
                             // requestSetRecordCancelReserve(sChannelId);
                         }
-                    } break;
+                    }
+                    break;
                 }
+
                 return false;
             }
         });
@@ -1237,6 +1255,99 @@ public class EpgSubActivity extends AppCompatActivity {
     }
 
     private void parseSetRecordStop(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestSetRecordReserve(String channelId, String starttime) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordReserve()"); }
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecordReserve(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("Duplicated Recording Reserve Request", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecordReserve(String response) {
         XmlPullParserFactory factory = null;
         try {
             factory = XmlPullParserFactory.newInstance();
