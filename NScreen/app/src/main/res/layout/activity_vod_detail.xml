@@ -496,7 +496,7 @@
             android:layout_marginRight="12.25dp"
             android:id="@+id/vod_detail_purchase_linearlayout2"
             android:gravity="center"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <Button
                 android:layout_width="108.25dp"
@@ -534,7 +534,7 @@
         android:layout_marginRight="12.25dp"
         android:id="@+id/vod_detail_purchase_linearlayout"
         android:gravity="center"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <Button android:id="@+id/vod_detail_preplay_button"
@@ -580,7 +580,7 @@
         android:layout_marginLeft="12.25dp"
         android:layout_marginRight="12.25dp"
         android:id="@+id/vod_detail_play_linearlayout"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <Button
             android:layout_width="match_parent"
@@ -601,7 +601,7 @@
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
         android:id="@+id/vod_detail_tvonly_linearlayout"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
