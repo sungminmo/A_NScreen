@@ -3,6 +3,8 @@ package com.stvn.nscreen;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,6 +57,10 @@ public class LoadingActivity extends AppCompatActivity {
         mProgressBar  = (ProgressBar)findViewById(R.id.loading_progressbar);
         mTextView     = (TextView)findViewById(R.id.loading_textview);
 
+
+        //mProgressBar.getProgressDrawable().setColorFilter(Color.MAGENTA, PorterDuff.Mode.SRC_IN);
+        //mProgressBar.getProgressDrawable().setColorFilter(0xFFFF0000, PorterDuff.Mode.SRC_IN);
+        mProgressBar.getProgressDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
 
         mProgressBar.setProgress(10);
         mTextView.setText("초기화 중입니다.");

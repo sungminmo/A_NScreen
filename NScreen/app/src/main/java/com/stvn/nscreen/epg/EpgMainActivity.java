@@ -2,9 +2,12 @@ package com.stvn.nscreen.epg;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -17,6 +20,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
@@ -66,9 +73,10 @@ public class EpgMainActivity extends AppCompatActivity {
 
         mAdapter      = new EpgMainListViewAdapter(this, null);
 
-        mListView    = (ListView)findViewById(R.id.epg_main_listview);
+        mListView     = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(mItemClickListener);
+
 
         epg_main_genre_choice_imageButton = (ImageButton) findViewById(R.id.epg_main_genre_choice_imageButton);
         epg_main_backBtn                  = (ImageButton) findViewById(R.id.epg_main_backBtn);
@@ -107,6 +115,7 @@ public class EpgMainActivity extends AppCompatActivity {
             try {
                 JSONObject jo              = new JSONObject(dobj.sJson);
                 String     sChannelNumber  = jo.getString("channelNumber");
+                String     sChannelId      = jo.getString("channelId");
                 String     sChannelName    = jo.getString("channelName");
                 String     sChannelLogoImg = jo.getString("channelLogoImg");
 
@@ -114,6 +123,7 @@ public class EpgMainActivity extends AppCompatActivity {
                 intent.putExtra("channelNumber", sChannelNumber);
                 intent.putExtra("channelName", sChannelName);
                 intent.putExtra("channelLogoImg", sChannelLogoImg);
+                intent.putExtra("channelId", sChannelId);
 
                 startActivity(intent);
             } catch (JSONException e) {
@@ -214,4 +224,5 @@ public class EpgMainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }

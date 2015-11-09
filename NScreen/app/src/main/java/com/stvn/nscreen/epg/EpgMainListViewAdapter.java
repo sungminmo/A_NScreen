@@ -58,6 +58,25 @@ public class EpgMainListViewAdapter extends BaseAdapter {
         });
     }
 
+    /**
+     * Swipe menu ListView
+     */
+    @Override
+    public int getViewTypeCount() {
+        // menu type count
+        return 3;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        // current menu type
+        return position % 3;
+    }
+
+    /**
+     * ListView
+     * @return
+     */
     @Override
     public int getCount() { return mDatas.size(); }
 

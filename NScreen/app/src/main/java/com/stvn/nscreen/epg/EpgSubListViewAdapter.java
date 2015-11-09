@@ -34,7 +34,15 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
-    private int mCurrDateNo;
+    private              int                           mCurrDateNo;
+
+    // STB status
+    private              String                          mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+    private              ArrayList<JSONObject>           mStbRecordReservelist;
 
     private NetworkImageView epg_sub_imageview_program_age;
 
@@ -45,6 +53,18 @@ public class EpgSubListViewAdapter extends BaseAdapter {
         this.mOnClickListener = onClickListener;
     }
 
+    public void setStbState(String state, String recCh1, String recCh2, String watchCh, String pipCh) {
+        this.mStbState             = state;
+        this.mStbRecordingchannel1 = recCh1;
+        this.mStbRecordingchannel2 = recCh2;
+        this.mStbWatchingchannel   = watchCh;
+        this.mStbPipchannel        = pipCh;
+    }
+
+    public void setStbRecordReservelist(ArrayList<JSONObject> list) {
+        this.mStbRecordReservelist = list;
+    }
+
     public void setDatas(ArrayList<ListViewDataObject> datas, int currDateNo) {
         mCurrDateNo = currDateNo;
         mDatas.clear();
@@ -53,6 +73,25 @@ public class EpgSubListViewAdapter extends BaseAdapter {
         }
     }
 
+    /**
+     * Swipe menu ListView
+     */
+    @Override
+    public int getViewTypeCount() {
+        // menu type count
+        return 3;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        // current menu type
+        return position % 3;
+    }
+
+    /**
+     * ListView
+     * @return
+     */
     @Override
     public int getCount() { return mDatas.size(); }
 
@@ -117,9 +156,12 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                     progBar.setProgress(0);
                 } else {
                     if (i1 < i3 && i3 <= i2) {
+                        // 현재 방송 중.
+                        // menu: TV로 시청은 고정./ 즉시녹화or즉시녹화중지.
                         float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
                         progBar.setProgress((int) (f1 * 100));
                     } else if (i2 <= i3) {
+                        // 이미 지난 방송.
                         if (Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2))) {
                             i2 += 1440;
                             float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
@@ -128,6 +170,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                             progBar.setProgress(100);
                         }
                     } else if (i3 <= i1) {
+                        // 미래.
                         progBar.setProgress(0);
                     }
                 }
