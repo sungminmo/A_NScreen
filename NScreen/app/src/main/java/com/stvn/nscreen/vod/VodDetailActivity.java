@@ -292,14 +292,14 @@ public class VodDetailActivity extends Activity {
                     // 찜 안한 VOD
                     requestAddRemoveWishItem("addWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-                    img.setBounds( 0, 0, 25, 25 );
+                    img.setBounds( 0, 0, 35, 35 );
                     mJimButton.setCompoundDrawables( null, null, img, null );
                     mJimButton.setText("찜해제");
                 } else {
                     // 찜 한 VOD
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
-                    img.setBounds( 0, 0, 25, 25 );
+                    img.setBounds( 0, 0, 35, 35 );
                     mJimButton.setCompoundDrawables( null, null, img, null );
                     mJimButton.setText("찜하기");
                 }
@@ -314,14 +314,14 @@ public class VodDetailActivity extends Activity {
                     // 찜 안한 VOD
                     requestAddRemoveWishItem("addWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-                    img.setBounds( 0, 0, 25, 25 );
+                    img.setBounds( 0, 0, 35, 35 );
                     mJimButton2.setCompoundDrawables( null, null, img, null );
                     mJimButton2.setText("찜해제");
                 } else {
                     // 찜 한 VOD
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
-                    img.setBounds( 0, 0, 25, 25 );
+                    img.setBounds( 0, 0, 35, 35 );
                     mJimButton2.setCompoundDrawables( null, null, img, null );
                     mJimButton2.setText("찜하기");
                 }
@@ -333,7 +333,7 @@ public class VodDetailActivity extends Activity {
         } else {
             // 찜 한 VOD
             Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-            img.setBounds( 0, 0, 25, 25 );
+            img.setBounds( 0, 0, 35, 35 );
             mJimButton.setCompoundDrawables( null, null, img, null );
             mJimButton.setText("찜해제");
         }
@@ -443,6 +443,8 @@ public class VodDetailActivity extends Activity {
                     String runningTimeMinute = String.valueOf((Integer.parseInt(runningTime.substring(0, 2)) * 60) + Integer.parseInt(runningTime.substring(3))) + "분";
                     runningTime = runningTimeMinute;
 
+                    String previewPeriod     = asset.getString("previewPeriod");      // 미리보기 시간.
+
                     // productList
                     //JSONArray productList    = asset.getJSONArray("productList");
                     //JSONObject product       = productLists.getJSONObject(0);
@@ -450,7 +452,6 @@ public class VodDetailActivity extends Activity {
                     String listPrice         = product.getString("listPrice");
                     String purchasedId       = product.getString("purchasedId");
                     String purchasedTime     = product.getString("purchasedTime");
-                    String viewPeriod     = product.getString("viewPeriod");
 
                     // LinearLayout 감추기/보이기 -----------------------------------------------------
                     // mSeriesLinearLayout   // 시리즈 회차 버튼
@@ -465,12 +466,11 @@ public class VodDetailActivity extends Activity {
                         mSeriesLinearLayout.setVisibility(View.GONE);
                     }
                     if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
-                        if ("".equals(viewPeriod)) {
-                            mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
-                            mPlayLinearLayout.setVisibility(View.GONE);
-                        } else {
-                        mPurchaseLinearLayout.setVisibility(View.VISIBLE);
                         mPlayLinearLayout.setVisibility(View.GONE);
+                        if ("0".equals(previewPeriod)) { // 미리보기 없음.
+                            mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                        } else {
+                            mPurchaseLinearLayout.setVisibility(View.VISIBLE);
                         }
                     } else {                         // 구매했다. 감쳐라.
                         mPurchaseLinearLayout.setVisibility(View.GONE);

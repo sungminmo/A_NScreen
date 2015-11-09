@@ -11,10 +11,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
@@ -26,7 +31,13 @@ import com.widevine.sampleplayer.VideoPlayerView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +49,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     // network
     private              RequestQueue        mRequestQueue;
+    private              Map<String, Object> mGetAppInitialize;
 
     // ui
     private              ProgressBar         mProgressBar;
@@ -49,9 +61,10 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
 
-        mInstance     = this;
-        mPref         = new JYSharedPreferences(this);
-        mRequestQueue = Volley.newRequestQueue(this);
+        mInstance         = this;
+        mPref             = new JYSharedPreferences(this);
+        mRequestQueue     = Volley.newRequestQueue(this);
+        mGetAppInitialize = new HashMap<String, Object>();
 
 
         mProgressBar  = (ProgressBar)findViewById(R.id.loading_progressbar);
@@ -60,19 +73,112 @@ public class LoadingActivity extends AppCompatActivity {
 
         //mProgressBar.getProgressDrawable().setColorFilter(Color.MAGENTA, PorterDuff.Mode.SRC_IN);
         //mProgressBar.getProgressDrawable().setColorFilter(0xFFFF0000, PorterDuff.Mode.SRC_IN);
-        mProgressBar.getProgressDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        mProgressBar.getProgressDrawable().setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+
 
         mProgressBar.setProgress(10);
         mTextView.setText("초기화 중입니다.");
-        if ( mPref.isPairingCompleted() ) {
-            mProgressBar.setProgress(20);
-            requestGetWishList();
-        } else {
-            mTextView.setText("초기화를 완료 했습니다.");
-            mProgressBar.setProgress(100);
-            Intent intent = new Intent(mInstance, MainActivity.class);
-            startActivity(intent);
-            finish();
+
+        // requestGetAppInitialize() 50%
+        // requestGetWishList()      50%
+
+        requestGetAppInitialize();
+    }
+
+    /**
+     *
+     */
+    private void requestGetAppInitialize() {
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetAppInitialize()"); }
+        String url  = mPref.getRumpersServerUrl() + "/GetAppInitialize.asp?appType=A&appId=002cc6d42269f3143470c116a3de51aa6128737c";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressBar.setProgress(30);
+                parseGetAppInitialize(response);
+                mProgressBar.setProgress(40);
+                if ( Constants.CODE_RUMPUS_OK.equals(mGetAppInitialize.get("resultCode")) ) {
+                    // ok
+                    //requestGetWishList();
+                    if ( mPref.isPairingCompleted() ) {
+                        mProgressBar.setProgress(50);
+                        requestGetWishList();
+                    } else {
+                        mTextView.setText("초기화를 완료 했습니다.");
+                        mProgressBar.setProgress(100);
+                        Intent intent = new Intent(mInstance, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } else {
+                    String errorString = (String)mGetAppInitialize.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+        mProgressBar.setProgress(20);
+    }
+
+    private void parseGetAppInitialize(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        mGetAppInitialize.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        mGetAppInitialize.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -81,14 +187,14 @@ public class LoadingActivity extends AppCompatActivity {
      * http://58.141.255.79:8080/HApplicationServer/getWishList.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1
      */
     private void requestGetWishList() {
-        mProgressBar.setProgress(30);
+        mProgressBar.setProgress(70);
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressBar.setProgress(50);
+                mProgressBar.setProgress(80);
                 try {
                     JSONObject jo      = new JSONObject(response);
                     String resultCode  = jo.getString("resultCode");
@@ -137,6 +243,8 @@ public class LoadingActivity extends AppCompatActivity {
             }
         };
         mRequestQueue.add(request);
-        mProgressBar.setProgress(40);
+        mProgressBar.setProgress(60);
     }
+
+
 }
