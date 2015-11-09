@@ -2,26 +2,34 @@ package com.stvn.nscreen.vod;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.EightVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
@@ -188,6 +196,15 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -204,7 +221,8 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     // 배너 요청
     private void requestGetServiceBannerList() {
-        String url = mPref.getRumpersServerUrl() + "/getservicebannerlist.asp";
+        StringBuffer sb = new StringBuffer().append("terminalKey=").append(JYSharedPreferences.RUMPERS_TERMINAL_KEY);
+        String url = mPref.getRumpersServerUrl() + "/getservicebannerlist.asp?"+sb.toString();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -216,6 +234,15 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -230,6 +257,18 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     }
 
     // 배너 파싱
+    /*
+    <BannerList_Item>
+<vbId>1</vbId>
+<assetId>151006.20</assetId>
+<Banner_Version><![CDATA[ffefsfdfdsfasd]]></Banner_Version>
+<Banner_Title><![CDATA[ffefsfdfdsfasd]]></Banner_Title>
+<android_imgurl><![CDATA[http://58.141.255.80/data/vodbanner//1442457556268654.jpg]]></android_imgurl>
+<iphone_imgurl><![CDATA[http://58.141.255.80/data/vodbanner//1442457561612438.png]]></iphone_imgurl>
+<sortno>1</sortno>
+</BannerList_Item>
+
+     */
     private void parseGetServiceBannerList(String response) {
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
@@ -249,9 +288,9 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                         sb.append(",\"assetId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("android_imgurl")) {
                         sb.append(",\"android_imgurl\":\"").append(xpp.nextText()).append("\"}");
-                        String imsi = sb.toString();
-                        String re   = imsi.replace("http://58.141.255.80", "http://192.168.44.10"); // 삼성동 C&M에서는 공인망 럼퍼스 접속이 안되서, 임시로 리플레이스 처리 함.
-                        JSONObject jo = new JSONObject(re); //JSONObject jo = new JSONObject(sb.toString());
+                        //String imsi = sb.toString();
+                        //String re   = imsi.replace("http://58.141.255.80", "http://192.168.44.10"); // 삼성동 C&M에서는 공인망 럼퍼스 접속이 안되서, 임시로 리플레이스 처리 함.
+                        JSONObject jo = new JSONObject(sb.toString()); //JSONObject jo = new JSONObject(sb.toString());
                         mBanners.add(jo);
                         sb.setLength(0);
                     }
@@ -385,11 +424,40 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
      * */
     // 인기 TOP 20
     private void requestGetPopularityChart() {
-        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        //String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                parseGetPopularityChart(response);
+                //parseGetPopularityChart(response);
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    String resultCode = jo.getString("resultCode");
+                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        JSONObject weeklyChart = jo.getJSONObject("weeklyChart");
+                        JSONArray popularityList = weeklyChart.getJSONArray("popularityList");
+                        for ( int i = 0; i < popularityList.length(); i++ ) {
+                            JSONObject popularity = popularityList.getJSONObject(i);
+                            mPop20PagerAdapter.addVod(popularity);
+                        }
+                    } else {
+                        String errorString = jo.getString("errorString");
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(sb.toString());
+                        alert.show();
+                    }
+
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
+                }
                 mPop20PagerAdapter.notifyDataSetChanged();
                 requestGetContentGroupList(); // 금주의 신작영화 요청.
             }

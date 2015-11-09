@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.stvn.nscreen">
+    package="com.stvn.nscreen" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -12,113 +12,124 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".LoadingActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:theme="@style/AppTheme" android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- 기존의 개발자용 메인 화면 -->
-        <!--<activity-->
-            <!--android:name=".DeveloperMainActivity"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:screenOrientation="portrait">-->
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
+
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
-        <!--</activity>-->
+        </activity>
+
+        <!-- 기존의 개발자용 메인 화면 -->
+        <!-- <activity -->
+        <!-- android:name=".DeveloperMainActivity" -->
+        <!-- android:label="@string/app_name" -->
+        <!-- android:screenOrientation="portrait"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+
 
         <!-- leftMenu -->
-        <activity android:name=".leftmenu.LeftMenuActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".leftmenu.LeftMenuActivity"
             android:label="@string/title_activity_leftmenu"
-            android:theme="@android:style/Theme.Translucent">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".leftmenu.LeftMenuDialogActivity"
-            android:label="@string/title_activity_leftmenu_dialog"
             android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_leftmenu_dialog"
             android:screenOrientation="unspecified"
             android:theme="@android:style/Theme.Dialog"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
 
         <!-- EPG -->
         <activity
             android:name=".epg.EpgMainActivity"
-            android:label="@string/title_activity_epg_main">
+            android:label="@string/title_activity_epg_main" >
         </activity>
         <activity
             android:name=".epg.EpgSubActivity"
-            android:label="@string/title_activity_epg_sub">
+            android:label="@string/title_activity_epg_sub" >
         </activity>
         <activity
             android:name=".epg.EpgChoiceActivity"
-            android:label="@string/title_activity_epg_choice"
             android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_epg_choice"
             android:screenOrientation="unspecified"
             android:theme="@android:style/Theme.Dialog"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
 
         <!-- PVR -->
         <activity
             android:name=".pvr.PvrMainActivity"
-            android:label="@string/title_activity_pvr_main">
+            android:label="@string/title_activity_pvr_main" >
         </activity>
         <activity
             android:name=".pvr.PvrSubActivity"
-            android:label="@string/title_activity_pvr_sub">
+            android:label="@string/title_activity_pvr_sub" >
         </activity>
 
         <!-- MY -->
         <activity
             android:name=".my.MyMainActivity"
-            android:label="@string/title_activity_my_main">
+            android:label="@string/title_activity_my_main" >
         </activity>
         <activity
             android:name=".my.MySubActivity"
-            android:label="@string/title_activity_my_sub">
+            android:label="@string/title_activity_my_sub" >
         </activity>
 
         <!-- PAIRING -->
         <activity
             android:name=".pairing.PairingMainActivity"
-            android:label="@string/title_activity_pairing_main">
+            android:label="@string/title_activity_pairing_main" >
         </activity>
         <activity
             android:name=".pairing.PairingSubActivity"
-            android:label="@string/title_activity_pairing_sub">
+            android:label="@string/title_activity_pairing_sub" >
         </activity>
         <activity
             android:name=".pairing.PairingCheckActivity"
-            android:label="@string/title_activity_pairing_check">
+            android:label="@string/title_activity_pairing_check" >
         </activity>
 
         <!-- REMOTE CONTROLLER -->
         <activity
             android:name=".rmt.RemoteControllerActivity"
-            android:label="@string/title_activity_remote_controller">
+            android:label="@string/title_activity_remote_controller" >
         </activity>
         <activity
             android:name=".rmt.RemoteControllerChoiceActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="unspecified"
             android:theme="@android:style/Theme.Dialog"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
 
         <!-- SEARCH -->
         <activity
             android:name=".search.SearchMainActivity"
-            android:label="@string/title_activity_search_main">
+            android:label="@string/title_activity_search_main" >
         </activity>
 
         <!-- 설정 화면 관련 엑티비티 -->
@@ -128,7 +139,6 @@
         <activity android:name=".setting.CMSettingAdultAuthActivity" />
         <activity android:name=".setting.CMSettingPayChannelActivity" />
         <activity android:name=".setting.CMSettingPayChannelDetailActivity" />
-
         <activity android:name=".vod.VodMainActivity" />
 
         <!-- VOD -->
@@ -140,8 +150,8 @@
         <activity
             android:name=".vod.VodDetailActivity"
             android:label="@string/title_activity_vod_detail"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         </activity>
         <activity
             android:name=".vod.VodBuyActivity"
@@ -150,40 +160,43 @@
         </activity>
 
         <!-- player -->
-        <activity android:name="com.widevine.sampleplayer.WidevineSamplePlayer"
+        <activity
+            android:name="com.widevine.sampleplayer.WidevineSamplePlayer"
             android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name="com.widevine.sampleplayer.VideoPlayerView"
+        <activity
+            android:name="com.widevine.sampleplayer.VideoPlayerView"
             android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.widevine.sampleplayer.StreamingActivity"
+        <activity
+            android:name="com.widevine.sampleplayer.StreamingActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.widevine.sampleplayer.DownloadActivity"
+        <activity
+            android:name="com.widevine.sampleplayer.DownloadActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.widevine.sampleplayer.SettingsActivity"
+        <activity
+            android:name="com.widevine.sampleplayer.SettingsActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>

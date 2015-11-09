@@ -24,7 +24,10 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by limdavid on 15. 10. 26..
@@ -137,4 +140,17 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
     }
     public void setSelectedIndex(int position){ mSelectedIndex = position; }
     public int  getSelectedIndex() { return mSelectedIndex; }
+
+    /*
+    public void sortWithChannelNumber(){
+        Collections.sort(mDatas, new Comparator(ListViewDataObject first, ListViewDataObject second) {
+            @Override
+            public int compare(ListViewDataObject first, ListViewDataObject second) {
+                int firstValue = Integer.valueOf(first.get("no"));
+                int secondValue = Integer.valueOf(second.get("no"));
+                return first.get("no").compareTo(second.get("no"));
+            }
+        });
+    }
+    */
 }

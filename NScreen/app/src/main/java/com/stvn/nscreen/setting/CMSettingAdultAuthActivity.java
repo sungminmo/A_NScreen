@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -13,7 +14,6 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
-import com.stvn.nscreen.util.CMLog;
 
 /**
  * 설정화면 > 성인인증
@@ -46,7 +46,6 @@ public class CMSettingAdultAuthActivity extends CMBaseActivity {
         this.mWebview.getSettings().setJavaScriptEnabled(true);
         this.mWebview.setWebViewClient(new AdultAuthWebClient());
         this.mWebview.loadUrl(CMConstants.ADULT_AUTH_URL);
-
     }
 
     /**
@@ -57,21 +56,32 @@ public class CMSettingAdultAuthActivity extends CMBaseActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-            CMLog.d("wd", url);
             Uri pageURI = Uri.parse(url);
 
-            if (CMConstants.CM_CUSTOM_SCHEME.equals(pageURI.getScheme())) {
-                if (CMConstants.CM_ADULT_AUTH_HOST.equals(pageURI.getHost())) {
-                    String result = pageURI.getQueryParameter(CMConstants.CM_ADULT_AUTH_PARAM);
-                    if ("Y".equals(result)) {
-                        setResult(Activity.RESULT_OK);
-                        CMSettingData.getInstance().setAdultAuth(CMSettingAdultAuthActivity.this, true);
-                    } else {
-                        setResult(Activity.RESULT_OK);
-                        CMSettingData.getInstance().setAdultAuth(CMSettingAdultAuthActivity.this, false);
+            String strScheme = pageURI.getScheme();
+            if (TextUtils.isEmpty(strScheme) == false) {
+                strScheme = strScheme.toLowerCase();
+                if (CMConstants.CM_CUSTOM_SCHEME.equalsIgnoreCase(strScheme)) {
+                    if (CMConstants.CM_ADULT_AUTH_HOST.equals(pageURI.getHost())) {
+                        boolean isSucess = false;
+                        String strResult = pageURI.getQueryParameter(CMConstants.CM_ADULT_AUTH_PARAM);
+                        if (TextUtils.isEmpty(strResult) == false) {
+                            strResult = strResult.toLowerCase();
+                            if ("y".equalsIgnoreCase(strResult)) {
+                                isSucess = true;
+                            }
+                        }
+
+                        if (isSucess == true) {
+                            setResult(Activity.RESULT_OK);
+                            CMSettingData.getInstance().setAdultAuth(CMSettingAdultAuthActivity.this, true);
+                        } else {
+                            setResult(Activity.RESULT_OK);
+                            CMSettingData.getInstance().setAdultAuth(CMSettingAdultAuthActivity.this, false);
+                        }
+                        finish();
+                        return true;
                     }
-                    finish();
-                    return true;
                 }
             }
 
@@ -80,6 +90,7 @@ public class CMSettingAdultAuthActivity extends CMBaseActivity {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            // ssl 인증 전 페이지가 로드되어 ssl 인증오류 발생으로 인한 앱 비정상 종료 방지를 위한 ssl 인증 오류 무시 코드
             handler.proceed();
         }
     }

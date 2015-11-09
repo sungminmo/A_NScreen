@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -32,6 +34,8 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
+    private int mCurrDateNo;
+
     private NetworkImageView epg_sub_imageview_program_age;
 
     public EpgSubListViewAdapter(Context c, View.OnClickListener onClickListener) {
@@ -39,6 +43,14 @@ public class EpgSubListViewAdapter extends BaseAdapter {
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
+    }
+
+    public void setDatas(ArrayList<ListViewDataObject> datas, int currDateNo) {
+        mCurrDateNo = currDateNo;
+        mDatas.clear();
+        for ( int i = 0; i < datas.size(); i++ ) {
+            mDatas.add(datas.get(i));
+        }
     }
 
     @Override
@@ -62,6 +74,8 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_sub, parent, false);
         }
 
+        Date dt = new Date();
+
         SimpleDateFormat       formatter                    = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat       formatter2                   = new SimpleDateFormat("HH:mm");
 
@@ -78,14 +92,46 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             ImageView          Info                         = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_hdsd);
             TextView           titleTextView                = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
             TextView           channelProgramOnAirTime      = ViewHolder.get(convertView, R.id.epg_sub_textview_program_time);
+            ProgressBar        progBar                      = ViewHolder.get(convertView, R.id.progressBar);
 
-            Date               dt1                          = formatter.parse(ProgramBroadcastingStartTime);
-            Date               dt2                          = formatter.parse(ProgramBroadcastingEndTime);
-            String             str1                         = formatter2.format(dt1).toString();
-            String             str2                         = formatter2.format(dt2).toString();
+            Date               dt11                         = formatter.parse(ProgramBroadcastingStartTime);
+            Date               dt12                         = formatter.parse(ProgramBroadcastingEndTime);
+            String             dt21                         = formatter2.format(dt11).toString();
+            String             dt22                         = formatter2.format(dt12).toString();
+            String             dt23                         = formatter2.format(dt).toString();
+
+            // 시작시간
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+            // 끝시간
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
+            // 현재시간
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
 
             titleTextView.setText(jobj.getString("programTitle"));
-            channelProgramOnAirTime.setText(str1 + "~" + str2);
+            channelProgramOnAirTime.setText(dt21 + "~" + dt22);
+
+            if ( mCurrDateNo != 0 ) {
+                progBar.setProgress(0);
+            } else {
+                if ( i1 < 360 ) {
+                    progBar.setProgress(0);
+                } else {
+                    if (i1 < i3 && i3 <= i2) {
+                        float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
+                        progBar.setProgress((int) (f1 * 100));
+                    } else if (i2 <= i3) {
+                        if (Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2))) {
+                            i2 += 1440;
+                            float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
+                            progBar.setProgress((int) (f1 * 100));
+                        } else {
+                            progBar.setProgress(100);
+                        }
+                    } else if (i3 <= i1) {
+                        progBar.setProgress(0);
+                    }
+                }
+            }
 
             if ( "모두 시청".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_all);

@@ -181,4 +181,3 @@ public class EpgChoiceActivity extends Activity {
         });
     }
 }
-

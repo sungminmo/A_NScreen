@@ -64,16 +64,24 @@ public class VideoPlayerView extends Activity {
     }
 
     @Override
+    protected void onPause() {
+        Log.v("VideoPlayerView", "------------------- onPause ----------------");
+        super.onPause(); // swlim
+        onStop();
+    }
+
+    @Override
     public void finish() {
         Intent intent = new Intent();
         intent.putExtra("currentpage",getIntent().getIntExtra("currentpage",0));
-        setResult(Activity.RESULT_OK,intent);
+        setResult(Activity.RESULT_OK, intent);
 
         super.finish();
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Display display = getWindowManager().getDefaultDisplay();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -87,11 +95,16 @@ public class VideoPlayerView extends Activity {
         } else {
             setContentView(R.layout.widevine_sampleplayer_notprovisioned);
         }
-        drm.printPluginVersion();
 
+        //drm.printPluginVersion();
         // swlim aaa
         drm.acquireRights(assetUri);
-        startPlayback();
+        try {
+            Thread.sleep(100);
+            startPlayback();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -112,7 +125,7 @@ public class VideoPlayerView extends Activity {
 
     private View createView() {
         enteringFullScreen = false;
-        assetUri = this.getIntent().getStringExtra("com.widevine.demo.Path").replaceAll("wvplay", "http");
+        //assetUri = this.getIntent().getStringExtra("com.widevine.demo.Path").replaceAll("wvplay", "http");
 
 
         String assetId = this.getIntent().getStringExtra("assetId");
@@ -120,9 +133,10 @@ public class VideoPlayerView extends Activity {
         String drmServerUri = this.getIntent().getStringExtra("drmServerUri");
         String drmProtection = this.getIntent().getStringExtra("drmProtection");
         String terminalKey = this.getIntent().getStringExtra("terminalKey");
-        contentUri = "widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm";
         assetUri = contentUri;
-
+        assetUri = contentUri.replaceAll("wvplay", "http");
+        assetUri = contentUri.replaceAll("widevine", "http");
+        // widevine://cnm.video.toast.com/aaaaaa/b99fd60d-e0a1-465f-8641-b8276b3f1b8a.wvm
 
         drm = new WidevineDrm(this);
 
@@ -141,12 +155,19 @@ public class VideoPlayerView extends Activity {
         logMessage("Portal Name: " + WidevineDrm.Settings.PORTAL_NAME + "\n");
 
         // Set log update listener
-        WidevineDrm.WidevineDrmLogEventListener drmLogListener =
-            new WidevineDrm.WidevineDrmLogEventListener() {
-
+        WidevineDrm.WidevineDrmLogEventListener drmLogListener = new WidevineDrm.WidevineDrmLogEventListener() {
             public void logUpdated() {
-                updateLogs();
 
+                /*
+                private final static long DEVICE_IS_PROVISIONED = 0;
+                private final static long DEVICE_IS_NOT_PROVISIONED = 1;
+                private final static long DEVICE_IS_PROVISIONED_SD_ONLY = 2;
+                */
+//                long lWVDrmInfoRequestStatusKey = drm.getWVDrmInfoRequestStatusKey();
+//                if ( lWVDrmInfoRequestStatusKey == 1 ) {
+//                    startPlayback();
+//                }
+                updateLogs();
             }
         };
 
@@ -166,6 +187,16 @@ public class VideoPlayerView extends Activity {
                     /* Refresh UI */
                     logs.setText(drm.logBuffer.toString());
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    //mStringBuffer.append(drm.logBuffer.toString());
+                    //Log.d("player", mStringBuffer.toString());
+                    //Log.d("player", drm.logBuffer.toString());
+
+                    //drm.checkRightsStatus(contentUri)
+                    //drm.acquireRights(assetUri);
+                    //int drmRightsStatus = drm.checkRightsStatus(assetUri);
+                    //Log.d("player", "updateLogs() drmRightsStatus:"+drmRightsStatus);
+
+
                     break;
                 }
             }
@@ -234,27 +265,29 @@ public class VideoPlayerView extends Activity {
                 videoView.seekTo(currentPosition);
             }
         });
-        playerFrame.addView(fullScreen, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-        fullScreen.setVisibility(View.INVISIBLE);
-        playerFrame.addView(bgImage, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        //playerFrame.addView(fullScreen, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        //fullScreen.setVisibility(View.INVISIBLE);
+        //playerFrame.addView(bgImage, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
         main = new LinearLayout(this);
 //        main.addView(playerFrame, new LinearLayout.LayoutParams((int) (width * 0.65), LinearLayout.LayoutParams.FILL_PARENT, 1));
         main.addView(playerFrame, new LinearLayout.LayoutParams((int) (width), LinearLayout.LayoutParams.FILL_PARENT, 1));
-        main.addView(sidePanel, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT, 3));
+//        main.addView(sidePanel, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT, 3));
 
-        sidePanel.setVisibility(View.GONE);
+//        sidePanel.setVisibility(View.GONE);
 
 
         // swlim aaa
-        drm.acquireRights(contentUri);
+        //drm.acquireRights(contentUri);
         //enteringFullScreen = true;
         //startPlayback();
-
+        drm.setVideoPlayerView(this);
 
 
         return main;
     }
+
+
 
     private void startPlayback() {
         logMessage("Playback start.");
@@ -262,19 +295,13 @@ public class VideoPlayerView extends Activity {
         bgImage.setVisibility(View.GONE);
 
         if (useMediaCodec) {
-            mediaCodecView.setDataSource(
-                    this,
-                    Uri.parse(assetUri),
-                    null /* headers */,
-                    true /* encrypted */);
-
+            mediaCodecView.setDataSource(this, Uri.parse(assetUri), null /* headers */, true /* encrypted */);
             mediaCodecView.setMediaController(new MediaController(context));
             mediaCodecView.requestFocus();
             mediaCodecView.start();
         } else {
             videoView.setVideoPath(assetUri);
             videoView.setMediaController(new MediaController(context));
-
             videoView.setOnErrorListener(new OnErrorListener() {
                 public boolean onError(MediaPlayer mp, int what, int extra) {
                     String message = "Unknown error: " + what;
@@ -358,8 +385,7 @@ public class VideoPlayerView extends Activity {
             }
 
             fullScreen.setVisibility(View.VISIBLE);
-            videoView.setFullScreenDimensions(contentView.getRight() - contentView.getLeft(),
-                    contentView.getBottom() - contentView.getTop());
+            videoView.setFullScreenDimensions(contentView.getRight() - contentView.getLeft(), contentView.getBottom() - contentView.getTop());
         }
     }
 
@@ -474,9 +500,7 @@ public class VideoPlayerView extends Activity {
             }
         });
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
 
         params.setMargins(0, 0, 0, 5);
         LinearLayout buttonsLeft = new LinearLayout(this);
@@ -492,9 +516,7 @@ public class VideoPlayerView extends Activity {
         buttonsRight.addView(checkButton, params);
         buttonsRight.addView(removeButton, params);
 
-        LinearLayout.LayoutParams paramsSides = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        LinearLayout.LayoutParams paramsSides = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
         paramsSides.gravity = Gravity.BOTTOM;
 
         LinearLayout buttons = new LinearLayout(this);
@@ -508,11 +530,7 @@ public class VideoPlayerView extends Activity {
         hRefresh.sendEmptyMessage(REFRESH);
     }
 
-    @Override
-    protected void onPause() {
-        Log.v("VideoPlayerView", "------------------- onPause ----------------");
-        onStop();
-    }
+
 
     private void logMessage(String message) {
         Log.d(TAG, message);

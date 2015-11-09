@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -78,6 +79,8 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_main, parent, false);
         }
 
+        Date dt = new Date();
+
         SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
 
@@ -98,16 +101,31 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             TextView           channelNumberTextView   = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView           titleTextView           = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
             TextView           channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
+            ProgressBar        progBar = ViewHolder.get(convertView, R.id.progressBar);
 
-            Date               dt1                     = formatter.parse(ProgramOnAirStartTime);
-            Date               dt2                     = formatter.parse(ProgramOnAirEndTime);
-            String             str1                    = formatter2.format(dt1).toString();
-            String             str2                    = formatter2.format(dt2).toString();
+            Date               dt11                     = formatter.parse(ProgramOnAirStartTime);
+            Date               dt12                     = formatter.parse(ProgramOnAirEndTime);
+            String             dt21                     = formatter2.format(dt11).toString();
+            String             dt22                     = formatter2.format(dt12).toString();
+            String             dt23                     = formatter2.format(dt).toString();
+
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+
+            if ( Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2)) ) {
+                dt22 += 1440;
+            }
+
+            float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+
+            progBar.setProgress((int)(f1 * 100));
+
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
-            channelProgramOnAirTime.setText(str1 + "~" + str2);
+            channelProgramOnAirTime.setText(dt21 + "~" + dt22);
 
             if ( "모두 시청".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_all);
@@ -133,5 +151,4 @@ public class EpgMainListViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
-
 }

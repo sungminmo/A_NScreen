@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -23,17 +24,20 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.FourVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.bean.WishObject;
 import com.widevine.sampleplayer.VideoPlayerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -42,11 +46,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class VodDetailActivity extends Activity {
 
     private static final String              tag = VodDetailActivity.class.getSimpleName();
     private static       VodDetailActivity   mInstance;
     private              JYSharedPreferences mPref;
+
+
 
     // network
     private RequestQueue mRequestQueue;
@@ -70,16 +79,24 @@ public class VodDetailActivity extends Activity {
     private TextView mDirectorTextView;
     private TextView mStarringTextView;
     private TextView mViewableTextView;
+    private ImageView mMobileImageView;
     private LinearLayout mSeriesLinearLayout;
     private TextView mSynopsisTextView;
     private LinearLayout mPurchaseLinearLayout;
+    private LinearLayout mPurchaseLinearLayout2;
     private LinearLayout mPlayLinearLayout;
     private LinearLayout mTvOnlyLiearLayout;
+    private TextView mTvOnlyTextView;
     private ViewPager mViewPager;
     private String viewable;
 
     private Button mPurchaseButton; // 구매하기 버튼
-    private Button mPlayButton; // 시청하기 버튼
+    private Button mPurchaseButton2; // 구매하기 버튼
+    private Button mPrePlayButton;  // 미리보기 버튼
+    private Button mPlayButton;     // 시청하기 버튼
+    private Button mJimButton;      // 찜하기 버튼
+    private Button mJimButton2;      // 찜하기 버튼
+
 
     // activity
     private String assetId; // intent param
@@ -102,6 +119,7 @@ public class VodDetailActivity extends Activity {
     private String contentUri; // http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm
     private String drmServerUri; // http://proxy.video.toast.com/widevine/drm/dls.do
     private String drmProtection; // true
+    private boolean isPrePlay; // 미리보기? 아니면 전체보기 임.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +130,10 @@ public class VodDetailActivity extends Activity {
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
-        mImageLoader = new ImageLoader(mRequestQueue, imageCache);
+        mImageLoader  = new ImageLoader(mRequestQueue, imageCache);
+
+        isPrePlay     = true;
+
 
         //sJson   = getIntent().getExtras().getString("sJson");
         assetId   = getIntent().getExtras().getString("assetId");
@@ -145,11 +166,14 @@ public class VodDetailActivity extends Activity {
         mDirectorTextView     = (TextView)findViewById(R.id.vod_detail_director_textview);
         mStarringTextView     = (TextView)findViewById(R.id.vod_detail_starring_textview);
         mViewableTextView     = (TextView)findViewById(R.id.vod_detail_viewable_textview);
-        mSeriesLinearLayout   = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout);
+        mSeriesLinearLayout   = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout);    // 시리즈 회차 버튼
         mSynopsisTextView     = (TextView)findViewById(R.id.vod_detail_synopsis_textview);
-        mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);
-        mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);
-        mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);
+        mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);  // 미리보기/구매하기/찜하기
+        mPurchaseLinearLayout2 = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout2);  // 구매하기/찜하기
+        mPlayLinearLayout     = (LinearLayout)findViewById(R.id.vod_detail_play_linearlayout);      // 시청하기
+        mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);    // TV에서 시청가능합니다.
+        mTvOnlyTextView       = (TextView)findViewById(R.id.vod_detail_tvonly_textview);
+        mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
 
         ImageButton backButton = (ImageButton)findViewById(R.id.vod_detail_topmenu_left_imagebutton);
@@ -157,6 +181,16 @@ public class VodDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        // 미리보기 버튼
+        mPrePlayButton = (Button)findViewById(R.id.vod_detail_preplay_button);
+        mPrePlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPrePlay = true;
+                requestContentUri();
             }
         });
 
@@ -200,14 +234,111 @@ public class VodDetailActivity extends Activity {
             }
         });
 
+        mPurchaseButton2       = (Button)findViewById(R.id.vod_detail_order_button2);
+        mPurchaseButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
+                //startActivity(i);
+
+                /*
+                Bundle param = new Bundle();
+                param.putString("assetId", mInstance.assetId);
+                param.putString("isSeriesLink", isSeriesLink);
+                param.putString("mTitle", mTitle);
+                param.putString("sListPrice", sListPrice);
+                param.putString("sPrice", sPrice);
+                param.putString("productId", productId);
+                param.putString("goodId", goodId);
+
+
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodBuyFragment vf = new VodBuyFragment();
+                vf.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, vf);
+                ft.addToBackStack("VodBuyFragment");
+                ft.commit();
+                */
+
+                Intent intent = new Intent(mInstance, VodBuyActivity.class);
+                intent.putExtra("assetId", mInstance.assetId);
+                intent.putExtra("isSeriesLink", isSeriesLink);
+                intent.putExtra("mTitle", mTitle);
+                intent.putExtra("sListPrice", sListPrice);
+                intent.putExtra("sPrice", sPrice);
+                intent.putExtra("productId", productId);
+                intent.putExtra("goodId", goodId);
+                startActivityForResult(intent, 1000);
+            }
+        });
+
         // 시청하기 버튼
         mPlayButton = (Button)findViewById(R.id.vod_detail_play_button);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isPrePlay = false;
                 requestContentUri();
             }
         });
+
+        // 찜하기 버튼
+        mJimButton = (Button)findViewById(R.id.vod_detail_jjim_button);
+        mJimButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( mPref.isWishAsset(assetId) == false ) {
+                    // 찜 안한 VOD
+                    requestAddRemoveWishItem("addWishItem");
+                    Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                    img.setBounds( 0, 0, 25, 25 );
+                    mJimButton.setCompoundDrawables( null, null, img, null );
+                    mJimButton.setText("찜해제");
+                } else {
+                    // 찜 한 VOD
+                    requestAddRemoveWishItem("removeWishItem");
+                    Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
+                    img.setBounds( 0, 0, 25, 25 );
+                    mJimButton.setCompoundDrawables( null, null, img, null );
+                    mJimButton.setText("찜하기");
+                }
+            }
+        });
+
+        mJimButton2 = (Button)findViewById(R.id.vod_detail_jjim_button);
+        mJimButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( mPref.isWishAsset(assetId) == false ) {
+                    // 찜 안한 VOD
+                    requestAddRemoveWishItem("addWishItem");
+                    Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                    img.setBounds( 0, 0, 25, 25 );
+                    mJimButton2.setCompoundDrawables( null, null, img, null );
+                    mJimButton2.setText("찜해제");
+                } else {
+                    // 찜 한 VOD
+                    requestAddRemoveWishItem("removeWishItem");
+                    Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
+                    img.setBounds( 0, 0, 25, 25 );
+                    mJimButton2.setCompoundDrawables( null, null, img, null );
+                    mJimButton2.setText("찜하기");
+                }
+            }
+        });
+
+        if ( mPref.isWishAsset(assetId) == false ) {
+            // 찜 안한 VOD
+        } else {
+            // 찜 한 VOD
+            Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+            img.setBounds( 0, 0, 25, 25 );
+            mJimButton.setCompoundDrawables( null, null, img, null );
+            mJimButton.setText("찜해제");
+        }
+
+
 
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
         // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
@@ -282,6 +413,8 @@ public class VodDetailActivity extends Activity {
                     boolean seriesLink          = asset.getBoolean("seriesLink");
                     String promotionSticker     = asset.getString("promotionSticker");
                     String title                = asset.getString("title");
+                    String publicationRight     = asset.getString("publicationRight"); // 1: TV ONLY, 2 MOBILE
+
 
                     JSONArray productLists      = asset.getJSONArray("productList");
                     JSONObject product          = (JSONObject)productLists.get(0);
@@ -317,8 +450,13 @@ public class VodDetailActivity extends Activity {
                     String listPrice         = product.getString("listPrice");
                     String purchasedId       = product.getString("purchasedId");
                     String purchasedTime     = product.getString("purchasedTime");
+                    String viewPeriod     = product.getString("viewPeriod");
 
                     // LinearLayout 감추기/보이기 -----------------------------------------------------
+                    // mSeriesLinearLayout   // 시리즈 회차 버튼
+                    // mPurchaseLinearLayout // 미리비기/구매하기/찜하기
+                    // mPlayLinearLayout     // 시청하기
+                    // mTvOnlyLiearLayout    // TV에서 시청가능합니다.
                     if ( seriesLink == true ) {      // 시리즈 보여라
                         isSeriesLink = "YES";
                         mSeriesLinearLayout.setVisibility(View.VISIBLE);
@@ -327,17 +465,20 @@ public class VodDetailActivity extends Activity {
                         mSeriesLinearLayout.setVisibility(View.GONE);
                     }
                     if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
+                        if ("".equals(viewPeriod)) {
+                            mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                            mPlayLinearLayout.setVisibility(View.GONE);
+                        } else {
                         mPurchaseLinearLayout.setVisibility(View.VISIBLE);
                         mPlayLinearLayout.setVisibility(View.GONE);
+                        }
                     } else {                         // 구매했다. 감쳐라.
                         mPurchaseLinearLayout.setVisibility(View.GONE);
                         mPlayLinearLayout.setVisibility(View.VISIBLE);
                     }
-                    // @// TODO: 2015. 10. 21. 지금은 값이 안내려옴. 시청기기 서버작업 되면 수정해야 됨.
-                    if ( true ) {                    // TV에서봐 보여랴
-                        mTvOnlyLiearLayout.setVisibility(View.GONE);
-                    } else {                         // TV에서봐 감쳐라.
-                        mTvOnlyLiearLayout.setVisibility(View.GONE);
+                    if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
+                        mTvOnlyTextView.setText("["+title+"] 는 (은)");
+                        mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
                     }
 
                     // 값들 찍어주기. -----------------------------------------------------------------
@@ -386,7 +527,9 @@ public class VodDetailActivity extends Activity {
                     mDirectorTextView.setText(director);
                     mStarringTextView.setText(starring);
                     mSynopsisTextView.setText(synopsis);
-
+                    if ( "2".equals(publicationRight) ) {
+                        mMobileImageView.setVisibility(View.VISIBLE);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -473,6 +616,127 @@ public class VodDetailActivity extends Activity {
         mRequestQueue.add(request);
     }
 
+    /**
+     * 찜하기에 추가/제거
+     * http://58.141.255.79:8080/HApplicationServer/addWishItem.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1&assetId=www.hchoice.co.kr|M4166179LSG353388601
+     * http://58.141.255.79:8080/HApplicationServer/removeWishItem.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1&assetId=www.hchoice.co.kr|M4166179LSG353388601
+     */
+    private void requestAddRemoveWishItem(String action) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestAddRemoveWishItem()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String encAssetId  = null;
+        try {
+            encAssetId  = URLDecoder.decode(assetId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = mPref.getWebhasServerUrl() + "/"+action+".json?version=1&terminalKey="+terminalKey+"&&assetId="+encAssetId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                try {
+                    JSONObject jo      = new JSONObject(response);
+                    String resultCode  = jo.getString("resultCode");
+
+                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        requestGetWishList();
+                    } else {
+                        String errorString = jo.getString("errorString");
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(sb.toString());
+                        alert.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    /**
+     * 찜하기 리스트 받기
+     * http://58.141.255.79:8080/HApplicationServer/getWishList.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1
+     */
+    private void requestGetWishList() {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                try {
+                    JSONObject jo      = new JSONObject(response);
+                    String resultCode  = jo.getString("resultCode");
+
+                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        JSONArray arr  = jo.getJSONArray("wishItemList");
+                        mPref.setAllWishList(arr);
+                    } else {
+                        String errorString = jo.getString("errorString");
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(sb.toString());
+                        alert.show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
 
 //    private String fileName; // M4145902.mpg
 //    private String contentUri; // http://cjhv.video.toast.com/aaaaaa/5268a42c-5bfe-46ac-b8f0-9c094ee5327b.wvm
@@ -482,7 +746,13 @@ public class VodDetailActivity extends Activity {
     private void requestContentUri() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestContentUri()"); }
-        String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/play";
+        String action = "preview";
+        if ( isPrePlay == true ) {
+            action = "preview";
+        } else {
+            action = "play";
+        }
+        String url = "https://api.cablevod.co.kr/api/v1/mso/10/asset/"+fileName+"/"+action;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -540,6 +810,12 @@ public class VodDetailActivity extends Activity {
                         intent.putExtra("drmServerUri", drmServerUri);
                         intent.putExtra("drmProtection", drmProtection);
                         intent.putExtra("terminalKey", terminalKey);
+                        if ( isPrePlay == true ) {
+                            intent.putExtra("isPrePlay", "YES");
+                        } else {
+                            intent.putExtra("isPrePlay", "NO");
+                        }
+                        intent.putExtra("title", mTitle);
                         startActivityForResult(intent, 111);
                         //startActivity(intent);
                     }
