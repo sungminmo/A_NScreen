@@ -20,7 +20,8 @@
         android:layout_height="46.25dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
-        android:layout_marginRight="17.5dp">
+        android:layout_marginRight="17.5dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +51,8 @@
         android:layout_height="46.25dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
-        android:layout_marginRight="17.5dp">
+        android:layout_marginRight="17.5dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -80,7 +82,8 @@
         android:layout_height="46.25dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
-        android:layout_marginRight="17.5dp">
+        android:layout_marginRight="17.5dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -118,7 +121,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
         android:layout_marginRight="17.5dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -158,7 +161,8 @@
         android:layout_height="79.25dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
-        android:layout_marginRight="17.5dp">
+        android:layout_marginRight="17.5dp"
+        android:visibility="gone">
 
         <FrameLayout
             android:orientation="horizontal"
@@ -235,7 +239,8 @@
         android:background="@mipmap/setting_pw_box_nor"
         android:layout_marginLeft="17.5dp"
         android:layout_marginRight="17.5dp"
-        android:layout_marginBottom="37.5dp" />
+        android:layout_marginBottom="37.5dp"
+        android:password="true" />
 
     <LinearLayout
         android:orientation="horizontal"

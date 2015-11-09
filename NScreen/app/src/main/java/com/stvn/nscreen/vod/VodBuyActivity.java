@@ -313,12 +313,16 @@ public class VodBuyActivity extends Activity {
                     String errorString = jo.getString("errorString");
 
                     if ( resultCode != 100 ) {
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("API: getPointBalance\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
                         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                         alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); }
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
                         });
-                        alert.setMessage(errorString);
+                        alert.setMessage(sb.toString());
                         alert.show();
                     }
 
