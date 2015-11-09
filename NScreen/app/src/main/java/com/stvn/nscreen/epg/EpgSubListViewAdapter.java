@@ -111,40 +111,60 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             String             dt22                         = formatter2.format(dt12).toString();
             String             dt23                         = formatter2.format(dt).toString();
 
-            // 시작시간
-            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
-            // 끝시간
-            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
-            // 현재시간
-            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3))); // 시작시간
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3))); // 끝시간
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3))); // 현재시간
 
             if ( mCurrDateNo != 0 ) {
-                //
+                JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
+                if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
+                    return 2; // 시청예약 / 녹화예약
+                } else {      //  예약 녹화 걸린 방송.
+                    return 3; // 시청예약 / 녹화예약취소
+                }
             } else {
-                if ( i1 < 360 ) {
-                    //
+                if ( i2 < i1) {
+                    i2 += 1440;
+                    if ( i3 < i1 ) {
+                        i3 += 1440;
+                        if (i1 < i3 && i3 <= i2) {
+                            // 현재 방송 중.
+                            // menu: TV로 시청 / 즉시녹화 or 즉시녹화중지.
+                            if (mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2)) {
+                                return 1; // TV로 시청 / 녹화중지
+                            } else {
+                                return 0; // TV로 시청 / 즉시녹화
+                            }
+                        } else if (i3 <= i1) {
+                            // 미래 방송.
+                            JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
+                            if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
+                                return 2; // 시청예약 / 녹화예약
+                            } else {    //  예약 녹화 걸린 방송.
+                                return 3; // 시청예약 / 녹화예약취소
+                            }
+                        }
+                    }
                 } else {
                     if (i1 < i3 && i3 <= i2) {
                         // 현재 방송 중.
                         // menu: TV로 시청은 고정./ 즉시녹화or즉시녹화중지.
-                        float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
-                        if ( mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2) ) {
+                        if (mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2)) {
                             return 1; // TV로 시청 / 녹화중지
                         } else {
-                            return 0; // // TV로 시청 / 즉시녹화
+                            return 0; // TV로 시청 / 즉시녹화
                         }
-                    } else if (i2 <= i3) {
-                        // 이미 지난 방송.
-                        if (Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2))) {
-                            i2 += 1440;
-                            float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
-                            //
-                        } else {
-                            //
-                        }
-                    } else if (i3 <= i1) {
+                    } else if ( i3 <= i1 ) {
                         // 미래.
-                        //
+                        JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
+                        if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
+                            return 2; // 시청예약 / 녹화예약
+                        } else {    //  예약 녹화 걸린 방송.
+                            return 3; // 시청예약 / 녹화예약취소
+                        }
+                    } else if ( i3 > i2 ) {
+                        // 과거.
+
                     }
                 }
             }
@@ -174,6 +194,24 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     public void addItem(ListViewDataObject obj) { mDatas.add(obj); }
     public void remove(int position) { mDatas.remove(position); }
     public void clear() { mDatas.clear(); }
+
+    public JSONObject getStbRecordReserveWithChunnelId(String channelId, ListViewDataObject epgitem) {
+        try {
+            String str = epgitem.sJson;
+            JSONObject epgjo = new JSONObject(str);
+            String programBroadcastingStartTime = epgjo.getString("programBroadcastingStartTime");
+            for ( int i = 0; i < mStbRecordReservelist.size(); i++ ) {
+                JSONObject reservjo = mStbRecordReservelist.get(i);
+                String RecordStartTime = reservjo.getString("RecordStartTime");
+                if ( programBroadcastingStartTime.equals(RecordStartTime) ) {  // epg의 시작간과 예약의 시작 시간이 같다면 동일 채널 동일 프로그램.
+                    return reservjo;
+                }
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -219,28 +257,41 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             channelProgramOnAirTime.setText(dt21 + "~" + dt22);
 
             if ( mCurrDateNo != 0 ) {
+                // 미래 방송.
                 progBar.setProgress(0);
             } else {
-                if ( i1 < 360 ) {
-                    progBar.setProgress(0);
-                } else {
-                    if (i1 < i3 && i3 <= i2) {
-                        // 현재 방송 중.
-                        // menu: TV로 시청은 고정./ 즉시녹화or즉시녹화중지.
-                        float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
-                        progBar.setProgress((int) (f1 * 100));
-                    } else if (i2 <= i3) {
-                        // 이미 지난 방송.
-                        if (Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2))) {
-                            i2 += 1440;
+                // 오늘 방송.
+                if ( i2 < i1 ) {
+                    if ( 0 <= i3 && i3 < i2 ) {
+                        i2 += 1440;
+                        i3 += 1440;
+                        if (i1 < i3 && i3 <= i2) {
+                            // 현재 방송 중.
                             float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
                             progBar.setProgress((int) (f1 * 100));
-                        } else {
-                            progBar.setProgress(100);
                         }
-                    } else if (i3 <= i1) {
-                        // 미래.
+                    } else {
+                        i2 += 1440;
+                        if (i1 < i3 && i3 <= i2) {
+                            // 현재 방송 중.
+                            float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
+                            progBar.setProgress((int) (f1 * 100));
+                        } else if ( i3 < i1 ) {
+                            // 미래 방송 중.
+                            progBar.setProgress(0);
+                        }
+                    }
+                } else {
+                    if ( i3 < i1 ) {
+                        // 미래 방송.
                         progBar.setProgress(0);
+                    } else if ( i3 > i2 ) {
+                        // 과거 방송.
+                        progBar.setProgress(100);
+                    }  else if ( i1 <= i3 && i3 <= i2 ) {
+                        // 현재 방송.
+                        float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
+                        progBar.setProgress((int) (f1 * 100));
                     }
                 }
             }

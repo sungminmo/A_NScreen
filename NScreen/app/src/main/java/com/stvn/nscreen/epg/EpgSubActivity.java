@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.LruCache;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -50,6 +51,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,7 +93,7 @@ public class EpgSubActivity extends AppCompatActivity {
     private              String                          mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
 
-    private              ArrayList<JSONObject>           mStbRecordReservelist;
+    private              ArrayList<JSONObject>           mStbRecordReservelist; // 녹화예약목록.
 
     // gui
     private              EpgSubListViewAdapter mAdapter;
@@ -107,6 +109,8 @@ public class EpgSubActivity extends AppCompatActivity {
 
     private              LinearLayout          epg_sub_date_linearlayout1, epg_sub_date_linearlayout2, epg_sub_date_linearlayout3, epg_sub_date_linearlayout4, epg_sub_date_linearlayout5, epg_sub_date_linearlayout6, epg_sub_date_linearlayout7;
     private              ImageView             imageView21, imageView22, imageView23, imageView24, imageView25, imageView26, imageView27;
+
+    private              ImageButton           backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +184,7 @@ public class EpgSubActivity extends AppCompatActivity {
         imageView26                = (ImageView) findViewById(R.id.imageView26);
         imageView27                = (ImageView) findViewById(R.id.imageView27);
         epg_sub_channelLogoImg     = (NetworkImageView) findViewById(R.id.epg_sub_imageview_channel_logo);
+        backBtn                    = (ImageButton) findViewById(R.id.backBtn);
 
         epg_sub_channelNumber.setText("CH." + sChannelNumber);
         epg_sub_channelName.setText(sChannelName);
@@ -196,6 +201,13 @@ public class EpgSubActivity extends AppCompatActivity {
 
         mAdapter              = new EpgSubListViewAdapter(this, null);
         mAdapter.setChannelIdChannelNumberChannelName(sChannelId, sChannelNumber, sChannelName);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         epg_sub_date_linearlayout1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,20 +388,62 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     } break;
                     case 1: { // TV로 시청 / 녹화중지
+                        if ( index == 0 ) { // left button
+                            requestSetRemoteChannelControl(sChannelId);
+                        } else { // right button
+                            requestSetRecordStop(sChannelId);
+                        }
                     } break;
                     case 2: { // 시청예약 / 녹화예약
+                        if ( index == 0 ) { // left button
+
+                        } else { // right button
+                            requestSetRecordStop(sChannelId);
+                        }
                     } break;
                     case 3: { // 시청예약 / 녹화예약취소
+                        if ( index == 0 ) { // left button
+
+                        } else { // right button
+                            try {
+                                JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
+                                String starttime = null;
+                                starttime = reservjo.getString("RecordStartTime");
+                                String seriesid  = reservjo.getString("SeriesId");
+                                requestSetRecordCancelReserve(sChannelId, starttime, seriesid);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     } break;
                     case 4: { // 시청예약취소 / 녹화예약
+                        if ( index == 0 ) { // left button
+
+                        } else { // right button
+                            requestSetRecord(sChannelId);
+                        }
                     } break;
                     case 5: { // 시청예약취소 / 녹화예약취소
+                        if ( index == 0 ) { // left button
+
+                        } else { // right button
+                            // requestSetRecordCancelReserve(sChannelId);
+                        }
                     } break;
                 }
                 return false;
             }
         });
 
+        requestGetSetTopStatus();
+
+
+    }
+
+    private void reloadAll() {
+        mNetworkError.clear();
+        mStbRecordReservelist.clear();
         requestGetSetTopStatus();
     }
 
@@ -430,14 +484,14 @@ public class EpgSubActivity extends AppCompatActivity {
 
         private void createMenu0(SwipeMenu menu) { // TV로 시청 / 즉시녹화
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0x18, 0x5E)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0xF7, 0xBD, 0x33)));
             item1.setWidth(dp2px(90));
             item1.setTitle("TV로 시청");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
-            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setBackground(new ColorDrawable(Color.rgb(0xC4, 0x5C, 0xC2)));
             item2.setWidth(dp2px(90));
             item2.setTitle("즉시녹화");
             item2.setTitleSize(12);
@@ -447,14 +501,14 @@ public class EpgSubActivity extends AppCompatActivity {
 
         private void createMenu1(SwipeMenu menu) { // TV로 시청 / 녹화중지
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0xE0, 0x3F)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0xF7, 0xBD, 0x33)));
             item1.setWidth(dp2px(90));
             item1.setTitle("TV로 시청");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
-            item2.setBackground(new ColorDrawable(Color.rgb(0xF9, 0x3F, 0x25)));
+            item2.setBackground(new ColorDrawable(Color.rgb(0xEA, 0x55, 0x55)));
             item2.setWidth(dp2px(90));
             item2.setTitle("녹화중지");
             item2.setTitleSize(12);
@@ -464,14 +518,14 @@ public class EpgSubActivity extends AppCompatActivity {
 
         private void createMenu2(SwipeMenu menu) { // 시청예약 / 녹화예약
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
             item1.setWidth(dp2px(90));
             item1.setTitle("시청예약");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
-            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setBackground(new ColorDrawable(Color.rgb(0xED, 0x72, 0x33)));
             item2.setWidth(dp2px(90));
             item2.setTitle("녹화예약");
             item2.setTitleSize(12);
@@ -481,14 +535,14 @@ public class EpgSubActivity extends AppCompatActivity {
 
         private void createMenu3(SwipeMenu menu) { // 시청예약 / 녹화예약취소
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
             item1.setWidth(dp2px(90));
             item1.setTitle("시청예약");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);;
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
-            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setBackground(new ColorDrawable(Color.rgb(0xC1, 0x4F, 0x28)));
             item2.setWidth(dp2px(90));
             item2.setTitle("녹화예약취소");
             item2.setTitleSize(12);
@@ -498,14 +552,14 @@ public class EpgSubActivity extends AppCompatActivity {
 
         private void createMenu4(SwipeMenu menu) { // 시청예약취소 / 녹화예약
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0x7F, 0x94, 0x24)));
             item1.setWidth(dp2px(90));
             item1.setTitle("시청예약취소");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
-            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setBackground(new ColorDrawable(Color.rgb(0xED, 0x72, 0x33)));
             item2.setWidth(dp2px(90));
             item2.setTitle("녹화예약");
             item2.setTitleSize(12);
@@ -515,14 +569,14 @@ public class EpgSubActivity extends AppCompatActivity {
 
         private void createMenu5(SwipeMenu menu) { // 시청예약취소 / 녹화예약취소
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0x7F, 0x94, 0x24)));
             item1.setWidth(dp2px(90));
             item1.setTitle("시청예약취소");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
-            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setBackground(new ColorDrawable(Color.rgb(0xC1, 0x4F, 0x28)));
             item2.setWidth(dp2px(90));
             item2.setTitle("녹화예약취소");
             item2.setTitleSize(12);
@@ -680,7 +734,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     alert.show();
                 } else {
                     // ok case
-                    requestGetChannelList();
+                    requestGetChannelSchedule();
                 }
             }
         }, new Response.ErrorListener() {
@@ -719,7 +773,7 @@ public class EpgSubActivity extends AppCompatActivity {
         List<String> strings     = new ArrayList<String>();
 
         response = response.replace("<![CDATA[","");
-        response = response.replace("]]>","");
+        response = response.replace("]]>", "");
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -804,10 +858,7 @@ public class EpgSubActivity extends AppCompatActivity {
         return sResultCode;
     }
 
-
-
-
-    private void requestGetChannelList() {
+    private void requestGetChannelSchedule() {
         mProgressDialog = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
         String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=" + sChannelNumber + "&dateIndex=7&areaCode=0";
@@ -841,7 +892,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 date6 = c.getTime();
 
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String sDate0 = sdf.format(date0);
                 String sDate1 = sdf.format(date1);
                 String sDate2 = sdf.format(date2);
@@ -854,7 +905,8 @@ public class EpgSubActivity extends AppCompatActivity {
                     ListViewDataObject obj = (ListViewDataObject)mDatasAll.get(i);
                     try {
                         JSONObject jo =  new JSONObject(obj.sJson);
-                        String broadcastingDate = jo.getString("broadcastingDate");
+                        String broadcastingDate = jo.getString("programBroadcastingStartTime");
+                        broadcastingDate = broadcastingDate.substring(0, 10);
                         if ( sDate0.equals(broadcastingDate) ) {
                             ListViewDataObject ldo = new ListViewDataObject(mDatas0.size(), 0, obj.sJson);
                             mDatas0.add(ldo);
@@ -1071,7 +1123,7 @@ public class EpgSubActivity extends AppCompatActivity {
 
     private void requestSetRecord(String channelId) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
-        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecord()"); }
         String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url  = mPref.getRumpersServerUrl() + "/SetRecord.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId=" + channelId;
@@ -1080,8 +1132,161 @@ public class EpgSubActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 parseSetRecord(response);
+                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecord(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestSetRecordStop(String channelId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordStop()"); }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordStop.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId=" + channelId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecordStop(response);
+                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecordStop(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestSetRecordCancelReserve(String channelId, String starttime, String seriesId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordCancelReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime + "&seriesId=" + seriesId + "&ReserveCancel=2";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecordCancelReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
                     String errorString = (String)RemoteChannelControl.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
@@ -1146,7 +1351,7 @@ public class EpgSubActivity extends AppCompatActivity {
         mRequestQueue.add(request);
     }
 
-    private void parseSetRecord(String response) {
+    private void parseSetRecordCancelReserve(String response) {
         XmlPullParserFactory factory = null;
         try {
             factory = XmlPullParserFactory.newInstance();
@@ -1176,6 +1381,5 @@ public class EpgSubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }
 

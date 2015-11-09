@@ -132,15 +132,18 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
             Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
 
-            if ( Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2)) ) {
-                dt22 += 1440;
+            if ( i1 < 360 ) {
+                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                progBar.setProgress((int)(f1 * 100));
+            } else if ( i2 < 360 ) {
+                i2 += 1440;
+                if ( i3 < 360 ) {
+                    i3 += 1440;
+                    float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                    progBar.setProgress((int)(f1 * 100));
+                }
             }
-
-            float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
-
-            progBar.setProgress((int)(f1 * 100));
-
-
+            
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);

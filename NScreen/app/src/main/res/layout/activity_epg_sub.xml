@@ -11,7 +11,7 @@
         android:background="@mipmap/title_bar_bg">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/backBtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
@@ -46,13 +46,13 @@
                 android:gravity="center_vertical" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:id="@+id/imageView15"
             android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="9dp"
-            android:background="@mipmap/icon_favorite_unselect" />
+            android:background="@color/transparent"
+            android:src="@mipmap/icon_favorite_unselect" />
 
     </FrameLayout>
 
