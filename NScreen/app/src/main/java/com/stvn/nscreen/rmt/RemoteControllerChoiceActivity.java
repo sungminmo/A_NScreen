@@ -24,7 +24,7 @@ public class RemoteControllerChoiceActivity extends Activity {
 
     private              ImageButton            remote_controller_choice_close_imageButton;
 
-    private              String                 sChannel;
+    private              String                 sChannel, mStbState;
 
     private              Button                 remote_controller_choice_genre_all_button, remote_controller_choice_genre_like_button, remote_controller_choice_genre_one_button, remote_controller_choice_genre_two_button, remote_controller_choice_genre_three_button, remote_controller_choice_genre_four_button, remote_controller_choice_genre_five_button, remote_controller_choice_genre_six_button, remote_controller_choice_genre_seven_button, remote_controller_choice_genre_eight_button, remote_controller_choice_genre_nine_button;
 
@@ -36,6 +36,7 @@ public class RemoteControllerChoiceActivity extends Activity {
         setContentView(R.layout.activity_remote_controller_choice);
 
         sChannel  = getIntent().getExtras().getString("Channel");
+        mStbState = getIntent().getExtras().getString("StbState");
 
         mInstance = this;
         mPref     = new JYSharedPreferences(this);
@@ -62,6 +63,7 @@ public class RemoteControllerChoiceActivity extends Activity {
                 intent.putExtra("sGenreCode", "");
                 intent.putExtra("sGenreName", "전체채널");
                 intent.putExtra("Channel", sChannel);
+                intent.putExtra("StbState", mStbState);
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();

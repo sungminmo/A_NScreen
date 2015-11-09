@@ -131,6 +131,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent i = new Intent(RemoteControllerActivity.this, RemoteControllerChoiceActivity.class);
                 i.putExtra("Channel", sChannel);
+                i.putExtra("StbState", mStbState);
+
                 startActivity(i);
             }
         });
@@ -238,7 +240,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         });
                         alert.setMessage(getString(R.string.error_not_ability_change_channel_independence));
                         alert.show();
-                    } else if ( "4".equals(mStbState) ) { // 개인 미디어 시청중.
+                    } else if ( "4".equals(mStbState) ) { // 셋탑박스 대기모드.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel4_linearlayout.setVisibility(View.VISIBLE);
                     } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
@@ -369,7 +371,29 @@ public class RemoteControllerActivity extends AppCompatActivity{
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
                     String errorString = (String)RemoteChannelControl.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -378,7 +402,6 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     alert.setMessage(errorString);
                     alert.show();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -449,6 +472,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
         String sGenreCode = "";
         try {
             sGenreCode = getIntent().getExtras().getString("sGenreCode");
+            mStbState  = getIntent().getExtras().getString("StbState");
         } catch (NullPointerException e) {
             sGenreCode = "";
         }
