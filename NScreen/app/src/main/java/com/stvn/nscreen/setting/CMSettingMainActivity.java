@@ -66,11 +66,15 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
 
         itemRow = makeSettingToggleItem(R.id.setting_adult_search_Index, true, "성인검색 제한설정", CMSettingData.getInstance().getAdultSearchRestriction(this));
         mainView.addView(itemRow);
+        itemListUseEvent(R.id.setting_adult_search_Index, false);
 
-        subMessage = getAdultAuthString(CMSettingData.getInstance().isAdultAuth(this));
+        boolean isAuthed = CMSettingData.getInstance().isAdultAuth(CMSettingMainActivity.this);
+        subMessage = getAdultAuthString(isAuthed);
 
         itemRow = makeSettingItem(R.id.setting_adult_auth_Index, true, "성인인증", "", subMessage, R.color.red, false);
         mainView.addView(itemRow);
+        itemListUseEvent(R.id.setting_adult_auth_Index, !isAuthed);
+
         itemRow = makeSettingItem(R.id.setting_notice_Index, false, "공지사항", "", "", 0, false);
         mainView.addView(itemRow);
         itemRow = makeSettingItem(R.id.setting_pay_channel_Index, false, "유료채널 안내", "", "", 0, false);
@@ -135,7 +139,6 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
 
         itemRow.setId(itemIndex);
         itemRow.findViewById(R.id.setting_item_switch_button).setVisibility(View.VISIBLE);
-        itemRow.setBackgroundResource(R.drawable.setting_item_background);
 
         if (useImage == true) {
             itemRow.findViewById(R.id.setting_item_image).setVisibility(View.VISIBLE);
@@ -151,7 +154,6 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
 
         ((TextView)itemRow.findViewById(R.id.setting_item_title)).setText(title);
 
-        // TODO: 가이드 완료 시 디자인 적용 필요 15.10.09
         Switch switchButton = (Switch)itemRow.findViewById(R.id.setting_item_switch_button);
         switchButton.setTag(itemIndex);
         switchButton.setOnCheckedChangeListener(this);
@@ -162,11 +164,25 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
     }
 
     /**
+     * 리스트 아이템 클릭 처리
+     * */
+    private void itemListUseEvent(int itemId, boolean useEvent) {
+        View itemRow = findViewById(itemId);
+        if (useEvent == true) {
+            itemRow.setOnClickListener(this);
+            itemRow.setBackgroundResource(R.drawable.setting_item_selector);
+        } else {
+            itemRow.setOnClickListener(null);
+            itemRow.setBackgroundResource(R.drawable.setting_item_background);
+        }
+    }
+
+    /**
      * 성인인증 여부에 따른 화면 표출 문구 반환
      * */
     private String getAdultAuthString(boolean isAuthed) {
         if (isAuthed) {
-            return "";
+            return "성인인증 되셨습니다.";
         } else {
             return "성인인증이 필요합니다.";
         }
@@ -195,6 +211,8 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
      * */
     private void setAdultAuth(boolean isAuthed) {
         View itemView = findViewById(R.id.setting_adult_auth_Index);
+        itemListUseEvent(R.id.setting_adult_auth_Index, !isAuthed);
+
         TextView authText = (TextView)itemView.findViewById(R.id.setting_item_title_sub2);
         authText.setText(getAdultAuthString(isAuthed));
     }
@@ -323,6 +341,7 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                     if (isAuth == true) {
                         CMSettingData.getInstance().setAdultSearchRestriction(CMSettingMainActivity.this, false);
                         setAdultSearchRestriction(false);
+                        setAdultAuth(isAuth);
                     }
                 }
                 break;

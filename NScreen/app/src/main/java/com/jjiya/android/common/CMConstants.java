@@ -8,7 +8,7 @@ public class CMConstants {
     public static final String CM_SCHEMA = "http://schemas.android.com/apk/res/stvn.nscreen";
     public static final String ANDROID_SCHEMA = "http://schemas.android.com/apk/res/android";
 
-    public static final String CM_CUSTOM_SCHEME = "cnm_app";
+    public static final String CM_CUSTOM_SCHEME = "cnmapp";
 
     public static final String CM_ADULT_AUTH_HOST = "adult_auth";
     public static final String CM_ADULT_AUTH_PARAM = "result";
