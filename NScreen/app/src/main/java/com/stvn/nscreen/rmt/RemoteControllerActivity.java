@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,8 +66,6 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              String                          mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
 
-
-
     // gui
     private              RemoteControllerListViewAdapter mAdapter;
     private              ListView                        mListView;
@@ -76,6 +75,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              TextView                        remote_controller_genre_name, remote_controller_channel_textview;
     private              String                          sChannel, sPower, sVolume;
     private              Button                          remote_controller_power_button, remote_controller_volume_up_button, remote_controller_volume_down_button;
+
+    private LinearLayout channel1_linearlayout, channel2_linearlayout, channel3_linearlayout, channel4_linearlayout, channel5_linearlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,12 @@ public class RemoteControllerActivity extends AppCompatActivity{
         remote_controller_power_button             = (Button) findViewById(R.id.remote_controller_power_button);
         remote_controller_volume_up_button         = (Button) findViewById(R.id.remote_controller_volume_up_button);
         remote_controller_volume_down_button       = (Button) findViewById(R.id.remote_controller_volume_down_button);
+
+        channel1_linearlayout                      = (LinearLayout) findViewById(R.id.channel1_linearlayout);
+        channel2_linearlayout                      = (LinearLayout) findViewById(R.id.channel2_linearlayout);
+        channel3_linearlayout                      = (LinearLayout) findViewById(R.id.channel3_linearlayout);
+        channel4_linearlayout                      = (LinearLayout) findViewById(R.id.channel4_linearlayout);
+        channel5_linearlayout                      = (LinearLayout) findViewById(R.id.channel5_linearlayout);
 
         try {
             sChannel = getIntent().getExtras().getString("Channel");
@@ -204,6 +211,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
 
 
                     if ( "1".equals(mStbState) ) { // VOD 시청중.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel2_linearlayout.setVisibility(View.VISIBLE);
                         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                         alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
                             @Override
@@ -214,6 +223,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         alert.setMessage(getString(R.string.error_not_ability_change_channel_vod));
                         alert.show();
                     } else if ( "2".equals(mStbState) ) { // 독립형.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel3_linearlayout.setVisibility(View.VISIBLE);
                         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                         alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
                             @Override
@@ -223,7 +234,12 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         });
                         alert.setMessage(getString(R.string.error_not_ability_change_channel_independence));
                         alert.show();
+                    } else if ( "4".equals(mStbState) ) { // 개인 미디어 시청중.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel4_linearlayout.setVisibility(View.VISIBLE);
                     } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel5_linearlayout.setVisibility(View.VISIBLE);
                         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                         alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
                             @Override
@@ -431,9 +447,9 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     if (xpp.getName().equalsIgnoreCase("channelId")) {
                         sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
-                        String sChanneNumber = xpp.nextText();
-                        iChannelNumber = Integer.valueOf(sChanneNumber);
-                        sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
+                        String sChannelNumber = xpp.nextText();
+                        iChannelNumber = Integer.valueOf(sChannelNumber);
+                        sb.append(",\"channelNumber\":\"").append(sChannelNumber).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelName")) {
                         sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTitle")) {
