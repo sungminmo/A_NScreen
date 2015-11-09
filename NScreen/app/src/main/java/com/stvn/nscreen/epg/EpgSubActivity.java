@@ -1150,6 +1150,76 @@ public class EpgSubActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 parseSetRecord(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("Duplicated Recording Reserve Request", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "009".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("고객님의 셋탑박스에서 제공되지 않는 채널입니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "012".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("고객님의 셋탑박스 설정에 의한 시청제한으로 녹화가 불가합니다. 셋탑박스 설정을 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                }
                 reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
@@ -1309,6 +1379,39 @@ public class EpgSubActivity extends AppCompatActivity {
                     String errorString = (String)RemoteChannelControl.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                     alert.setPositiveButton("Duplicated Recording Reserve Request", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
