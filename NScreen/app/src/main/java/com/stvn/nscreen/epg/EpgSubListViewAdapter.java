@@ -37,6 +37,9 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     private              int                           mCurrDateNo;
 
     // STB status
+    private              String                          mChannelNumber;        // intent param
+    private              String                          mChannelId;            // intent param
+    private              String                          mChannelName;          // intent param
     private              String                          mStbState;             // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
@@ -53,10 +56,16 @@ public class EpgSubListViewAdapter extends BaseAdapter {
         this.mOnClickListener = onClickListener;
     }
 
+    public void setChannelIdChannelNumberChannelName(String ChannelId, String ChannelNumber, String ChannelName) {
+        this.mChannelId = ChannelId;
+        this.mChannelNumber = ChannelNumber;
+        this.mChannelName = ChannelName;
+    }
+
     public void setStbState(String state, String recCh1, String recCh2, String watchCh, String pipCh) {
         this.mStbState             = state;
-        this.mStbRecordingchannel1 = recCh1;
-        this.mStbRecordingchannel2 = recCh2;
+        this.mStbRecordingchannel1 = recCh1; // ID
+        this.mStbRecordingchannel2 = recCh2; // ID
         this.mStbWatchingchannel   = watchCh;
         this.mStbPipchannel        = pipCh;
     }
@@ -79,13 +88,73 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         // menu type count
-        return 3;
+        return 6;
     }
 
     @Override
     public int getItemViewType(int position) {
         // current menu type
-        return position % 3;
+        Date dt = new Date();
+
+        SimpleDateFormat       formatter                    = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat       formatter2                   = new SimpleDateFormat("HH:mm");
+        try {
+            ListViewDataObject dobj                         = (ListViewDataObject)getItem(position);
+            JSONObject         jobj                         = new JSONObject(dobj.sJson);
+
+            String             ProgramBroadcastingStartTime = jobj.getString("programBroadcastingStartTime");
+            String             ProgramBroadcastingEndTime   = jobj.getString("programBroadcastingEndTime");
+
+            Date               dt11                         = formatter.parse(ProgramBroadcastingStartTime);
+            Date               dt12                         = formatter.parse(ProgramBroadcastingEndTime);
+            String             dt21                         = formatter2.format(dt11).toString();
+            String             dt22                         = formatter2.format(dt12).toString();
+            String             dt23                         = formatter2.format(dt).toString();
+
+            // 시작시간
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+            // 끝시간
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
+            // 현재시간
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+
+            if ( mCurrDateNo != 0 ) {
+                //
+            } else {
+                if ( i1 < 360 ) {
+                    //
+                } else {
+                    if (i1 < i3 && i3 <= i2) {
+                        // 현재 방송 중.
+                        // menu: TV로 시청은 고정./ 즉시녹화or즉시녹화중지.
+                        float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
+                        if ( mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2) ) {
+                            return 1; // TV로 시청 / 녹화중지
+                        } else {
+                            return 0; // // TV로 시청 / 즉시녹화
+                        }
+                    } else if (i2 <= i3) {
+                        // 이미 지난 방송.
+                        if (Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2))) {
+                            i2 += 1440;
+                            float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
+                            //
+                        } else {
+                            //
+                        }
+                    } else if (i3 <= i1) {
+                        // 미래.
+                        //
+                    }
+                }
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     /**

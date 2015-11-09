@@ -2,6 +2,7 @@ package com.stvn.nscreen.epg;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -72,6 +73,7 @@ public class EpgSubActivity extends AppCompatActivity {
     private              ProgressDialog        mProgressDialog;
     private              ImageLoader           mImageLoader;
     private              Map<String, Object>   mNetworkError;
+    private              Map<String, Object>   RemoteChannelControl;
 
     private ArrayList<ListViewDataObject>     mDatasAll = new ArrayList<ListViewDataObject>();
     private ArrayList<ListViewDataObject>     mDatas0 = new ArrayList<ListViewDataObject>();
@@ -124,6 +126,7 @@ public class EpgSubActivity extends AppCompatActivity {
             }
         });
         mNetworkError = new HashMap<String, Object>();
+        RemoteChannelControl = new HashMap<String, Object>();
         mStbRecordReservelist = new ArrayList<JSONObject>();
 
         Date date = new Date();
@@ -192,6 +195,7 @@ public class EpgSubActivity extends AppCompatActivity {
         epg_sub_channelLogoImg.setImageUrl(sChannelLogoImg, mImageLoader);
 
         mAdapter              = new EpgSubListViewAdapter(this, null);
+        mAdapter.setChannelIdChannelNumberChannelName(sChannelId, sChannelNumber, sChannelName);
 
         epg_sub_date_linearlayout1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -358,9 +362,38 @@ public class EpgSubActivity extends AppCompatActivity {
         mListView.setAdapter(mAdapter);
         mListView.setMenuCreator(creator);
 
-        requestGetChannelList();
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                ListViewDataObject item = (ListViewDataObject)mAdapter.getItem(position);
+                int iMenuType = mAdapter.getItemViewType(position);
+                switch ( iMenuType ) {
+                    case 0: { // TV로 시청 / 즉시녹화
+                        if ( index == 0 ) { // left button
+                            requestSetRemoteChannelControl(sChannelId);
+                        } else { // right button
+                            requestSetRecord(sChannelId);
+                        }
+                    } break;
+                    case 1: { // TV로 시청 / 녹화중지
+                    } break;
+                    case 2: { // 시청예약 / 녹화예약
+                    } break;
+                    case 3: { // 시청예약 / 녹화예약취소
+                    } break;
+                    case 4: { // 시청예약취소 / 녹화예약
+                    } break;
+                    case 5: { // 시청예약취소 / 녹화예약취소
+                    } break;
+                }
+                return false;
+            }
+        });
 
+        requestGetSetTopStatus();
     }
+
+
 
     /**
      * Swipe Menu for ListView
@@ -371,13 +404,22 @@ public class EpgSubActivity extends AppCompatActivity {
             // Create different menus depending on the view type
             switch (menu.getViewType()) {
                 case 0: {
-                    createMenu1(menu);
+                    createMenu0(menu);  // TV로 시청 / 즉시녹화
                 } break;
                 case 1: {
-                    createMenu2(menu);
+                    createMenu1(menu);  // TV로 시청 / 녹화중지
                 } break;
                 case 2: {
-                    createMenu3(menu);
+                    createMenu2(menu);  // 시청예약 / 녹화예약
+                } break;
+                case 3: {
+                    createMenu3(menu);  // 시청예약 / 녹화예약취소
+                } break;
+                case 4: {
+                    createMenu4(menu);  // 시청예약취소 / 녹화예약
+                } break;
+                case 5: {
+                    createMenu5(menu);  // 시청예약취소 / 녹화예약취소
                 } break;
             }
         }
@@ -386,42 +428,105 @@ public class EpgSubActivity extends AppCompatActivity {
             return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
         }
 
-        private void createMenu1(SwipeMenu menu) {
+        private void createMenu0(SwipeMenu menu) { // TV로 시청 / 즉시녹화
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
             item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0x18, 0x5E)));
             item1.setWidth(dp2px(90));
-            //item1.setIcon(R.drawable.ic_action_favorite);
+            item1.setTitle("TV로 시청");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
             item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
             item2.setWidth(dp2px(90));
-            //item2.setIcon(R.drawable.ic_action_good);
+            item2.setTitle("즉시녹화");
+            item2.setTitleSize(12);
+            item2.setTitleColor(Color.WHITE);
             menu.addMenuItem(item2);
         }
 
-        private void createMenu2(SwipeMenu menu) {
+        private void createMenu1(SwipeMenu menu) { // TV로 시청 / 녹화중지
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
             item1.setBackground(new ColorDrawable(Color.rgb(0xE5, 0xE0, 0x3F)));
             item1.setWidth(dp2px(90));
-            //item1.setIcon(R.drawable.ic_action_important);
+            item1.setTitle("TV로 시청");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
             item2.setBackground(new ColorDrawable(Color.rgb(0xF9, 0x3F, 0x25)));
             item2.setWidth(dp2px(90));
-            //item2.setIcon(R.drawable.ic_action_discard);
+            item2.setTitle("녹화중지");
+            item2.setTitleSize(12);
+            item2.setTitleColor(Color.WHITE);
             menu.addMenuItem(item2);
         }
 
-        private void createMenu3(SwipeMenu menu) {
+        private void createMenu2(SwipeMenu menu) { // 시청예약 / 녹화예약
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
             item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
             item1.setWidth(dp2px(90));
-            //item1.setIcon(R.drawable.ic_action_about);
+            item1.setTitle("시청예약");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
             SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
             item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
             item2.setWidth(dp2px(90));
-            //item2.setIcon(R.drawable.ic_action_share);
+            item2.setTitle("녹화예약");
+            item2.setTitleSize(12);
+            item2.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item2);
+        }
+
+        private void createMenu3(SwipeMenu menu) { // 시청예약 / 녹화예약취소
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("시청예약");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);;
+            menu.addMenuItem(item1);
+            SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
+            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setWidth(dp2px(90));
+            item2.setTitle("녹화예약취소");
+            item2.setTitleSize(12);
+            item2.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item2);
+        }
+
+        private void createMenu4(SwipeMenu menu) { // 시청예약취소 / 녹화예약
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("시청예약취소");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+            SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
+            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setWidth(dp2px(90));
+            item2.setTitle("녹화예약");
+            item2.setTitleSize(12);
+            item2.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item2);
+        }
+
+        private void createMenu5(SwipeMenu menu) { // 시청예약취소 / 녹화예약취소
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0x30, 0xB1, 0xF5)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("시청예약취소");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+            SwipeMenuItem item2 = new SwipeMenuItem(getApplicationContext());
+            item2.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
+            item2.setWidth(dp2px(90));
+            item2.setTitle("녹화예약취소");
+            item2.setTitleSize(12);
+            item2.setTitleColor(Color.WHITE);
             menu.addMenuItem(item2);
         }
     };
@@ -575,6 +680,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     alert.show();
                 } else {
                     // ok case
+                    requestGetChannelList();
                 }
             }
         }, new Response.ErrorListener() {
@@ -779,9 +885,6 @@ public class EpgSubActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
                 mProgressDialog.dismiss();
 
-                // 7.3.40 GetSetTopStatus
-                // 셋탑의 상태 확인용.
-                requestGetSetTopStatus();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -853,4 +956,226 @@ public class EpgSubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    /**
+     *  리스트뷰의 스와이프 메뉴로 호출되는 통신들 입니다. ******************************************************
+     */
+
+    private void requestSetRemoteChannelControl(String channelId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String tk   = mPref.getWebhasTerminalKey();
+        String url  = mPref.getRumpersServerUrl() + "/SetRemoteChannelControl.asp?deviceId=" + uuid + "&channelId=" + channelId + "&version=1&terminalKey=" + tk;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRemoteChannelControl(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRemoteChannelControl(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestSetRecord(String channelId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecord.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId=" + channelId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecord(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecord(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+
