@@ -267,7 +267,7 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                     public void positiveClickEvent(DialogInterface dialog, String text) {
 
                         String savedPassword = CMSettingData.getInstance().getPurchaseAuthPassword(CMSettingMainActivity.this);
-                        if (text.equals(savedPassword)) {
+                        if (TextUtils.isEmpty(savedPassword) == false && text.equals(savedPassword)) {
                             Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
                             startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
                         }
