@@ -72,23 +72,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
         this.mStbPipchannel        = pipCh;
     }
 
-    public String getChannelNumberWithChannelId(String cid) {
-        String rtn = "";
-        for ( int i = 0; i < mDatas.size(); i++ ) {
-            ListViewDataObject obj = mDatas.get(i);
-            try {
-                JSONObject jo = new JSONObject(obj.sJson);
-                String channelId = jo.getString("channelId");
-                if ( cid.equals(channelId) == true ) {
-                    String channelNumber = jo.getString("channelNumber");
-                    return channelNumber;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return rtn;
-    }
+
 
     /**
      * ListView

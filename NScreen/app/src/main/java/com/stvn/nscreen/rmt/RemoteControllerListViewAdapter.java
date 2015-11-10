@@ -62,6 +62,24 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
         });
     }
 
+    public String getChannelNumberWithChannelId(String cid) {
+        String rtn = "";
+        for ( int i = 0; i < mDatas.size(); i++ ) {
+            ListViewDataObject obj = mDatas.get(i);
+            try {
+                JSONObject jo = new JSONObject(obj.sJson);
+                String channelId = jo.getString("channelId");
+                if ( cid.equals(channelId) == true ) {
+                    String channelNumber = jo.getString("channelNumber");
+                    return channelNumber;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return rtn;
+    }
+
     @Override
     public int getCount() { return mDatas.size(); }
 
