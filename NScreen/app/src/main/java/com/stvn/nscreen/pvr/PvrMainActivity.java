@@ -2,10 +2,13 @@ package com.stvn.nscreen.pvr;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,12 +26,17 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -57,11 +65,11 @@ public class PvrMainActivity extends AppCompatActivity {
     private              Map<String, Object>    mNetworkError;
 
     private              PvrMainListViewAdapter mAdapter;
-    private              ListView               mListView;
+    private              SwipeMenuListView      mListView;
 
     private              ImageButton            pvr_main_backBtn;
     private              Button                 button1, button2;
-    private              TextView               textView2, textView7;
+    private              TextView               textView1, textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +96,31 @@ public class PvrMainActivity extends AppCompatActivity {
         button1       = (Button) findViewById(R.id.button1);
         button2       = (Button) findViewById(R.id.button2);
 
-        textView2     = (TextView) findViewById(R.id.textView2);
-        textView7     = (TextView) findViewById(R.id.textView7);
+        textView1     = (TextView) findViewById(R.id.pvr_main_count_textview1);
+        textView2     = (TextView) findViewById(R.id.pvr_main_count_textview2);
 
-        mListView     = (ListView)findViewById(R.id.pvr_main_listview);
+        mListView     = (SwipeMenuListView)findViewById(R.id.pvr_main_listview);
         mListView.setAdapter(mAdapter);
+        mListView.setMenuCreator(creator);
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                ListViewDataObject item = (ListViewDataObject) mAdapter.getItem(position);
+                int iMenuType = mAdapter.getItemViewType(position);
+                switch (iMenuType) {
+                    case 0: { // TV로 시청 / 즉시녹화
+                        if (index == 0) { // left button
+                            // requestSetRemoteChannelControl(sChannelId);
+                        } else { // right button
+                            // requestSetRecord(sChannelId);
+                        }
+                    }
+                    break;
+                }
+
+                return false;
+            }
+        });
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,8 +128,8 @@ public class PvrMainActivity extends AppCompatActivity {
                 mAdapter.clear();
                 button1.setSelected(true);
                 button2.setSelected(false);
+                textView1.setVisibility(View.VISIBLE);
                 textView2.setVisibility(View.GONE);
-                textView7.setVisibility(View.VISIBLE);
                 requestGetRecordReservelist();
             }
         });
@@ -112,8 +140,8 @@ public class PvrMainActivity extends AppCompatActivity {
                 mAdapter.clear();
                 button1.setSelected(false);
                 button2.setSelected(true);
+                textView1.setVisibility(View.GONE);
                 textView2.setVisibility(View.VISIBLE);
-                textView7.setVisibility(View.GONE);
                 requestGetrecordlist();
             }
         });
@@ -121,6 +149,48 @@ public class PvrMainActivity extends AppCompatActivity {
         button1.setSelected(true);
         requestGetRecordReservelist();
     }
+
+    /**
+     * Swipe Menu for ListView
+     */
+    SwipeMenuCreator creator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            // Create different menus depending on the view type
+            switch (menu.getViewType()) {
+                case 0: {
+                    createMenu0(menu);  // 녹화중지
+                } break;
+                case 1: {
+                    createMenu1(menu);  // 녹화예약취소
+                } break;
+            }
+        }
+
+        private int dp2px(int dp) {
+            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+        }
+
+        private void createMenu0(SwipeMenu menu) { // 녹화중지
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0xEA, 0x55, 0x55)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("녹화중지");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+        }
+
+        private void createMenu1(SwipeMenu menu) { // 녹화예약취소
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0xC1, 0x4F, 0x28)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("녹화예약취소");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+        }
+    };
 
     private void requestGetRecordReservelist() {
         mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
@@ -149,6 +219,7 @@ public class PvrMainActivity extends AppCompatActivity {
                     AlertDialog alert = ad.create();
                     alert.show();
                 } else {
+                    textView1.setText("총 " + mAdapter.getCount() + "개의 녹화예약 콘텐츠가 있습니다.");
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -281,6 +352,7 @@ public class PvrMainActivity extends AppCompatActivity {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 parseGetrecordlist(response);
+                textView2.setText("총 " + mAdapter.getCount() + "개의 녹화 콘텐츠가 있습니다.");
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {

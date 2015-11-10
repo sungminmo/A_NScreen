@@ -41,6 +41,12 @@ public class EpgMainListViewAdapter extends BaseAdapter {
     private              RequestQueue                  mRequestQueue;
     private              ImageLoader                   mImageLoader;
 
+    private              String                 mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+
     public EpgMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
 
@@ -58,6 +64,17 @@ public class EpgMainListViewAdapter extends BaseAdapter {
         });
     }
 
+    public void setStbState(String state, String recCh1, String recCh2, String watchCh, String pipCh) {
+        this.mStbState             = state;
+        this.mStbRecordingchannel1 = recCh1; // ID
+        this.mStbRecordingchannel2 = recCh2; // ID
+        this.mStbWatchingchannel   = watchCh;
+        this.mStbPipchannel        = pipCh;
+    }
+    /**
+     * ListView
+     * @return
+     */
     @Override
     public int getCount() { return mDatas.size(); }
 
@@ -92,6 +109,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             String             sChannelInfo            = jobj.getString("channelInfo");
             String             ProgramOnAirStartTime   = jobj.getString("channelProgramOnAirStartTime");
             String             ProgramOnAirEndTime     = jobj.getString("channelProgramOnAirEndTime");
+            String             channelId               = jobj.getString("channelId");
 
             NetworkImageView   channelLogo             = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
 
@@ -101,6 +119,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             TextView           channelNumberTextView   = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView           titleTextView           = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
             TextView           channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
+            ImageView           recImageView           = ViewHolder.get(convertView, R.id.epg_main_rec_imageview);
             ProgressBar        progBar = ViewHolder.get(convertView, R.id.progressBar);
 
             Date               dt11                     = formatter.parse(ProgramOnAirStartTime);
@@ -113,15 +132,18 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
             Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
 
-            if ( Integer.parseInt(dt22.substring(0, 2)) < Integer.parseInt(dt21.substring(0, 2)) ) {
-                dt22 += 1440;
+            if ( i1 < 360 ) {
+                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                progBar.setProgress((int)(f1 * 100));
+            } else if ( i2 < 360 ) {
+                i2 += 1440;
+                if ( i3 < 360 ) {
+                    i3 += 1440;
+                    float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                    progBar.setProgress((int)(f1 * 100));
+                }
             }
-
-            float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
-
-            progBar.setProgress((int)(f1 * 100));
-
-
+            
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
@@ -144,6 +166,13 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             } else if ("HD".equals(sChannelInfo) || "SD,HD".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_hd);
             }
+
+            if ( channelId.equals(mStbRecordingchannel1) || channelId.equals(mStbRecordingchannel2) ) {
+                recImageView.setVisibility(View.VISIBLE);
+            } else {
+                recImageView.setVisibility(View.GONE);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {

@@ -58,6 +58,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              RequestQueue                    mRequestQueue;
     private              ProgressDialog                  mProgressDialog;
     private              Map<String, Object>             mNetworkError;
+    private              Map<String, Object>             RemoteChannelControl;
 
     // STB status
     private              String                          mStbState;             // GetSetTopStatus API로 가져오는 값.
@@ -65,6 +66,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              String                          mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+
+
 
     // gui
     private              RemoteControllerListViewAdapter mAdapter;
@@ -75,8 +78,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              TextView                        remote_controller_genre_name, remote_controller_channel_textview;
     private              String                          sChannel, sPower, sVolume;
     private              Button                          remote_controller_power_button, remote_controller_volume_up_button, remote_controller_volume_down_button;
-
-    private LinearLayout channel1_linearlayout, channel2_linearlayout, channel3_linearlayout, channel4_linearlayout, channel5_linearlayout;
+    private              LinearLayout                    channel1_linearlayout, channel2_linearlayout, channel3_linearlayout, channel4_linearlayout, channel5_linearlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
         mNetworkError = new HashMap<String, Object>();
+        RemoteChannelControl = new HashMap<String, Object>();
 
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
@@ -112,6 +115,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
         channel4_linearlayout                      = (LinearLayout) findViewById(R.id.channel4_linearlayout);
         channel5_linearlayout                      = (LinearLayout) findViewById(R.id.channel5_linearlayout);
 
+
         try {
             sChannel = getIntent().getExtras().getString("Channel");
             remote_controller_channel_textview.setText(sChannel + "번");
@@ -127,6 +131,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent i = new Intent(RemoteControllerActivity.this, RemoteControllerChoiceActivity.class);
                 i.putExtra("Channel", sChannel);
+                i.putExtra("StbState", mStbState);
+
                 startActivity(i);
             }
         });
@@ -234,7 +240,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         });
                         alert.setMessage(getString(R.string.error_not_ability_change_channel_independence));
                         alert.show();
-                    } else if ( "4".equals(mStbState) ) { // 개인 미디어 시청중.
+                    } else if ( "4".equals(mStbState) ) { // 셋탑박스 대기모드.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel4_linearlayout.setVisibility(View.VISIBLE);
                     } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
@@ -358,8 +364,44 @@ public class RemoteControllerActivity extends AppCompatActivity{
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d(tag, response);
                 mProgressDialog.dismiss();
+                parseSetRemoteChannelControl(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -390,12 +432,47 @@ public class RemoteControllerActivity extends AppCompatActivity{
         mRequestQueue.add(request);
     }
 
+    private void parseSetRemoteChannelControl(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
         String sGenreCode = "";
         try {
             sGenreCode = getIntent().getExtras().getString("sGenreCode");
+            mStbState  = getIntent().getExtras().getString("StbState");
         } catch (NullPointerException e) {
             sGenreCode = "";
         }
