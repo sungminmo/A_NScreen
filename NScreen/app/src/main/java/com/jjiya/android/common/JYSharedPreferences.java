@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.stvn.nscreen.LoadingActivity;
+import com.stvn.nscreen.bean.BookmarkChannelObject;
 import com.stvn.nscreen.bean.WatchTvObject;
 import com.stvn.nscreen.bean.WishObject;
 
@@ -328,4 +329,44 @@ public class JYSharedPreferences {
         }
     }
 
+    /**
+     * 선호채널
+     */
+    public void addBookmarkChannel(String channelId, String channelNumber, String channelName) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        BookmarkChannelObject bm = realm.createObject(BookmarkChannelObject.class); // Create a new object
+        bm.setsChannelId(channelId);
+        bm.setsChannelNumber(channelNumber);
+        bm.setsChannelName(channelName);
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
+
+    public void removeBookmarkChannelWithChannelId(String channelId) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<BookmarkChannelObject> results = mRealm.where(BookmarkChannelObject.class).equalTo("sChannelId", channelId).findAll();
+        if ( results.size() > 0 ) {
+            BookmarkChannelObject obj = results.get(0);
+            obj.removeFromRealm();
+        } else {
+            //
+        }
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
+
+    public boolean isBookmarkChannelWithChannelId(String channelId) {
+        RealmResults<BookmarkChannelObject> results = mRealm.where(BookmarkChannelObject.class).equalTo("sChannelId", channelId).findAll();
+        if ( results.size() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
