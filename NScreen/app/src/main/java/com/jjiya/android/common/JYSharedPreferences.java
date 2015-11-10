@@ -1,11 +1,16 @@
 package com.jjiya.android.common;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 
+import com.stvn.nscreen.LoadingActivity;
+import com.stvn.nscreen.bean.WatchTvObject;
 import com.stvn.nscreen.bean.WishObject;
 
 import org.json.JSONArray;
@@ -16,8 +21,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 
@@ -61,6 +71,9 @@ public class JYSharedPreferences {
 
     public JYSharedPreferences(Context c) {
         mContext = c;
+
+        //RealmConfiguration config = new RealmConfiguration.Builder(mContext).build();
+        //Realm.deleteRealm(config);
         mRealm   = Realm.getInstance(c);
     }
 
@@ -213,4 +226,106 @@ public class JYSharedPreferences {
         realm.commitTransaction();
         // Realm Database **********************************************************************
     }
+
+    /**
+     * Local Alarm Noti
+     */
+
+    /**
+     *
+     * @param programId "S321387639"
+     * @param seriesId ""
+     * @param programTitle "국악무대"
+     * @param programBroadcastingStartTime 2015-11-10 16:02:00"
+     *
+     * mPref.addWatchTvAlarm("S321387639", "", "국악무대1", "2015-11-10 18:50:00");
+     * mPref.addWatchTvAlarm("S321387640", "", "국악무대2", "2015-11-10 18:51:00");
+     * mPref.addWatchTvAlarm("S321387641", "", "국악무대3", "2015-11-10 18:52:00");
+     * mPref.addWatchTvAlarm("S321387642", "", "국악무대4", "2015-11-10 18:53:00");
+     * mPref.addWatchTvAlarm("S321387643", "", "국악무대5", "2015-11-10 18:54:00");
+     *
+     */
+    public void addWatchTvReserveAlarm(String programId, String seriesId, String programTitle, String programBroadcastingStartTime) {
+
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+
+        // remove all
+        realm.beginTransaction();
+        WatchTvObject obj = realm.createObject(WatchTvObject.class); // Create a new object
+        long iSeq = realm.where(WatchTvObject.class).maximumInt("iSeq") + 1;
+        obj.setiSeq((int)iSeq);
+        obj.setsScheduleSeq("");
+        obj.setsBroadcastingDate("");
+        obj.setsProgramId(programId);
+        obj.setsSeriesId(seriesId);
+        obj.setsProgramTitle(programTitle);
+        obj.setsProgramContent("");
+        obj.setsProgramBroadcastingStartTime(programBroadcastingStartTime);
+        obj.setsProgramBroadcastingEndTime("");
+        obj.setsProgramHD("");
+        obj.setsProgramGrade("");
+        obj.setsProgramPVR("");
+        // 트랜잭션 종료
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+
+
+        Date startDate = null;
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            startDate = formatter.parse(programBroadcastingStartTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.setTime(startDate);
+
+
+        Intent intent = new Intent(mContext, WatchTvAlarmBroadcastReceiver.class);
+        intent.putExtra("programId",                    programId);
+        intent.putExtra("seriesId",                     seriesId);
+        intent.putExtra("programTitle",                 programTitle);
+        intent.putExtra("programBroadcastingStartTime", programBroadcastingStartTime);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int)iSeq, intent, PendingIntent.FLAG_NO_CREATE);
+
+        AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    public void removeWatchTvReserveAlarm(String programId) {
+        int iSeq = 0;
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<WatchTvObject> results = mRealm.where(WatchTvObject.class).equalTo("sProgramId", programId).findAll();
+        if ( results.size() > 0 ) {
+            WatchTvObject obj = results.get(0);
+            iSeq = obj.getiSeq();
+            obj.removeFromRealm();
+        } else {
+            //
+        }
+        realm.commitTransaction();
+
+        AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(mContext, WatchTvAlarmBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, iSeq, intent, PendingIntent.FLAG_NO_CREATE);
+        if ( pendingIntent != null ) {
+            alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
+
+    }
+
+    public boolean isWatchTvReserveWithProgramId(String programId) {
+        RealmResults<WatchTvObject> results = mRealm.where(WatchTvObject.class).equalTo("sProgramId", programId).findAll();
+        if ( results.size() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

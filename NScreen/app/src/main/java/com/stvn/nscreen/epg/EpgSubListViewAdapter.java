@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
 import com.stvn.nscreen.R;
@@ -31,6 +32,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = EpgSubListViewAdapter.class.getSimpleName();
     private              Context                       mContext         = null;
+    private              JYSharedPreferences           mPref;
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
@@ -54,6 +56,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
+        this.mPref            = new JYSharedPreferences(c);
     }
 
     public void setChannelIdChannelNumberChannelName(String ChannelId, String ChannelNumber, String ChannelName) {
@@ -102,6 +105,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             ListViewDataObject dobj                         = (ListViewDataObject)getItem(position);
             JSONObject         jobj                         = new JSONObject(dobj.sJson);
 
+            String             programId                    = jobj.getString("programId");
             String             ProgramBroadcastingStartTime = jobj.getString("programBroadcastingStartTime");
             String             ProgramBroadcastingEndTime   = jobj.getString("programBroadcastingEndTime");
 
@@ -115,12 +119,27 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3))); // 끝시간
             Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3))); // 현재시간
 
-            if ( mCurrDateNo != 0 ) {
+            // case 0: { // TV로 시청 / 즉시녹화
+            // case 1: { // TV로 시청 / 녹화중지
+            // case 2: { // 시청예약 / 녹화예약
+            // case 3: { // 시청예약 / 녹화예약취소
+            // case 4: { // 시청예약취소 / 녹화예약
+            // case 5: { // 시청예약취소 / 녹화예약취소
+
+            if ( mCurrDateNo != 0 ) { // 오늘이 아니라면...
                 JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
                 if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
-                    return 2; // 시청예약 / 녹화예약
+                    if ( mPref.isWatchTvReserveWithProgramId(programId) == true ) { // 시청예약 걸려 있음.
+                        return 4; // 시청예약취소 / 녹화예약
+                    } else {  // 시청예약 없음.
+                        return 2; // 시청예약 / 녹화예약
+                    }
                 } else {      //  예약 녹화 걸린 방송.
-                    return 3; // 시청예약 / 녹화예약취소
+                    if ( mPref.isWatchTvReserveWithProgramId(programId) == true ) { // 시청예약 걸려 있음.
+                        return 5; // 시청예약취소 / 녹화예약취소
+                    } else {  // 시청예약 없음.
+                        return 3; // 시청예약 / 녹화예약취소
+                    }
                 }
             } else {
                 if ( i2 < i1) {

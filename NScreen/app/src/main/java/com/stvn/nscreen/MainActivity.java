@@ -68,22 +68,20 @@ public class MainActivity extends AppCompatActivity {
             requestGetWishList();
         }
 
-        /*
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.epg.EpgMainActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MyMainActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.my.MySubActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrMainActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.pvr.PvrSubActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.search.SearchMainActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.setting.CMSettingMainActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodMainActivity.class);
-        Intent i = new Intent(MainActivity.this, com.stvn.nscreen.vod.VodDetailActivity.class);
-        Intent i = new Intent(MainActivity.this, PairingMainActivity.class);
-        Intent i = new Intent(MainActivity.this, PairingSubActivity.class);
-        Intent i = new Intent(MainActivity.this, PairingCheckActivity.class);
-        Intent i = new Intent(MainActivity.this, VodBuyActivity.class);
-        Intent i = new Intent(MainActivity.this, RemoteControllerActivity.class);
-        */
+
+        /**
+         * @param programId "S321387639"
+         * @param seriesId ""
+         * @param programTitle "국악무대"
+         * @param programBroadcastingStartTime "2015-11-10 16:02:00"
+         */
+        //mPref.addWatchTvAlarm("S321387639", "", "국악무대5000",  "2015-11-10 20:50:00");
+        //mPref.addWatchTvAlarm("S321387640", "", "국악무대5030",  "2015-11-10 20:50:30");
+        //mPref.addWatchTvAlarm("S321387641", "", "국악무대5100",  "2015-11-10 20:51:00");
+        //mPref.addWatchTvAlarm("S321387642", "", "국악무대5130",  "2015-11-10 20:51:30");
+        //mPref.addWatchTvAlarm("S321387643", "", "국악무대10", "2015-11-10 20:54:00");
+
+        //mPref.removeWatchTvAlarm(1);
 
         /* StatusBarColor ----------------------------------------------------------------------- */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

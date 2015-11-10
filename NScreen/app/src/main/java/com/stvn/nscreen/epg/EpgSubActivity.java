@@ -398,6 +398,17 @@ public class EpgSubActivity extends AppCompatActivity {
                     break;
                     case 2: { // 시청예약 / 녹화예약
                         if (index == 0) { // left button
+                            try {
+                                JSONObject jo = new JSONObject(item.sJson);
+                                String programId    = jo.getString("programId");
+                                String seriesId     = jo.getString("seriesId");
+                                String programTitle = jo.getString("programTitle");
+                                String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
+                                mPref.addWatchTvReserveAlarm(programId, seriesId, programTitle, programBroadcastingStartTime);
+                                mAdapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         } else { // right button
                             try {
                                 JSONObject jo = new JSONObject(item.sJson);
@@ -411,7 +422,17 @@ public class EpgSubActivity extends AppCompatActivity {
                     break;
                     case 3: { // 시청예약 / 녹화예약취소
                         if (index == 0) { // left button
-
+                            try {
+                                JSONObject jo = new JSONObject(item.sJson);
+                                String programId    = jo.getString("programId");
+                                String seriesId     = jo.getString("seriesId");
+                                String programTitle = jo.getString("programTitle");
+                                String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
+                                mPref.addWatchTvReserveAlarm(programId, seriesId, programTitle, programBroadcastingStartTime);
+                                mAdapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         } else { // right button
                             try {
                                 JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
@@ -428,6 +449,14 @@ public class EpgSubActivity extends AppCompatActivity {
                     break;
                     case 4: { // 시청예약취소 / 녹화예약
                         if (index == 0) { // left button
+                            try {
+                                JSONObject jo    = new JSONObject(item.sJson);
+                                String programId = jo.getString("programId");
+                                mPref.removeWatchTvReserveAlarm(programId);
+                                mAdapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         } else { // right button
                             try {
                                 JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
@@ -442,7 +471,14 @@ public class EpgSubActivity extends AppCompatActivity {
                     break;
                     case 5: { // 시청예약취소 / 녹화예약취소
                         if (index == 0) { // left button
-
+                            try {
+                                JSONObject jo    = new JSONObject(item.sJson);
+                                String programId = jo.getString("programId");
+                                mPref.removeWatchTvReserveAlarm(programId);
+                                mAdapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         } else { // right button
                             // requestSetRecordCancelReserve(sChannelId);
                         }
