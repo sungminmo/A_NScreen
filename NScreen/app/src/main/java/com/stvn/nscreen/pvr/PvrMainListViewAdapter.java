@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -20,7 +21,10 @@ import com.stvn.nscreen.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by limdavid on 15. 9. 15..
@@ -35,6 +39,8 @@ public class PvrMainListViewAdapter extends BaseAdapter {
 
     private              RequestQueue                  mRequestQueue;
     private              ImageLoader                   mImageLoader;
+
+    private              ArrayList<JSONObject>           mStbRecordReservelist;
 
     public PvrMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
@@ -53,6 +59,10 @@ public class PvrMainListViewAdapter extends BaseAdapter {
         });
     }
 
+    public void setStbRecordReservelist(ArrayList<JSONObject> list) {
+        this.mStbRecordReservelist = list;
+    }
+
     /**
      * Swipe menu ListView
      */
@@ -60,6 +70,43 @@ public class PvrMainListViewAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         // menu type count
         return 3;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        // current menu type
+        Date dt = new Date();
+
+        SimpleDateFormat       formatter                    = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat       formatter2                   = new SimpleDateFormat("HH:mm");
+        try {
+            ListViewDataObject dobj = (ListViewDataObject) getItem(position);
+            JSONObject jobj = new JSONObject(dobj.sJson);
+
+            String RecordStartTime = jobj.getString("RecordStartTime");
+            String RecordEndTime = jobj.getString("RecordEndTime");
+
+            Date dt11 = formatter.parse(RecordStartTime);
+            Date dt12 = formatter.parse(RecordEndTime);
+            String dt21 = formatter2.format(dt11).toString();
+            String dt22 = formatter2.format(dt12).toString();
+            String dt23 = formatter2.format(dt).toString();
+
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3))); // 시작시간
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3))); // 끝시간
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3))); // 현재시간
+
+            if (i1 <= i3 && i3 <= i2 ) { // 예약녹화 걸려있지 않은 방송.
+                return 0; // 녹화중지
+            } else {
+                return 1; // 녹화 예약 취소
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -83,17 +130,45 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_pvr_main, parent, false);
         }
 
+        Date dt = new Date();
+
+        SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
+
         try {
-            ListViewDataObject dobj          = (ListViewDataObject)getItem(position);
-            JSONObject         jobj          = new JSONObject(dobj.sJson);
+            ListViewDataObject dobj            = (ListViewDataObject)getItem(position);
+            JSONObject         jobj            = new JSONObject(dobj.sJson);
+
+            String             RecordStartTime = jobj.getString("RecordStartTime");
+            String             RecordEndTime   = jobj.getString("RecordEndTime");
 
             TextView           titleTextView = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
             NetworkImageView   channelLogo   = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
+            ProgressBar progBar = ViewHolder.get(convertView, R.id.progressBar1);
 
             titleTextView.setText(jobj.getString("ProgramName"));
             channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);
 
+            Date               dt11                     = formatter.parse(RecordStartTime);
+            Date               dt12                     = formatter.parse(RecordEndTime);
+            String             dt21                     = formatter2.format(dt11).toString();
+            String             dt22                     = formatter2.format(dt12).toString();
+            String             dt23                     = formatter2.format(dt).toString();
+
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+
+            if (i1 <= i3 && i3 <= i2 ) { // 예약녹화 걸려있지 않은 방송.
+                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                progBar.setProgress((int)(f1 * 100));
+            } else {
+                progBar.setProgress(0);
+            }
+
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return convertView;
