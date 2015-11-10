@@ -122,7 +122,6 @@ public class PvrMainActivity extends AppCompatActivity {
             }
         });
 
-
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,13 +159,10 @@ public class PvrMainActivity extends AppCompatActivity {
             // Create different menus depending on the view type
             switch (menu.getViewType()) {
                 case 0: {
-                    createMenu0(menu);  // TV로 시청 / 즉시녹화
+                    createMenu0(menu);  // 녹화중지
                 } break;
                 case 1: {
-                    createMenu1(menu);  // TV로 시청 / 녹화중지
-                } break;
-                case 2: {
-                    createMenu2(menu);  // 시청예약 / 녹화예약
+                    createMenu1(menu);  // 녹화예약취소
                 } break;
             }
         }
@@ -175,31 +171,21 @@ public class PvrMainActivity extends AppCompatActivity {
             return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
         }
 
-        private void createMenu0(SwipeMenu menu) { // TV로 시청 / 즉시녹화
+        private void createMenu0(SwipeMenu menu) { // 녹화중지
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0xF7, 0xBD, 0x33)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0xEA, 0x55, 0x55)));
             item1.setWidth(dp2px(90));
-            item1.setTitle("개발중"); //item1.setTitle("녹화중지");
+            item1.setTitle("녹화중지");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
         }
 
-        private void createMenu1(SwipeMenu menu) { // TV로 시청 / 녹화중지
+        private void createMenu1(SwipeMenu menu) { // 녹화예약취소
             SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0xF7, 0xBD, 0x33)));
+            item1.setBackground(new ColorDrawable(Color.rgb(0xC1, 0x4F, 0x28)));
             item1.setWidth(dp2px(90));
             item1.setTitle("녹화예약취소");
-            item1.setTitleSize(12);
-            item1.setTitleColor(Color.WHITE);
-            menu.addMenuItem(item1);
-        }
-
-        private void createMenu2(SwipeMenu menu) { // 시청예약 / 녹화예약
-            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
-            item1.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
-            item1.setWidth(dp2px(90));
-            item1.setTitle("시청예약");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);

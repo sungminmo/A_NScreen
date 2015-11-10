@@ -53,6 +53,15 @@ public class PvrMainListViewAdapter extends BaseAdapter {
         });
     }
 
+    /**
+     * Swipe menu ListView
+     */
+    @Override
+    public int getViewTypeCount() {
+        // menu type count
+        return 3;
+    }
+
     @Override
     public int getCount() { return mDatas.size(); }
 

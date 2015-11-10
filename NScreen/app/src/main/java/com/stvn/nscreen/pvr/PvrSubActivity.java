@@ -1,10 +1,16 @@
 package com.stvn.nscreen.pvr;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.ListView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.stvn.nscreen.R;
@@ -41,4 +47,34 @@ public class PvrSubActivity extends AppCompatActivity {
         mListView = (ListView)findViewById(R.id.pvr_sub_listview);
         mListView.setAdapter(mAdapter);
     }
+
+    /**
+     * Swipe Menu for ListView
+     */
+    SwipeMenuCreator creator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            // Create different menus depending on the view type
+            switch (menu.getViewType()) {
+                case 0: {
+                    createMenu0(menu);  // 삭제
+                }
+                break;
+            }
+        }
+
+        private int dp2px(int dp) {
+            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+        }
+
+        private void createMenu0(SwipeMenu menu) { // 삭제
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0xEA, 0x55, 0x55)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("삭제");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+        }
+    };
 }
