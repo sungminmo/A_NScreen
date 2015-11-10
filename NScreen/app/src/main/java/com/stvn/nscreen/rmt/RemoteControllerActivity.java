@@ -213,9 +213,6 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     mStbWatchingchannel   = (String)mNetworkError.get("watchingchannel");
                     mStbPipchannel        = (String)mNetworkError.get("pipchannel");
 
-                    remote_controller_channel_textview.setText(mStbWatchingchannel + "번");
-
-
                     if ( "1".equals(mStbState) ) { // VOD 시청중.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel2_linearlayout.setVisibility(View.VISIBLE);
@@ -486,6 +483,11 @@ public class RemoteControllerActivity extends AppCompatActivity{
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 parseGetChannelList(response);
+
+                String mStbWatchingchannel1 = mAdapter.getChannelNumberWithChannelId(mStbWatchingchannel);
+
+                remote_controller_channel_textview.setText(mStbWatchingchannel1 + "번");
+
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {

@@ -49,26 +49,6 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="38.25dp" />
 
-    <ImageView
-        android:id="@+id/pvr_main_imageview_progress_bg"
-        android:layout_width="fill_parent"
-        android:layout_height="2.25dp"
-        android:layout_marginLeft="154.5dp"
-        android:layout_marginRight="15dp"
-        android:layout_gravity="left|top"
-        android:background="@drawable/progress_bg"
-        android:layout_marginTop="61dp" />
-
-    <ImageView
-        android:id="@+id/pvr_main_imageview_progress_curent"
-        android:layout_width="fill_parent"
-        android:layout_height="2.25dp"
-        android:background="@drawable/progress_bar"
-        android:layout_marginLeft="154.5dp"
-        android:layout_marginRight="200dp"
-        android:layout_gravity="left|top"
-        android:layout_marginTop="61dp" />
-
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/pvr_main_imagebutton_channel_logo"
         android:layout_width="48dp"
@@ -85,5 +65,21 @@
         android:layout_gravity="left|center_vertical"
         android:background="@mipmap/icon_series"
         android:layout_marginLeft="20dp" />
+
+    <ProgressBar
+        android:layout_width="fill_parent"
+        android:layout_height="2.25dp"
+        android:id="@+id/progressBar1"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="154.5dp"
+        android:layout_marginRight="15dp"
+        android:visibility="visible"
+        android:indeterminate="false"
+        android:background="@drawable/progress_bg"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="45"
+        android:progressDrawable="@drawable/progressbar_color"
+        android:layout_marginTop="61dp" />
 
 </FrameLayout>
