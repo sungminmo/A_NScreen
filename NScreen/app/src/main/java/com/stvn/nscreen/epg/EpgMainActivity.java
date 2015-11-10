@@ -141,12 +141,22 @@ public class EpgMainActivity extends AppCompatActivity {
                 intent.putExtra("channelLogoImg", sChannelLogoImg);
                 intent.putExtra("channelId", sChannelId);
 
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        switch(requestCode){
+            case 1: {    //
+                mAdapter.notifyDataSetChanged();
+            } break;
+        }
+    }
 
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));

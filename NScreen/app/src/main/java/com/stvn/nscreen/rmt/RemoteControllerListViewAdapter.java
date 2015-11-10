@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
 import com.stvn.nscreen.R;
@@ -37,6 +39,7 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = RemoteControllerListViewAdapter.class.getSimpleName();
     private              Context                       mContext         = null;
+    private              JYSharedPreferences           mPref;
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
@@ -60,6 +63,7 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
                 return mCache.get(url);
             }
         });
+        this.mPref            = new JYSharedPreferences(c);
     }
 
     public String getChannelNumberWithChannelId(String cid) {
@@ -120,7 +124,8 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             ImageView          favoriteImageView     = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
             TextView           channelNumberTextView = ViewHolder.get(convertView, R.id.remote_textview_channel_number);
             TextView           titleTextView         = ViewHolder.get(convertView, R.id.remote_textview_program_title);
-            TextView           programTimeTextView    = ViewHolder.get(convertView, R.id.remote_textview_program_time);
+            TextView           programTimeTextView   = ViewHolder.get(convertView, R.id.remote_textview_program_time);
+            final ImageButton        bookmarkImageButton   = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
 
             Date               dt1                     = formatter.parse(ProgramOnAirStartTime);
             Date               dt2                     = formatter.parse(ProgramOnAirEndTime);
@@ -131,6 +136,28 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
             programTimeTextView.setText(str1 + "~" + str2);
+
+            final String channelId = jobj.getString("channelId");
+            final String channelNumber = jobj.getString("channelNumber");
+            final String channelName = jobj.getString("channelName");
+
+            if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+                bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_select);
+            } else {
+                bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_unselect);
+            }
+            bookmarkImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+                        mPref.removeBookmarkChannelWithChannelId(channelId);
+                        bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_unselect);
+                    } else {
+                        mPref.addBookmarkChannel(channelId, channelNumber, channelName);
+                        bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_select);
+                    }
+                }
+            });
 
             if ( "모두 시청".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_all);

@@ -49,7 +49,7 @@
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:id="@+id/imageView15"
+            android:id="@+id/epg_sub_bookmark_imagebutton"
             android:layout_gravity="center_vertical|right"
             android:background="@color/transparent"
             android:src="@mipmap/icon_favorite_unselect" />

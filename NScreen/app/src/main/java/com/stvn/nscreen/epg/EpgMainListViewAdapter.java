@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
 import com.stvn.nscreen.R;
@@ -35,6 +36,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
     private static final String                        tag              = EpgMainListViewAdapter.class.getSimpleName();
     private              Context                       mContext         = null;
+    private              JYSharedPreferences           mPref;
     private              View.OnClickListener          mOnClickListener = null;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
@@ -62,6 +64,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
                 return mCache.get(url);
             }
         });
+        this.mPref            = new JYSharedPreferences(c);
     }
 
     public void setStbState(String state, String recCh1, String recCh2, String watchCh, String pipCh) {
@@ -116,6 +119,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
             NetworkImageView   channelLogo             = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
 
+            ImageView          bookmarkImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             ImageView          programAge              = ViewHolder.get(convertView, R.id.epg_main_imageview_program_age);
             ImageView          Info                    = ViewHolder.get(convertView, R.id.epg_main_imageview_program_hdsd);
             ImageView          favoriteImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
@@ -146,7 +150,13 @@ public class EpgMainListViewAdapter extends BaseAdapter {
                     progBar.setProgress((int)(f1 * 100));
                 }
             }
-            
+
+            if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+                bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_select);
+            } else {
+                bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_unselect);
+            }
+
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);

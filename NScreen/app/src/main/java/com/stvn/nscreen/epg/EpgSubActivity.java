@@ -110,7 +110,7 @@ public class EpgSubActivity extends AppCompatActivity {
     private              LinearLayout          epg_sub_date_linearlayout1, epg_sub_date_linearlayout2, epg_sub_date_linearlayout3, epg_sub_date_linearlayout4, epg_sub_date_linearlayout5, epg_sub_date_linearlayout6, epg_sub_date_linearlayout7;
     private              ImageView             imageView21, imageView22, imageView23, imageView24, imageView25, imageView26, imageView27;
 
-    private              ImageButton           backBtn;
+    private              ImageButton           backBtn, bookmarkImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +185,7 @@ public class EpgSubActivity extends AppCompatActivity {
         imageView27                = (ImageView) findViewById(R.id.imageView27);
         epg_sub_channelLogoImg     = (NetworkImageView) findViewById(R.id.epg_sub_imageview_channel_logo);
         backBtn                    = (ImageButton) findViewById(R.id.backBtn);
+        bookmarkImageButton        = (ImageButton)findViewById(R.id.epg_sub_bookmark_imagebutton);
 
         epg_sub_channelNumber.setText("CH." + sChannelNumber);
         epg_sub_channelName.setText(sChannelName);
@@ -206,6 +207,24 @@ public class EpgSubActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        if ( mPref.isBookmarkChannelWithChannelId(sChannelId) == true ) {
+            bookmarkImageButton.setImageResource(R.mipmap.icon_favorite_select);
+        } else {
+            bookmarkImageButton.setImageResource(R.mipmap.icon_favorite_unselect);
+        }
+        bookmarkImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( mPref.isBookmarkChannelWithChannelId(sChannelId) == true ) {
+                    mPref.removeBookmarkChannelWithChannelId(sChannelId);
+                    bookmarkImageButton.setImageResource(R.mipmap.icon_favorite_unselect);
+                } else {
+                    mPref.addBookmarkChannel(sChannelId, sChannelNumber, sChannelName);
+                    bookmarkImageButton.setImageResource(R.mipmap.icon_favorite_select);
+                }
             }
         });
 
