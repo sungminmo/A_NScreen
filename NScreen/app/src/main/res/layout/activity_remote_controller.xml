@@ -22,11 +22,11 @@
 
         <ImageButton
             android:id="@+id/remote_controller_backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="9dp"
-            android:background="@mipmap/btn_back" />
+            android:src="@mipmap/btn_back"
+            android:background="@color/transparent" />
 
     </FrameLayout>
 
@@ -38,6 +38,7 @@
         android:layout_marginRight="12.5dp">
 
         <LinearLayout
+            android:id="@+id/channel1_linearlayout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="52dp"
@@ -58,6 +59,87 @@
                 android:id="@+id/remote_controller_channel_textview"
                 android:textSize="14.75sp"
                 android:textColor="@color/violet" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/channel2_linearlayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VOD 재생중"
+                android:id="@+id/textView93"
+                android:textSize="14.75dp"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/channel3_linearlayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="데이터 방송 시청 중"
+                android:id="@+id/textView90"
+                android:textSize="14.75dp"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/channel4_linearlayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="셋탑박스 대기모드"
+                android:id="@+id/textView91"
+                android:textSize="14.75dp"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/channel5_linearlayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="녹화 VOD 재생중"
+                android:id="@+id/textView92"
+                android:textSize="14.75dp"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+
         </LinearLayout>
 
         <LinearLayout

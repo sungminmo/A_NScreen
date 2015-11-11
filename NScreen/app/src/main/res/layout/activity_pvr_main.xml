@@ -24,11 +24,11 @@
 
         <ImageButton
             android:id="@+id/pvr_main_backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="9dp"
-            android:background="@mipmap/btn_back" />
+            android:src="@mipmap/btn_back"
+            android:background="@color/transparent" />
 
     </FrameLayout>
 
@@ -73,27 +73,26 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/pvr_main_count_textview1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="총 120개의 녹화예약 콘텐트가 있습니다."
+            android:text="총 개의 녹화예약 콘텐트가 있습니다."
             android:textSize="11.5sp"
             android:textColor="@color/violet"
-            android:layout_marginBottom="2.5dp"
-            android:visibility="gone" />
+            android:layout_marginBottom="2.5dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="총 120개의 녹화 콘텐트가 있습니다."
-            android:id="@+id/textView2"
+            android:text="총 개의 녹화 콘텐트가 있습니다."
+            android:id="@+id/pvr_main_count_textview2"
             android:layout_marginBottom="2.5dp"
             android:textColor="@color/violet"
             android:textSize="11.5sp"
             android:visibility="gone" />
     </LinearLayout>
 
-    <ListView
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/pvr_main_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

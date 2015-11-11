@@ -29,6 +29,14 @@ public class WidevineDrm {
         public void logUpdated();
     }
 
+    // swlim
+    VideoPlayerView mVideoPlayerViewActivity;
+    public void setVideoPlayerView(VideoPlayerView ac ) {
+        this.mVideoPlayerViewActivity = ac;
+    }
+
+
+
     private WidevineDrmLogEventListener logEventListener;
     private final static long DEVICE_IS_PROVISIONED = 0;
     private final static long DEVICE_IS_NOT_PROVISIONED = 1;
@@ -57,6 +65,8 @@ public class WidevineDrm {
 
     public WidevineDrm(Context context) {
 
+
+
         // mContext = context;
         mDrmManager = new DrmManagerClient(context);
 
@@ -75,6 +85,11 @@ public class WidevineDrm {
                 switch (event.getType()) {
                 case DrmEvent.TYPE_DRM_INFO_PROCESSED:
                     logMessage("Info Processed\n");
+//                    if ( mVideoPlayerViewActivity != null ) {
+//                        if ( mWVDrmInfoRequestStatusKey == 0 ) { // DEVICE_IS_PROVISIONED
+//                            mVideoPlayerViewActivity.callStartPlayBack();
+//                        }
+//                    }
                     // ������ �����ϴ� �ڵ带 �ֽ��ϴ�.
                     break;
                 case DrmEvent.TYPE_ALL_RIGHTS_REMOVED:
@@ -112,7 +127,11 @@ public class WidevineDrm {
                 // ����ó���� �մϴ�.
             }
         });
+
+
     }
+
+
 
     public DrmInfoRequest getDrmInfoRequest(String assetUri) {
         DrmInfoRequest rightsAcquisitionInfo;
@@ -142,7 +161,7 @@ public class WidevineDrm {
     public boolean isProvisionedDevice() {
 
         if (mWVDrmInfoRequestStatusKey == DEVICE_IS_PROVISIONED)
-          logMessage("Device is provisioined\n");
+          logMessage("Device is provisioined\n"); // 처음에 여기 들어온다.
         else if (mWVDrmInfoRequestStatusKey == DEVICE_IS_PROVISIONED_SD_ONLY)
           logMessage("Device is provisioined SD only\n");
         else if (mWVDrmInfoRequestStatusKey == DEVICE_IS_NOT_PROVISIONED)

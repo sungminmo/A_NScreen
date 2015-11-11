@@ -1,14 +1,17 @@
 package com.stvn.nscreen.rmt;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
@@ -53,6 +57,17 @@ public class RemoteControllerActivity extends AppCompatActivity{
     // network
     private              RequestQueue                    mRequestQueue;
     private              ProgressDialog                  mProgressDialog;
+    private              Map<String, Object>             mNetworkError;
+    private              Map<String, Object>             RemoteChannelControl;
+
+    // STB status
+    private              String                          mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private              String                          mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+
+
 
     // gui
     private              RemoteControllerListViewAdapter mAdapter;
@@ -63,15 +78,18 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              TextView                        remote_controller_genre_name, remote_controller_channel_textview;
     private              String                          sChannel, sPower, sVolume;
     private              Button                          remote_controller_power_button, remote_controller_volume_up_button, remote_controller_volume_down_button;
+    private              LinearLayout                    channel1_linearlayout, channel2_linearlayout, channel3_linearlayout, channel4_linearlayout, channel5_linearlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote_controller);
 
-        mInstance = this;
-        mPref     = new JYSharedPreferences(this);
+        mInstance     = this;
+        mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
+        mNetworkError = new HashMap<String, Object>();
+        RemoteChannelControl = new HashMap<String, Object>();
 
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
@@ -91,6 +109,13 @@ public class RemoteControllerActivity extends AppCompatActivity{
         remote_controller_volume_up_button         = (Button) findViewById(R.id.remote_controller_volume_up_button);
         remote_controller_volume_down_button       = (Button) findViewById(R.id.remote_controller_volume_down_button);
 
+        channel1_linearlayout                      = (LinearLayout) findViewById(R.id.channel1_linearlayout);
+        channel2_linearlayout                      = (LinearLayout) findViewById(R.id.channel2_linearlayout);
+        channel3_linearlayout                      = (LinearLayout) findViewById(R.id.channel3_linearlayout);
+        channel4_linearlayout                      = (LinearLayout) findViewById(R.id.channel4_linearlayout);
+        channel5_linearlayout                      = (LinearLayout) findViewById(R.id.channel5_linearlayout);
+
+
         try {
             sChannel = getIntent().getExtras().getString("Channel");
             remote_controller_channel_textview.setText(sChannel + "번");
@@ -106,6 +131,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent i = new Intent(RemoteControllerActivity.this, RemoteControllerChoiceActivity.class);
                 i.putExtra("Channel", sChannel);
+                i.putExtra("StbState", mStbState);
+
                 startActivity(i);
             }
         });
@@ -117,6 +144,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
             }
         });
 
+        requestGetSetTopStatus();
         requestGetChannelList();
 
         remote_controller_power_button.setOnClickListener(new View.OnClickListener() {
@@ -150,29 +178,227 @@ public class RemoteControllerActivity extends AppCompatActivity{
             ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
             try {
                 JSONObject jo = new JSONObject(dobj.sJson);
-                String sChannelNumber = jo.getString("channelNumber");
-                requestSetRemoteChannelControl(sChannelNumber);
+                String channelId = jo.getString("channelId");
+                String channelNumber = jo.getString("channelNumber");
+                requestSetRemoteChannelControl(channelId);
+
+                sChannel = channelNumber;
+                remote_controller_channel_textview.setText(sChannel + "번");
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
 
-    private void requestSetRemoteChannelControl(String sChannelNumber) {
+    // http://58.141.255.80/SMApplicationServer/GetSetTopStatus.asp?deviceId=86713f34-15f4-45ba-b1df-49b32b13d551
+    // 7.3.40 GetSetTopStatus
+    // 셋탑의 상태 확인용.
+    private void requestGetSetTopStatus() {
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetSetTopStatus()"); }
+        String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url         = mPref.getRumpersServerUrl() + "/GetSetTopStatus.asp?deviceId="+uuid;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                parseGetSetTopStatus(response);
+
+                String resultCode = (String) mNetworkError.get("resultCode");
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
+                    //
+                    mStbState             = (String)mNetworkError.get("state");
+                    mStbRecordingchannel1 = (String)mNetworkError.get("recordingchannel1");
+                    mStbRecordingchannel2 = (String)mNetworkError.get("recordingchannel2");
+                    mStbWatchingchannel   = (String)mNetworkError.get("watchingchannel");
+                    mStbPipchannel        = (String)mNetworkError.get("pipchannel");
+
+                    if ( "1".equals(mStbState) ) { // VOD 시청중.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel2_linearlayout.setVisibility(View.VISIBLE);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_ability_change_channel_vod));
+                        alert.show();
+                    } else if ( "2".equals(mStbState) ) { // 독립형.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel3_linearlayout.setVisibility(View.VISIBLE);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_ability_change_channel_independence));
+                        alert.show();
+                    } else if ( "4".equals(mStbState) ) { // 셋탑박스 대기모드.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel4_linearlayout.setVisibility(View.VISIBLE);
+                    } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
+                        channel1_linearlayout.setVisibility(View.GONE);
+                        channel5_linearlayout.setVisibility(View.VISIBLE);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_ability_change_channel_data));
+                        alert.show();
+                    }
+
+//                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found_authCode.equals(resultCode) ) {
+//                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+//                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//                    alert.setMessage(getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode));
+//                    alert.show();
+                } else {
+                    String errorString = (String)mNetworkError.get("errorString");
+                    StringBuilder sb   = new StringBuilder();
+                    sb.append("API: GetSetTopStatus\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(sb.toString());
+                    alert.show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseGetSetTopStatus(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        mNetworkError.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        mNetworkError.put("errorString", errorString);
+
+                    } else if (xpp.getName().equalsIgnoreCase("state")) {
+                        String errorString = xpp.nextText();
+                        mNetworkError.put("state", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel1")) {
+                        String errorString = xpp.nextText();
+                        mNetworkError.put("recordingchannel1", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel2")) {
+                        String errorString = xpp.nextText();
+                        mNetworkError.put("recordingchannel2", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("watchingchannel")) {
+                        String errorString = xpp.nextText();
+                        mNetworkError.put("watchingchannel", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("pipchannel")) {
+                        String errorString = xpp.nextText();
+                        mNetworkError.put("pipchannel", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void requestSetRemoteChannelControl(String channelId) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String tk   = mPref.getWebhasTerminalKey();
-        String url  = mPref.getRumpersServerUrl() + "/SetRemoteChannelControl.asp?deviceId=" + uuid + "&channelId=" + sChannelNumber + "&version=1&terminalKey=" + tk;
-        sChannel = sChannelNumber;
+        String url  = mPref.getRumpersServerUrl() + "/SetRemoteChannelControl.asp?deviceId=" + uuid + "&channelId=" + channelId + "&version=1&terminalKey=" + tk;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d(tag, response);
                 mProgressDialog.dismiss();
-
-                remote_controller_channel_textview.setText(sChannel + "번");
-
+                parseSetRemoteChannelControl(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -203,12 +429,47 @@ public class RemoteControllerActivity extends AppCompatActivity{
         mRequestQueue.add(request);
     }
 
+    private void parseSetRemoteChannelControl(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
         String sGenreCode = "";
         try {
             sGenreCode = getIntent().getExtras().getString("sGenreCode");
+            mStbState  = getIntent().getExtras().getString("StbState");
         } catch (NullPointerException e) {
             sGenreCode = "";
         }
@@ -222,6 +483,11 @@ public class RemoteControllerActivity extends AppCompatActivity{
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 parseGetChannelList(response);
+
+                String mStbWatchingchannel1 = mAdapter.getChannelNumberWithChannelId(mStbWatchingchannel);
+
+                remote_controller_channel_textview.setText(mStbWatchingchannel1 + "번");
+
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
@@ -244,6 +510,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
     }
 
     private void parseGetChannelList(String response) {
+        int iChannelNumber = 0;
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
@@ -259,7 +526,9 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     if (xpp.getName().equalsIgnoreCase("channelId")) {
                         sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
-                        sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
+                        String sChannelNumber = xpp.nextText();
+                        iChannelNumber = Integer.valueOf(sChannelNumber);
+                        sb.append(",\"channelNumber\":\"").append(sChannelNumber).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelName")) {
                         sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTitle")) {
@@ -280,7 +549,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         sb.append(",\"channelProgramGrade\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelView")) {
                         sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
-                        ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
+                        ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), iChannelNumber, sb.toString());
                         mAdapter.addItem(obj);
                         sb.setLength(0);
                     }

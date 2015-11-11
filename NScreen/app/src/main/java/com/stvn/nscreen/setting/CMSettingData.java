@@ -51,7 +51,7 @@ public class CMSettingData {
      * */
     public String getPurchaseAuthPassword(Context context) {
         JYSharedPreferences preferences = new JYSharedPreferences(context);
-        return preferences.getValue(CMConstants.PURCHASE_AUTH_PASSWORD_KEY, "");
+        return preferences.getValue(JYSharedPreferences.PURCHASE_PASSWORD, "");
     }
 
     /**
@@ -59,7 +59,7 @@ public class CMSettingData {
      * */
     public void setPurchaseAuthPassword(Context context, String purchasePwd) {
         JYSharedPreferences preferences = new JYSharedPreferences(context);
-        preferences.put(CMConstants.PURCHASE_AUTH_PASSWORD_KEY, purchasePwd);
+        preferences.put(JYSharedPreferences.PURCHASE_PASSWORD, purchasePwd);
     }
 
     /**

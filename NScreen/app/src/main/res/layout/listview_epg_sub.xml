@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="58dp">
+    android:layout_height="wrap_content">
+
+    <View android:layout_width="match_parent" android:layout_height="58dp" />
 
     <TextView
         android:id="@+id/epg_sub_textview_program_time"
@@ -40,32 +42,29 @@
         android:layout_marginLeft="123dp" />
 
     <ImageView
-        android:id="@+id/epg_sub_imageview_progress_bg"
-        android:layout_width="fill_parent"
-        android:layout_height="2.25dp"
-        android:background="@drawable/progress_bg"
-        android:layout_marginLeft="94.5dp"
-        android:layout_marginRight="10.75dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="9.75dp" />
-
-    <ImageView
-        android:id="@+id/epg_sub_imageview_progress_curent"
-        android:layout_width="fill_parent"
-        android:layout_height="2.25dp"
-        android:layout_marginLeft="94.5dp"
-        android:layout_marginBottom="9.75dp"
-        android:layout_marginRight="200dp"
-        android:background="@drawable/progress_bar"
-        android:layout_gravity="right|bottom" />
-
-    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView9"
         android:layout_gravity="left|top"
         android:layout_marginTop="27.75dp"
         android:layout_marginLeft="151.5dp"
-        android:background="@mipmap/icon_record" />
+        android:background="@mipmap/icon_record"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:layout_width="fill_parent"
+        android:layout_height="2.25dp"
+        android:id="@+id/progressBar"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="93.75dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="9.75dp"
+        android:visibility="visible"
+        android:indeterminate="false"
+        android:background="@drawable/progress_bg"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="45"
+        android:progressDrawable="@drawable/progressbar_color" />
 
 </FrameLayout>

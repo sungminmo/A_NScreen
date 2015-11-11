@@ -3,8 +3,10 @@ package com.jjiya.android.http;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.jjiya.android.common.JYSharedPreferences;
 
@@ -24,6 +26,12 @@ public class JYStringRequest extends StringRequest {
         super(iMethod, url, listener, errorListener);
         mUrl = url;
         mPref = pref;
+
+        //int socketTimeout = 30000;//30 seconds - change to what you want
+        int socketTimeout = 10000;//10 seconds - change to what you want
+        //int socketTimeout = 5000;//50 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        setRetryPolicy(policy);
     }
 
     @Override
@@ -55,4 +63,5 @@ public class JYStringRequest extends StringRequest {
         }
         return super.parseNetworkResponse(response);
     }
+
 }

@@ -1,22 +1,33 @@
 package com.stvn.nscreen.epg;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
@@ -32,7 +43,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EpgMainActivity extends AppCompatActivity {
@@ -45,9 +58,17 @@ public class EpgMainActivity extends AppCompatActivity {
     private              RequestQueue           mRequestQueue;
     private              ProgressDialog         mProgressDialog;
 
+
     // gui
     private              EpgMainListViewAdapter mAdapter;
     private              ListView               mListView;
+
+    private              Map<String, Object>    mStbStateMap;
+    private              String                 mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
 
     private              ImageButton            epg_main_genre_choice_imageButton, epg_main_backBtn;
 
@@ -61,14 +82,16 @@ public class EpgMainActivity extends AppCompatActivity {
         mInstance     = this;
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
+        mStbStateMap  = new HashMap<String, Object>();
 
         if ( mPref.isLogging() ) { Log.d(tag, "onCreate()"); }
 
         mAdapter      = new EpgMainListViewAdapter(this, null);
 
-        mListView    = (ListView)findViewById(R.id.epg_main_listview);
+        mListView     = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(mItemClickListener);
+
 
         epg_main_genre_choice_imageButton = (ImageButton) findViewById(R.id.epg_main_genre_choice_imageButton);
         epg_main_backBtn                  = (ImageButton) findViewById(R.id.epg_main_backBtn);
@@ -95,7 +118,8 @@ public class EpgMainActivity extends AppCompatActivity {
                 finish();
             }
         });
-        requestGetChannelList();
+
+        requestGetSetTopStatus();
     }
 
     private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
@@ -107,6 +131,7 @@ public class EpgMainActivity extends AppCompatActivity {
             try {
                 JSONObject jo              = new JSONObject(dobj.sJson);
                 String     sChannelNumber  = jo.getString("channelNumber");
+                String     sChannelId      = jo.getString("channelId");
                 String     sChannelName    = jo.getString("channelName");
                 String     sChannelLogoImg = jo.getString("channelLogoImg");
 
@@ -114,13 +139,24 @@ public class EpgMainActivity extends AppCompatActivity {
                 intent.putExtra("channelNumber", sChannelNumber);
                 intent.putExtra("channelName", sChannelName);
                 intent.putExtra("channelLogoImg", sChannelLogoImg);
+                intent.putExtra("channelId", sChannelId);
 
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        switch(requestCode){
+            case 1: {    //
+                mAdapter.notifyDataSetChanged();
+            } break;
+        }
+    }
 
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
@@ -202,6 +238,125 @@ public class EpgMainActivity extends AppCompatActivity {
                         ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
                         mAdapter.addItem(obj);
                         sb.setLength(0);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // http://58.141.255.80/SMApplicationServer/GetSetTopStatus.asp?deviceId=86713f34-15f4-45ba-b1df-49b32b13d551
+    // 7.3.40 GetSetTopStatus
+    // 셋탑의 상태 확인용.
+    private void requestGetSetTopStatus() {
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetSetTopStatus()"); }
+        String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url         = mPref.getRumpersServerUrl() + "/GetSetTopStatus.asp?deviceId="+uuid;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                parseGetSetTopStatus(response);
+
+                String resultCode = (String) mStbStateMap.get("resultCode");
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
+                    //
+                    mStbState             = (String)mStbStateMap.get("state");
+                    mStbRecordingchannel1 = (String)mStbStateMap.get("recordingchannel1");
+                    mStbRecordingchannel2 = (String)mStbStateMap.get("recordingchannel2");
+                    mStbWatchingchannel   = (String)mStbStateMap.get("watchingchannel");
+                    mStbPipchannel        = (String)mStbStateMap.get("pipchannel");
+
+                    if ( "1".equals(mStbState) ) { // VOD 시청중.
+
+                    } else if ( "2".equals(mStbState) ) { // 독립형.
+
+                    } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
+
+                    }
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else {
+                    String errorString = (String)mStbStateMap.get("errorString");
+                    StringBuilder sb   = new StringBuilder();
+                    sb.append("API: GetSetTopStatus\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(sb.toString());
+                    alert.show();
+                }
+
+                requestGetChannelList();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseGetSetTopStatus(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        mStbStateMap.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("errorString", errorString);
+
+                    } else if (xpp.getName().equalsIgnoreCase("state")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("state", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel1")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("recordingchannel1", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel2")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("recordingchannel2", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("watchingchannel")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("watchingchannel", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("pipchannel")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("pipchannel", errorString);
                     }
                 }
                 eventType = xpp.next();

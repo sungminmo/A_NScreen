@@ -50,4 +50,12 @@
 	<color name="colore4d8f2">#e4d8f2</color>
 	<color name="color7b5aa3">#7b5aa3</color>
 
+	<color name="epg_sub_color1">#f7bd33</color>
+	<color name="epg_sub_color2">#ea5555</color>
+	<color name="epg_sub_color3">#b3cf3b</color>
+	<color name="epg_sub_color4">#7f9424</color>
+	<color name="epg_sub_color5">#ed7233</color>
+	<color name="epg_sub_color6">#c14f28</color>
+	<color name="epg_sub_color7">#c45cc2</color>
+
 </resources>
