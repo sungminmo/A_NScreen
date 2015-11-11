@@ -283,30 +283,66 @@
 
                 <LinearLayout
                     android:clickable="true"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="309dp"
                     android:layout_height="49.25dp"
                     android:layout_marginBottom="3dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
-                    android:id="@+id/vod_buy_step2_normal_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible"
+                    android:id="@+id/vod_buy_step2_normal_linearlayout">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:paddingLeft="35dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="일반결제"
+                                android:id="@+id/textView51"
+                                android:textColor="@drawable/btn_selector_textcolor"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="씨앤앰 청구서 포함결제"
+                                android:id="@+id/textView53"
+                                android:textColor="@drawable/btn_purchase_textcolor"
+                                android:layout_gravity="left|center_vertical"
+                                android:textSize="14sp" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:paddingLeft="35dp"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="일반결제"
-                            android:id="@+id/textView51"
-                            android:textColor="@drawable/btn_selector_textcolor"
-                            android:textSize="16sp" />
+                        android:gravity="center_vertical"
+                        android:layout_weight="1">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -317,22 +353,6 @@
                             android:textSize="12.75sp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="씨앤앰 청구서 포함결제"
-                            android:id="@+id/textView53"
-                            android:textColor="@drawable/btn_purchase_textcolor"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -426,7 +446,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step2_coupon_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:orientation="vertical"
@@ -487,7 +507,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step2_point_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:orientation="vertical"
@@ -539,6 +559,66 @@
                     </LinearLayout>
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="334.5dp"
+                android:layout_height="204dp"
+                android:visibility="gone"
+                android:layout_marginLeft="12.75dp"
+                android:layout_marginRight="12.75dp"
+                android:layout_marginBottom="49.5dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#f0f0f1"
+                android:gravity="center"
+                android:id="@+id/vod_buy_step2_linearlayout2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="매월 자동 결제되는 월정액 상품을 가입 하시면"
+                    android:id="@+id/textView2"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12.75sp"
+                    android:textColor="#707070" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="무제한 시청이 가능합니다."
+                    android:id="@+id/textView7"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12.75sp"
+                    android:textColor="#707070" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가입 후 1개월 내 해지 시 한달 요금이 청구될 수 있습니다."
+                    android:id="@+id/textView94"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12.75sp"
+                    android:textColor="#707070" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(쿠폰 결제 불가)"
+                    android:id="@+id/textView95"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12.75sp"
+                    android:textColor="#707070"
+                    android:layout_marginBottom="12.75sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가입 및 해지 문의 : 1644-1100"
+                    android:id="@+id/textView96"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12.75sp"
+                    android:textColor="#707070" />
             </LinearLayout>
 
             <LinearLayout
