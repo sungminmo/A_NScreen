@@ -113,7 +113,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
 
         // 먼저 공통 뷰 초기화 부터 해준다. (Left버튼, Right버튼, GNB)
-        view = initializeBaseView(view);
+        view = initializeBaseView(view, 0);
 
         // 공통 뷰 초기화가 끝났으면, 이놈을 위한 초기화를 한다.
         view = initializeView(view);

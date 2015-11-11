@@ -72,12 +72,8 @@ public class VodMainGridViewAdapter extends BaseAdapter {
             titleTextView.setText(jo.getString("title"));
             rankTextView.setText(jo.getString("ranking"));
 
-
-            int ino = randomRange(0, 4);
-
-            // http://www.jjiya.com/cnm/0.jpeg
-            String imgurl = "http://www.jjiya.com/cnm/0.jpeg"; // String imgurl = "http://www.jjiya.com/cnm/"+ino+".jpeg";
-            vodImageView.setImageUrl(imgurl, mImageLoader);
+            String imageFileName = jo.getString("imageFileName");
+            vodImageView.setImageUrl(imageFileName, mImageLoader);
 
         } catch (JSONException e) {
             e.printStackTrace();

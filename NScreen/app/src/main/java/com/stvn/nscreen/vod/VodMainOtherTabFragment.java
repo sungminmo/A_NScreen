@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -13,8 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkError;
@@ -32,11 +39,13 @@ import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.EightVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.common.VodNewMoviePosterPagerAdapter;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.bean.SubCategoryObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,26 +66,32 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 
-public class VodMainOtherTabFragment extends VodMainBaseFragment {
+public class VodMainOtherTabFragment extends VodMainBaseFragment implements View.OnClickListener {
 
     private static final String                  tag = VodMainOtherTabFragment.class.getSimpleName();
     private static       VodMainOtherTabFragment mInstance;
     private              JYSharedPreferences     mPref;
 
     // network
+    private              String                 mCategoryId;
     private              RequestQueue           mRequestQueue;
     private              ProgressDialog         mProgressDialog;
     private              ImageLoader            mImageLoader;
+    private              SubCategoryObject      mCurrCategoryObject;
 
     // gui
-    private              ViewPager                     mPop20ViewPager;
-    private              EightVodPosterPagerAdapter    mPop20PagerAdapter; // 인기순위 Top 20
+    private              GridView               mGridView;
+    private              VodMainGridViewAdapter mAdapter;
+    private              TextView               mCategoryNameTextView;
 
-    private              ViewPager                     mNewMovieViewPager;
-    private              VodNewMoviePosterPagerAdapter mNewMoviePagerAdapter; // 금주의 신작 영화
+    private              LinearLayout           mTabbar;
+    private              LinearLayout           mTab1;  // 실시간 인기순위. requestItems=daily
+    private              LinearLayout           mTab2;  // 주간 인기순위. requestItems=weekly
+    private              String                 mRequestItems; // default = daily
 
-    private              ViewPager                     mThisMonthViewPager;
-    private              VodNewMoviePosterPagerAdapter mThisMonthPagerAdapter; // 이달의 추천 VOD
+    private              FrameLayout            mCategoryBgFramelayout;
+    private              ImageButton            mCategoryButton;
+
 
     public VodMainOtherTabFragment() {
         // Required empty public constructor
@@ -88,6 +103,12 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vod_main_order_tab, container, false);
 
+        Bundle param  = getArguments();
+        String tabId  = param.getString("tabId");
+        int    iTabId = Integer.valueOf(tabId);
+        mCategoryId   = param.getString("categoryId");
+        categorys     = new ArrayList<JSONObject>();
+        mCurrCategoryObject = new SubCategoryObject();
 
         mInstance     = this;
         mPref         = new JYSharedPreferences(this.getActivity());
@@ -95,21 +116,10 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
         mImageLoader  = new ImageLoader(mRequestQueue, imageCache);
 
-        mPop20PagerAdapter     = new EightVodPosterPagerAdapter(this.getActivity());
-        mNewMoviePagerAdapter  = new VodNewMoviePosterPagerAdapter(this.getActivity());
-        mThisMonthPagerAdapter = new VodNewMoviePosterPagerAdapter(this.getActivity());
-
-        mPop20PagerAdapter.setImageLoader(mImageLoader);
-        mNewMoviePagerAdapter.setImageLoader(mImageLoader);
-        mThisMonthPagerAdapter.setImageLoader(mImageLoader);
-
-        mPop20PagerAdapter.setFragment(mInstance);
-        mNewMoviePagerAdapter.setFragment(mInstance);
-        mThisMonthPagerAdapter.setFragment(mInstance);
 
 
         // 먼저 공통 뷰 초기화 부터 해준다. (Left버튼, Right버튼, GNB)
-        view = initializeBaseView(view);
+        view = initializeBaseView(view, iTabId);
 
         // 공통 뷰 초기화가 끝났으면, 이놈을 위한 초기화를 한다.
         view = initializeView(view);
@@ -119,96 +129,145 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
 
     private View initializeView(View view) {
 
+        mCategoryNameTextView = (TextView) view.findViewById(R.id.vod_main_orther_category_choice_textview);
 
-        // 인가 탑20
-        mPop20ViewPager = (ViewPager)view.findViewById(R.id.vod_main_pop20_viewpager);
-        mPop20ViewPager.setAdapter(mPop20PagerAdapter);
+        mTabbar = (LinearLayout)view.findViewById(R.id.vod_main_other_tabbar_linearlayout);
+        mTab1 = (LinearLayout)view.findViewById(R.id.vod_main_other_tab1_linearlayout);
+        mTab2 = (LinearLayout)view.findViewById(R.id.vod_main_other_tab2_linearlayout);
+        mTab1.setSelected(true);
+        mTab2.setSelected(false);
+        mTab1.setOnClickListener(this);
+        mTab2.setOnClickListener(this);
+        mRequestItems = "daily";
 
-        // 신작영화
-        mNewMovieViewPager = (ViewPager)view.findViewById(R.id.vod_main_newmovie_viewpager);
-        mNewMovieViewPager.setAdapter(mNewMoviePagerAdapter);
 
-        // 이달의 추천 VOD
-        mThisMonthViewPager = (ViewPager)view.findViewById(R.id.vod_main_thismonth_viewpager);
-        mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
+        mAdapter  = new VodMainGridViewAdapter(mInstance.getActivity(), null);
+        mGridView = (GridView)view.findViewById(R.id.vod_main_gridview);
+        mGridView.setAdapter(mAdapter);
+        mGridView.setOnItemClickListener(assetItemClickListener);
+
+        mCategoryBgFramelayout = (FrameLayout)view.findViewById(R.id.vod_main_other_category_bg_framelayout);
+        mCategoryBgFramelayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCategoryBgFramelayout.setVisibility(View.GONE);
+            }
+        });
+        mCategoryButton        = (ImageButton)view.findViewById(R.id.vod_main_orther_category_choice_imageButton);
+        mCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCategoryBgFramelayout.setVisibility(View.VISIBLE);
+            }
+        });
 
         // 카테고리 요청. 추천.
         requestGetCategoryTree();
 
-
-        ((LinearLayout)view.findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
-                //startActivity(i);
-            }
-        });
-
         return view;
     }
+
+    @Override
+    public void onClick(View v) {
+        switch ( v.getId() ) {
+            case R.id.vod_main_other_tab1_linearlayout: { // 실시간 인기순위.
+                mTab1.setSelected(true);
+                mTab2.setSelected(false);
+                mAdapter.clear();
+                mRequestItems = "daily";
+                requestGetPopularityChart();
+            } break;
+            case R.id.vod_main_other_tab2_linearlayout: { // 주간 인기순위.
+                mTab1.setSelected(false);
+                mTab2.setSelected(true);
+                mAdapter.clear();
+                mRequestItems = "weekly";
+                requestGetPopularityChart();
+            } break;
+        }
+    }
+
+    private AdapterView.OnItemClickListener assetItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ListViewDataObject item = (ListViewDataObject)mAdapter.getItem(position);
+            String assetId = "";
+            try {
+                JSONObject jo = new JSONObject(item.sJson);
+                assetId = jo.getString("assetId");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Intent intent = new Intent(mInstance.getActivity(), com.stvn.nscreen.vod.VodDetailActivity.class);
+            intent.putExtra("assetId", assetId);
+            startActivity(intent);
+        }
+    };
+
 
     // 카테고리 요청.
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
     private void requestGetCategoryTree() {
-
-        /**
-         * 버젼 체크해서 얼럿 띄우자.
-         */
-        String serverVer  = mPref.getAppVersionForServer();
-        String appVer     = mPref.getAppVersionForApp();
-        Float  fVerServer = Float.valueOf(serverVer);
-        Float  fVerApp    = Float.valueOf(appVer);
-        if ( fVerServer > fVerApp ) {
-            StringBuilder sb   = new StringBuilder();
-            sb.append("지금 사용하시는 버젼보다, 더 최신버젼의 앱이 있습니다.\n구글마켓에서 최신버젼으로 업데이트 하시길 권장드립니다.").append("\n")
-                    .append("구글마켓의 최신 버젼 : ").append(serverVer).append("\n")
-                    .append("사용중이신 앱의 버젼 : ").append(appVer);
-            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
-            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alert.setMessage(sb.toString());
-            alert.show();
-        }
-
-
         mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
         //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
-        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713230&depth=3&traverseType=DFS";
+        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId="+mCategoryId+"&depth=4&traverseType=DFS";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                boolean isNeedReCallGetCategoryTree = false;
                 try {
-                    JSONObject first       = new JSONObject(response);
-                    int        resultCode  = first.getInt("resultCode");
-                    String     errorString = first.getString("errorString");
+                    JSONObject first        = new JSONObject(response);
+                    int        resultCode   = first.getInt("resultCode");
+                    String     errorString  = first.getString("errorString");
+                    boolean    isGotitCateName = false;
 
-                    categorys              = new ArrayList<JSONObject>();
                     JSONArray  categoryList = first.getJSONArray("categoryList");
                     for ( int i = 0; i < categoryList.length(); i++ ) {
                         JSONObject category     = (JSONObject)categoryList.get(i);
-                        int        viewerType   = category.getInt("viewerType");
-                        String     categoryId   = category.getString("categoryId");
-                        String     categoryName = category.getString("categoryName");
+                        //CATEGORY_ID_MOVIE
+                        //private String sCategoryId;
+                        //private String sAdultCategory;
+                        //private String sCategoryName;
+                        //private String sLeaf;
+                        //private String sParentCategoryId;
+                        //private String sViewerType;
+                        String     categoryId       = category.getString("categoryId");
+                        boolean    adultCategory    = category.getBoolean("adultCategory");
+                        String     categoryName     = category.getString("categoryName");
+                        boolean    leaf             = category.getBoolean("leaf");
+                        String     parentCategoryId = category.getString("parentCategoryId");
+                        int        viewerType       = category.getInt("viewerType");
 
-                        /**
-                         ViewerType = 30, getContentGroupList (보통 리스트)
-                         ViewerType = 200, getPopularityChart (인기순위)
-                         ViewerType = 41, ㅎetBundleProductList (묶음)
-                         ViewerType = 310, recommendContentGroupByAssetId (연관)
-                         */
-                        if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
+                        if ( ! mCategoryId.equals(categoryId) && viewerType != 60 ) {
+                            /**
+                             ViewerType = 30, getContentGroupList (보통 리스트)
+                             ViewerType = 200, getPopularityChart (인기순위)
+                             ViewerType = 41, ㅎetBundleProductList (묶음)
+                             ViewerType = 310, recommendContentGroupByAssetId (연관)
+                             */
+                            //if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
+                            //    categorys.add(category);
+                            //}
                             categorys.add(category);
+                            if ( isGotitCateName == false ) {
+                                isGotitCateName = true;
+                                mCategoryNameTextView.setText(categoryName);
+                                mCurrCategoryObject.setsCategoryId(categoryId);
+                                mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
+                                mCurrCategoryObject.setsCategoryName(categoryName);
+                                mCurrCategoryObject.setsLeaf(category.getString("leaf"));
+                                mCurrCategoryObject.setsParentCategoryId(parentCategoryId);
+                                mCurrCategoryObject.setsViewerType(category.getString("viewerType"));
+                                processRequest();
+                            }
                         }
                     }
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
-                requestGetPopularityChart();
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -237,6 +296,24 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
     }
 
 
+    private void processRequest() {
+        /**
+         ViewerType = 30, getContentGroupList (보통 리스트)
+         ViewerType = 200, getPopularityChart (인기순위)
+         ViewerType = 41, ㅎetBundleProductList (묶음)
+         ViewerType = 310, recommendContentGroupByAssetId (연관)
+         */
+        if ( "30".equals(mCurrCategoryObject.getsViewerType()) ) {
+
+        } else if ( "200".equals(mCurrCategoryObject.getsViewerType()) ) {
+            requestGetPopularityChart();
+        } else if ( "41".equals(mCurrCategoryObject.getsViewerType()) ) {
+
+        } else if ( "310".equals(mCurrCategoryObject.getsViewerType()) ) {
+
+        }
+    }
+
 
 
     /**
@@ -246,7 +323,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
     // 인기 TOP 20
     private void requestGetPopularityChart() {
         //String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
-        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId="+mCurrCategoryObject.getsCategoryId()+"&requestItems="+mRequestItems;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -255,11 +332,22 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
                     JSONObject jo = new JSONObject(response);
                     String resultCode = jo.getString("resultCode");
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
-                        JSONObject weeklyChart = jo.getJSONObject("weeklyChart");
-                        JSONArray popularityList = weeklyChart.getJSONArray("popularityList");
-                        for ( int i = 0; i < popularityList.length(); i++ ) {
-                            JSONObject popularity = popularityList.getJSONObject(i);
-                            mPop20PagerAdapter.addVod(popularity);
+                        if ( "daily".equals(mRequestItems) ) {
+                            JSONObject dailyChart = jo.getJSONObject("dailyChart");
+                            JSONArray popularityList = dailyChart.getJSONArray("popularityList");
+                            for ( int i = 0; i < popularityList.length(); i++ ) {
+                                JSONObject popularity = popularityList.getJSONObject(i);
+                                ListViewDataObject obj = new ListViewDataObject(i, i, popularity.toString());
+                                mAdapter.addItem(obj);
+                            }
+                        } else if ( "weekly".equals(mRequestItems) ) {
+                            JSONObject weeklyChart = jo.getJSONObject("weeklyChart");
+                            JSONArray popularityList = weeklyChart.getJSONArray("popularityList");
+                            for ( int i = 0; i < popularityList.length(); i++ ) {
+                                JSONObject popularity = popularityList.getJSONObject(i);
+                                ListViewDataObject obj = new ListViewDataObject(i, i, popularity.toString());
+                                mAdapter.addItem(obj);
+                            }
                         }
                     } else {
                         String errorString = jo.getString("errorString");
@@ -279,8 +367,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
-                mPop20PagerAdapter.notifyDataSetChanged();
-                requestGetContentGroupList(); // 금주의 신작영화 요청.
+                mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -337,7 +424,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
                     } else if (xpp.getName().equalsIgnoreCase("title")) {
                         sb.append(",\"title\":\"").append(xpp.nextText()).append("\"}");
                         JSONObject content = new JSONObject(sb.toString());
-                        mPop20PagerAdapter.addVod(content);
+//                        mPop20PagerAdapter.addVod(content);
                         sb.setLength(0);
                     }
                 }
@@ -366,9 +453,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
                     JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
                     for ( int i = 0; i < contentGroupList.length(); i++ ) {
                         JSONObject jo = (JSONObject)contentGroupList.get(i);
-                        mNewMoviePagerAdapter.addVod(jo);
+//                        mNewMoviePagerAdapter.addVod(jo);
                     }
-                    mNewMoviePagerAdapter.notifyDataSetChanged();
+//                    mNewMoviePagerAdapter.notifyDataSetChanged();
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
@@ -403,9 +490,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment {
                     JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
                     for ( int i = 0; i < contentGroupList.length(); i++ ) {
                         JSONObject jo = (JSONObject)contentGroupList.get(i);
-                        mThisMonthPagerAdapter.addVod(jo);
+//                        mThisMonthPagerAdapter.addVod(jo);
                     }
-                    mThisMonthPagerAdapter.notifyDataSetChanged();
+//                    mThisMonthPagerAdapter.notifyDataSetChanged();
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
