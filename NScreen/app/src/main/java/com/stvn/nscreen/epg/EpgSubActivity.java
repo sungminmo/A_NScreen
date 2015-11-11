@@ -793,21 +793,22 @@ public class EpgSubActivity extends AppCompatActivity {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
-                if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
+                if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {   // 예약목록을 받았을때.
+                    requestGetChannelSchedule();
+                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
+                    requestGetChannelSchedule();
+                } else { // 그외는 error
                     String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
                     AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
                     ad.setTitle("알림").setMessage(msg).setCancelable(false)
-                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
                     AlertDialog alert = ad.create();
                     alert.show();
-                } else {
-                    // ok case
-                    requestGetChannelSchedule();
                 }
             }
         }, new Response.ErrorListener() {
