@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -317,7 +318,7 @@ public class VodDetailActivity extends Activity {
             public void onClick(View v) {
                 if ( mPref.isPairingCompleted() == false ) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -341,7 +342,7 @@ public class VodDetailActivity extends Activity {
                     // 찜 안한 VOD
                     if ( mPref.isPairingCompleted() == false ) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -355,6 +356,15 @@ public class VodDetailActivity extends Activity {
                         img.setBounds(0, 0, 35, 35);
                         mJimButton.setCompoundDrawables(null, null, img, null);
                         mJimButton.setText("찜해제");
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage("찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.");
+                        alert.show();
                     }
                 } else {
                     // 찜 한 VOD
@@ -364,11 +374,20 @@ public class VodDetailActivity extends Activity {
                     img.setBounds( 0, 0, 35, 35 );
                     mJimButton.setCompoundDrawables( null, null, img, null );
                     mJimButton.setText("찜하기");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage("찜 하기가 해제 되었습니다.");
+                    alert.show();
                 }
             }
         });
 
-        mJimButton2 = (Button)findViewById(R.id.vod_detail_jjim_button);
+        mJimButton2 = (Button)findViewById(R.id.vod_detail_jjim_button2);
         mJimButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,7 +395,7 @@ public class VodDetailActivity extends Activity {
                     // 찜 안한 VOD
                         if ( mPref.isPairingCompleted() == false ) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -390,6 +409,15 @@ public class VodDetailActivity extends Activity {
                             img.setBounds(0, 0, 35, 35);
                             mJimButton2.setCompoundDrawables(null, null, img, null);
                             mJimButton2.setText("찜해제");
+                            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            alert.setMessage("찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.");
+                            alert.show();
                         }
                 } else {
                     // 찜 한 VOD
@@ -407,8 +435,17 @@ public class VodDetailActivity extends Activity {
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
                     img.setBounds( 0, 0, 35, 35 );
-                    mJimButton2.setCompoundDrawables( null, null, img, null );
+                    mJimButton2.setCompoundDrawables(null, null, img, null);
                     mJimButton2.setText("찜하기");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage("찜 하기가 해제 되었습니다.");
+                    alert.show();
                 }
             }
         });
@@ -614,7 +651,13 @@ public class VodDetailActivity extends Activity {
                     }
                     sPrice = price;
                     sListPrice = listPrice;
-                    mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
+                    if ( "".equals(purchasedTime) ) {
+                        mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
+                    } else {
+                        mPriceTextView.setText("이미 구매하셨습니다.");
+                        String strColor = "#7b5aa3";
+                        mPriceTextView.setTextColor(Color.parseColor(strColor));
+                    }
                     mGenreTextView.setText(genre+" / "+runningTime);
                     mDirectorTextView.setText(director);
                     mStarringTextView.setText(starring);
