@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.android.volley.RequestQueue;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  * Created by leejunghoon on 15. 9. 19..
  */
 
-public class SearchVodFragment extends SearchBaseFragment{
+public class SearchVodFragment extends SearchBaseFragment implements AdapterView.OnItemClickListener{
 
     private LayoutInflater mInflater;
     private GridView mGridView;
@@ -69,6 +70,7 @@ public class SearchVodFragment extends SearchBaseFragment{
         mGridView = (GridView)getView().findViewById(R.id.programgridview);
         mAdapter = new SearchVodAdapter(getActivity(),mProgramlist);
         mGridView.setAdapter(mAdapter);
+        mGridView.setOnItemClickListener(this);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -125,6 +127,9 @@ public class SearchVodFragment extends SearchBaseFragment{
 
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
 
 }
