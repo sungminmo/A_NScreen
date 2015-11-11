@@ -59,7 +59,7 @@ import java.util.Map;
 
 public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
-    private static final String                  tag = VodMainFragment.class.getSimpleName();
+    private static final String                  tag = VodMainFirstTabFragment.class.getSimpleName();
     private static       VodMainFirstTabFragment mInstance;
     private              JYSharedPreferences     mPref;
 
@@ -159,7 +159,32 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
     private void requestGetCategoryTree() {
-        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(),"",getString(R.string.wait_a_moment));
+
+        /**
+         * 버젼 체크해서 얼럿 띄우자.
+         */
+        String serverVer  = mPref.getAppVersionForServer();
+        String appVer     = mPref.getAppVersionForApp();
+        Float  fVerServer = Float.valueOf(serverVer);
+        Float  fVerApp    = Float.valueOf(appVer);
+        if ( fVerServer > fVerApp ) {
+            StringBuilder sb   = new StringBuilder();
+            sb.append("지금 사용하시는 버젼보다, 더 최신버젼의 앱이 있습니다.\n구글마켓에서 최신버젼으로 업데이트 하시길 권장드립니다.").append("\n")
+                    .append("구글마켓의 최신 버젼 : ").append(serverVer).append("\n")
+                    .append("사용중이신 앱의 버젼 : ").append(appVer);
+            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.setMessage(sb.toString());
+            alert.show();
+        }
+
+
+        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
         //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
         String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713230&depth=3&traverseType=DFS";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {

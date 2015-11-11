@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.util.Log;
 
@@ -58,9 +60,10 @@ public class JYSharedPreferences {
     public final static String USER_ID      = "USER_ID";
     public final static String USER_PWD     = "USER_PWD";
     public final static String USER_TYPE    = "USER_TYPE";
-    public final static String SERVER_CODE  = "SERVER_CODE";  // 기기등록시에 선택한 서버.
-    public final static String LOGIN_SERVER = "LOGIN_SERVER"; // 로그인 화면에서 선택한 서버.
     public final static String VoVolunteerActivityIsCompletMode = "VoVolunteerActivityIsCompletMode"; // VoVolunteerActivityIsCompletMode : true, false
+
+
+    public final static String APP_VERSION_FOR_SERVER = "APP_VERSION_FOR_SERVER";
 
     public final static String RUMPERS_TERMINAL_KEY  = "MjAxMS0wNC0xNl8yMTk0NDY4Nl9Dbk1UZXN0QXBwXyAg";   // 고정키값. 모든 앱이 같은 값을 사용 함.
     public final static String RUMPERS_SETOPBOX_KIND = "RUMPERS_SETOPBOX_KIND";
@@ -135,6 +138,35 @@ public class JYSharedPreferences {
             return dftValue;
         }
     }
+
+    /**
+     * 서버로부터 받은 버젼.
+     * @param ver
+     */
+    public void setAppVersionForServer(String ver){
+        put(APP_VERSION_FOR_SERVER, ver);
+    }
+
+    public String getAppVersionForServer() {
+        String ver = getValue(APP_VERSION_FOR_SERVER, "");
+        return ver;
+    }
+
+    /**
+     * 앱으로부터 알아낸 버젼.
+     */
+    public String getAppVersionForApp() {
+        PackageInfo pInfo = null;
+        try {
+            pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+            String version = pInfo.versionName;
+            return version;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     /**
      * private키가 있다면 privatekey를 사용. 없다면, publickey 사용.
@@ -388,7 +420,6 @@ public class JYSharedPreferences {
         }
     }
 
-
     /**
      * 카테고리(메인)
      */
@@ -429,5 +460,5 @@ public class JYSharedPreferences {
         realm.commitTransaction();
         // Realm Database **********************************************************************
     }
-
 }
+

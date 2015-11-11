@@ -1,35 +1,41 @@
 package com.stvn.nscreen.vod;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.EightVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.common.VodNewMoviePosterPagerAdapter;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
-import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
 
 import org.json.JSONArray;
@@ -47,11 +53,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VodMainActivity extends Activity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
 
-    private static final String                 tag = VodMainActivity.class.getSimpleName();
-    private static       VodMainActivity        mInstance;
-    private              JYSharedPreferences    mPref;
+public class VodMainOtherTabFragment extends VodMainBaseFragment {
+
+    private static final String                  tag = VodMainOtherTabFragment.class.getSimpleName();
+    private static       VodMainOtherTabFragment mInstance;
+    private              JYSharedPreferences     mPref;
 
     // network
     private              RequestQueue           mRequestQueue;
@@ -59,9 +69,6 @@ public class VodMainActivity extends Activity {
     private              ImageLoader            mImageLoader;
 
     // gui
-    private              ViewPager              mBannerViewPager;
-    private              List<JSONObject>       mBanners;
-
     private              ViewPager                     mPop20ViewPager;
     private              EightVodPosterPagerAdapter    mPop20PagerAdapter; // 인기순위 Top 20
 
@@ -71,92 +78,151 @@ public class VodMainActivity extends Activity {
     private              ViewPager                     mThisMonthViewPager;
     private              VodNewMoviePosterPagerAdapter mThisMonthPagerAdapter; // 이달의 추천 VOD
 
-    
+    public VodMainOtherTabFragment() {
+        // Required empty public constructor
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vod_main);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_vod_main_order_tab, container, false);
+
 
         mInstance     = this;
-        mPref         = new JYSharedPreferences(this);
-        mRequestQueue = Volley.newRequestQueue(this);
+        mPref         = new JYSharedPreferences(this.getActivity());
+        mRequestQueue = Volley.newRequestQueue(this.getActivity());
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
         mImageLoader  = new ImageLoader(mRequestQueue, imageCache);
 
-        mBanners               = new ArrayList<JSONObject>();
-        mPop20PagerAdapter     = new EightVodPosterPagerAdapter(this);
-        mNewMoviePagerAdapter  = new VodNewMoviePosterPagerAdapter(this);
-        mThisMonthPagerAdapter = new VodNewMoviePosterPagerAdapter(this);
+        mPop20PagerAdapter     = new EightVodPosterPagerAdapter(this.getActivity());
+        mNewMoviePagerAdapter  = new VodNewMoviePosterPagerAdapter(this.getActivity());
+        mThisMonthPagerAdapter = new VodNewMoviePosterPagerAdapter(this.getActivity());
 
         mPop20PagerAdapter.setImageLoader(mImageLoader);
         mNewMoviePagerAdapter.setImageLoader(mImageLoader);
         mThisMonthPagerAdapter.setImageLoader(mImageLoader);
 
-        if ( mPref.isLogging() ) { Log.d(tag, "onCreate()"); }
-
-//        setActionBarStyle(CMActionBar.CMActionBarStyle.MAIN);
-//        setActionBarTitle(getString(R.string.title_activity_main));
-
+        mPop20PagerAdapter.setFragment(mInstance);
+        mNewMoviePagerAdapter.setFragment(mInstance);
+        mThisMonthPagerAdapter.setFragment(mInstance);
 
 
-        // 배너
-        mBannerViewPager = (ViewPager) findViewById(R.id.vod_main_event_viewpager);
+        // 먼저 공통 뷰 초기화 부터 해준다. (Left버튼, Right버튼, GNB)
+        view = initializeBaseView(view);
+
+        // 공통 뷰 초기화가 끝났으면, 이놈을 위한 초기화를 한다.
+        view = initializeView(view);
+
+        return view;
+    }
+
+    private View initializeView(View view) {
+
 
         // 인가 탑20
-        mPop20ViewPager = (ViewPager) findViewById(R.id.vod_main_pop20_viewpager);
+        mPop20ViewPager = (ViewPager)view.findViewById(R.id.vod_main_pop20_viewpager);
         mPop20ViewPager.setAdapter(mPop20PagerAdapter);
 
         // 신작영화
-        mNewMovieViewPager = (ViewPager) findViewById(R.id.vod_main_newmovie_viewpager);
+        mNewMovieViewPager = (ViewPager)view.findViewById(R.id.vod_main_newmovie_viewpager);
         mNewMovieViewPager.setAdapter(mNewMoviePagerAdapter);
-        
+
         // 이달의 추천 VOD
-        mThisMonthViewPager = (ViewPager) findViewById(R.id.vod_main_thismonth_viewpager);
+        mThisMonthViewPager = (ViewPager)view.findViewById(R.id.vod_main_thismonth_viewpager);
         mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
 
+        // 카테고리 요청. 추천.
+        requestGetCategoryTree();
 
-        ((LinearLayout)findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {
+
+        ((LinearLayout)view.findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(VodMainActivity.this, com.stvn.nscreen.vod.VodCategoryMainActivity.class);
-                startActivity(i);
+                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
+                //startActivity(i);
             }
         });
 
-        //MainActivity.mInstance.getSupportActionBar().show();
-        // 배너 요청.
-        requestGetServiceBannerList();
+        return view;
     }
 
+    // 카테고리 요청.
+    // 추천
+    // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
+    private void requestGetCategoryTree() {
 
-    private AdapterView.OnItemClickListener assetItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //ListViewDataObject item = (ListViewDataObject)mAdapter.getItem(position);
-            Intent intent = new Intent(VodMainActivity.this, com.stvn.nscreen.vod.VodDetailActivity.class);
-            //intent.putExtra("sJson", item.sJson);
-            startActivity(intent);
+        /**
+         * 버젼 체크해서 얼럿 띄우자.
+         */
+        String serverVer  = mPref.getAppVersionForServer();
+        String appVer     = mPref.getAppVersionForApp();
+        Float  fVerServer = Float.valueOf(serverVer);
+        Float  fVerApp    = Float.valueOf(appVer);
+        if ( fVerServer > fVerApp ) {
+            StringBuilder sb   = new StringBuilder();
+            sb.append("지금 사용하시는 버젼보다, 더 최신버젼의 앱이 있습니다.\n구글마켓에서 최신버젼으로 업데이트 하시길 권장드립니다.").append("\n")
+                    .append("구글마켓의 최신 버젼 : ").append(serverVer).append("\n")
+                    .append("사용중이신 앱의 버젼 : ").append(appVer);
+            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.setMessage(sb.toString());
+            alert.show();
         }
-    };
 
-    // 배너 요청
-    private void requestGetServiceBannerList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
-        StringBuffer sb = new StringBuffer().append("terminalKey=").append(JYSharedPreferences.RUMPERS_TERMINAL_KEY);
-        String url = mPref.getRumpersServerUrl() + "/getservicebannerlist.asp?"+sb.toString();
+
+        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
+        //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
+        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713230&depth=3&traverseType=DFS";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                parseGetServiceBannerList(response);
-                mBannerViewPager.setAdapter(new PagerAdapterClass(getApplicationContext()));
+                try {
+                    JSONObject first       = new JSONObject(response);
+                    int        resultCode  = first.getInt("resultCode");
+                    String     errorString = first.getString("errorString");
+
+                    categorys              = new ArrayList<JSONObject>();
+                    JSONArray  categoryList = first.getJSONArray("categoryList");
+                    for ( int i = 0; i < categoryList.length(); i++ ) {
+                        JSONObject category     = (JSONObject)categoryList.get(i);
+                        int        viewerType   = category.getInt("viewerType");
+                        String     categoryId   = category.getString("categoryId");
+                        String     categoryName = category.getString("categoryName");
+
+                        /**
+                         ViewerType = 30, getContentGroupList (보통 리스트)
+                         ViewerType = 200, getPopularityChart (인기순위)
+                         ViewerType = 41, ㅎetBundleProductList (묶음)
+                         ViewerType = 310, recommendContentGroupByAssetId (연관)
+                         */
+                        if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
+                            categorys.add(category);
+                        }
+                    }
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
+                }
                 requestGetPopularityChart();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -170,155 +236,8 @@ public class VodMainActivity extends Activity {
         mRequestQueue.add(request);
     }
 
-    // 배너 파싱
-    private void parseGetServiceBannerList(String response) {
-        StringBuilder sb = new StringBuilder();
-        XmlPullParserFactory factory = null;
-        try {
-            factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-
-            XmlPullParser xpp = factory.newPullParser();
-            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
-
-            int eventType = xpp.getEventType();
-            while ( eventType != XmlPullParser.END_DOCUMENT ) {
-                if (eventType == XmlPullParser.START_TAG) {
-                    if (xpp.getName().equalsIgnoreCase("vbId")) {
-                        sb.append("{\"vbId\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("assetId")) {
-                        sb.append(",\"assetId\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("android_imgurl")) {
-                        sb.append(",\"android_imgurl\":\"").append(xpp.nextText()).append("\"}");
-                        String imsi = sb.toString();
-                        String re   = imsi.replace("http://58.141.255.80", "http://192.168.44.10"); // 삼성동 C&M에서는 공인망 럼퍼스 접속이 안되서, 임시로 리플레이스 처리 함.
-                        JSONObject jo = new JSONObject(re); //JSONObject jo = new JSONObject(sb.toString());
-                        mBanners.add(jo);
-                        sb.setLength(0);
-                    }
-                }
-                eventType = xpp.next();
-            }
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * PagerAdapter
-     */
-
-    private class PagerAdapterClass extends PagerAdapter {
-
-        private LayoutInflater mInflater;
-
-        public PagerAdapterClass(Context c){
-            super();
-            mInflater = LayoutInflater.from(c);
-        }
-
-        @Override
-        public int getCount() {
-            return mBanners.size();
-        }
-
-        @Override
-        public Object instantiateItem(View pager, int position) {
-            View v = null;
-
-            v = mInflater.inflate(R.layout.viewpager_void_main_banner, null);
-            try {
-                JSONObject       jo   = mBanners.get(position);
-                //final String           num  = jo.getString("num");
-                //String           iurl = mPref.getServerUrl() + jo.get("bImg2");
-                String imageUrl = jo.getString("android_imgurl");
-                NetworkImageView niv  = (NetworkImageView)v.findViewById(R.id.vod_main_banner_network_imageview);
-                niv.setImageUrl(imageUrl, mImageLoader);
-                niv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        Intent intent = new Intent(mInstance, EventMainActivity.class);
-//                        intent.putExtra("num", num);
-//                        v = TopMainActivityGroup.topMainActivityGroup.getLocalActivityManager().startActivity("EventMainActivity", intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)).getDecorView();
-//                        TopMainActivityGroup.topMainActivityGroup.replaceView(v);
-
-                        //MainActivity.mainActivity.changeTabAndChangeActivity("event", "EventSubActivity", EventSubActivity.class);
-                    }
-                });
 
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            ImageView indi1 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview1);
-            ImageView indi2 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview2);
-            ImageView indi3 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview3);
-            ImageView indi4 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview4);
-            ImageView indi5 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview5);
-            ImageView indi6 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview6);
-            ImageView indi7 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview7);
-            ImageView indi8 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview8);
-            ImageView indi9 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview9);
-            ImageView indi10 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview10);
-            UiUtil.setIndicatorImage(position, getCount(), indi1, indi2, indi3, indi4, indi5, indi6, indi7, indi8, indi9, indi10);
-
-            ((ViewPager)pager).addView(v);
-
-            return v;
-        }
-
-        @Override
-        public void destroyItem(View pager, int position, Object view) {
-            ((ViewPager)pager).removeView((View)view);
-        }
-
-        @Override public boolean isViewFromObject(View pager, Object obj) {
-            return pager == obj;
-        }
-        @Override public void    restoreState(Parcelable arg0, ClassLoader arg1) {}
-        @Override public         Parcelable saveState() { return null; }
-        @Override public void    startUpdate(View arg0) {}
-        @Override public void    finishUpdate(View arg0) {}
-    }
-
-
-
-    private void loadVpnData_getPopularityChart() {
-
-        String response = getResources().getString(R.string.get_populaity_chart);
-
-        try {
-            JSONObject jo  = new JSONObject(response);
-            JSONObject weeklyChart = jo.getJSONObject("weeklyChart");
-            JSONArray  popularityList = weeklyChart.getJSONArray("popularityList");
-            for ( int i = 0; i < popularityList.length(); i++ ) {
-                JSONObject popularity = (JSONObject)popularityList.get(i);
-                // {\"assetId\":\"www.hchoice.co.kr|M4154270LSG347422301\",\"categoryId\":713230,\"comparision\":\"0\",\"hitCount\":838,\"hot\":false,\"isNew\":true,\"new\":true,\"ranking\":1,\"title\":\"(HD)극장동시-베테랑\"}
-                /*
-                String assetId     = popularity.getString("popularity");
-                String categoryId  = popularity.getString("categoryId");
-                String comparision = popularity.getString("comparision");
-                String hitCount    = popularity.getString("hitCount");
-                String hot         = popularity.getString("hot");
-                String isNew       = popularity.getString("isNew");
-                String isNewOri    = popularity.getString("new");
-                String ranking     = popularity.getString("ranking");
-                String title       = popularity.getString("title");
-                */
-                //ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, popularity.toString());
-                //mAdapter.addItem(obj);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * http://192.168.40.5:8080/HApplicationServer/getPopularityChart.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&categoryId=713230&requestItems=weekly
@@ -326,11 +245,40 @@ public class VodMainActivity extends Activity {
      * */
     // 인기 TOP 20
     private void requestGetPopularityChart() {
-        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        //String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                parseGetPopularityChart(response);
+                //parseGetPopularityChart(response);
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    String resultCode = jo.getString("resultCode");
+                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        JSONObject weeklyChart = jo.getJSONObject("weeklyChart");
+                        JSONArray popularityList = weeklyChart.getJSONArray("popularityList");
+                        for ( int i = 0; i < popularityList.length(); i++ ) {
+                            JSONObject popularity = popularityList.getJSONObject(i);
+                            mPop20PagerAdapter.addVod(popularity);
+                        }
+                    } else {
+                        String errorString = jo.getString("errorString");
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(sb.toString());
+                        alert.show();
+                    }
+
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
+                }
                 mPop20PagerAdapter.notifyDataSetChanged();
                 requestGetContentGroupList(); // 금주의 신작영화 요청.
             }
@@ -480,7 +428,7 @@ public class VodMainActivity extends Activity {
     }
 
     private void requestGetChannelList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(),"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
         String url = mPref.getWebhasServerUrl() + "/getChannelList.xml?version=1&areaCode=0";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {

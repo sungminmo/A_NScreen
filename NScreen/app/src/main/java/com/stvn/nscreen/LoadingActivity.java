@@ -37,6 +37,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,6 +100,11 @@ public class LoadingActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+//                try {
+//                    response = URLEncoder.encode(response, "EUC-KR");
+//                } catch ( UnsupportedEncodingException e ) {
+//                    e.printStackTrace();
+//                }
                 mProgressBar.setProgress(30);
                 parseGetAppInitialize(response);
                 mProgressBar.setProgress(40);
@@ -112,6 +118,9 @@ public class LoadingActivity extends AppCompatActivity {
                     }
                     // 메인 category 저장.
                     mPref.addMainCategory(mMainCategoryObject1, mMainCategoryObject2, mMainCategoryObject3);
+                    // 서버로부터 받은 앱의 버젼 저장.
+                    String appversion = (String)mGetAppInitialize.get("appversion");
+                    mPref.setAppVersionForServer(appversion);
 
                     if ( mPref.isPairingCompleted() ) {
                         mProgressBar.setProgress(50);
@@ -165,6 +174,8 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void parseGetAppInitialize(String response) {
+        response = response.replace("<![CDATA[","");
+        response = response.replace("]]>", "");
         XmlPullParserFactory factory = null;
         int iCategoryLoop = 0;
         try {
@@ -183,6 +194,9 @@ public class LoadingActivity extends AppCompatActivity {
                     } else if (xpp.getName().equalsIgnoreCase("errorString")) {
                         String errorString = xpp.nextText();
                         mGetAppInitialize.put("errorString", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("appversion")) {
+                        String appversion = xpp.nextText();
+                        mGetAppInitialize.put("appversion", appversion);
                     } else if (xpp.getName().equalsIgnoreCase("SetTopBoxKind")) {
                         String SetTopBoxKind = xpp.nextText();
                         mGetAppInitialize.put("SetTopBoxKind", SetTopBoxKind);

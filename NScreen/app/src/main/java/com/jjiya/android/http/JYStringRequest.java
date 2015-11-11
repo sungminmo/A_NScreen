@@ -10,6 +10,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.jjiya.android.common.JYSharedPreferences;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +63,14 @@ public class JYStringRequest extends StringRequest {
             }
         }
         return super.parseNetworkResponse(response);
+//        String responseUtf8 = null;
+//        try {
+//            responseUtf8 = new String(response.data,"UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return super.parseNetworkResponse(responseUtf8);
     }
 
 }

@@ -1,28 +1,61 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.stvn.nscreen.vod.VodMainActivity"
-    android:background="@color/white">
+    tools:context="com.stvn.nscreen.vod.VodMainFirstTabFragment">
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView" >
+    <!-- 공통 뷰 (Left버튼, Right버튼, GNB) -->
+    <include
+        layout="@layout/fragment_vod_main_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- 배너 -->
-            <android.support.v4.view.ViewPager
-                android:id="@+id/vod_main_event_viewpager"
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="196dp">
-            </android.support.v4.view.ViewPager>
-    
+                android:layout_height="40.75dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/frameLayout"
+                android:layout_toEndOf="@+id/frameLayout"
+                android:layout_marginTop="12.75dp"
+                android:layout_marginBottom="11.5dp">
+
+                <ImageButton
+                    android:id="@+id/vod_main_orther_category_choice_imageButton"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40.75dp"
+                    android:layout_marginLeft="12.25dp"
+                    android:layout_marginRight="12.25dp"
+                    android:background="@mipmap/btn_nor"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/vod_main_orther_category_choice_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14.5sp"
+                    android:textColor="@color/violet"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="25.25dp"
+                    android:background="@mipmap/ch_box_arrow" />
+
+            </FrameLayout>
+
 
             <!-- 인기 순위 Top20 -->
             <View
@@ -167,6 +200,7 @@
             </android.support.v4.view.ViewPager>
 
         </LinearLayout>
-    </ScrollView>
+
+
 
 </LinearLayout>

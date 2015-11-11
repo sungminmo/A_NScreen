@@ -1,5 +1,7 @@
 package com.stvn.nscreen.vod;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -80,6 +82,16 @@ public class VodMainBaseFragment extends Fragment {
                 lineview3.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+                Bundle param = new Bundle();
+                param.putString("tabId", "movie");
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodMainFirstTabFragment df = new VodMainFirstTabFragment();
+                df.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, df);
+                ft.addToBackStack("VodMainFirstTabFragment");
+                ft.commit();
             }
         });
 
@@ -101,6 +113,16 @@ public class VodMainBaseFragment extends Fragment {
                 lineview3.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+                Bundle param = new Bundle();
+                param.putString("tabId", "movie");
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodMainOtherTabFragment df = new VodMainOtherTabFragment();
+                df.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, df);
+                ft.addToBackStack("VodMainOtherTabFragment");
+                ft.commit();
             }
         });
         textView3.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +143,16 @@ public class VodMainBaseFragment extends Fragment {
                 lineview3.setBackgroundColor(getResources().getColor(R.color.white));
                 lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+                Bundle param = new Bundle();
+                param.putString("tabId", "ani");
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodMainOtherTabFragment df = new VodMainOtherTabFragment();
+                df.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, df);
+                ft.addToBackStack("VodMainOtherTabFragment");
+                ft.commit();
             }
         });
         textView4.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +173,16 @@ public class VodMainBaseFragment extends Fragment {
                 lineview3.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview4.setBackgroundColor(getResources().getColor(R.color.white));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+                Bundle param = new Bundle();
+                param.putString("tabId", "tv");
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodMainOtherTabFragment df = new VodMainOtherTabFragment();
+                df.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, df);
+                ft.addToBackStack("VodMainOtherTabFragment");
+                ft.commit();
             }
         });
         textView5.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +203,16 @@ public class VodMainBaseFragment extends Fragment {
                 lineview3.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.white));
+
+                Bundle param = new Bundle();
+                param.putString("tabId", "adult");
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                VodMainOtherTabFragment df = new VodMainOtherTabFragment();
+                df.setArguments(param);
+                ft.replace(R.id.fragment_placeholder, df);
+                ft.addToBackStack("VodMainOtherTabFragment");
+                ft.commit();
             }
         });
 

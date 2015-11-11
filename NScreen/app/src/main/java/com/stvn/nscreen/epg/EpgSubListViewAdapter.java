@@ -54,9 +54,10 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     public EpgSubListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
 
-        this.mContext         = c;
-        this.mOnClickListener = onClickListener;
-        this.mPref            = new JYSharedPreferences(c);
+        this.mContext              = c;
+        this.mOnClickListener      = onClickListener;
+        this.mPref                 = new JYSharedPreferences(c);
+        this.mStbRecordReservelist = new ArrayList<JSONObject>();
     }
 
     public void setChannelIdChannelNumberChannelName(String ChannelId, String ChannelNumber, String ChannelName) {
