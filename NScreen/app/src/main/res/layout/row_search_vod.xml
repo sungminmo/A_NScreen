@@ -11,7 +11,6 @@
         <com.android.volley.toolbox.NetworkImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_120.25"
-            android:src="@mipmap/postersample"
             android:id="@+id/poster"
             android:scaleType="fitXY"
             />

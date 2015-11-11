@@ -16,10 +16,11 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchVodDataObject;
+import com.stvn.nscreen.util.CMLog;
 
 import java.util.List;
 
-public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject.ContentGroup> {
+public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 
 	LayoutInflater mInflater;
 	private Context mContext;
@@ -27,7 +28,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject.ContentGr
 	private ImageLoader mImageLoader;
 
 
-	public SearchVodAdapter(Context context, List<SearchVodDataObject.ContentGroup> items)
+	public SearchVodAdapter(Context context, List<SearchVodDataObject> items)
 	{
 		super(context, 0, items);
 		// TODO Auto-generated constructor stub
@@ -73,9 +74,9 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject.ContentGr
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		SearchVodDataObject.ContentGroup item = getItem(position);
-		holder.poster.setImageResource(R.mipmap.postersample);
-		holder.poster.setImageUrl(item.getImageFileName(), mImageLoader);
+		SearchVodDataObject item = getItem(position);
+		holder.poster.setImageUrl(item.imageFileName, mImageLoader);
+		CMLog.d("ljh","item : "+item.toString());
 		int imgresource = R.mipmap.vod_01;
 		switch (position%8)
 		{
@@ -105,7 +106,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject.ContentGr
 				break;
 		}
 		holder.event.setImageResource(imgresource);
-		holder.programname.setText(item.getTitle());
+		holder.programname.setText(item.title);
 
 		return convertView;
 	}

@@ -2,6 +2,9 @@ package com.stvn.nscreen.util;
 
 import android.text.TextUtils;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,5 +51,17 @@ public class CMUtil {
 
         sdf.applyPattern(toFormat);
         return sdf.format(d);
+    }
+
+    public static void autoMappingJsonToObject(JSONObject json, Object obj) {
+        Field[] fields = obj.getClass().getFields();
+        for (Field field : fields) {
+            if (json.optString(field.getName()) != null) {
+                try {
+                    field.set(obj, json.optString(field.getName()));
+                } catch (Exception e) {
+                }
+            }
+        }
     }
 }

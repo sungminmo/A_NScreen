@@ -56,7 +56,7 @@ public class SearchMainActivity extends CMBaseActivity {
     private TextView mKeywordEmptyView;
 
     private String mVersion = "1";
-    private String mTerminalKey = "9CED3A20FB6A4D7FF35D1AC965F988D2";
+    private String mTerminalKey = "8A5D2E45D3874824FF23EC97F78D358";
     private RequestQueue mRequestQueue;
     private ProgressDialog mProgressDialog;
 
@@ -194,8 +194,8 @@ public class SearchMainActivity extends CMBaseActivity {
     {
         mLockListView = true;
         mKeywordList.clear();
-        mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
-        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/getSearchWord.json?version=1&terminalKey=8A5D2E45D3874824FF23EC97F78D358&includeAdultCategory=0&searchKeyword="+mKeywordView.getText().toString();
+        mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment),false,true);
+        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/getSearchWord.json?version="+mVersion+"&terminalKey="+mTerminalKey+"&includeAdultCategory=0&searchKeyword="+mKeywordView.getText().toString();
         mKeywordView.setEnabled(false);
         final GsonRequest gsonRequest = new GsonRequest(url, KeyWordDataObject.class,null,new Response.Listener<KeyWordDataObject>(){
             @Override
