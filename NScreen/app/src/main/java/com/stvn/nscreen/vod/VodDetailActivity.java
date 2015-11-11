@@ -102,6 +102,7 @@ public class VodDetailActivity extends Activity {
     // activity
     private String assetId; // intent param
     private List<JSONObject> relationVods;
+    private List<JSONObject> series;
     private FourVodPosterPagerAdapter mPagerAdapter;
     private String isSeriesLink; //시리즈인지 연부. true/false
     private String mTitle;
@@ -143,11 +144,12 @@ public class VodDetailActivity extends Activity {
 //            assetId = jo.getString("assetId");
 //            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
 //            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
-//            assetId = "www.hchoice.co.kr|M4132449LFO281926301";
+//              assetId = "www.hchoice.co.kr|M4132449LFO281926301";
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
         relationVods = new ArrayList<JSONObject>();
+        series = new ArrayList<JSONObject>();
         mPagerAdapter = new FourVodPosterPagerAdapter(this);
         mPagerAdapter.setImageLoader(mImageLoader);
         mPagerAdapter.setVodDetailActivity(this);
@@ -522,6 +524,7 @@ public class VodDetailActivity extends Activity {
                     // asset
                     JSONObject asset            = jo.getJSONObject("asset");
                     fileName                    = asset.getString("fileName");
+                    String categoryId           = asset.getString("categoryId");
                     String imageFileName        = asset.getString("imageFileName");
                     String rating               = asset.getString("rating");
                     String reviewRatingCount    = asset.getString("reviewRatingCount");
@@ -532,6 +535,7 @@ public class VodDetailActivity extends Activity {
                     String director             = asset.getString("director");
                     String starring             = asset.getString("starring");
                     String synopsis             = asset.getString("synopsis");
+                    String seriesId             = asset.getString("seriesId");
                     boolean seriesLink          = asset.getBoolean("seriesLink");
                     String promotionSticker     = asset.getString("promotionSticker");
                     String title                = asset.getString("title");
@@ -583,6 +587,12 @@ public class VodDetailActivity extends Activity {
                     if ( seriesLink == true ) {      // 시리즈 보여라
                         isSeriesLink = "YES";
                         mSeriesLinearLayout.setVisibility(View.VISIBLE);
+
+                        String sCategoryId = asset.getString("categoryId");
+                        String sSeriesId = asset.getString("seriesId");
+
+                        requestGetSeriesAssetList(sSeriesId, sCategoryId);
+
                     } else {                         // 시리즈 감춰라.
                         isSeriesLink = "NO";
                         mSeriesLinearLayout.setVisibility(View.GONE);
@@ -963,6 +973,75 @@ public class VodDetailActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void requestGetSeriesAssetList(String seriesId, String categoryId) {
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetSeriesAssetList()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String url = mPref.getWebhasServerUrl() + "/getSeriesAssetList.json?version=1&terminalKey="+terminalKey+"&seriesId="+seriesId+"&categoryId="+categoryId+"&assetProfile=3";
+
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                // mProgressDialog.dismiss();
+                try {
+                    JSONObject jo            = new JSONObject(response);
+                    JSONArray  assetList     = jo.getJSONArray("assetList");
+
+                    for ( int i = 0; i < assetList.length(); i++ ) {
+                        JSONObject asset = (JSONObject) assetList.get(i);
+
+                        series.add(asset);
+
+                        final String buttonAssetId = asset.getString("assetId");
+                        String categoryId          = asset.getString("categoryId");
+                        String seriesCurIndex      = asset.getString("seriesCurIndex");
+                        String seriesId            = asset.getString("seriesId");
+
+                        // Button seriesButton = new Button(mInstance);
+                        Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
+                        seriesButton.setText(seriesCurIndex + "회");
+
+                        if ( assetId.equals(buttonAssetId) ) {
+                            seriesButton.setSelected(true);
+                        }
+
+                        seriesButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mInstance, VodDetailActivity.class);
+                                intent.putExtra("assetId", buttonAssetId);
+                                startActivity(intent);
+                            }
+                        });
+
+                        LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        ll.addView(seriesButton, lp);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
