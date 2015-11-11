@@ -78,7 +78,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
     {
         mLockListView = true;
         mProgressDialog	 = ProgressDialog.show(getActivity(), "", getString(R.string.wait_a_moment));
-        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+mTerminalKey+"&includeAdultCategory=0&searchKeyword="+mKeyword+"&contentGroupProfile=2";
+        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory=0&searchKeyword="+mKeyword+"&contentGroupProfile=2";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
