@@ -123,7 +123,7 @@ public class LeftMenuActivity extends Activity {
         leftmenu_remote_linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String SetTopBoxKind = mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "").toLowerCase();
+                String SetTopBoxKind = mPref.getSettopBoxKind().toLowerCase();
                 if ( mPref.isPairingCompleted() == false ) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                     alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {

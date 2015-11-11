@@ -6,11 +6,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Environment;
-import android.util.Log;
 
-import com.stvn.nscreen.LoadingActivity;
 import com.stvn.nscreen.bean.BookmarkChannelObject;
+import com.stvn.nscreen.bean.BaseCategoryObject;
+import com.stvn.nscreen.bean.MainCategoryObject;
 import com.stvn.nscreen.bean.WatchTvObject;
 import com.stvn.nscreen.bean.WishObject;
 
@@ -18,10 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,16 +52,15 @@ public class JYSharedPreferences {
     public final static String USER_ID      = "USER_ID";
     public final static String USER_PWD     = "USER_PWD";
     public final static String USER_TYPE    = "USER_TYPE";
-    public final static String SERVER_CODE  = "SERVER_CODE";  // 기기등록시에 선택한 서버.
-    public final static String LOGIN_SERVER = "LOGIN_SERVER"; // 로그인 화면에서 선택한 서버.
     public final static String VoVolunteerActivityIsCompletMode = "VoVolunteerActivityIsCompletMode"; // VoVolunteerActivityIsCompletMode : true, false
 
-    public final static String RUMPERS_TERMINAL_KEY = "MjAxMS0wNC0xNl8yMTk0NDY4Nl9Dbk1UZXN0QXBwXyAg";   // 고정키값. 모든 앱이 같은 값을 사용 함.
+
+    public final static String RUMPERS_TERMINAL_KEY  = "MjAxMS0wNC0xNl8yMTk0NDY4Nl9Dbk1UZXN0QXBwXyAg";   // 고정키값. 모든 앱이 같은 값을 사용 함.
     public final static String RUMPERS_SETOPBOX_KIND = "RUMPERS_SETOPBOX_KIND";
 
     // Public TerminalKey = 8A5D2E45D3874824FF23EC97F78D358
     // Private terminalKey = C5E6DBF75F13A2C1D5B2EFDB2BC940
-    public final static String WEBHAS_PUBLIC_TERMINAL_KEY = "8A5D2E45D3874824FF23EC97F78D358";
+    public final static String WEBHAS_PUBLIC_TERMINAL_KEY  = "8A5D2E45D3874824FF23EC97F78D358";
     public final static String WEBHAS_PRIVATE_TERMINAL_KEY = "WEBHAS_PRIVATE_TERMINAL_KEY"; // 폰마다 다른 키값.
     public final static String PURCHASE_PASSWORD = "PURCHASE_PASSWORD"; // 구매비밀번호.
 
@@ -185,6 +179,23 @@ public class JYSharedPreferences {
         } else {
             return true;
         }
+    }
+
+    /**
+     * 페어링완료후나 스플래쉬에서 받은 셋탑박스 종류를 저장한다.
+     * @param SetTopBoxKind
+     */
+    public void setSettopBoxKind(String SetTopBoxKind) {
+        put(RUMPERS_SETOPBOX_KIND, SetTopBoxKind);
+    }
+
+    /**
+     * 셋탑박스 정보를 꺼내간다.
+     * @return
+     */
+    public String getSettopBoxKind() {
+        String rtn = getValue(RUMPERS_SETOPBOX_KIND, "");
+        return rtn;
     }
 
     public boolean isWishAsset(String assetId) {
@@ -369,4 +380,46 @@ public class JYSharedPreferences {
             return false;
         }
     }
+
+    /**
+     * 카테고리(메인)
+     */
+    public void addMainCategory(MainCategoryObject obj1, MainCategoryObject obj2, MainCategoryObject obj3) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        realm.allObjects(MainCategoryObject.class).clear();
+        MainCategoryObject newObj1 = realm.createObject(MainCategoryObject.class); // Create a new object
+        newObj1.setsCategoryId(obj1.getsCategoryId());
+        newObj1.setsCategoryType(obj1.getsCategoryType());
+        newObj1.setsCategoryTitle(obj1.getsCategoryTitle());
+        MainCategoryObject newObj2 = realm.createObject(MainCategoryObject.class); // Create a new object
+        newObj2.setsCategoryId(obj2.getsCategoryId());
+        newObj2.setsCategoryType(obj2.getsCategoryType());
+        newObj2.setsCategoryTitle(obj2.getsCategoryTitle());
+        MainCategoryObject newObj3 = realm.createObject(MainCategoryObject.class); // Create a new object
+        newObj3.setsCategoryId(obj3.getsCategoryId());
+        newObj3.setsCategoryType(obj3.getsCategoryType());
+        newObj3.setsCategoryTitle(obj3.getsCategoryTitle());
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
+
+    public void removeCategory(String channelId) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<BookmarkChannelObject> results = mRealm.where(BookmarkChannelObject.class).equalTo("sChannelId", channelId).findAll();
+        if ( results.size() > 0 ) {
+            BookmarkChannelObject obj = results.get(0);
+            obj.removeFromRealm();
+        } else {
+            //
+        }
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
 }
+

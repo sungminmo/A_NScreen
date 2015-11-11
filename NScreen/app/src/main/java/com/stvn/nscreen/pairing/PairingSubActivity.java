@@ -318,7 +318,7 @@ public class PairingSubActivity extends AppCompatActivity {
                     String resultCode = jo.getString("resultCode");
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
                         String SetTopBoxKind = (String)mNetworkError.get("SetTopBoxKind");
-                        mPref.put(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, SetTopBoxKind);
+                        mPref.setSettopBoxKind(SetTopBoxKind);
                         String terminalKey = jo.getString("terminalKey");
                         mPref.put(JYSharedPreferences.WEBHAS_PRIVATE_TERMINAL_KEY, terminalKey); // 터미널키 저장.
                         mPref.put(JYSharedPreferences.PURCHASE_PASSWORD, mPurchasePassword);     // 구매비번 저장.
