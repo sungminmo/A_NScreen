@@ -420,7 +420,7 @@ public class VodBuyActivity extends Activity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 int resultCode = 0;
-                String jstr = "";
+                final String jstr = "";
                 // {"resultCode":100,"discountCouponPaymentList":[],"transactionId":null,"errorString":"","version":"2","enrolledEventIdList":[]}
                 try {
                     JSONObject jo      = new JSONObject(response);
@@ -429,15 +429,25 @@ public class VodBuyActivity extends Activity {
                     FragmentManager fm = getFragmentManager();
                     fm.popBackStack("VodBuyFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     */
-                    jstr = jo.toString();
+                    // jstr = jo.toString();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent();
-                intent.putExtra("jstr", jstr);
-                setResult(RESULT_OK, intent);
-                finish();
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent();
+                        intent.putExtra("jstr", jstr);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                });
+                alert.setMessage("구매를 완료했습니다.");
+                alert.show();
             }
         }, new Response.ErrorListener() {
             @Override

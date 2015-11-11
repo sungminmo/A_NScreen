@@ -106,9 +106,27 @@ public class LeftMenuActivity extends Activity {
         leftmenu_pairing_button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mInstance, PairingMainActivity.class);
-                startActivity(intent);
-                finish();
+                AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
+                ad.setTitle("셋탑박스 재 연동")
+                        .setMessage("셋탑박스 재 연동 시 기존 연동은 해제되며, 구매비밀번호 재설정이 필요합니다. 계속 진행하시겠습니까?")
+                        .setCancelable(false)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(mInstance, PairingMainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'No'
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = ad.create();
+                alert.show();
             }
         });
 
