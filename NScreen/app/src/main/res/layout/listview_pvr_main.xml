@@ -28,7 +28,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView11"
+        android:id="@+id/pvr_main_pvr"
         android:layout_gravity="left|top"
         android:background="@mipmap/icon_record"
         android:layout_marginTop="19.75dp"

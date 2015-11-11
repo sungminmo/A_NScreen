@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Environment;
+import android.util.Log;
 
+import com.stvn.nscreen.LoadingActivity;
 import com.stvn.nscreen.bean.BookmarkChannelObject;
-import com.stvn.nscreen.bean.BaseCategoryObject;
 import com.stvn.nscreen.bean.MainCategoryObject;
 import com.stvn.nscreen.bean.WatchTvObject;
 import com.stvn.nscreen.bean.WishObject;
@@ -17,6 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,15 +58,16 @@ public class JYSharedPreferences {
     public final static String USER_ID      = "USER_ID";
     public final static String USER_PWD     = "USER_PWD";
     public final static String USER_TYPE    = "USER_TYPE";
+    public final static String SERVER_CODE  = "SERVER_CODE";  // 기기등록시에 선택한 서버.
+    public final static String LOGIN_SERVER = "LOGIN_SERVER"; // 로그인 화면에서 선택한 서버.
     public final static String VoVolunteerActivityIsCompletMode = "VoVolunteerActivityIsCompletMode"; // VoVolunteerActivityIsCompletMode : true, false
-
 
     public final static String RUMPERS_TERMINAL_KEY  = "MjAxMS0wNC0xNl8yMTk0NDY4Nl9Dbk1UZXN0QXBwXyAg";   // 고정키값. 모든 앱이 같은 값을 사용 함.
     public final static String RUMPERS_SETOPBOX_KIND = "RUMPERS_SETOPBOX_KIND";
 
     // Public TerminalKey = 8A5D2E45D3874824FF23EC97F78D358
     // Private terminalKey = C5E6DBF75F13A2C1D5B2EFDB2BC940
-    public final static String WEBHAS_PUBLIC_TERMINAL_KEY  = "8A5D2E45D3874824FF23EC97F78D358";
+    public final static String WEBHAS_PUBLIC_TERMINAL_KEY = "A9D0D3B07231F38878AB0979D7C315A";
     public final static String WEBHAS_PRIVATE_TERMINAL_KEY = "WEBHAS_PRIVATE_TERMINAL_KEY"; // 폰마다 다른 키값.
     public final static String PURCHASE_PASSWORD = "PURCHASE_PASSWORD"; // 구매비밀번호.
 
@@ -381,6 +388,7 @@ public class JYSharedPreferences {
         }
     }
 
+
     /**
      * 카테고리(메인)
      */
@@ -421,5 +429,5 @@ public class JYSharedPreferences {
         realm.commitTransaction();
         // Realm Database **********************************************************************
     }
-}
 
+}

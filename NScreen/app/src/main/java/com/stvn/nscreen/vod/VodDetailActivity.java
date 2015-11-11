@@ -189,16 +189,28 @@ public class VodDetailActivity extends Activity {
         mPrePlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isPrePlay = true;
-                requestContentUri();
+                if ( mPref.isPairingCompleted() == false ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.error_not_paring_compleated6));
+                    alert.show();
+                } else {
+                    isPrePlay = true;
+                    requestContentUri();
+                }
             }
         });
 
         // 미리보기 | 구매하기 | 찜하기
-        mPurchaseButton       = (Button)findViewById(R.id.vod_detail_order_button);
-        mPurchaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                mPurchaseButton       = (Button)findViewById(R.id.vod_detail_order_button);
+                mPurchaseButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                 //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
                 //startActivity(i);
 
@@ -222,15 +234,28 @@ public class VodDetailActivity extends Activity {
                 ft.commit();
                 */
 
-                Intent intent = new Intent(mInstance, VodBuyActivity.class);
-                intent.putExtra("assetId", mInstance.assetId);
-                intent.putExtra("isSeriesLink", isSeriesLink);
-                intent.putExtra("mTitle", mTitle);
-                intent.putExtra("sListPrice", sListPrice);
-                intent.putExtra("sPrice", sPrice);
-                intent.putExtra("productId", productId);
-                intent.putExtra("goodId", goodId);
-                startActivityForResult(intent, 1000);
+                if ( mPref.isPairingCompleted() == false ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
+                    alert.show();
+                } else {
+
+                    Intent intent = new Intent(mInstance, VodBuyActivity.class);
+                    intent.putExtra("assetId", mInstance.assetId);
+                    intent.putExtra("isSeriesLink", isSeriesLink);
+                    intent.putExtra("mTitle", mTitle);
+                    intent.putExtra("sListPrice", sListPrice);
+                    intent.putExtra("sPrice", sPrice);
+                    intent.putExtra("productId", productId);
+                    intent.putExtra("goodId", goodId);
+                    startActivityForResult(intent, 1000);
+                }
             }
         });
 
@@ -261,15 +286,27 @@ public class VodDetailActivity extends Activity {
                 ft.commit();
                 */
 
-                Intent intent = new Intent(mInstance, VodBuyActivity.class);
-                intent.putExtra("assetId", mInstance.assetId);
-                intent.putExtra("isSeriesLink", isSeriesLink);
-                intent.putExtra("mTitle", mTitle);
-                intent.putExtra("sListPrice", sListPrice);
-                intent.putExtra("sPrice", sPrice);
-                intent.putExtra("productId", productId);
-                intent.putExtra("goodId", goodId);
-                startActivityForResult(intent, 1000);
+                if ( mPref.isPairingCompleted() == false ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
+                    alert.show();
+                } else {
+                    Intent intent = new Intent(mInstance, VodBuyActivity.class);
+                    intent.putExtra("assetId", mInstance.assetId);
+                    intent.putExtra("isSeriesLink", isSeriesLink);
+                    intent.putExtra("mTitle", mTitle);
+                    intent.putExtra("sListPrice", sListPrice);
+                    intent.putExtra("sPrice", sPrice);
+                    intent.putExtra("productId", productId);
+                    intent.putExtra("goodId", goodId);
+                    startActivityForResult(intent, 1000);
+                }
             }
         });
 
@@ -278,8 +315,20 @@ public class VodDetailActivity extends Activity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isPrePlay = false;
-                requestContentUri();
+                if ( mPref.isPairingCompleted() == false ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.error_not_paring_compleated5));
+                    alert.show();
+                } else {
+                    isPrePlay = false;
+                    requestContentUri();
+                }
             }
         });
 
@@ -290,13 +339,26 @@ public class VodDetailActivity extends Activity {
             public void onClick(View v) {
                 if ( mPref.isWishAsset(assetId) == false ) {
                     // 찜 안한 VOD
-                    requestAddRemoveWishItem("addWishItem");
-                    Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-                    img.setBounds( 0, 0, 35, 35 );
-                    mJimButton.setCompoundDrawables( null, null, img, null );
-                    mJimButton.setText("찜해제");
+                    if ( mPref.isPairingCompleted() == false ) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_paring_compleated4));
+                        alert.show();
+                    } else {
+                        requestAddRemoveWishItem("addWishItem");
+                        Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                        img.setBounds(0, 0, 35, 35);
+                        mJimButton.setCompoundDrawables(null, null, img, null);
+                        mJimButton.setText("찜해제");
+                    }
                 } else {
                     // 찜 한 VOD
+
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
                     img.setBounds( 0, 0, 35, 35 );
@@ -312,13 +374,36 @@ public class VodDetailActivity extends Activity {
             public void onClick(View v) {
                 if ( mPref.isWishAsset(assetId) == false ) {
                     // 찜 안한 VOD
-                    requestAddRemoveWishItem("addWishItem");
-                    Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-                    img.setBounds( 0, 0, 35, 35 );
-                    mJimButton2.setCompoundDrawables( null, null, img, null );
-                    mJimButton2.setText("찜해제");
+                        if ( mPref.isPairingCompleted() == false ) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            alert.setMessage(getString(R.string.error_not_paring_compleated4));
+                            alert.show();
+                        } else {
+                            requestAddRemoveWishItem("addWishItem");
+                            Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                            img.setBounds(0, 0, 35, 35);
+                            mJimButton2.setCompoundDrawables(null, null, img, null);
+                            mJimButton2.setText("찜해제");
+                        }
                 } else {
                     // 찜 한 VOD
+                    if ( mPref.isPairingCompleted() == false ) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_paring_compleated4));
+                        alert.show();
+                    }
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
                     img.setBounds( 0, 0, 35, 35 );
@@ -467,19 +552,26 @@ public class VodDetailActivity extends Activity {
                     }
                     if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
                         mPlayLinearLayout.setVisibility(View.GONE);
-                        if ("0".equals(previewPeriod)) { // 미리보기 없음.
+                        if ( ! "2".equals(publicationRight) ) {
                             mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
                         } else {
-                            mPurchaseLinearLayout.setVisibility(View.VISIBLE);
+                            if ("0".equals(previewPeriod)) { // 미리보기 없음.
+                                mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                            } else {
+                                mPurchaseLinearLayout.setVisibility(View.VISIBLE);
+                            }
                         }
                     } else {                         // 구매했다. 감쳐라.
+                        mPurchaseLinearLayout2.setVisibility(View.GONE);
                         mPurchaseLinearLayout.setVisibility(View.GONE);
-                        mPlayLinearLayout.setVisibility(View.VISIBLE);
+                        if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
+                            mTvOnlyTextView.setText("["+title+"] 는 (은)");
+                            mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            mPlayLinearLayout.setVisibility(View.VISIBLE);
+                        }
                     }
-                    if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
-                        mTvOnlyTextView.setText("["+title+"] 는 (은)");
-                        mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
-                    }
+
 
                     // 값들 찍어주기. -----------------------------------------------------------------
 

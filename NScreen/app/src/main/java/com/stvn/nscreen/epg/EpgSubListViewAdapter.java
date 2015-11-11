@@ -91,7 +91,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         // menu type count
-        return 6;
+        return 7;
     }
 
     @Override
@@ -125,6 +125,10 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             // case 3: { // 시청예약 / 녹화예약취소
             // case 4: { // 시청예약취소 / 녹화예약
             // case 5: { // 시청예약취소 / 녹화예약취소
+
+            if ( mPref.isPairingCompleted() == false ) {
+                return 6;
+            }
 
             if ( mCurrDateNo != 0 ) { // 오늘이 아니라면...
                 JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
