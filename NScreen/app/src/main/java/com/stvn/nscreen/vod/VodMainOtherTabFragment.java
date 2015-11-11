@@ -21,6 +21,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.SubCategoryObject;
+import com.stvn.nscreen.epg.EpgMainListViewAdapter;
+import com.stvn.nscreen.epg.EpgSubActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,6 +94,10 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
 
     private              FrameLayout            mCategoryBgFramelayout;
     private              ImageButton            mCategoryButton;
+
+    private              VodMainOtherListViewAdapter mCategoryAdapter;
+    private              ListView                    mCategoryListView;
+
 
 
     public VodMainOtherTabFragment() {
@@ -161,11 +168,53 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
             }
         });
 
+        mCategoryAdapter      = new VodMainOtherListViewAdapter(mInstance.getActivity(), null);
+
+        mCategoryListView     = (ListView)view.findViewById(R.id.vod_main_other_category_listview);
+        mCategoryListView.setAdapter(mCategoryAdapter);
+        mCategoryListView.setOnItemClickListener(mItemClickListener);
+
         // 카테고리 요청. 추천.
         requestGetCategoryTree();
 
         return view;
     }
+
+    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(tag, "mItemClickListener() " + position);
+            ListViewDataObject dobj = (ListViewDataObject) mCategoryAdapter.getItem(position);
+
+            try {
+                mCategoryBgFramelayout.setVisibility(View.GONE);
+                JSONObject jo          = new JSONObject(dobj.sJson);
+                String     categoryId        = jo.getString("categoryId");
+                String     adultCategory     = jo.getString("adultCategory");
+                String     categoryName      = jo.getString("categoryName");
+                String     leaf              = jo.getString("leaf");
+                String     parentCategoryId  = jo.getString("parentCategoryId");
+                String     viewerType        = jo.getString("viewerType");
+
+                mCategoryId            = categoryId;
+
+                mAdapter.clear();
+                mAdapter.notifyDataSetChanged();
+
+                mCategoryNameTextView.setText(categoryName);
+                mCurrCategoryObject.setsCategoryId(categoryId);
+                mCurrCategoryObject.setsAdultCategory(adultCategory);
+                mCurrCategoryObject.setsCategoryName(categoryName);
+                mCurrCategoryObject.setsLeaf(leaf);
+                mCurrCategoryObject.setsParentCategoryId(parentCategoryId);
+                mCurrCategoryObject.setsViewerType(viewerType);
+                processRequest();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -267,7 +316,12 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
-
+                for ( int i = 0; i < categorys.size(); i++ ) {
+                    JSONObject category = categorys.get(i);
+                    ListViewDataObject obj = new ListViewDataObject(i, i, category.toString());
+                    mCategoryAdapter.addItem(obj);
+                }
+                mCategoryAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
