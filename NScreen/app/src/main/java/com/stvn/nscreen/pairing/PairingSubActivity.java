@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -54,6 +55,7 @@ public class PairingSubActivity extends AppCompatActivity {
     private EditText mAuthCodeEditText;
     private Button   mCancleButton;
     private Button   mNextButton;
+    private ImageButton backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,16 @@ public class PairingSubActivity extends AppCompatActivity {
         mAuthCodeEditText = (EditText)findViewById(R.id.pairing_sub_authcode_edittext);
         mCancleButton = (Button)findViewById(R.id.pairing_sub_cancle_button);
         mNextButton   = (Button)findViewById(R.id.pairing_sub_next_button);
+        backBtn = (ImageButton)findViewById(R.id.backBtn);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mInstance, PairingMainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         mCancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,22 +100,9 @@ public class PairingSubActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAuthCodeEditText.getText().toString().length() < 6) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setMessage("6자리의 인증번호를 입력해 주십시오.");
-                    alert.show();
-                } else {
                     mCancleButton.setEnabled(false);
                     mNextButton.setEnabled(false);
                     requestClientSetTopBoxRegist();
-                }
-
             }
         });
     }
