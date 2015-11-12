@@ -169,9 +169,9 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         Float  fVerApp    = Float.valueOf(appVer);
         if ( fVerServer > fVerApp ) {
             StringBuilder sb   = new StringBuilder();
-            sb.append("지금 사용하시는 버젼보다, 더 최신버젼의 앱이 있습니다.\n구글마켓에서 최신버젼으로 업데이트 하시길 권장드립니다.").append("\n")
-                    .append("구글마켓의 최신 버젼 : ").append(serverVer).append("\n")
-                    .append("사용중이신 앱의 버젼 : ").append(appVer);
+            sb.append("지금 사용하시는 버전보다 더 최신버전이 존재합니다. 구글 마켓에서 업데이트 하신 뒤 사용하시기 바랍니다.").append("\n")
+                    .append("사용 중인 버전 : ").append(appVer + " ver.\n")
+            .append("최신 버전 : ").append(serverVer).append(" ver.");
             AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
             alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
                 @Override

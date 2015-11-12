@@ -41,6 +41,8 @@ public class LeftMenuActivity extends Activity {
 
     private              ImageButton            imageButton2, leftmenu_whatBtn;
 
+    private              TextView               leftmenu_version_textview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +51,7 @@ public class LeftMenuActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND, WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         setContentView(R.layout.activity_leftmenu);
 
-
-
         // getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
 
         WindowManager.LayoutParams wmlp = getWindow().getAttributes();
         wmlp.gravity = Gravity.LEFT;
@@ -63,8 +61,7 @@ public class LeftMenuActivity extends Activity {
         if (mPref.isLogging()) {
             Log.d(tag, "onCreate()");
         }
-
-
+        String appVer     = mPref.getAppVersionForApp();
 
         leftmenu_tv_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_tv_linearLayout);
         leftmenu_remote_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_remote_linearLayout);
@@ -76,6 +73,9 @@ public class LeftMenuActivity extends Activity {
         leftmenu_pairing_button2 = (Button) findViewById(R.id.leftmenu_pairing_button2);
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
         leftmenu_whatBtn = (ImageButton) findViewById(R.id.leftmenu_whatBtn);
+        leftmenu_version_textview = (TextView) findViewById(R.id.leftmenu_version_textview);
+
+        leftmenu_version_textview.setText("현재 버전 " + appVer);
 
         if ( mPref.isPairingCompleted() == true ) {
             ((TextView)findViewById(R.id.leftmenu_pairing_textview1)).setText("셋탑박스와 연동중입니다.");
