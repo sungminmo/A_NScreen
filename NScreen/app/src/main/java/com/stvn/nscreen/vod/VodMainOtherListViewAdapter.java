@@ -2,6 +2,7 @@ package com.stvn.nscreen.vod;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,9 +83,20 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
 
         try {
             ListViewDataObject dobj                    = (ListViewDataObject)getItem(position);
-            JSONObject         jobj                    = new JSONObject(dobj.sJson);
+            JSONObject         jo                     = new JSONObject(dobj.sJson);
 
-            // {"adultCategory":false,"categoryId":"1144335","categoryName":"인기영화TOP20","description":"","externalId":"","imageFileName":"","leaf":true,"linkInterfaceId":"","linkedBannerIdList":[],"menuType":0,"orientationType":"V","packageDescription":"","packageDisplayPrice":-1,"packageId":"","packageLink":false,"packageProductId":"","packageUIName":"","parentCategoryId":"27282","presentationType":"","seriesId":"","seriesLink":false,"seriesName":"","subCategoryPcgView":"N","subCategoryPresentationType":"T","subCategoryVisible":true,"titleImage":null,"titlePresentationType":"text","viewerType":200,"vodType":0}
+            String  categoryId       = jo.getString("categoryId");
+            String  categoryName     = jo.getString("categoryName");
+            boolean leaf             = jo.getBoolean("leaf");
+            String  parentCategoryId = jo.getString("parentCategoryId");
+            String  viewerType       = jo.getString("viewerType");
+
+//            Log.d("category", position + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
+            // {"adultCategory":false,"categoryId":"1144335","categoryName":"인기영화TOP20","description":"","externalId":"","imageFileName":"",
+            // "leaf":true,"linkInterfaceId":"","linkedBannerIdList":[],"menuType":0,"orientationType":"V","packageDescription":"","packageDisplayPrice":-1,
+            // "packageId":"","packageLink":false,"packageProductId":"","packageUIName":"","parentCategoryId":"27282","presentationType":"",
+            // "seriesId":"","seriesLink":false,"seriesName":"","subCategoryPcgView":"N","subCategoryPresentationType":"T","subCategoryVisible":true,
+            // "titleImage":null,"titlePresentationType":"text","viewerType":200,"vodType":0}
 
 //            String             sProgramAge             = jobj.getString("channelProgramGrade");
 //            String             sChannelInfo            = jobj.getString("channelInfo");
@@ -95,8 +107,25 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
 //
 //            ImageView          bookmarkImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
 
+//            String str = position + ": " + categoryId + "|" + categoryName + "|" + parentCategoryId;
+//            if ( leaf == false ) {
+//                str += " ▼";
+//            }
+
+            ImageView depth1ImageView = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_caterory_list_depth1_imageview);
+            ImageView depth2ImageView = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_caterory_list_depth2_imageview);
             TextView textview = ViewHolder.get(convertView, R.id.vod_main_other_categoty_list_textview);
-            textview.setText(jobj.getString("categoryName"));
+            ImageView imageView1 = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_categoty_list_imageview1);
+            ImageView imageView2 = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_categoty_list_imageview2);
+
+            if ( leaf == true ) {
+                imageView2.setVisibility(View.GONE);
+            } else {
+                imageView2.setVisibility(View.VISIBLE);
+            }
+
+
+            textview.setText(categoryName);
 
         } catch (JSONException e) {
             e.printStackTrace();

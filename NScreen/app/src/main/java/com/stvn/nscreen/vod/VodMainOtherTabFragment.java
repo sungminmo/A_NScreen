@@ -62,8 +62,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,6 +99,12 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
 
     private              VodMainOtherListViewAdapter mCategoryAdapter;
     private              ListView                    mCategoryListView;
+
+    //
+    private              Map<String, String> mCateDepth1;
+    private              Map<String, String> mCateDepth2;
+    private              Map<String, String> mCateDepth3;
+    private              Map<String, String> mCateDepth4;
 
 
 
@@ -175,6 +183,12 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mCategoryListView     = (ListView)view.findViewById(R.id.vod_main_other_category_listview);
         mCategoryListView.setAdapter(mCategoryAdapter);
         mCategoryListView.setOnItemClickListener(mItemClickListener);
+
+
+        mCateDepth1 = new  HashMap<String, String>();
+        mCateDepth2 = new  HashMap<String, String>();
+        mCateDepth3 = new  HashMap<String, String>();
+        mCateDepth4 = new  HashMap<String, String>();
 
         // 카테고리 요청. 추천.
         requestGetCategoryTree();
@@ -275,6 +289,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                     boolean    isGotitCateName = false;
 
                     JSONArray  categoryList = first.getJSONArray("categoryList");
+                    int iLoop1Depth = 0; //
                     for ( int i = 0; i < categoryList.length(); i++ ) {
                         JSONObject category     = (JSONObject)categoryList.get(i);
                         //CATEGORY_ID_MOVIE
@@ -291,7 +306,12 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                         String     parentCategoryId = category.getString("parentCategoryId");
                         int        viewerType       = category.getInt("viewerType");
 
-                        if ( ! mCategoryId.equals(categoryId) && viewerType != 60 ) {
+                        Log.d("category", i + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
+
+
+
+//                        if ( ! mCategoryId.equals(categoryId) && viewerType != 60 ) {
+                        if ( true ) {
                             /**
                              ViewerType = 30, getContentGroupList (보통 리스트)
                              ViewerType = 200, getPopularityChart (인기순위)
@@ -301,7 +321,13 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                             //if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
                             //    categorys.add(category);
                             //}
-                            categorys.add(category);
+                            //if ( mCategoryId.equals(parentCategoryId) ) {
+                            //    categorys.add(iLoop1Depth, category);
+                            //    iLoop1Depth++;
+                            //} else {
+                                categorys.add(category);
+                            //}
+
                             if ( isGotitCateName == false ) {
                                 isGotitCateName = true;
                                 mCategoryNameTextView.setText(categoryName);
@@ -318,12 +344,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
-                for ( int i = 0; i < categorys.size(); i++ ) {
-                    JSONObject category = categorys.get(i);
-                    ListViewDataObject obj = new ListViewDataObject(i, i, category.toString());
-                    mCategoryAdapter.addItem(obj);
-                }
-                mCategoryAdapter.notifyDataSetChanged();
+                list2treee();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -351,6 +372,84 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mRequestQueue.add(request);
     }
 
+    private void list2treee(){
+        //
+        //CATEGORY_ID_MOVIE
+        //private String sCategoryId;
+        //private String sAdultCategory;
+        //private String sCategoryName;
+        //private String sLeaf;
+        //private String sParentCategoryId;
+        //private String sViewerType;
+        try {
+            for ( int i = 0; i < categorys.size(); i++ ) {
+                JSONObject category         = (JSONObject)categorys.get(i);
+                String     categoryId       = category.getString("categoryId");
+                boolean    adultCategory    = category.getBoolean("adultCategory");
+                String     categoryName     = category.getString("categoryName");
+                boolean    leaf             = category.getBoolean("leaf");
+                String     parentCategoryId = category.getString("parentCategoryId");
+                int        viewerType       = category.getInt("viewerType");
+                Log.d("category", i + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
+                if ( mCategoryId.equals(parentCategoryId) ) {
+                    mCateDepth1.put(categoryId, parentCategoryId);
+                }
+            }
+            //
+            for ( int i = 0; i < categorys.size(); i++ ) {
+                JSONObject category         = (JSONObject)categorys.get(i);
+                String     categoryId       = category.getString("categoryId");
+                boolean    adultCategory    = category.getBoolean("adultCategory");
+                String     categoryName     = category.getString("categoryName");
+                boolean    leaf             = category.getBoolean("leaf");
+                String     parentCategoryId = category.getString("parentCategoryId");
+                int        viewerType       = category.getInt("viewerType");
+                Log.d("category", i + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
+                String aaa = mCateDepth1.get(parentCategoryId);
+                if ( aaa != null ) {
+                    mCateDepth2.put(categoryId, parentCategoryId);
+                }
+            }
+            Log.d("category","aaa");
+
+            int i = 0;
+            TreeMap<String,String> tm = new TreeMap<String,String>(mCateDepth1);
+            Iterator<String> iteratorKey = tm.keySet( ).iterator( );   //키값 오름차순 정렬(기본)
+            while ( iteratorKey.hasNext() ) {
+                String key = iteratorKey.next();
+                JSONObject category = getCategoryWithCategoryId(key);
+                ListViewDataObject obj = new ListViewDataObject(i, i, category.toString());
+                mCategoryAdapter.addItem(obj);
+                i++;
+            }
+
+//            int i = 0;
+//            for( String key : mCateDepth1.keySet() ){
+//                JSONObject category = getCategoryWithCategoryId(key);
+//                ListViewDataObject obj = new ListViewDataObject(i, i, category.toString());
+//                mCategoryAdapter.addItem(obj);
+//                i++;
+//            }
+            mCategoryAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JSONObject getCategoryWithCategoryId(String cid) {
+        try {
+            for ( int i = 0; i < categorys.size(); i++ ) {
+                JSONObject category         = (JSONObject)categorys.get(i);
+                String     categoryId       = category.getString("categoryId");
+                if ( cid.equals(categoryId) ) {
+                    return category;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private void processRequest() {
         /**

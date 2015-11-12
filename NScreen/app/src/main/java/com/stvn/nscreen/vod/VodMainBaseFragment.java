@@ -200,7 +200,7 @@ public class VodMainBaseFragment extends Fragment {
 
                 Bundle param = new Bundle();
                 param.putString("tabId", "3"); // tv
-                param.putString("categoryId", Constants.CATEGORY_ID_ANI);
+                param.putString("categoryId", Constants.CATEGORY_ID_TV);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
