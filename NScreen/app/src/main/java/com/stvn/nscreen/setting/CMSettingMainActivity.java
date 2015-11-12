@@ -267,9 +267,17 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                     public void positiveClickEvent(DialogInterface dialog, String text) {
 
                         String savedPassword = CMSettingData.getInstance().getPurchaseAuthPassword(CMSettingMainActivity.this);
-                        if (TextUtils.isEmpty(savedPassword) == false && text.equals(savedPassword)) {
-                            Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
-                            startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+                        if (TextUtils.isEmpty(text)) {
+                            CMAlertUtil.Alert(CMSettingMainActivity.this, "구매인증 비밀번호 입력", "인증번호를 입력하세요.");
+                        } else if (TextUtils.isEmpty(savedPassword)) {
+                            CMAlertUtil.Alert(CMSettingMainActivity.this, "구매인증 비밀번호 입력", "등록된 구매 인증번호가 없습니다.");
+                        } else {
+                            if (text.equals(savedPassword)) {
+                                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
+                                startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+                            } else {
+                                CMAlertUtil.Alert(CMSettingMainActivity.this, "구매인증 비밀번호 입력", "구매인증번호가 일치하지 않습니다.");
+                            }
                         }
                     }
                     @Override
