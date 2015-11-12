@@ -66,6 +66,7 @@ public class SearchMainActivity extends CMBaseActivity {
     private final int GET_KEYWORD_REQ = 0x99;
     private String mKeyword;
     private boolean mListClicked = false;
+    private boolean isFragmentVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +114,9 @@ public class SearchMainActivity extends CMBaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
-                        mKeywordListView.setVisibility(View.GONE);
+                        isFragmentVisible = true;
                         mKeywordHandler.removeMessages(GET_KEYWORD_REQ);
+                        mKeywordListView.setVisibility(View.GONE);
                         hideSoftKeyboard();
                         if (mKeywordView.getText().length() > 0) {
                             mKeyword = mKeywordView.getText().toString();
@@ -169,6 +171,7 @@ public class SearchMainActivity extends CMBaseActivity {
         public void afterTextChanged(Editable s) {
             if(s.length()>0)
             {
+                isFragmentVisible = false;
                 mKeyword = mKeywordView.getText().toString();
                 mKeywordHandler.removeMessages(GET_KEYWORD_REQ);
                 if(mKeywordEmptyView.getVisibility()==View.VISIBLE)
@@ -176,7 +179,7 @@ public class SearchMainActivity extends CMBaseActivity {
                 // 조회로직 추가
                 if(!mListClicked)
                 {
-                    mKeywordHandler.sendEmptyMessageDelayed(GET_KEYWORD_REQ, 800);
+                    mKeywordHandler.sendEmptyMessageDelayed(GET_KEYWORD_REQ, 400);
                     mFragmentlayout.setVisibility(View.GONE);
                 }else
                     mListClicked = false;
@@ -199,6 +202,12 @@ public class SearchMainActivity extends CMBaseActivity {
         final GsonRequest gsonRequest = new GsonRequest(url, KeyWordDataObject.class,null,new Response.Listener<KeyWordDataObject>(){
             @Override
             public void onResponse(KeyWordDataObject response) {
+                if(isFragmentVisible)
+                {
+                    mProgressDialog.dismiss();
+                    isFragmentVisible = false;
+                    return;
+                }
                 mKeywordList.clear();
                 for(String str : response.getSearchWordList())
                 {

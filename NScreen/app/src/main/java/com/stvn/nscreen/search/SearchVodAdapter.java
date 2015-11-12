@@ -16,7 +16,6 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchVodDataObject;
-import com.stvn.nscreen.util.CMLog;
 
 import java.util.List;
 
@@ -76,36 +75,32 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 		}
 		SearchVodDataObject item = getItem(position);
 		holder.poster.setImageUrl(item.imageFileName, mImageLoader);
-		CMLog.d("ljh","item : "+item.toString());
+
+		holder.event.setVisibility(View.VISIBLE);
 		int imgresource = R.mipmap.vod_01;
-		switch (position%8)
-		{
-			case 0:
-				imgresource = R.mipmap.vod_01;
-				break;
-			case 1:
-				imgresource = R.mipmap.vod_02;
-				break;
-			case 2:
-				imgresource = R.mipmap.vod_03;
-				break;
-			case 3:
-				imgresource = R.mipmap.vod_04;
-				break;
-			case 4:
-				imgresource = R.mipmap.vod_05;
-				break;
-			case 5:
-				imgresource = R.mipmap.vod_06;
-				break;
-			case 6:
-				imgresource = R.mipmap.vod_07;
-				break;
-			case 7:
-				imgresource = R.mipmap.vod_08;
-				break;
+		if ("0".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_01;
+		} else if ("11".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_09;
+		} else if ("12".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_07;
+		} else if ("13".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_03;
+		} else if ("14".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_08;
+		} else if ("15".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_04;
+		} else if ("16".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_02;
+		} else if ("17".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_05;
+		} else if ("18".equals(item.promotionSticker)) {
+			imgresource = R.mipmap.vod_06;
+		} else {
+			holder.event.setVisibility(View.INVISIBLE);
 		}
 		holder.event.setImageResource(imgresource);
+
 		holder.programname.setText(item.title);
 
 		return convertView;

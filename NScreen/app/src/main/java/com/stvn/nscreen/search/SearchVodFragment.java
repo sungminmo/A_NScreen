@@ -1,7 +1,9 @@
 package com.stvn.nscreen.search;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.stvn.nscreen.common.SearchVodDataObject;
 import com.stvn.nscreen.common.VolleyHelper;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMUtil;
+import com.stvn.nscreen.vod.VodDetailActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -129,6 +132,14 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        String assetId = mProgramlist.get(position).primaryAssetId;
+        if(!TextUtils.isEmpty(assetId))
+        {
+            Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+            intent.putExtra("assetId", assetId);
+            startActivity(intent);
+        }
 
     }
 
