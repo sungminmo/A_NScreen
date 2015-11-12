@@ -63,6 +63,7 @@ public class JYSharedPreferences {
     public final static String VoVolunteerActivityIsCompletMode = "VoVolunteerActivityIsCompletMode"; // VoVolunteerActivityIsCompletMode : true, false
 
 
+    public final static String I_AM_ADULT   = "I_AM_ADULT";
     public final static String APP_VERSION_FOR_SERVER = "APP_VERSION_FOR_SERVER";
 
     public final static String RUMPERS_TERMINAL_KEY  = "MjAxMS0wNC0xNl8yMTk0NDY4Nl9Dbk1UZXN0QXBwXyAg";   // 고정키값. 모든 앱이 같은 값을 사용 함.
@@ -235,6 +236,21 @@ public class JYSharedPreferences {
     public String getSettopBoxKind() {
         String rtn = getValue(RUMPERS_SETOPBOX_KIND, "");
         return rtn;
+    }
+
+    /**
+     * 성인인증 받으면 호출해야 되는 메소드
+     */
+    public void setIAmAdult() {
+        put(I_AM_ADULT, I_AM_ADULT);
+    }
+
+    public boolean isAdultVerification() {
+        if ( getValue(I_AM_ADULT, "").equals("") ) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public boolean isWishAsset(String assetId) {

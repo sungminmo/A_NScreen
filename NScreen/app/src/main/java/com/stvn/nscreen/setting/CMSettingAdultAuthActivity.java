@@ -69,6 +69,7 @@ public class CMSettingAdultAuthActivity extends CMBaseActivity {
                             strResult = strResult.toLowerCase();
                             if ("y".equalsIgnoreCase(strResult)) {
                                 isSucess = true;
+                                mPref.setIAmAdult(); // 성인인증 받았을때 호출. 성인인증 받았는지 여부는 mPref.isAdultVerification()
                             }
                         }
 
