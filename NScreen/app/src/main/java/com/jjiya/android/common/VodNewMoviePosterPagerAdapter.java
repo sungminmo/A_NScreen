@@ -119,7 +119,18 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title1.setText(jo1.getString("title"));
                 String imageFileName1 = jo1.getString("imageFileName");
                 String promotionSticker1 = jo1.getString("promotionSticker");
-                String publicationRight1 = jo1.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo1.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo1.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo1.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating1 = jo1.getString("rating");
                 niv11.setImageUrl(imageFileName1, mImageLoader);
                 niv11.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +163,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker1, eight_vod_poster_promotionsticker_imageview1);
-                if ( "1".equals(publicationRight1) ) {
+                if ( isMobilePublicationRight == false ) {  // 모바일 판권이 없으니, TV전용 이미지를 보여라.
                     eight_vod_poster_tvonly_imageview1.setVisibility(View.VISIBLE);
                 }
                 if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
@@ -182,7 +193,18 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title2.setText(jo2.getString("title"));
                 String imageFileName2 = jo2.getString("imageFileName");
                 String promotionSticker2 = jo2.getString("promotionSticker");
-                String publicationRight2 = jo2.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo2.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo2.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo2.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating2 = jo2.getString("rating");
                 niv21.setImageUrl(imageFileName2, mImageLoader);
                 niv21.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +237,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker2, eight_vod_poster_promotionsticker_imageview2);
-                if ( "1".equals(publicationRight2) ) {
+                if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview2.setVisibility(View.VISIBLE);
                 }
                 if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
@@ -245,7 +267,18 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title3.setText(jo3.getString("title"));
                 String imageFileName3 = jo3.getString("imageFileName");
                 String promotionSticker3 = jo3.getString("promotionSticker");
-                String publicationRight3 = jo3.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo3.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo3.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo3.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating3 = jo3.getString("rating");
                 niv31.setImageUrl(imageFileName3, mImageLoader);
                 niv31.setOnClickListener(new View.OnClickListener() {
@@ -278,7 +311,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker3, eight_vod_poster_promotionsticker_imageview3);
-                if ( "1".equals(publicationRight3) ) {
+                if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview3.setVisibility(View.VISIBLE);
                 }
                 if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
@@ -308,7 +341,18 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title4.setText(jo4.getString("title"));
                 String imageFileName4 = jo4.getString("imageFileName");
                 String promotionSticker4 = jo4.getString("promotionSticker");
-                String publicationRight4 = jo4.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo4.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo4.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo4.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating4 = jo4.getString("rating");
                 niv41.setImageUrl(imageFileName4, mImageLoader);
                 niv41.setOnClickListener(new View.OnClickListener() {
@@ -341,7 +385,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker4, eight_vod_poster_promotionsticker_imageview4);
-                if ( "1".equals(publicationRight4) ) {
+                if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview4.setVisibility(View.VISIBLE);
                 }
                 if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
@@ -371,7 +415,18 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title5.setText(jo5.getString("title"));
                 String imageFileName5 = jo5.getString("imageFileName");
                 String promotionSticker5 = jo5.getString("promotionSticker");
-                String publicationRight5 = jo5.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo5.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo5.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo5.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating5 = jo5.getString("rating");
                 niv51.setImageUrl(imageFileName5, mImageLoader);
                 niv51.setOnClickListener(new View.OnClickListener() {
@@ -404,7 +459,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker5, eight_vod_poster_promotionsticker_imageview5);
-                if ( "1".equals(publicationRight5) ) {
+                if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview5.setVisibility(View.VISIBLE);
                 }
                 if ( rating5.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
@@ -434,7 +489,18 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title6.setText(jo6.getString("title"));
                 String imageFileName6 = jo6.getString("imageFileName");
                 String promotionSticker6 = jo6.getString("promotionSticker");
-                String publicationRight6 = jo6.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo6.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo6.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo6.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating6 = jo6.getString("rating");
                 niv61.setImageUrl(imageFileName6, mImageLoader);
                 niv61.setOnClickListener(new View.OnClickListener() {
@@ -467,7 +533,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker6, eight_vod_poster_promotionsticker_imageview6);
-                if ( "1".equals(publicationRight6) ) {
+                if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview6.setVisibility(View.VISIBLE);
                 }
                 if ( rating6.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
@@ -497,13 +563,24 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title7.setText(jo7.getString("title"));
                 String imageFileName7 = jo7.getString("imageFileName");
                 String promotionSticker7 = jo7.getString("promotionSticker");
-                String publicationRight7 = jo7.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo7.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo7.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo7.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating7 = jo7.getString("rating");
                 niv71.setImageUrl(imageFileName7, mImageLoader);
                 niv71.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ( rating7.startsWith("19") && mPref.isAdultVerification() == false ) {
+                        if (rating7.startsWith("19") && mPref.isAdultVerification() == false) {
                             AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
                             ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
@@ -530,7 +607,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker7, eight_vod_poster_promotionsticker_imageview7);
-                if ( "1".equals(publicationRight7) ) {
+                if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview7.setVisibility(View.VISIBLE);
                 }
                 if ( rating7.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
@@ -560,7 +637,18 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 title8.setText(jo8.getString("title"));
                 String imageFileName8 = jo8.getString("imageFileName");
                 String promotionSticker8 = jo8.getString("promotionSticker");
-                String publicationRight8 = jo8.getString("mobilePublicationRight");
+
+                boolean isMobilePublicationRight = false;
+                String easyMobilePublicationRight = "";
+                if ( jo8.isNull("mobilePublicationRight") ) {
+                    easyMobilePublicationRight = jo8.getString("publicationRight");
+                    if ( "2".equals(easyMobilePublicationRight) ) {  // 모바일 판권 있다.
+                        isMobilePublicationRight = true;
+                    }
+                } else {
+                    isMobilePublicationRight = jo8.getBoolean("mobilePublicationRight");
+                }
+
                 final String rating8 = jo8.getString("rating");
                 niv81.setImageUrl(imageFileName8, mImageLoader);
                 niv81.setOnClickListener(new View.OnClickListener() {
@@ -593,7 +681,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 });
 
                 setPromotionSticker(promotionSticker8, eight_vod_poster_promotionsticker_imageview8);
-                if ( "1".equals(publicationRight8) ) {
+                if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview8.setVisibility(View.VISIBLE);
                 }
                 if ( rating8.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
