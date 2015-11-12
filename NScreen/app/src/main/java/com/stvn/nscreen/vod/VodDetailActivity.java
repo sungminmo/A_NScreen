@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -358,33 +359,19 @@ public class VodDetailActivity extends Activity {
                         img.setBounds(0, 0, 35, 35);
                         mJimButton.setCompoundDrawables(null, null, img, null);
                         mJimButton.setText("찜해제");
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alert.setMessage("찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.");
-                        alert.show();
+
+                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     // 찜 한 VOD
 
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
-                    img.setBounds( 0, 0, 35, 35 );
-                    mJimButton.setCompoundDrawables( null, null, img, null );
+                    img.setBounds(0, 0, 35, 35);
+                    mJimButton.setCompoundDrawables(null, null, img, null);
                     mJimButton.setText("찜하기");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setMessage("찜 하기가 해제 되었습니다.");
-                    alert.show();
+
+                    Toast.makeText(VodDetailActivity.this, "찜 하기가 해제 되었습니다.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -411,15 +398,8 @@ public class VodDetailActivity extends Activity {
                             img.setBounds(0, 0, 35, 35);
                             mJimButton2.setCompoundDrawables(null, null, img, null);
                             mJimButton2.setText("찜해제");
-                            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            alert.setMessage("찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.");
-                            alert.show();
+
+                            Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
                         }
                 } else {
                     // 찜 한 VOD
@@ -439,15 +419,8 @@ public class VodDetailActivity extends Activity {
                     img.setBounds( 0, 0, 35, 35 );
                     mJimButton2.setCompoundDrawables(null, null, img, null);
                     mJimButton2.setText("찜하기");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setMessage("찜 하기가 해제 되었습니다.");
-                    alert.show();
+                    
+                    Toast.makeText(VodDetailActivity.this, "찜 하기가 해제 되었습니다.", Toast.LENGTH_LONG).show();
                 }
             }
         });
