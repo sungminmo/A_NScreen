@@ -34,6 +34,7 @@ import static com.jjiya.android.common.UiUtil.setPromotionSticker;
 public class EightVodPosterPagerAdapter extends PagerAdapter {
 
     private LayoutInflater   mLayoutInflater;
+    private JYSharedPreferences mPref;
 
     private ImageLoader      mImageLoader;
     private List<JSONObject> mVods;
@@ -44,6 +45,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
         super();
         mLayoutInflater = LayoutInflater.from(c);
         mVods           = new ArrayList<JSONObject>();
+        mPref = new JYSharedPreferences(c);
     }
 
     public void setFragment(Fragment f) {
@@ -132,7 +134,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight1) ) {
                     eight_vod_poster_tvonly_imageview1.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating1) ) {
+                if ( rating1.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview1.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -176,7 +178,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight2) ) {
                     eight_vod_poster_tvonly_imageview2.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating2) ) {
+                if ( rating2.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview2.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -220,7 +222,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight3) ) {
                     eight_vod_poster_tvonly_imageview3.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating3) ) {
+                if ( rating3.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview3.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -264,7 +266,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight4) ) {
                     eight_vod_poster_tvonly_imageview4.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating4) ) {
+                if ( rating4.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview4.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -308,7 +310,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight5) ) {
                     eight_vod_poster_tvonly_imageview5.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating5) ) {
+                if ( rating5.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview5.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -352,7 +354,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight6) ) {
                     eight_vod_poster_tvonly_imageview6.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating6) ) {
+                if ( rating6.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview6.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -396,7 +398,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight7) ) {
                     eight_vod_poster_tvonly_imageview7.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating7) ) {
+                if ( rating7.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview7.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -440,7 +442,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight8) ) {
                     eight_vod_poster_tvonly_imageview8.setVisibility(View.VISIBLE);
                 }
-                if ( "19".equals(rating8) ) {
+                if ( rating8.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview8.setVisibility(View.VISIBLE);
                 }
             } else {

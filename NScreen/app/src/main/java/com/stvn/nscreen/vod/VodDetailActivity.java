@@ -612,7 +612,7 @@ public class VodDetailActivity extends Activity {
                         mPurchaseLinearLayout2.setVisibility(View.GONE);
                         mPurchaseLinearLayout.setVisibility(View.GONE);
                         if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
-                            mTvOnlyTextView.setText("["+title+"] 는 (은)");
+                            mTvOnlyTextView.setText("["+title+"] 은 (는)");
                             mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
                         } else {
                             mPlayLinearLayout.setVisibility(View.VISIBLE);
