@@ -27,4 +27,8 @@ public class Constants {
     public static final String CATEGORY_ID_ANI   = "27281";
     public static final String CATEGORY_ID_TV    = "27279";
     public static final String CATEGORY_ID_ADULT = "20912";
+//    public static final String CATEGORY_ID_MOVIE = "1579721"; // 11/12일 전달받은 모바일전용카테고리
+//    public static final String CATEGORY_ID_ANI   = "1579722"; // 11/12일 전달받은 모바일전용카테고리
+//    public static final String CATEGORY_ID_TV    = "1579723"; // 11/12일 전달받은 모바일전용카테고리
+//    public static final String CATEGORY_ID_ADULT = "1579724"; // 11/12일 전달받은 모바일전용카테고리
 }

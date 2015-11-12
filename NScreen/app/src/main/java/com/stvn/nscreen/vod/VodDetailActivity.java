@@ -144,12 +144,14 @@ public class VodDetailActivity extends Activity {
 
         //sJson   = getIntent().getExtras().getString("sJson");
         assetId   = getIntent().getExtras().getString("assetId");
+        // (HD)막돼먹은 영애씨 시즌14 02회(08/11
+        // assetId = "www.hchoice.co.kr|M4132449LFO281926301";
 //        try {
 //            JSONObject jo = new JSONObject(sJson);
 //            assetId = jo.getString("assetId");
 //            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
 //            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
-              assetId = "www.hchoice.co.kr|M4132449LFO281926301";
+              // assetId = "www.hchoice.co.kr|M4132449LFO281926301";
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
@@ -967,7 +969,7 @@ public class VodDetailActivity extends Activity {
     }
 
     private void requestGetSeriesAssetList(String seriesId, String categoryId) {
-        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetSeriesAssetList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String url = mPref.getWebhasServerUrl() + "/getSeriesAssetList.json?version=1&terminalKey="+terminalKey+"&seriesId="+seriesId+"&categoryId="+categoryId+"&assetProfile=3";
@@ -975,7 +977,7 @@ public class VodDetailActivity extends Activity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
                 try {
                     JSONObject jo            = new JSONObject(response);
                     JSONArray  assetList     = jo.getJSONArray("assetList");
@@ -993,6 +995,10 @@ public class VodDetailActivity extends Activity {
                         String seriesId            = asset.getString("seriesId");
 
                         // Button seriesButton = new Button(mInstance);
+                        // android:layout_width="41.25dp"
+                        // android:layout_height="27.75dp"
+                        // android:layout_marginLeft="15.5dp"
+
                         Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
                         seriesButton.setText(seriesCurIndex + "회");
 
@@ -1010,7 +1016,7 @@ public class VodDetailActivity extends Activity {
                         });
 
                         LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         ll.addView(seriesButton, lp);
 
                         if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
@@ -1037,7 +1043,7 @@ public class VodDetailActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
