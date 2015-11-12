@@ -1,6 +1,7 @@
 package com.jjiya.android.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -8,6 +9,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.vod.VodDetailActivity;
 import com.stvn.nscreen.vod.VodDetailFragment;
 
@@ -33,6 +36,7 @@ import static com.jjiya.android.common.UiUtil.setPromotionSticker;
 public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
 
     private LayoutInflater   mLayoutInflater;
+    private JYSharedPreferences mPref;
 
     private ImageLoader      mImageLoader;
     private List<JSONObject> mVods;
@@ -43,6 +47,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
         super();
         mLayoutInflater = LayoutInflater.from(c);
         mVods           = new ArrayList<JSONObject>();
+        mPref           = new JYSharedPreferences(c);
     }
 
     public void setFragment(Fragment f) {
@@ -115,15 +120,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName1 = jo1.getString("imageFileName");
                 String promotionSticker1 = jo1.getString("promotionSticker");
                 String publicationRight1 = jo1.getString("mobilePublicationRight");
-                String rating1 = jo1.getString("rating");
+                final String rating1 = jo1.getString("rating");
                 niv11.setImageUrl(imageFileName1, mImageLoader);
                 niv11.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId1);
-                        intent.putExtra("jstr", jo1.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId1);
+                            intent.putExtra("jstr", jo1.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -131,7 +155,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight1) ) {
                     eight_vod_poster_tvonly_imageview1.setVisibility(View.VISIBLE);
                 }
-                if ( rating1.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview1.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -159,15 +183,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName2 = jo2.getString("imageFileName");
                 String promotionSticker2 = jo2.getString("promotionSticker");
                 String publicationRight2 = jo2.getString("mobilePublicationRight");
-                String rating2 = jo2.getString("rating");
+                final String rating2 = jo2.getString("rating");
                 niv21.setImageUrl(imageFileName2, mImageLoader);
                 niv21.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId2);
-                        intent.putExtra("jstr", jo2.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId2);
+                            intent.putExtra("jstr", jo2.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -175,7 +218,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight2) ) {
                     eight_vod_poster_tvonly_imageview2.setVisibility(View.VISIBLE);
                 }
-                if ( rating2.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview2.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -203,15 +246,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName3 = jo3.getString("imageFileName");
                 String promotionSticker3 = jo3.getString("promotionSticker");
                 String publicationRight3 = jo3.getString("mobilePublicationRight");
-                String rating3 = jo3.getString("rating");
+                final String rating3 = jo3.getString("rating");
                 niv31.setImageUrl(imageFileName3, mImageLoader);
                 niv31.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId3);
-                        intent.putExtra("jstr", jo3.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId3);
+                            intent.putExtra("jstr", jo3.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -219,7 +281,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight3) ) {
                     eight_vod_poster_tvonly_imageview3.setVisibility(View.VISIBLE);
                 }
-                if ( rating3.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview3.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -247,15 +309,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName4 = jo4.getString("imageFileName");
                 String promotionSticker4 = jo4.getString("promotionSticker");
                 String publicationRight4 = jo4.getString("mobilePublicationRight");
-                String rating4 = jo4.getString("rating");
+                final String rating4 = jo4.getString("rating");
                 niv41.setImageUrl(imageFileName4, mImageLoader);
                 niv41.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId4);
-                        intent.putExtra("jstr", jo4.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId4);
+                            intent.putExtra("jstr", jo4.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -263,7 +344,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight4) ) {
                     eight_vod_poster_tvonly_imageview4.setVisibility(View.VISIBLE);
                 }
-                if ( rating4.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview4.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -291,15 +372,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName5 = jo5.getString("imageFileName");
                 String promotionSticker5 = jo5.getString("promotionSticker");
                 String publicationRight5 = jo5.getString("mobilePublicationRight");
-                String rating5 = jo5.getString("rating");
+                final String rating5 = jo5.getString("rating");
                 niv51.setImageUrl(imageFileName5, mImageLoader);
                 niv51.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId5);
-                        intent.putExtra("jstr", jo5.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating5.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId5);
+                            intent.putExtra("jstr", jo5.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -307,7 +407,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight5) ) {
                     eight_vod_poster_tvonly_imageview5.setVisibility(View.VISIBLE);
                 }
-                if ( rating5.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating5.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview5.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -335,15 +435,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName6 = jo6.getString("imageFileName");
                 String promotionSticker6 = jo6.getString("promotionSticker");
                 String publicationRight6 = jo6.getString("mobilePublicationRight");
-                String rating6 = jo6.getString("rating");
+                final String rating6 = jo6.getString("rating");
                 niv61.setImageUrl(imageFileName6, mImageLoader);
                 niv61.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId6);
-                        intent.putExtra("jstr", jo6.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating6.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId6);
+                            intent.putExtra("jstr", jo6.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -351,7 +470,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight6) ) {
                     eight_vod_poster_tvonly_imageview6.setVisibility(View.VISIBLE);
                 }
-                if ( rating6.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating6.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview6.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -379,15 +498,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName7 = jo7.getString("imageFileName");
                 String promotionSticker7 = jo7.getString("promotionSticker");
                 String publicationRight7 = jo7.getString("mobilePublicationRight");
-                String rating7 = jo7.getString("rating");
+                final String rating7 = jo7.getString("rating");
                 niv71.setImageUrl(imageFileName7, mImageLoader);
                 niv71.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId7);
-                        intent.putExtra("jstr", jo7.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating7.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId7);
+                            intent.putExtra("jstr", jo7.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -395,7 +533,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight7) ) {
                     eight_vod_poster_tvonly_imageview7.setVisibility(View.VISIBLE);
                 }
-                if ( rating7.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating7.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview7.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -423,15 +561,34 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 String imageFileName8 = jo8.getString("imageFileName");
                 String promotionSticker8 = jo8.getString("promotionSticker");
                 String publicationRight8 = jo8.getString("mobilePublicationRight");
-                String rating8 = jo8.getString("rating");
+                final String rating8 = jo8.getString("rating");
                 niv81.setImageUrl(imageFileName8, mImageLoader);
                 niv81.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId8);
-                        intent.putExtra("jstr", jo8.toString());
-                        mFragment.getActivity().startActivity(intent);
+                        if ( rating8.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
+                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
+                                    mFragment.getActivity().startActivity(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {// 'No'
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = ad.create();
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId8);
+                            intent.putExtra("jstr", jo8.toString());
+                            mFragment.getActivity().startActivity(intent);
+                        }
                     }
                 });
 
@@ -439,7 +596,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 if ( "1".equals(publicationRight8) ) {
                     eight_vod_poster_tvonly_imageview8.setVisibility(View.VISIBLE);
                 }
-                if ( rating8.startsWith("19") ) {   //if ( "19".equals(rating2) ) {
+                if ( rating8.startsWith("19") && mPref.isAdultVerification() == false ) {   //if ( "19".equals(rating2) ) {
                     eight_vod_poster_19_imageview8.setVisibility(View.VISIBLE);
                 }
             } else {

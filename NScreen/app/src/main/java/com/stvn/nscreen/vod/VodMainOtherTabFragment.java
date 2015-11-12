@@ -110,6 +110,8 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vod_main_order_tab, container, false);
 
+        setMyContext(this.getActivity());
+
         Bundle param  = getArguments();
         String tabId  = param.getString("tabId");
         int    iTabId = Integer.valueOf(tabId);

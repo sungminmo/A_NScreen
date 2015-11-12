@@ -83,6 +83,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     public VodMainFirstTabFragment() {
         // Required empty public constructor
+
     }
 
 
@@ -91,6 +92,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vod_main_first_tab, container, false);
 
+        setMyContext(this.getActivity());
 
         mInstance     = this;
         mPref         = new JYSharedPreferences(this.getActivity());

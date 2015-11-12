@@ -2,10 +2,13 @@ package com.stvn.nscreen.vod;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +16,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jjiya.android.common.Constants;
+import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.leftmenu.LeftMenuActivity;
 import com.stvn.nscreen.search.SearchMainActivity;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
+import com.widevine.sampleplayer.SettingsActivity;
 
 import org.json.JSONObject;
 
@@ -26,6 +32,10 @@ import java.util.List;
  */
 
 public class VodMainBaseFragment extends Fragment {
+
+    //private static VodMainBaseFragment mInstance;
+    private static Context             mContext;
+    private        JYSharedPreferences mPref;
 
     //
     public List<JSONObject> categorys;
@@ -41,10 +51,18 @@ public class VodMainBaseFragment extends Fragment {
         iMyTabNumber = 0;
     }
 
+    public void setMyContext(Context c){
+        this.mContext = c;
+        mPref = new JYSharedPreferences(c);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vod_main_base, container, false);
+
+        //mInstance = this;
+        //mPref = new JYSharedPreferences(mInstance.getActivity());
 
         return view;
     }
@@ -195,32 +213,53 @@ public class VodMainBaseFragment extends Fragment {
         textView5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textView1.setTypeface(null, Typeface.NORMAL);
-                textView2.setTypeface(null, Typeface.NORMAL);
-                textView3.setTypeface(null, Typeface.NORMAL);
-                textView4.setTypeface(null, Typeface.NORMAL);
-                textView5.setTypeface(null, Typeface.BOLD);
-                textView1.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
-                textView2.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
-                textView3.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
-                textView4.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
-                textView5.setTextColor(getResources().getColor(R.color.white));
-                lineview1.setBackgroundColor(getResources().getColor(R.color.transparent));
-                lineview2.setBackgroundColor(getResources().getColor(R.color.transparent));
-                lineview3.setBackgroundColor(getResources().getColor(R.color.transparent));
-                lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
-                lineview5.setBackgroundColor(getResources().getColor(R.color.white));
 
-                Bundle param = new Bundle();
-                param.putString("tabId", "4"); // adult
-                param.putString("categoryId", Constants.CATEGORY_ID_ADULT);
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
-                otherTabFragment.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, otherTabFragment);
-                ft.addToBackStack("VodMainOtherTabFragment");
-                ft.commit();
+                if (mPref.isAdultVerification() == false) {
+                    AlertDialog.Builder ad = new AlertDialog.Builder(mContext);
+                    ad.setTitle("알림").setMessage(getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent intent = new Intent(mContext, CMSettingMainActivity.class);
+                            startActivity(intent);
+                        }
+                    }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {// 'No'
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alert = ad.create();
+                    alert.show();
+                } else {
+
+                    textView1.setTypeface(null, Typeface.NORMAL);
+                    textView2.setTypeface(null, Typeface.NORMAL);
+                    textView3.setTypeface(null, Typeface.NORMAL);
+                    textView4.setTypeface(null, Typeface.NORMAL);
+                    textView5.setTypeface(null, Typeface.BOLD);
+                    textView1.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                    textView2.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                    textView3.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                    textView4.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                    textView5.setTextColor(getResources().getColor(R.color.white));
+                    lineview1.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    lineview2.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    lineview3.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    lineview5.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    Bundle param = new Bundle();
+                    param.putString("tabId", "4"); // adult
+                    param.putString("categoryId", Constants.CATEGORY_ID_ADULT);
+                    FragmentManager fm = getFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
+                    otherTabFragment.setArguments(param);
+                    ft.replace(R.id.fragment_placeholder, otherTabFragment);
+                    ft.addToBackStack("VodMainOtherTabFragment");
+                    ft.commit();
+                }
             }
         });
 

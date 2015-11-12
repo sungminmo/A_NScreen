@@ -1,7 +1,9 @@
 package com.stvn.nscreen.vod;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,12 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.ViewHolder;
 import com.jjiya.android.common.VolleySingleton;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +36,7 @@ public class VodMainGridViewAdapter extends BaseAdapter {
     private static final String                        tag              = VodMainGridViewAdapter.class.getSimpleName();
     private              Context                       mContext         = null;
     private              View.OnClickListener          mOnClickListener = null;
+    private              JYSharedPreferences           mPref;
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
     private              ImageLoader                   mImageLoader;
@@ -42,6 +47,7 @@ public class VodMainGridViewAdapter extends BaseAdapter {
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
         this.mImageLoader     = VolleySingleton.getInstance().getImageLoader();
+        mPref                 = new JYSharedPreferences(c);
     }
 
     @Override
@@ -67,7 +73,7 @@ public class VodMainGridViewAdapter extends BaseAdapter {
 
         try {
             ListViewDataObject obj        = (ListViewDataObject)getItem(position);
-            JSONObject         jo         = new JSONObject(obj.sJson);
+            final JSONObject         jo         = new JSONObject(obj.sJson);
 
             NetworkImageView vodImageView = ViewHolder.get(convertView, R.id.volleyImageView);
             TextView titleTextView        = ViewHolder.get(convertView, R.id.vod_main_textview_title);
@@ -97,13 +103,13 @@ public class VodMainGridViewAdapter extends BaseAdapter {
 
             titleTextView.setText(jo.getString("title"));
             String promotionSticker = jo.getString("promotionSticker");
-            String rating = jo.getString("rating");
+            final String rating = jo.getString("rating");
 
             setPromotionSticker(promotionSticker, gridview_vod_main_promotionsticker_imageview);
             if ( "1".equals(publicationRight1) ) {
                 gridview_vod_main_tvonly_imageview.setVisibility(View.VISIBLE);
             }
-            if ( "19".equals(rating) ) {
+            if ( rating.startsWith("19") && mPref.isAdultVerification() == false ) {
                 gridview_vod_main_19_imageview.setVisibility(View.VISIBLE);
             }
             String assetId = null;
@@ -116,9 +122,29 @@ public class VodMainGridViewAdapter extends BaseAdapter {
             vodImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, VodDetailActivity.class);
-                    intent.putExtra("assetId", assetId1);
-                    mContext.startActivity(intent);
+                    if ( rating.startsWith("19") && mPref.isAdultVerification() == false ) {
+                        AlertDialog.Builder ad = new AlertDialog.Builder(mContext);
+                        ad.setTitle("알림").setMessage(mContext.getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(mContext, CMSettingMainActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {// 'No'
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog alert = ad.create();
+                        alert.show();
+                    } else {
+                        Intent intent = new Intent(mContext, VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId1);
+                        intent.putExtra("jstr", jo.toString());
+                        mContext.startActivity(intent);
+                    }
                 }
             });
 
