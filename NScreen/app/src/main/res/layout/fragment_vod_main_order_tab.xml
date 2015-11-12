@@ -73,7 +73,8 @@
                         android:layout_marginLeft="6dp"
                         android:layout_marginRight="6dp"
                         android:background="@color/white"
-                        android:id="@+id/vod_main_other_tabbar_linearlayout">
+                        android:id="@+id/vod_main_other_tabbar_linearlayout"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="0dp"

@@ -37,8 +37,6 @@ public class VodMainBaseFragment extends Fragment {
     private static Context             mContext;
     private        JYSharedPreferences mPref;
 
-    //
-    public List<JSONObject> categorys;
 
     // UI
     private int iMyTabNumber;

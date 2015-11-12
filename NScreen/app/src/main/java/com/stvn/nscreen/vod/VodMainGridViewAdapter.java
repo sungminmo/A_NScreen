@@ -106,7 +106,7 @@ public class VodMainGridViewAdapter extends BaseAdapter {
             final String rating = jo.getString("rating");
 
             setPromotionSticker(promotionSticker, gridview_vod_main_promotionsticker_imageview);
-            if ( "1".equals(publicationRight1) ) {
+            if ( "1".equals(publicationRight1) || "false".equals(publicationRight1) ) {
                 gridview_vod_main_tvonly_imageview.setVisibility(View.VISIBLE);
             }
             if ( rating.startsWith("19") && mPref.isAdultVerification() == false ) {

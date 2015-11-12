@@ -143,7 +143,8 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
 
         // 카테고리 요청. 추천.
-        requestGetCategoryTree();
+        //requestGetCategoryTree();
+        requestGetServiceBannerList(); // 배너 요청
 
 
         ((LinearLayout)view.findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {
@@ -160,16 +161,16 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // 카테고리 요청.
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
-    private void requestGetCategoryTree() {
-
-        /**
-         * 버젼 체크해서 얼럿 띄우자.
-         */
-        String serverVer  = mPref.getAppVersionForServer();
-        String appVer     = mPref.getAppVersionForApp();
-        Float  fVerServer = Float.valueOf(serverVer);
-        Float  fVerApp    = Float.valueOf(appVer);
-        if ( fVerServer > fVerApp ) {
+//    private void requestGetCategoryTree() {
+//
+//        /**
+//         * 버젼 체크해서 얼럿 띄우자.
+//         */
+//        String serverVer  = mPref.getAppVersionForServer();
+//        String appVer     = mPref.getAppVersionForApp();
+//        Float  fVerServer = Float.valueOf(serverVer);
+//        Float  fVerApp    = Float.valueOf(appVer);
+//        if ( fVerServer > fVerApp ) {
 //            StringBuilder sb   = new StringBuilder();
 //            sb.append("지금 사용하시는 버전보다 더 최신버전이 존재합니다. 구글 마켓에서 업데이트 하신 뒤 사용하시기 바랍니다.").append("\n")
 //                    .append("사용 중인 버전 : ").append(appVer + " ver.\n")
@@ -183,68 +184,68 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 //            });
 //            alert.setMessage(sb.toString());
 //            alert.show();
-        }
-
-
-        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
-        //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
-        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713230&depth=3&traverseType=DFS";
-        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject first       = new JSONObject(response);
-                    int        resultCode  = first.getInt("resultCode");
-                    String     errorString = first.getString("errorString");
-
-                    categorys              = new ArrayList<JSONObject>();
-                    JSONArray  categoryList = first.getJSONArray("categoryList");
-                    for ( int i = 0; i < categoryList.length(); i++ ) {
-                        JSONObject category     = (JSONObject)categoryList.get(i);
-                        int        viewerType   = category.getInt("viewerType");
-                        String     categoryId   = category.getString("categoryId");
-                        String     categoryName = category.getString("categoryName");
-
-                        /**
-                         ViewerType = 30, getContentGroupList (보통 리스트)
-                         ViewerType = 200, getPopularityChart (인기순위)
-                         ViewerType = 41, ㅎetBundleProductList (묶음)
-                         ViewerType = 310, recommendContentGroupByAssetId (연관)
-                         */
-                        if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
-                            categorys.add(category);
-                        }
-                    }
-                } catch ( JSONException e ) {
-                    e.printStackTrace();
-                }
-                requestGetServiceBannerList(); // 배너 요청
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
-                if (error instanceof TimeoutError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
-                } else if (error instanceof NoConnectionError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
-                } else if (error instanceof ServerError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
-                } else if (error instanceof NetworkError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
-                }
-                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
-                return params;
-            }
-        };
-        mRequestQueue.add(request);
-    }
+//        }
+//
+//
+//        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
+//        //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
+//        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713230&depth=3&traverseType=DFS";
+//        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject first       = new JSONObject(response);
+//                    int        resultCode  = first.getInt("resultCode");
+//                    String     errorString = first.getString("errorString");
+//
+//                    categorys              = new ArrayList<JSONObject>();
+//                    JSONArray  categoryList = first.getJSONArray("categoryList");
+//                    for ( int i = 0; i < categoryList.length(); i++ ) {
+//                        JSONObject category     = (JSONObject)categoryList.get(i);
+//                        int        viewerType   = category.getInt("viewerType");
+//                        String     categoryId   = category.getString("categoryId");
+//                        String     categoryName = category.getString("categoryName");
+//
+//                        /**
+//                         ViewerType = 30, getContentGroupList (보통 리스트)
+//                         ViewerType = 200, getPopularityChart (인기순위)
+//                         ViewerType = 41, ㅎetBundleProductList (묶음)
+//                         ViewerType = 310, recommendContentGroupByAssetId (연관)
+//                         */
+//                        if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
+//                            categorys.add(category);
+//                        }
+//                    }
+//                } catch ( JSONException e ) {
+//                    e.printStackTrace();
+//                }
+//                requestGetServiceBannerList(); // 배너 요청
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                mProgressDialog.dismiss();
+//                if (error instanceof TimeoutError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+//                } else if (error instanceof NoConnectionError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+//                } else if (error instanceof ServerError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+//                } else if (error instanceof NetworkError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+//                }
+//                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+//            }
+//        }) {
+//            @Override
+//            protected Map<String,String> getParams(){
+//                Map<String,String> params = new HashMap<String, String>();
+//                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+//                return params;
+//            }
+//        };
+//        mRequestQueue.add(request);
+//    }
 
 
     // 배너 요청
@@ -604,7 +605,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
+                //mProgressDialog.dismiss();
                 try {
                     JSONObject first            = new JSONObject(response);
                     JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
@@ -620,7 +621,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                //mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
