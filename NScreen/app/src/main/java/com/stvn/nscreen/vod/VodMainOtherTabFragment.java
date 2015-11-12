@@ -196,41 +196,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         return view;
     }
 
-    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.d(tag, "mItemClickListener() " + position);
-            ListViewDataObject dobj = (ListViewDataObject) mCategoryAdapter.getItem(position);
 
-            try {
-                mCategoryBgFramelayout.setVisibility(View.GONE);
-                JSONObject jo          = new JSONObject(dobj.sJson);
-                String     categoryId        = jo.getString("categoryId");
-                String     adultCategory     = jo.getString("adultCategory");
-                String     categoryName      = jo.getString("categoryName");
-                String     leaf              = jo.getString("leaf");
-                String     parentCategoryId  = jo.getString("parentCategoryId");
-                String     viewerType        = jo.getString("viewerType");
-
-                mCategoryId            = categoryId;
-
-                mAdapter.clear();
-                mAdapter.notifyDataSetChanged();
-
-                mCategoryNameTextView.setText(categoryName);
-                mCurrCategoryObject.setsCategoryId(categoryId);
-                mCurrCategoryObject.setsAdultCategory(adultCategory);
-                mCurrCategoryObject.setsCategoryName(categoryName);
-                mCurrCategoryObject.setsLeaf(leaf);
-                mCurrCategoryObject.setsParentCategoryId(parentCategoryId);
-                mCurrCategoryObject.setsViewerType(viewerType);
-                processRequest();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    };
 
     @Override
     public void onClick(View v) {
@@ -292,13 +258,8 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                     int iLoop1Depth = 0; //
                     for ( int i = 0; i < categoryList.length(); i++ ) {
                         JSONObject category     = (JSONObject)categoryList.get(i);
+                        category.put("isOpened", false);
                         //CATEGORY_ID_MOVIE
-                        //private String sCategoryId;
-                        //private String sAdultCategory;
-                        //private String sCategoryName;
-                        //private String sLeaf;
-                        //private String sParentCategoryId;
-                        //private String sViewerType;
                         String     categoryId       = category.getString("categoryId");
                         boolean    adultCategory    = category.getBoolean("adultCategory");
                         String     categoryName     = category.getString("categoryName");
@@ -306,27 +267,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                         String     parentCategoryId = category.getString("parentCategoryId");
                         int        viewerType       = category.getInt("viewerType");
 
-                        Log.d("category", i + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
 
-
-
-//                        if ( ! mCategoryId.equals(categoryId) && viewerType != 60 ) {
-                        if ( true ) {
-                            /**
-                             ViewerType = 30, getContentGroupList (보통 리스트)
-                             ViewerType = 200, getPopularityChart (인기순위)
-                             ViewerType = 41, ㅎetBundleProductList (묶음)
-                             ViewerType = 310, recommendContentGroupByAssetId (연관)
-                             */
-                            //if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
-                            //    categorys.add(category);
-                            //}
-                            //if ( mCategoryId.equals(parentCategoryId) ) {
-                            //    categorys.add(iLoop1Depth, category);
-                            //    iLoop1Depth++;
-                            //} else {
-                                categorys.add(category);
-                            //}
+                        if ( ! parentCategoryId.equals("0") || ! (viewerType == 0) ) {
+                            categorys.add(category);
 
                             if ( isGotitCateName == false ) {
                                 isGotitCateName = true;
@@ -372,68 +315,154 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mRequestQueue.add(request);
     }
 
+    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(tag, "mItemClickListener() " + position);
+            ListViewDataObject dobj = (ListViewDataObject) mCategoryAdapter.getItem(position);
+
+            try {
+                JSONObject jo          = new JSONObject(dobj.sJson);
+                String     categoryId       = jo.getString("categoryId");
+                String     adultCategory    = jo.getString("adultCategory");
+                String     categoryName     = jo.getString("categoryName");
+                String     sleaf            = jo.getString("leaf");
+                boolean    leaf             = jo.getBoolean("leaf");
+                String     parentCategoryId = jo.getString("parentCategoryId");
+                String     viewerType       = jo.getString("viewerType");
+
+                if ( leaf == true ) { // 하부카테고리가 없으므로 닫을 것.
+                    mCategoryBgFramelayout.setVisibility(View.GONE);
+                    mCategoryId = categoryId;
+                    mCategoryAdapter.clear();
+                    mCategoryAdapter.notifyDataSetChanged();
+                    mCategoryNameTextView.setText(categoryName);
+                    mCurrCategoryObject.setsCategoryId(categoryId);
+                    mCurrCategoryObject.setsAdultCategory(adultCategory);
+                    mCurrCategoryObject.setsCategoryName(categoryName);
+                    mCurrCategoryObject.setsLeaf(sleaf);
+                    mCurrCategoryObject.setsParentCategoryId(parentCategoryId);
+                    mCurrCategoryObject.setsViewerType(viewerType);
+                    mAdapter.clear();
+                    mAdapter.notifyDataSetChanged();
+                    processRequest();
+                } else { // 하부카테고리가 있으므로 닫지 말것.
+                    ListViewDataObject obj = (ListViewDataObject)mCategoryAdapter.getItem(position);
+                    JSONObject oldJo       = new JSONObject(obj.sJson);
+                    boolean isOpened       = oldJo.getBoolean("isOpened");
+                    String thiscategoryId  = oldJo.getString("categoryId");
+                    JSONObject newJo       = getCategoryWithCategoryId(thiscategoryId);
+                    int index              = getCategoryIndxWithCategoryId(thiscategoryId);
+                    if ( isOpened == true ) {
+                        newJo.put("isOpened", false);
+                    } else {
+                        newJo.put("isOpened", true);
+                    }
+                    categorys.set(index, newJo);
+                    list2treee();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
     private void list2treee(){
-        //
-        //CATEGORY_ID_MOVIE
-        //private String sCategoryId;
-        //private String sAdultCategory;
-        //private String sCategoryName;
-        //private String sLeaf;
-        //private String sParentCategoryId;
-        //private String sViewerType;
+        mCateDepth1.clear();
+        mCateDepth2.clear();
+        mCateDepth3.clear();
+        mCateDepth4.clear();
+        mCategoryAdapter.clear();
         try {
             for ( int i = 0; i < categorys.size(); i++ ) {
                 JSONObject category         = (JSONObject)categorys.get(i);
                 String     categoryId       = category.getString("categoryId");
-                boolean    adultCategory    = category.getBoolean("adultCategory");
-                String     categoryName     = category.getString("categoryName");
-                boolean    leaf             = category.getBoolean("leaf");
                 String     parentCategoryId = category.getString("parentCategoryId");
-                int        viewerType       = category.getInt("viewerType");
-                Log.d("category", i + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
                 if ( mCategoryId.equals(parentCategoryId) ) {
                     mCateDepth1.put(categoryId, parentCategoryId);
                 }
             }
-            //
             for ( int i = 0; i < categorys.size(); i++ ) {
                 JSONObject category         = (JSONObject)categorys.get(i);
                 String     categoryId       = category.getString("categoryId");
-                boolean    adultCategory    = category.getBoolean("adultCategory");
-                String     categoryName     = category.getString("categoryName");
-                boolean    leaf             = category.getBoolean("leaf");
                 String     parentCategoryId = category.getString("parentCategoryId");
-                int        viewerType       = category.getInt("viewerType");
-                Log.d("category", i + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
                 String aaa = mCateDepth1.get(parentCategoryId);
                 if ( aaa != null ) {
                     mCateDepth2.put(categoryId, parentCategoryId);
                 }
             }
-            Log.d("category","aaa");
-
+            for ( int i = 0; i < categorys.size(); i++ ) {
+                JSONObject category         = (JSONObject)categorys.get(i);
+                String     categoryId       = category.getString("categoryId");
+                String     parentCategoryId = category.getString("parentCategoryId");
+                String aaa = mCateDepth2.get(parentCategoryId);
+                if ( aaa != null ) {
+                    mCateDepth3.put(categoryId, parentCategoryId);
+                }
+            }
             int i = 0;
             TreeMap<String,String> tm = new TreeMap<String,String>(mCateDepth1);
             Iterator<String> iteratorKey = tm.keySet( ).iterator( );   //키값 오름차순 정렬(기본)
             while ( iteratorKey.hasNext() ) {
                 String key = iteratorKey.next();
                 JSONObject category = getCategoryWithCategoryId(key);
+                category.put("is1Depth", true);
                 ListViewDataObject obj = new ListViewDataObject(i, i, category.toString());
                 mCategoryAdapter.addItem(obj);
                 i++;
+                boolean isOpened = category.getBoolean("isOpened");
+                if ( isOpened == true ) {
+                    String categoryId = category.getString("categoryId");
+                    i = add2Depth(i, categoryId);
+                }
             }
-
-//            int i = 0;
-//            for( String key : mCateDepth1.keySet() ){
-//                JSONObject category = getCategoryWithCategoryId(key);
-//                ListViewDataObject obj = new ListViewDataObject(i, i, category.toString());
-//                mCategoryAdapter.addItem(obj);
-//                i++;
-//            }
             mCategoryAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private int add2Depth(int start, String cid) {
+        int loop = start;
+        try {
+            for ( int i = 0; i < categorys.size(); i++ ) {
+                JSONObject category   = (JSONObject)categorys.get(i);
+                String     parentCategoryId = category.getString("parentCategoryId");
+                if ( cid.equals(parentCategoryId) ) {
+                    category.put("is2Depth", true);
+                    ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
+                    mCategoryAdapter.addItem(obj);
+                    loop++;
+                    boolean isOpened = category.getBoolean("isOpened");
+                    if ( isOpened == true ) {
+                        String categoryId = category.getString("categoryId");
+                        loop = add3Depth(loop, categoryId);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return loop;
+    }
+
+    private int add3Depth(int start, String cid) {
+        int loop = start;
+        try {
+            for ( int i = 0; i < categorys.size(); i++ ) {
+                JSONObject category   = (JSONObject)categorys.get(i);
+                String     parentCategoryId = category.getString("parentCategoryId");
+                if ( cid.equals(parentCategoryId) ) {
+                    category.put("is3Depth", true);
+                    ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
+                    mCategoryAdapter.addItem(obj);
+                    loop++;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return loop;
     }
 
     private JSONObject getCategoryWithCategoryId(String cid) {
@@ -451,21 +480,38 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         return null;
     }
 
+    private int getCategoryIndxWithCategoryId(String cid) {
+        try {
+            for ( int i = 0; i < categorys.size(); i++ ) {
+                JSONObject category         = (JSONObject)categorys.get(i);
+                String     categoryId       = category.getString("categoryId");
+                if ( cid.equals(categoryId) ) {
+                    return i;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     private void processRequest() {
         /**
          ViewerType = 30, getContentGroupList (보통 리스트)
          ViewerType = 200, getPopularityChart (인기순위)
-         ViewerType = 41, ㅎetBundleProductList (묶음)
+         ViewerType = 41, getBundleProductList (묶음)
          ViewerType = 310, recommendContentGroupByAssetId (연관)
          */
         if ( "30".equals(mCurrCategoryObject.getsViewerType()) ) {
-
+            Toast.makeText(mInstance.getActivity(), "ViewerType: 30", Toast.LENGTH_LONG).show();
         } else if ( "200".equals(mCurrCategoryObject.getsViewerType()) ) {
             requestGetPopularityChart();
         } else if ( "41".equals(mCurrCategoryObject.getsViewerType()) ) {
-
+            Toast.makeText(mInstance.getActivity(), "ViewerType: 41", Toast.LENGTH_LONG).show();
         } else if ( "310".equals(mCurrCategoryObject.getsViewerType()) ) {
-
+            Toast.makeText(mInstance.getActivity(), "ViewerType: 310", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(mInstance.getActivity(), "ViewerType: "+mCurrCategoryObject.getsViewerType(), Toast.LENGTH_LONG).show();
         }
     }
 

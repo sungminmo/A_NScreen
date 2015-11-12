@@ -76,41 +76,21 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_vod_main_other, parent, false);
         }
 
-        Date dt = new Date();
-
-        SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
-
         try {
             ListViewDataObject dobj                    = (ListViewDataObject)getItem(position);
             JSONObject         jo                     = new JSONObject(dobj.sJson);
 
-            String  categoryId       = jo.getString("categoryId");
             String  categoryName     = jo.getString("categoryName");
             boolean leaf             = jo.getBoolean("leaf");
-            String  parentCategoryId = jo.getString("parentCategoryId");
-            String  viewerType       = jo.getString("viewerType");
-
-//            Log.d("category", position + ": categoryId: " + categoryId + ", categoryName: " + categoryName + ", leaf: " + leaf + ", parentCategoryId: " + parentCategoryId + ", viewerType: " + viewerType);
-            // {"adultCategory":false,"categoryId":"1144335","categoryName":"인기영화TOP20","description":"","externalId":"","imageFileName":"",
-            // "leaf":true,"linkInterfaceId":"","linkedBannerIdList":[],"menuType":0,"orientationType":"V","packageDescription":"","packageDisplayPrice":-1,
-            // "packageId":"","packageLink":false,"packageProductId":"","packageUIName":"","parentCategoryId":"27282","presentationType":"",
-            // "seriesId":"","seriesLink":false,"seriesName":"","subCategoryPcgView":"N","subCategoryPresentationType":"T","subCategoryVisible":true,
-            // "titleImage":null,"titlePresentationType":"text","viewerType":200,"vodType":0}
-
-//            String             sProgramAge             = jobj.getString("channelProgramGrade");
-//            String             sChannelInfo            = jobj.getString("channelInfo");
-//            String             ProgramOnAirStartTime   = jobj.getString("channelProgramOnAirStartTime");
-//            String             ProgramOnAirEndTime     = jobj.getString("channelProgramOnAirEndTime");
-//            String             channelId               = jobj.getString("channelId");
-//
-//
-//            ImageView          bookmarkImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
-
-//            String str = position + ": " + categoryId + "|" + categoryName + "|" + parentCategoryId;
-//            if ( leaf == false ) {
-//                str += " ▼";
-//            }
+            boolean isOpened         = jo.getBoolean("isOpened");
+            boolean is2Depth         = false;
+            boolean is3Depth         = false;
+            if ( ! jo.isNull("is2Depth") ) {
+                is2Depth = jo.getBoolean("is2Depth");
+            }
+            if ( ! jo.isNull("is3Depth") ) {
+                is3Depth = jo.getBoolean("is3Depth");
+            }
 
             ImageView depth1ImageView = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_caterory_list_depth1_imageview);
             ImageView depth2ImageView = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_caterory_list_depth2_imageview);
@@ -118,12 +98,50 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
             ImageView imageView1 = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_categoty_list_imageview1);
             ImageView imageView2 = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_categoty_list_imageview2);
 
-            if ( leaf == true ) {
-                imageView2.setVisibility(View.GONE);
+            // 왼쪽의 폴더 접기/펴기 이미지 처리.
+            if ( is2Depth == true ) {
+                depth1ImageView.setVisibility(View.VISIBLE);
+                depth2ImageView.setVisibility(View.GONE);
+            } else if ( is3Depth == true ) {
+                depth1ImageView.setVisibility(View.GONE);
+                depth2ImageView.setVisibility(View.VISIBLE);
             } else {
-                imageView2.setVisibility(View.VISIBLE);
+                depth1ImageView.setVisibility(View.GONE);
+                depth2ImageView.setVisibility(View.GONE);
             }
 
+            // 오른쪽의 화살표처리.
+            if ( leaf == true ) {
+                imageView1.setVisibility(View.GONE);
+                imageView2.setVisibility(View.GONE);
+            } else {
+                if ( is2Depth == true ) {
+                    imageView1.setVisibility(View.VISIBLE);
+                    imageView2.setVisibility(View.GONE);
+                    if ( isOpened == true ) {
+                        imageView1.setImageResource(R.mipmap.depth1_focus_arrow);
+                    } else {
+                        imageView1.setImageResource(R.mipmap.depth1_arrow);
+                    }
+                } else if ( is3Depth == true ) {
+                    imageView1.setVisibility(View.GONE);
+                    imageView2.setVisibility(View.GONE);
+                    if ( isOpened == true ) {
+                        imageView1.setImageResource(R.mipmap.depth2_focus_arrow);
+                    } else {
+                        imageView1.setImageResource(R.mipmap.depth2_arrow);
+                    }
+                } else {
+                    imageView1.setVisibility(View.GONE);
+                    imageView2.setVisibility(View.VISIBLE);
+                    if ( isOpened == true ) {
+                        imageView2.setImageResource(R.mipmap.depth1_focus_arrow);
+                    } else {
+                        imageView2.setImageResource(R.mipmap.depth1_arrow);
+                    }
+                }
+
+            }
 
             textview.setText(categoryName);
 

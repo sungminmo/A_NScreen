@@ -21,7 +21,7 @@
         android:id="@+id/vod_main_other_caterory_list_depth2_imageview"
         android:layout_gravity="center_vertical|right"
         android:src="@mipmap/depth2_focus"
-        android:layout_marginLeft="27.75dp"
+        android:layout_marginLeft="43.75dp"
         android:layout_marginTop="-6dp"
         android:visibility="gone" />
 
@@ -42,7 +42,7 @@
         android:id="@+id/vod_main_other_categoty_list_imageview1"
         android:layout_gravity="center_vertical|right"
         android:src="@mipmap/depth2_arrow"
-        android:layout_marginRight="24dp"
+        android:layout_marginRight="54.25dp"
         android:visibility="gone" />
 
     <ImageView
