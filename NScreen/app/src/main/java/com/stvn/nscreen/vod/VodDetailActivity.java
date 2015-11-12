@@ -12,9 +12,11 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,6 +101,8 @@ public class VodDetailActivity extends Activity {
     private Button mJimButton;      // 찜하기 버튼
     private Button mJimButton2;      // 찜하기 버튼
 
+    private HorizontalScrollView mSeriesScrollView;
+
 
     // activity
     private String assetId; // intent param
@@ -145,7 +149,7 @@ public class VodDetailActivity extends Activity {
 //            assetId = jo.getString("assetId");
 //            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
 //            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
-//              assetId = "www.hchoice.co.kr|M4132449LFO281926301";
+              assetId = "www.hchoice.co.kr|M4132449LFO281926301";
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
@@ -179,6 +183,7 @@ public class VodDetailActivity extends Activity {
         mTvOnlyTextView       = (TextView)findViewById(R.id.vod_detail_tvonly_textview);
         mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
+        mSeriesScrollView     = (HorizontalScrollView)findViewById(R.id.mSeriesScrollView);
 
         ImageButton backButton = (ImageButton)findViewById(R.id.vod_detail_topmenu_left_imagebutton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -419,7 +424,7 @@ public class VodDetailActivity extends Activity {
                     img.setBounds( 0, 0, 35, 35 );
                     mJimButton2.setCompoundDrawables(null, null, img, null);
                     mJimButton2.setText("찜하기");
-                    
+
                     Toast.makeText(VodDetailActivity.this, "찜 하기가 해제 되었습니다.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -983,6 +988,8 @@ public class VodDetailActivity extends Activity {
                         final String buttonAssetId = asset.getString("assetId");
                         String categoryId          = asset.getString("categoryId");
                         String seriesCurIndex      = asset.getString("seriesCurIndex");
+                        String seriesEndIndex      = asset.getString("seriesEndIndex");
+                        String seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
                         String seriesId            = asset.getString("seriesId");
 
                         // Button seriesButton = new Button(mInstance);
@@ -1005,6 +1012,22 @@ public class VodDetailActivity extends Activity {
                         LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         ll.addView(seriesButton, lp);
+
+                        if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
+                            mSeriesScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSeriesScrollView.fullScroll(ScrollView.FOCUS_RIGHT); // 1회를 표시한다.
+                                }
+                            });
+                        } else { // 종료되지 않은 시리즈.
+                            mSeriesScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSeriesScrollView.fullScroll(ScrollView.FOCUS_LEFT); // 가장 최근 회를 표시한다.
+                                }
+                            });
+                        }
                     }
 
                 } catch (JSONException e) {

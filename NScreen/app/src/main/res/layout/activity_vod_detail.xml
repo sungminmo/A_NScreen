@@ -387,7 +387,7 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="34dp"
-            android:id="@+id/horizontalScrollView"
+            android:id="@+id/mSeriesScrollView"
             android:background="#f2eef6"
             android:layout_marginTop="0.25dp"
             android:layout_marginBottom="0.25dp">

@@ -6,4 +6,5 @@
     android:text=""
     android:textSize="14.5sp"
     android:textColor="@color/violet"
-    android:background="@drawable/series_selector" />
+    android:background="#0000"/>
+    <!--android:background="@drawable/series_selector"-->
