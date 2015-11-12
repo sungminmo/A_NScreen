@@ -17,6 +17,7 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.GsonRequest;
 import com.stvn.nscreen.common.SearchVodDataObject;
 import com.stvn.nscreen.common.VolleyHelper;
+import com.stvn.nscreen.setting.CMSettingData;
 
 import java.util.ArrayList;
 
@@ -70,11 +71,11 @@ public class SearchVodFragment extends SearchBaseFragment{
     {
         mLockListView = true;
         mProgressDialog	 = ProgressDialog.show(getActivity(), "", getString(R.string.wait_a_moment));
-        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey=8A5D2E45D3874824FF23EC97F78D358&includeAdultCategory=0&searchKeyword="+mKeyword;
+        String includeAdultCategory = CMSettingData.getInstance().isAdultAuth(getActivity())?"1":"0";
+        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey=8A5D2E45D3874824FF23EC97F78D358&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+mKeyword;
         final GsonRequest gsonRequest = new GsonRequest(url, SearchVodDataObject.class,null,new Response.Listener<SearchVodDataObject>(){
             @Override
             public void onResponse(SearchVodDataObject response) {
-
                 mLockListView = false;
                 mProgramlist.addAll(response.getSearchResultList().getSearchResult().getContentGroupList().getContentGroup());
                 mAdapter.notifyDataSetChanged();
