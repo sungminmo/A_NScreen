@@ -170,19 +170,19 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         Float  fVerServer = Float.valueOf(serverVer);
         Float  fVerApp    = Float.valueOf(appVer);
         if ( fVerServer > fVerApp ) {
-            StringBuilder sb   = new StringBuilder();
-            sb.append("지금 사용하시는 버전보다 더 최신버전이 존재합니다. 구글 마켓에서 업데이트 하신 뒤 사용하시기 바랍니다.").append("\n")
-                    .append("사용 중인 버전 : ").append(appVer + " ver.\n")
-            .append("최신 버전 : ").append(serverVer).append(" ver.");
-            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
-            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alert.setMessage(sb.toString());
-            alert.show();
+//            StringBuilder sb   = new StringBuilder();
+//            sb.append("지금 사용하시는 버전보다 더 최신버전이 존재합니다. 구글 마켓에서 업데이트 하신 뒤 사용하시기 바랍니다.").append("\n")
+//                    .append("사용 중인 버전 : ").append(appVer + " ver.\n")
+//            .append("최신 버전 : ").append(serverVer).append(" ver.");
+//            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+//            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                }
+//            });
+//            alert.setMessage(sb.toString());
+//            alert.show();
         }
 
 

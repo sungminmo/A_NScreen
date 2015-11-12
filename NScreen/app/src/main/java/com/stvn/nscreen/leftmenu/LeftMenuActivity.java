@@ -191,7 +191,7 @@ public class LeftMenuActivity extends Activity {
                 } else {
                     // 페어링은 했지만, HD/PVR이 아니면 화면 진입 못함.
                     if ( "PVR".toLowerCase().equals(SetTopBoxKind) ) {
-                        Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
+                        Intent intent = new Intent(mInstance, PvrMainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
@@ -202,7 +202,7 @@ public class LeftMenuActivity extends Activity {
                                 dialog.dismiss();
                             }
                         });
-                        alert.setMessage(getString(R.string.error_not_compatibility_stb));
+                        alert.setMessage(getString(R.string.error_not_paring_compleated));
                         alert.show();
                     }
                 }
@@ -211,17 +211,32 @@ public class LeftMenuActivity extends Activity {
         leftmenu_my_linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if ( mPref.isPairingCompleted() == false ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.error_not_paring_compleated1));
+                    alert.show();
+
+                } else {
                 Intent intent = new Intent(mInstance, MyMainActivity.class);
                 startActivity(intent);
                 finish();
+                }
             }
         });
+
         leftmenu_setting_linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mInstance, CMSettingMainActivity.class);
-                startActivity(intent);
-                finish();
+
+                    Intent intent = new Intent(mInstance, CMSettingMainActivity.class);
+                    startActivity(intent);
+                    finish();
             }
         });
 

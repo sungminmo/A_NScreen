@@ -446,7 +446,7 @@ public class VodBuyActivity extends Activity {
                         finish();
                     }
                 });
-                alert.setMessage("구매를 완료했습니다.");
+                alert.setMessage(mTitle + "구매가 완료되었습니다. [VOD 구매목록] 메뉴에서 구매내역을 확인하실 수 있습니다.");
                 alert.show();
             }
         }, new Response.ErrorListener() {

@@ -208,7 +208,7 @@ public class VodDetailActivity extends Activity {
                             dialog.dismiss();
                         }
                     });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated6));
+                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
                     alert.show();
                 } else {
                     isPrePlay = true;
@@ -334,7 +334,7 @@ public class VodDetailActivity extends Activity {
                             dialog.dismiss();
                         }
                     });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated5));
+                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
                     alert.show();
                 } else {
                     isPrePlay = false;
@@ -358,7 +358,7 @@ public class VodDetailActivity extends Activity {
                                 dialog.dismiss();
                             }
                         });
-                        alert.setMessage(getString(R.string.error_not_paring_compleated4));
+                        alert.setMessage(getString(R.string.error_not_paring_compleated3));
                         alert.show();
                     } else {
                         requestAddRemoveWishItem("addWishItem");
@@ -397,7 +397,7 @@ public class VodDetailActivity extends Activity {
                                     dialog.dismiss();
                                 }
                             });
-                            alert.setMessage(getString(R.string.error_not_paring_compleated4));
+                            alert.setMessage(getString(R.string.error_not_paring_compleated3));
                             alert.show();
                         } else {
                             requestAddRemoveWishItem("addWishItem");
@@ -418,7 +418,7 @@ public class VodDetailActivity extends Activity {
                                 dialog.dismiss();
                             }
                         });
-                        alert.setMessage(getString(R.string.error_not_paring_compleated4));
+                        alert.setMessage(getString(R.string.error_not_paring_compleated3));
                         alert.show();
                     }
                     requestAddRemoveWishItem("removeWishItem");
@@ -747,7 +747,7 @@ public class VodDetailActivity extends Activity {
      * http://58.141.255.79:8080/HApplicationServer/removeWishItem.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1&assetId=www.hchoice.co.kr|M4166179LSG353388601
      */
     private void requestAddRemoveWishItem(String action) {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestAddRemoveWishItem()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String encAssetId  = null;
@@ -760,7 +760,7 @@ public class VodDetailActivity extends Activity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 try {
                     JSONObject jo      = new JSONObject(response);
                     String resultCode  = jo.getString("resultCode");
@@ -788,7 +788,7 @@ public class VodDetailActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -809,14 +809,14 @@ public class VodDetailActivity extends Activity {
      * http://58.141.255.79:8080/HApplicationServer/getWishList.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1
      */
     private void requestGetWishList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 try {
                     JSONObject jo      = new JSONObject(response);
                     String resultCode  = jo.getString("resultCode");
@@ -846,7 +846,7 @@ public class VodDetailActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {

@@ -511,7 +511,7 @@ public class EpgSubActivity extends AppCompatActivity {
                                 dialog.dismiss();
                             }
                         });
-                        alert.setMessage(getString(R.string.error_not_paring_compleated7));
+                        alert.setMessage(getString(R.string.error_not_paring_compleated3));
                         alert.show();
                     }
                     break;

@@ -26,18 +26,14 @@
     <string name="error_network_noconnectionerror">접속 실패 에러 입니다.</string>
     <string name="error_network_networkerrorr">네트웍 에러 입니다.</string>
 
-
-    <string name="error_not_paring_compleated">리모콘 기능을 이용하기 위해서, 먼저 "셋탑박스 연동하기"를 해주세요.</string>
+    <string name="error_not_paring_compleated">녹화 기능은 PVR STB와 연동 시에만 사용하실 수 있습니다.</string>
+    <string name="error_not_paring_compleated1">마이 C&amp;M은 STB와 연동 시에만 사용하실 수 있습니다.</string>
     <string name="error_not_compatibility_stb">리모컨 미 지원 상품\n고객님의 셋탑박스에서는 리모컨 기능을 지원하지 않습니다.</string>
     <string name="error_not_ability_change_channel_vod">VOD 시청중에는 채널이 변경되지 않습니다.</string>
     <string name="error_not_ability_change_channel_data">데이터 방송 시청 중에는 채널이 변경되지 않습니다.</string>
     <string name="error_not_ability_change_channel_independence">독립형 셋탑박스는 채널이 변경되지 않습니다.</string>
-    <string name="error_not_paring_compleated2">녹화 기능을 이용하기 위해서, 먼저 "셋탑박스 연동하기"를 해주세요.</string>
-    <string name="error_not_paring_compleated3">구매하기 기능을 이용하기 위해서, 먼저 "셋탑박스 연동하기"를 해주세요.</string>
-    <string name="error_not_paring_compleated4">찜하기 기능을 이용하기 위해서, 먼저 "셋탑박스 연동하기"를 해주세요.</string>
-    <string name="error_not_paring_compleated5">시청하기 기능을 이용하기 위해서, 먼저 "셋탑박스 연동하기"를 해주세요.</string>
-    <string name="error_not_paring_compleated6">미리보기 기능을 이용하기 위해서, 먼저 "셋탑박스 연동하기"를 해주세요.</string>
-    <string name="error_not_paring_compleated7">셋탑박스와 연결한 후 이용하실 수 있습니다</string>
+    <string name="error_not_paring_compleated2">리모콘 기능은 HD/PVR STB와 연동 시에만 사용하실 수 있습니다.</string>
+    <string name="error_not_paring_compleated3">셋탑박스와 연결한 후 이용하실 수 있습니다.</string>
 
 
     <!-- RUMPUS ERROR Respone -->

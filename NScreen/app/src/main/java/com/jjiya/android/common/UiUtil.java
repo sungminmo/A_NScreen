@@ -25,67 +25,67 @@ public class UiUtil {
      * @param starImage5
      */
     public static void setStarRating(Float rating, ImageView starImage1, ImageView starImage2, ImageView starImage3, ImageView starImage4, ImageView starImage5) {
-        if (rating == 0) {
+        if ( rating == 0 ) {
             starImage1.setImageResource(R.mipmap.series_star_off);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 0 && rating <= 1) {
+        } else if ( rating > 0 && rating <= 0.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on_half);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 1 && rating <= 2) {
+        } else if ( rating > 0.5 && rating <= 1.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 2 && rating <= 3) {
+        } else if ( rating > 1.0 && rating <= 1.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on_half);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 3 && rating <= 4) {
+        } else if ( rating > 1.5 && rating <= 2.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 4 && rating <= 5) {
+        } else if ( rating > 2.0 && rating <= 2.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on_half);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 5 && rating <= 6) {
+        } else if ( rating > 2.5 && rating <= 3.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 6 && rating <= 7) {
+        } else if ( rating > 3.0 && rating <= 3.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on_half);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 7 && rating <= 8) {
+        } else if ( rating > 3.5 && rating <= 4.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 8 && rating < 10) {
+        } else if ( rating > 4.0 && rating < 4.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_on_half);
-        } else if (rating == 10) {
+        } else if ( rating > 4.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);

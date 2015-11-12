@@ -291,7 +291,7 @@
             android:gravity="center"
             android:inputType="textPassword"
             android:textCursorDrawable="@color/pairing_edittext_color"
-            android:maxLength="20" />
+            android:maxLength="20"/>
 
     </LinearLayout>
 
