@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class PvrMainListViewAdapter extends BaseAdapter {
 
     private              ArrayList<JSONObject>           mStbRecordReservelist;
 
+    private int iTabNumber; // 1이면 녹화예약목록, 2면 녹화물 목록
+
     public PvrMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
 
@@ -57,10 +60,17 @@ public class PvrMainListViewAdapter extends BaseAdapter {
                 return mCache.get(url);
             }
         });
+
+        iTabNumber = 1; // 1이면 녹화예약목록, 2면 녹화물 목록
     }
 
-    public void setStbRecordReservelist(ArrayList<JSONObject> list) {
+    public void setStbRecordReservelist(int tabNumber, ArrayList<JSONObject> list) {
+        this.iTabNumber = tabNumber;
         this.mStbRecordReservelist = list;
+    }
+
+    public void setTabNumber(int tabNumber) {
+        this.iTabNumber = tabNumber;
     }
 
     /**
@@ -144,7 +154,16 @@ public class PvrMainListViewAdapter extends BaseAdapter {
 
             TextView           titleTextView = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
             NetworkImageView   channelLogo   = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
+            ImageView pvr_main_pvr = ViewHolder.get(convertView, R.id.pvr_main_pvr);
             ProgressBar progBar = ViewHolder.get(convertView, R.id.progressBar1);
+
+            if ( iTabNumber == 1 ) {
+                progBar.setVisibility(View.VISIBLE);
+                pvr_main_pvr.setVisibility(View.VISIBLE);
+            } else {
+                progBar.setVisibility(View.INVISIBLE);
+                pvr_main_pvr.setVisibility(View.INVISIBLE);
+            }
 
             titleTextView.setText(jobj.getString("ProgramName"));
             channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);

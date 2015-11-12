@@ -59,7 +59,7 @@ import java.util.Map;
 
 public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
-    private static final String                  tag = VodMainFragment.class.getSimpleName();
+    private static final String                  tag = VodMainFirstTabFragment.class.getSimpleName();
     private static       VodMainFirstTabFragment mInstance;
     private              JYSharedPreferences     mPref;
 
@@ -83,6 +83,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     public VodMainFirstTabFragment() {
         // Required empty public constructor
+
     }
 
 
@@ -91,6 +92,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vod_main_first_tab, container, false);
 
+        setMyContext(this.getActivity());
 
         mInstance     = this;
         mPref         = new JYSharedPreferences(this.getActivity());
@@ -113,7 +115,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
 
         // 먼저 공통 뷰 초기화 부터 해준다. (Left버튼, Right버튼, GNB)
-        view = initializeBaseView(view);
+        view = initializeBaseView(view, 0);
 
         // 공통 뷰 초기화가 끝났으면, 이놈을 위한 초기화를 한다.
         view = initializeView(view);
@@ -159,8 +161,34 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
     private void requestGetCategoryTree() {
-        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(),"",getString(R.string.wait_a_moment));
-        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
+
+        /**
+         * 버젼 체크해서 얼럿 띄우자.
+         */
+        String serverVer  = mPref.getAppVersionForServer();
+        String appVer     = mPref.getAppVersionForApp();
+        Float  fVerServer = Float.valueOf(serverVer);
+        Float  fVerApp    = Float.valueOf(appVer);
+        if ( fVerServer > fVerApp ) {
+            StringBuilder sb   = new StringBuilder();
+            sb.append("지금 사용하시는 버전보다 더 최신버전이 존재합니다. 구글 마켓에서 업데이트 하신 뒤 사용하시기 바랍니다.").append("\n")
+                    .append("사용 중인 버전 : ").append(appVer + " ver.\n")
+            .append("최신 버전 : ").append(serverVer).append(" ver.");
+            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.setMessage(sb.toString());
+            alert.show();
+        }
+
+
+        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
+        //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
+        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713230&depth=3&traverseType=DFS";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

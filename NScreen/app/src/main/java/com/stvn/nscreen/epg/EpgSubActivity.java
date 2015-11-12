@@ -503,15 +503,29 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }
                     break;
+                    case 6: { // 미 페어링
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage(getString(R.string.error_not_paring_compleated7));
+                        alert.show();
+                    }
+                    break;
                 }
 
                 return false;
             }
         });
 
-        requestGetSetTopStatus();
-
-
+        if ( mPref.isPairingCompleted() == true ) { // 페어링 안했을 시
+            requestGetSetTopStatus(); // 셋탑 상태 - 예약녹화물 리스트 - 한 채널 평성표 차례대로 호출.
+        } else { // 페어링 했을 시
+            requestGetChannelSchedule(); // 한 채널 평성표 호출.
+        }
     }
 
     private void reloadAll() {
@@ -548,6 +562,9 @@ public class EpgSubActivity extends AppCompatActivity {
                 case 5: {
                     createMenu5(menu);  // 시청예약취소 / 녹화예약취소
                 } break;
+                case 6: {
+                    createMenu6(menu); // 미 페어링 상태
+                }
             }
         }
 
@@ -655,6 +672,16 @@ public class EpgSubActivity extends AppCompatActivity {
             item2.setTitleSize(12);
             item2.setTitleColor(Color.WHITE);
             menu.addMenuItem(item2);
+        }
+
+        private void createMenu6(SwipeMenu menu) { // 미 페어링 상태
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0x00, 0x00, 0x00)));
+            item1.setWidth(dp2px(180));
+            item1.setTitle("셋탑 미 연동");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
         }
     };
 
@@ -793,7 +820,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
-                if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {   // 예약목록을 받았을때.
+                if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
                     requestGetChannelSchedule();
                 } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
                     requestGetChannelSchedule();
@@ -801,12 +828,12 @@ public class EpgSubActivity extends AppCompatActivity {
                     String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
                     AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
                     ad.setTitle("알림").setMessage(msg).setCancelable(false)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
                     AlertDialog alert = ad.create();
                     alert.show();
                 }

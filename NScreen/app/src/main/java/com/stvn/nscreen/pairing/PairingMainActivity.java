@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.jjiya.android.common.JYSharedPreferences;
@@ -26,6 +27,7 @@ public class PairingMainActivity extends AppCompatActivity {
     private        EditText              mPurchasePassword1Edittext;
     private        EditText              mPurchasePassword2Edittext;
     private        Button                cancleButton, nextButton;
+    private ImageButton backBtn;
     private LinearLayout pairing_main_non_title, pairing_main_ok_title, pairing_main_non_ment1, pairing_main_ok_ment1, pairing_main_non_ment2, pairing_main_ok_ment2;
 
     @Override
@@ -40,6 +42,7 @@ public class PairingMainActivity extends AppCompatActivity {
         mPurchasePassword2Edittext = (EditText)findViewById(R.id.pairing_main_purchase_password2_edittext);
         cancleButton = (Button)findViewById(R.id.pairing_main_cancle_button);
         nextButton   = (Button)findViewById(R.id.pairing_main_next_button);
+        backBtn = (ImageButton)findViewById(R.id.backBtn);
         pairing_main_non_title = (LinearLayout) findViewById(R.id.pairing_main_non_title);
         pairing_main_non_ment1 = (LinearLayout) findViewById(R.id.pairing_main_non_ment1);
         pairing_main_non_ment2 = (LinearLayout) findViewById(R.id.pairing_main_non_ment2);
@@ -49,6 +52,13 @@ public class PairingMainActivity extends AppCompatActivity {
 
 
         cancleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -79,6 +89,16 @@ public class PairingMainActivity extends AppCompatActivity {
                             }
                         });
                         alert.setMessage("4자 이상의 비밀번호를 입력해 주십시오.");
+                        alert.show();
+                    } else if ( mPurchasePassword2Edittext.getText().toString().length() > 20 ) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.setMessage("20자 이하의 비밀번호를 입력해 주십시오.");
                         alert.show();
                     } else {
                         Intent intent = new Intent(PairingMainActivity.this, com.stvn.nscreen.pairing.PairingSubActivity.class);

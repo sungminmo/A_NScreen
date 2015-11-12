@@ -34,16 +34,6 @@
             <!--</intent-filter>-->
         </activity>
 
-        <!-- 기존의 개발자용 메인 화면 -->
-        <!-- <activity -->
-        <!-- android:name=".DeveloperMainActivity" -->
-        <!-- android:label="@string/app_name" -->
-        <!-- android:screenOrientation="portrait"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
 
 
         <!-- leftMenu -->
@@ -64,11 +54,13 @@
         <!-- EPG -->
         <activity
             android:name=".epg.EpgMainActivity"
-            android:label="@string/title_activity_epg_main" >
+            android:label="@string/title_activity_epg_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".epg.EpgSubActivity"
-            android:label="@string/title_activity_epg_sub" >
+            android:label="@string/title_activity_epg_sub"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".epg.EpgChoiceActivity"
@@ -82,21 +74,25 @@
         <!-- PVR -->
         <activity
             android:name=".pvr.PvrMainActivity"
-            android:label="@string/title_activity_pvr_main" >
+            android:label="@string/title_activity_pvr_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".pvr.PvrSubActivity"
-            android:label="@string/title_activity_pvr_sub" >
+            android:label="@string/title_activity_pvr_sub"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- MY -->
         <activity
             android:name=".my.MyMainActivity"
-            android:label="@string/title_activity_my_main" >
+            android:label="@string/title_activity_my_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".my.MySubActivity"
-            android:label="@string/title_activity_my_sub" >
+            android:label="@string/title_activity_my_sub"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- PAIRING -->
@@ -110,13 +106,15 @@
         </activity>
         <activity
             android:name=".pairing.PairingCheckActivity"
-            android:label="@string/title_activity_pairing_check" >
+            android:label="@string/title_activity_pairing_check"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- REMOTE CONTROLLER -->
         <activity
             android:name=".rmt.RemoteControllerActivity"
-            android:label="@string/title_activity_remote_controller" >
+            android:label="@string/title_activity_remote_controller"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".rmt.RemoteControllerChoiceActivity"
@@ -129,7 +127,8 @@
         <!-- SEARCH -->
         <activity
             android:name=".search.SearchMainActivity"
-            android:label="@string/title_activity_search_main" >
+            android:label="@string/title_activity_search_main"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- 설정 화면 관련 엑티비티 -->
@@ -139,13 +138,14 @@
         <activity android:name=".setting.CMSettingAdultAuthActivity" />
         <activity android:name=".setting.CMSettingPayChannelActivity" />
         <activity android:name=".setting.CMSettingPayChannelDetailActivity" />
-        <activity android:name=".vod.VodMainActivity" />
+        <!--<activity android:name=".vod.VodMainActivity" android:screenOrientation="portrait" />-->
 
         <!-- VOD -->
         <activity
             android:name=".vod.VodCategoryMainActivity"
             android:label="@string/title_activity_vod_category_main"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".vod.VodDetailActivity"

@@ -420,4 +420,36 @@ public class UiUtil {
             PromotionSticker.setVisibility(View.GONE);
         }
     }
+
+    public static void setPromotionSticker(String promotionSticker, ImageView PromotionSticker) {
+
+        // string < - > int
+//        String str = "1234";
+//        int    num = 5678;
+//
+//        String str2 = String.valueOf(num);
+//        int    num2 = Integer.parseInt(str);
+
+        if ("0".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_01);
+        } else if ("11".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_09);
+        } else if ("12".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_07);
+        } else if ("13".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_03);
+        } else if ("14".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_08);
+        } else if ("15".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_04);
+        } else if ("16".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_02);
+        } else if ("17".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_05);
+        } else if ("18".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_06);
+        } else {
+            PromotionSticker.setVisibility(View.GONE);
+        }
+    }
 }

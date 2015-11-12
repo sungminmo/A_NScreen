@@ -267,19 +267,19 @@ public class EpgMainActivity extends AppCompatActivity {
                 String resultCode = (String) mStbStateMap.get("resultCode");
                 if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
                     //
-                    mStbState             = (String)mStbStateMap.get("state");
-                    mStbRecordingchannel1 = (String)mStbStateMap.get("recordingchannel1");
-                    mStbRecordingchannel2 = (String)mStbStateMap.get("recordingchannel2");
-                    mStbWatchingchannel   = (String)mStbStateMap.get("watchingchannel");
-                    mStbPipchannel        = (String)mStbStateMap.get("pipchannel");
-
-                    if ( "1".equals(mStbState) ) { // VOD 시청중.
-
-                    } else if ( "2".equals(mStbState) ) { // 독립형.
-
-                    } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
-
-                    }
+                    mStbState             = (String) mStbStateMap.get("state");
+                    mStbRecordingchannel1 = (String) mStbStateMap.get("recordingchannel1");
+                    mStbRecordingchannel2 = (String) mStbStateMap.get("recordingchannel2");
+                    mStbWatchingchannel   = (String) mStbStateMap.get("watchingchannel");
+                    mStbPipchannel        = (String) mStbStateMap.get("pipchannel");
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 하낟.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
                 } else {
                     String errorString = (String)mStbStateMap.get("errorString");

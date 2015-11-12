@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment
+<!--<fragment-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:id="@+id/fragment_placeholder"-->
+    <!--android:name="com.stvn.nscreen.vod.VodMainFirstTabFragment"-->
+    <!--tools:layout="@layout/fragment_vod_main_first_tab"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_placeholder"
-    android:name="com.stvn.nscreen.vod.VodMainFirstTabFragment"
-    tools:layout="@layout/fragment_vod_main_first_tab"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context=".MainActivity"-->
-    <!--android:orientation="vertical"-->
-    <!--android:background="@android:color/white">-->
-
-    <!--<LinearLayout-->
-        <!--android:id="@+id/fragment_placeholder"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical" >-->
-    <!--</LinearLayout>-->
-
-<!--</LinearLayout>-->
-
-
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+</LinearLayout>
 

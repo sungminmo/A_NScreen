@@ -376,7 +376,7 @@
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
         android:layout_marginTop="3dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <View
             android:layout_width="match_parent"
@@ -396,51 +396,11 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical">
-
-                <Button
-                    android:layout_width="41.25dp"
-                    android:layout_height="27.75dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:text="5회"
-                    android:id="@+id/vod_detail_series_5_button"
-                    android:textSize="14.5sp"
-                    android:textColor="@color/violet"
-                    android:background="@drawable/series_selector" />
-
-                <Button
-                    android:layout_width="41.25dp"
-                    android:layout_height="27.75dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:text="4회"
-                    android:id="@+id/vod_detail_series_4_button"
-                    android:textSize="14.5sp"
-                    android:textColor="@color/violet"
-                    android:background="@drawable/series_selector" />
+                android:gravity="center_vertical"
+                android:id="@+id/vod_detail_series_linearlayout2">
 
 
-                <Button
-                    android:layout_width="41.25dp"
-                    android:layout_height="27.75dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:text="3회"
-                    android:id="@+id/vod_detail_series_3_button"
-                    android:textSize="14.5sp"
-                    android:textColor="@color/violet"
-                    android:background="@drawable/series_selector" />
-
-
-                <Button
-                    android:layout_width="41.25dp"
-                    android:layout_height="27.75dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:text="2회"
-                    android:id="@+id/vod_detail_series_2_button"
-                    android:textSize="14.5sp"
-                    android:textColor="@color/violet"
-                    android:background="@drawable/series_selector" />
-
-
+ <!--
                 <Button
                     android:layout_width="41.25dp"
                     android:layout_height="27.75dp"
@@ -450,6 +410,7 @@
                     android:textSize="14.5sp"
                     android:textColor="@color/violet"
                     android:background="@drawable/series_selector" />
+                    -->
 
 
             </LinearLayout>
@@ -606,7 +567,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="[] 는 (은)"
+            android:text="[] 은 (는)"
             android:id="@+id/vod_detail_tvonly_textview"
             android:textSize="14sp"
             android:textColor="@color/violet"
