@@ -273,7 +273,7 @@ public class EpgMainActivity extends AppCompatActivity {
                     mStbWatchingchannel   = (String) mStbStateMap.get("watchingchannel");
                     mStbPipchannel        = (String) mStbStateMap.get("pipchannel");
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 하낟.
+                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
                     //
                     mStbState             = "";
                     mStbRecordingchannel1 = "";

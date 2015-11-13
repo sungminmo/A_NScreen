@@ -159,4 +159,29 @@ public class CMAlertUtil {
         mDialog.setNegativeButton(cancel, canclelistener);
         mDialog.show();
     }
+
+    // title / msg / btnOk
+    public static void Alert1(Context ctx, String title, String msg1, String msg2, boolean isbold1, boolean isbold2, DialogInterface.OnClickListener listener, boolean isOneButton) {
+
+        CMAlertDialog.CMDialogType type = CMAlertDialog.CMDialogType.DialogType2;
+        if (isOneButton) {
+            type = CMAlertDialog.CMDialogType.DialogType4;
+        }
+
+        CMAlertDialog mDialog = new CMAlertDialog(ctx, type);
+        mDialog.setTitle(title);
+        mDialog.setMessage(msg1, msg2, isbold1, isbold2);
+        mDialog.setPositiveButton("확인", listener);
+        mDialog.show();
+    }
+
+    public static void Alert1(Context ctx, String title, String msg1, String msg2, boolean isbold1, boolean isbold2, DialogInterface.OnClickListener listener, DialogInterface.OnClickListener canclelistener) {
+
+        CMAlertDialog mDialog = new CMAlertDialog(ctx);
+        mDialog.setTitle(title);
+        mDialog.setMessage(msg1, msg2, isbold1, isbold2);
+        mDialog.setPositiveButton("확인", listener);
+        mDialog.setNegativeButton("취소", canclelistener);
+        mDialog.show();
+    }
 }

@@ -25,23 +25,24 @@ import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.pvr.PvrMainActivity;
 import com.stvn.nscreen.rmt.RemoteControllerActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 /**
  * Created by limdavid on 15. 10. 30..
  */
 
 public class LeftMenuActivity extends Activity {
-    private static final String                 tag = LeftMenuActivity.class.getSimpleName();
-    private static       LeftMenuActivity       mInstance;
-    private              JYSharedPreferences    mPref;
+    private static final String tag = LeftMenuActivity.class.getSimpleName();
+    private static LeftMenuActivity mInstance;
+    private JYSharedPreferences mPref;
 
-    private              LinearLayout           leftmenu_tv_linearLayout, leftmenu_remote_linearLayout, leftmenu_pvr_linearLayout, leftmenu_my_linearLayout, leftmenu_setting_linearLayout, leftmenu_right;
+    private LinearLayout leftmenu_tv_linearLayout, leftmenu_remote_linearLayout, leftmenu_pvr_linearLayout, leftmenu_my_linearLayout, leftmenu_setting_linearLayout, leftmenu_right;
 
-    private              Button                 leftmenu_pairing_button1, leftmenu_pairing_button2;
+    private Button leftmenu_pairing_button1, leftmenu_pairing_button2;
 
-    private              ImageButton            imageButton2, leftmenu_whatBtn;
+    private ImageButton imageButton2, leftmenu_whatBtn;
 
-    private              TextView               leftmenu_version_textview;
+    private TextView leftmenu_version_textview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class LeftMenuActivity extends Activity {
         if (mPref.isLogging()) {
             Log.d(tag, "onCreate()");
         }
-        String appVer     = mPref.getAppVersionForApp();
+        String appVer = mPref.getAppVersionForApp();
 
         leftmenu_tv_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_tv_linearLayout);
         leftmenu_remote_linearLayout = (LinearLayout) findViewById(R.id.leftmenu_remote_linearLayout);
@@ -77,9 +78,9 @@ public class LeftMenuActivity extends Activity {
 
         leftmenu_version_textview.setText("현재 버전 " + appVer);
 
-        if ( mPref.isPairingCompleted() == true ) {
-            ((TextView)findViewById(R.id.leftmenu_pairing_textview1)).setText("셋탑박스와 연동중입니다.");
-            ((TextView)findViewById(R.id.leftmenu_pairing_textview1)).setText("");
+        if (mPref.isPairingCompleted() == true) {
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("셋탑박스와 연동중입니다.");
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("");
             leftmenu_pairing_button1.setVisibility(View.GONE);
             leftmenu_pairing_button2.setVisibility(View.VISIBLE);
         } else {
@@ -106,27 +107,22 @@ public class LeftMenuActivity extends Activity {
         leftmenu_pairing_button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
-                ad.setTitle("셋탑박스 재 연동")
-                        .setMessage("셋탑박스 재 연동 시 기존 연동은 해제되며, 구매비밀번호 재설정이 필요합니다. 계속 진행하시겠습니까?")
-                        .setCancelable(false)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(mInstance, PairingMainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                String alertTitle = "셋탑박스 재 연동";
+                String alertMsg1 = getString(R.string.error_not_paring_compleated4);
+                String alertMsg2 = getString(R.string.error_not_paring_compleated5);
+                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 'No'
-                        dialog.dismiss();
+                        Intent intent = new Intent(mInstance, PairingMainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
                     }
                 });
-                AlertDialog alert = ad.create();
-                alert.show();
             }
         });
 
@@ -142,33 +138,31 @@ public class LeftMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String SetTopBoxKind = mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "").toLowerCase();
-                if ( mPref.isPairingCompleted() == false ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                if (mPref.isPairingCompleted() == false) {
+                    String alertTitle = "리모컨 미 지원 상품";
+                    String alertMsg1 = getString(R.string.error_not_paring_compleated2);
+                    String alertMsg2 = "";
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                         }
-                    });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated2));
-                    alert.show();
+                    }, true);
 
                 } else {
                     // 페어링은 했지만, HD/PVR이 아니면 화면 진입 못함.
-                    if ( "HD".toLowerCase().equals(SetTopBoxKind) || "PVR".toLowerCase().equals(SetTopBoxKind) ) {
+                    if ("HD".toLowerCase().equals(SetTopBoxKind) || "PVR".toLowerCase().equals(SetTopBoxKind)) {
                         Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        String alertTitle = "녹화 미 지원 상품";
+                        String alertMsg1 = getString(R.string.error_not_paring_compleated2);
+                        String alertMsg2 = "";
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                             }
-                        });
-                        alert.setMessage(getString(R.string.error_not_compatibility_stb));
-                        alert.show();
+                        }, true);
                     }
                 }
             }
@@ -177,33 +171,30 @@ public class LeftMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String SetTopBoxKind = mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "").toLowerCase();
-                if ( mPref.isPairingCompleted() == false ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                if (mPref.isPairingCompleted() == false) {
+                    String alertTitle = "녹화 미 지원 상품";
+                    String alertMsg1 = getString(R.string.error_not_paring_compleated);
+                    String alertMsg2 = "";
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                         }
-                    });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated));
-                    alert.show();
-
+                    }, true);
                 } else {
                     // 페어링은 했지만, HD/PVR이 아니면 화면 진입 못함.
-                    if ( "PVR".toLowerCase().equals(SetTopBoxKind) ) {
+                    if ("PVR".toLowerCase().equals(SetTopBoxKind)) {
                         Intent intent = new Intent(mInstance, PvrMainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        String alertTitle = "녹화 미 지원 상품";
+                        String alertMsg1 = getString(R.string.error_not_paring_compleated);
+                        String alertMsg2 = "";
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                             }
-                        });
-                        alert.setMessage(getString(R.string.error_not_paring_compleated));
-                        alert.show();
+                        }, true);
                     }
                 }
             }
@@ -211,21 +202,20 @@ public class LeftMenuActivity extends Activity {
         leftmenu_my_linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( mPref.isPairingCompleted() == false ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                if (mPref.isPairingCompleted() == false) {
+                    String alertTitle = "마이 C&M 미 지원 상품";
+                    String alertMsg1 = getString(R.string.error_not_paring_compleated1);
+                    String alertMsg2 = "";
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                         }
-                    });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated1));
-                    alert.show();
+                    }, true);
 
                 } else {
-                Intent intent = new Intent(mInstance, MyMainActivity.class);
-                startActivity(intent);
-                finish();
+                    Intent intent = new Intent(mInstance, MyMainActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -234,9 +224,9 @@ public class LeftMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                    Intent intent = new Intent(mInstance, CMSettingMainActivity.class);
-                    startActivity(intent);
-                    finish();
+                Intent intent = new Intent(mInstance, CMSettingMainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -250,8 +240,11 @@ public class LeftMenuActivity extends Activity {
         leftmenu_whatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mInstance, LeftMenuDialogActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(mInstance, LeftMenuDialogActivity.class);
+//                startActivity(intent);
+                String alertTitle = "셋탑박스 연동이란?";
+                String alertMsg = getString(R.string.whatSetTop);
+                CMAlertUtil.Alert(mInstance, alertTitle, alertMsg);
             }
         });
     }

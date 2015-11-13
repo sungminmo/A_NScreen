@@ -23,6 +23,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -435,8 +436,10 @@ public class VodBuyActivity extends Activity {
                     e.printStackTrace();
                 }
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                String alertTitle = "구매완료";
+                String alertMsg1  = mTitle;
+                String alertMsg2  = getString(R.string.success_purchase);
+                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -445,9 +448,7 @@ public class VodBuyActivity extends Activity {
                         setResult(RESULT_OK, intent);
                         finish();
                     }
-                });
-                alert.setMessage(mTitle + "구매가 완료되었습니다. [VOD 구매목록] 메뉴에서 구매내역을 확인하실 수 있습니다.");
-                alert.show();
+                }, true);
             }
         }, new Response.ErrorListener() {
             @Override

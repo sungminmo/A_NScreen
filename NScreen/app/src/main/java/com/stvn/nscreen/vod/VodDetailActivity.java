@@ -36,6 +36,7 @@ import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.WishObject;
+import com.stvn.nscreen.util.CMAlertUtil;
 import com.widevine.sampleplayer.VideoPlayerView;
 
 import org.json.JSONArray;
@@ -246,17 +247,15 @@ public class VodDetailActivity extends Activity {
                 */
 
                 if ( mPref.isPairingCompleted() == false ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMsg1  = mTitle;
+                    String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                         }
-                    });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                    alert.show();
+                    }, true);
                 } else {
-
                     Intent intent = new Intent(mInstance, VodBuyActivity.class);
                     intent.putExtra("assetId", mInstance.assetId);
                     intent.putExtra("isSeriesLink", isSeriesLink);
@@ -298,15 +297,14 @@ public class VodDetailActivity extends Activity {
                 */
 
                 if ( mPref.isPairingCompleted() == false ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMsg1  = mTitle;
+                    String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                         }
-                    });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                    alert.show();
+                    }, true);
                 } else {
                     Intent intent = new Intent(mInstance, VodBuyActivity.class);
                     intent.putExtra("assetId", mInstance.assetId);
@@ -327,15 +325,14 @@ public class VodDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if ( mPref.isPairingCompleted() == false ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMsg1  = mTitle;
+                    String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                         }
-                    });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                    alert.show();
+                    }, true);
                 } else {
                     isPrePlay = false;
                     requestContentUri();
@@ -351,15 +348,14 @@ public class VodDetailActivity extends Activity {
                 if ( mPref.isWishAsset(assetId) == false ) {
                     // 찜 안한 VOD
                     if ( mPref.isPairingCompleted() == false ) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertMsg1  = mTitle;
+                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                             }
-                        });
-                        alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                        alert.show();
+                        }, true);
                     } else {
                         requestAddRemoveWishItem("addWishItem");
                         Drawable img = getResources().getDrawable(R.mipmap.v_pick);
@@ -390,15 +386,14 @@ public class VodDetailActivity extends Activity {
                 if ( mPref.isWishAsset(assetId) == false ) {
                     // 찜 안한 VOD
                         if ( mPref.isPairingCompleted() == false ) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "셋탑박스 연동 필요";
+                            String alertMsg1  = mTitle;
+                            String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                            CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                 }
-                            });
-                            alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                            alert.show();
+                            }, true);
                         } else {
                             requestAddRemoveWishItem("addWishItem");
                             Drawable img = getResources().getDrawable(R.mipmap.v_pick);
@@ -411,15 +406,14 @@ public class VodDetailActivity extends Activity {
                 } else {
                     // 찜 한 VOD
                     if ( mPref.isPairingCompleted() == false ) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertMsg1  = mTitle;
+                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                             }
-                        });
-                        alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                        alert.show();
+                        }, true);
                     }
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
