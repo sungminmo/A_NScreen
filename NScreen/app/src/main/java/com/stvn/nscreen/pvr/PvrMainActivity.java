@@ -232,7 +232,12 @@ public class PvrMainActivity extends AppCompatActivity {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
-                if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
+                if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) {
+                    // 녹화물 없음이므로 정상.
+                    textView1.setText("총 0개의 녹화예약 콘텐츠가 있습니다.");
+                    mAdapter.setTabNumber(1);
+                    mAdapter.notifyDataSetChanged();
+                } else if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
                     String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
                     AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
                     ad.setTitle("알림").setMessage(msg).setCancelable(false)
