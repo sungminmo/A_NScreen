@@ -223,14 +223,12 @@ public class PvrMainActivity extends AppCompatActivity {
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
-        // for test
-        //String          url     = "http://192.168.44.10/SMApplicationserver/getrecordReservelist.asp?Version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&deviceId=68590725-3b42-4cea-ab80-84c91c01bad2";
         String          url     = mPref.getRumpersServerUrl() + "/getRecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d(tag, response);
                 mProgressDialog.dismiss();
+                //String sResultCode = parseGetRecordReservelist(request.getUtf8Response()); // 파싱 결과를 리턴 받는다.
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) {
                     // 녹화물 없음이므로 정상.

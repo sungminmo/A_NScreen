@@ -18,13 +18,13 @@ import java.util.Map;
 /**
  * Created by swlim
  */
-public class JYStringRequest extends StringRequest {
+public class JYSMApplicationRequest extends StringRequest {
 
-    private static final String tag = JYStringRequest.class.getSimpleName();
+    private static final String tag = JYSMApplicationRequest.class.getSimpleName();
     private String mUrl = null;
     private JYSharedPreferences mPref = null;
 
-    public JYStringRequest(JYSharedPreferences pref, int iMethod, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public JYSMApplicationRequest(JYSharedPreferences pref, int iMethod, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(iMethod, url, listener, errorListener);
         mUrl = url;
         mPref = pref;
@@ -48,33 +48,26 @@ public class JYStringRequest extends StringRequest {
         return map;
     }
 
-    /*
-    @Override
-    protected Response<String> parseNetworkResponse(NetworkResponse response) {
-        Map<String, String> headers = response.headers;
-        if (headers.containsKey("session")) {
-            //
-        }
-        if (headers.containsKey("Set-Cookie")) {
-            String cookies = headers.get("Set-Cookie").toString();
-            String[] words = cookies.split(";");
-            String cookie = words[0];
-            mPref.put("Cookie", cookie);
-            if ( mPref.isLogging() ) {
-                Log.d(tag, "JYStringRequest() parseNetworkResponse() cookie:" + cookie);
-            }
-        }
-        return super.parseNetworkResponse(response);
-//        String responseUtf8 = null;
-//        try {
-//            responseUtf8 = new String(response.data,"UTF-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
+//    @Override
+//    protected Response<String> parseNetworkResponse(NetworkResponse response) {
+//        Map<String, String> headers = response.headers;
+//        if (headers.containsKey("session")) {
+//            //
 //        }
-//
-//        return super.parseNetworkResponse(responseUtf8);
-    }
-    */
+//        if (headers.containsKey("Set-Cookie")) {
+//            String cookies = headers.get("Set-Cookie").toString();
+//            String[] words = cookies.split(";");
+//            String cookie = words[0];
+//            mPref.put("Cookie", cookie);
+//            if ( mPref.isLogging() ) {
+//                Log.d(tag, "JYStringRequest() parseNetworkResponse() cookie:" + cookie);
+//            }
+//        }
+//        return super.parseNetworkResponse(response);
+//    }
+
+
+
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         String utf8String;
@@ -85,4 +78,5 @@ public class JYStringRequest extends StringRequest {
         }
         return Response.success(utf8String, HttpHeaderParser.parseCacheHeaders(response));
     }
+
 }
