@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.stvn.nscreen.setting.notice.CMSettingNoticeActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
 /**
@@ -292,6 +293,8 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case R.id.setting_notice_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingNoticeActivity.class);
+                startActivity(nextIntent);
                 break;
             }
             case R.id.setting_pay_channel_Index: {
@@ -300,6 +303,9 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case R.id.setting_customer_center_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingCustomerCenterActivity.class);
+                nextIntent.putExtra("GUIDE_ID", "2");
+                startActivity(nextIntent);
                 break;
             }
             case R.id.setting_item_image: {

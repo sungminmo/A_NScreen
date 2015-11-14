@@ -3,10 +3,7 @@ package com.stvn.nscreen.leftmenu;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -24,6 +21,7 @@ import com.stvn.nscreen.my.MyMainActivity;
 import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.pvr.PvrMainActivity;
 import com.stvn.nscreen.rmt.RemoteControllerActivity;
+import com.stvn.nscreen.setting.CMSettingCustomerCenterActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
@@ -38,7 +36,7 @@ public class LeftMenuActivity extends Activity {
 
     private LinearLayout leftmenu_tv_linearLayout, leftmenu_remote_linearLayout, leftmenu_pvr_linearLayout, leftmenu_my_linearLayout, leftmenu_setting_linearLayout, leftmenu_right;
 
-    private Button leftmenu_pairing_button1, leftmenu_pairing_button2;
+    private Button leftmenu_pairing_button1, leftmenu_pairing_button2, leftmenu_agreement_button;
 
     private ImageButton imageButton2, leftmenu_whatBtn;
 
@@ -74,8 +72,8 @@ public class LeftMenuActivity extends Activity {
         leftmenu_pairing_button2 = (Button) findViewById(R.id.leftmenu_pairing_button2);
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
         leftmenu_whatBtn = (ImageButton) findViewById(R.id.leftmenu_whatBtn);
+        leftmenu_agreement_button = (Button) findViewById(R.id.button5);
         leftmenu_version_textview = (TextView) findViewById(R.id.leftmenu_version_textview);
-
         leftmenu_version_textview.setText("현재 버전 " + appVer);
 
         if (mPref.isPairingCompleted() == true) {
@@ -245,6 +243,16 @@ public class LeftMenuActivity extends Activity {
                 String alertTitle = "셋탑박스 연동이란?";
                 String alertMsg = getString(R.string.whatSetTop);
                 CMAlertUtil.Alert(mInstance, alertTitle, alertMsg);
+            }
+        });
+
+        leftmenu_agreement_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextIntent = new Intent(LeftMenuActivity.this, CMSettingCustomerCenterActivity.class);
+                nextIntent.putExtra("GUIDE_ID", "1");
+                startActivity(nextIntent);
+                finish();
             }
         });
     }
