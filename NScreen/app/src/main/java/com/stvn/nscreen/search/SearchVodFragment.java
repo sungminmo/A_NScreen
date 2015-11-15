@@ -1,6 +1,5 @@
 package com.stvn.nscreen.search;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,10 +19,10 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchVodDataObject;
 import com.stvn.nscreen.common.VolleyHelper;
+import com.stvn.nscreen.setting.CMSettingData;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
-import com.stvn.nscreen.setting.CMSettingData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +44,6 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
     private String mTerminalKey = "8A5D2E45D3874824FF23EC97F78D358";
     private String mKeyword;
     private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
 
     private JYSharedPreferences mPref;
     private boolean mLockListView = true;
@@ -81,7 +79,8 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
     public void reqVodList()
     {
         mLockListView = true;
-        mProgressDialog	 = ProgressDialog.show(getActivity(), "", getString(R.string.wait_a_moment));
+        ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+
 		String includeAdultCategory = CMSettingData.getInstance().isAdultAuth(getActivity())?"1":"0";
         String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+mKeyword+"&contentGroupProfile=2";
 
@@ -89,8 +88,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-                        mProgressDialog.dismiss();
+                        ((SearchMainActivity)getActivity()).hideProgressDialog();
                         try {
                             JSONArray object = response.getJSONArray("searchResultList");
                             if(object.length()>0)
@@ -124,7 +122,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
             }
         });
 

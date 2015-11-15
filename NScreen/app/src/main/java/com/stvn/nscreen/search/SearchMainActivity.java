@@ -57,7 +57,6 @@ public class SearchMainActivity extends CMBaseActivity {
 
     private String mVersion = "1";
     private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
 
     private JYSharedPreferences mPref;
     private boolean mLockListView = true;
@@ -196,7 +195,8 @@ public class SearchMainActivity extends CMBaseActivity {
     {
         mLockListView = true;
         mKeywordList.clear();
-        mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment),false,true);
+        showProgressDialog("", getString(R.string.wait_a_moment), false, true);
+
         String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/getSearchWord.json?version="+mVersion+"&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory=0&searchKeyword="+mKeywordView.getText().toString();
         mKeywordView.setEnabled(false);
         final GsonRequest gsonRequest = new GsonRequest(url, KeyWordDataObject.class,null,new Response.Listener<KeyWordDataObject>(){
@@ -204,7 +204,7 @@ public class SearchMainActivity extends CMBaseActivity {
             public void onResponse(KeyWordDataObject response) {
                 if(isFragmentVisible)
                 {
-                    mProgressDialog.dismiss();
+                    hideProgressDialog();
                     isFragmentVisible = false;
                     return;
                 }
@@ -224,13 +224,13 @@ public class SearchMainActivity extends CMBaseActivity {
                 }
                 mAdapter.notifyDataSetChanged();;
                 mKeywordView.setEnabled(true);
-                mProgressDialog.dismiss();
+                hideProgressDialog();
             }
         }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
                 mKeywordView.setEnabled(true);
-                mProgressDialog.dismiss();
+                hideProgressDialog();
             }
         });
 

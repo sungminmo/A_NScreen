@@ -1,4 +1,4 @@
-package com.stvn.nscreen.setting;
+package com.stvn.nscreen.setting.pay_channel;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,7 +15,6 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.ListViewDataObject;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.util.CMLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,19 +72,8 @@ public class CMSettingPayChannelAdapter extends ArrayAdapter<ListViewDataObject>
         try {
             JSONObject jsonObj = new JSONObject(info.sJson);
 
-            holder.channelName.setText(jsonObj.getString("channelName"));
-            holder.channelImage.setImageUrl(jsonObj.getString("channelLogoImg"), mImageLoader);
-
-            CMLog.d("Pay Channel Data", "[ " + position + " ]---------");
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelId"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelNumber"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelName"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelInfo"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelOnAirHD"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelLogoImg"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelProgramOnAirID"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelProgramOnAirTime"));
-            CMLog.d("Pay Channel Data", jsonObj.getString("channelView"));
+            holder.channelName.setText(jsonObj.getString("Joy_Title"));
+            holder.channelImage.setImageUrl(jsonObj.getString("Joy_Thumbnail_Img"), mImageLoader);
 
         } catch (JSONException e) {
             e.printStackTrace();

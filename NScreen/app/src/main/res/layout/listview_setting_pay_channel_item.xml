@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_58">
+    android:layout_height="wrap_content">
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/setting_pay_channel_item_image"
         android:layout_width="@dimen/dimen_0"
@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/setting_pay_channel_item_name"
         android:layout_width="@dimen/dimen_0"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/dimen_58"
         android:layout_weight="1"
         android:text=""
         android:textSize="14sp"

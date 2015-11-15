@@ -1,6 +1,5 @@
-package com.stvn.nscreen.setting;
+package com.stvn.nscreen.setting.pay_channel;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,7 +45,6 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
 
     // network
     private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
 
     private JYSharedPreferences mPref;
 
@@ -81,20 +79,20 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
     }
 
     private void requestPayChannelList() {
-        mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
-
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0&mode=PAY";
+        showProgressDialog("", getString(R.string.wait_a_moment));
+//        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String url = mPref.getRumpersServerUrl() + "/GetServiceJoyNList.asp";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 parsePayChannelList(response);
                 mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
+                hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                hideProgressDialog();
                 CMLog.e("CMSettingPayChannelActivity", error.getMessage());
             }
         }) {
@@ -102,8 +100,6 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("version", String.valueOf(1));
-                params.put("areaCode", String.valueOf(0));
-                params.put("mode", "PAY");
                 CMLog.d("CMSettingPayChannelActivity", params.toString());
                 return params;
             }
@@ -124,24 +120,17 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
             int eventType = xpp.getEventType();
             while ( eventType != XmlPullParser.END_DOCUMENT ) {
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (xpp.getName().equalsIgnoreCase("channelId")) {
-                        sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
-                        sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelName")) {
-                        sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelInfo")) {
-                        sb.append(",\"channelInfo\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelOnAirHD")) {
-                        sb.append(",\"channelOnAirHD\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelLogoImg")) {
-                        sb.append(",\"channelLogoImg\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirID")) {
-                        sb.append(",\"channelProgramOnAirID\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTime")) {
-                        sb.append(",\"channelProgramOnAirTime\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelView")) {
-                        sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
+                    if (xpp.getName().equalsIgnoreCase("Joy_ID")) {
+                        sb.append("{\"Joy_ID\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("Joy_Title")) {
+                        sb.append(",\"Joy_Title\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("Joy_SubTitle")) {
+                        sb.append(",\"Joy_SubTitle\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("Joy_Content")) {
+                        String strContent = xpp.nextText().replaceAll("\"", "'");
+                        sb.append(",\"Joy_Content\":\"").append(strContent).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("Joy_Thumbnail_Img")) {
+                        sb.append(",\"Joy_Thumbnail_Img\":\"").append(xpp.nextText()).append("\"}");
                         ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
                         mPayChannelList.add(obj);
                         sb.setLength(0);
@@ -165,7 +154,8 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
             JSONObject jsonObj = new JSONObject(info.sJson);
 
             Intent nextIntent = new Intent(CMSettingPayChannelActivity.this, CMSettingPayChannelDetailActivity.class);
-            nextIntent.putExtra("Channel_Title", jsonObj.getString("channelName"));
+            nextIntent.putExtra("Joy_Title", jsonObj.getString("Joy_Title"));
+            nextIntent.putExtra("Joy_ID", jsonObj.getString("Joy_ID"));
             startActivity(nextIntent);
 
         } catch (JSONException e) {

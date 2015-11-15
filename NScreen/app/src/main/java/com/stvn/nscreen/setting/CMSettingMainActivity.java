@@ -16,6 +16,8 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
 import com.stvn.nscreen.setting.notice.CMSettingNoticeActivity;
+import com.stvn.nscreen.setting.pay_channel.CMSettingPayChannelActivity;
+import com.stvn.nscreen.setting.region.CMSettingRegionActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
 /**

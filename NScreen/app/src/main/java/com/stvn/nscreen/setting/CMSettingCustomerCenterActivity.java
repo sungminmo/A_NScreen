@@ -1,6 +1,5 @@
 package com.stvn.nscreen.setting;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -41,7 +40,6 @@ public class CMSettingCustomerCenterActivity extends CMBaseActivity implements V
     private String mGuideID;
     // network
     private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
 
     private JYSharedPreferences mPref;
 
@@ -81,7 +79,7 @@ public class CMSettingCustomerCenterActivity extends CMBaseActivity implements V
     }
 
     private void requestServiceGuide() {
-        mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
+        showProgressDialog("", getString(R.string.wait_a_moment));
 
         String url = mPref.getRumpersServerUrl() + "/GetServiceguideInfo.asp?guideID=" + mGuideID;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
@@ -102,12 +100,12 @@ public class CMSettingCustomerCenterActivity extends CMBaseActivity implements V
                     e.printStackTrace();
                 }
 
-                mProgressDialog.dismiss();
+                hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                hideProgressDialog();
                 CMLog.e("CMSettingCustomerCenterActivity", error.getMessage());
             }
         }) {
