@@ -113,7 +113,8 @@ public class LoadingActivity extends AppCompatActivity {
                     // ok
                     String SetTopBoxKind = (String)mGetAppInitialize.get("SetTopBoxKind");
                     if ( "".equals(SetTopBoxKind) ) {
-                        // 작업해야됨!!! 셋탑박스 종류가 안내려왔으니, 페어링 정보를 초기화(제거) 해야 한다.
+                        // 셋탑박스 종류가 안내려왔으니, 페어링 정보를 초기화(제거)
+                        mPref.removePairingInfo();
                     } else {
                         mPref.setSettopBoxKind(SetTopBoxKind);
                     }

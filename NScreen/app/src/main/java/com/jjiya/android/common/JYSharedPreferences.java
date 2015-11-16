@@ -223,6 +223,18 @@ public class JYSharedPreferences {
     }
 
     /**
+     * 페어링 정보 날리기.
+     * LoadingActivity의 requestGetAppInitialize()에서 응답중에 SetTopBoxKind 값이 없으면 이넘을 호출해서
+     * 페어링 정보를 날려버린다.
+     */
+    public void removePairingInfo(){
+        put(RUMPERS_SETOPBOX_KIND, "");
+        put(JYSharedPreferences.WEBHAS_PRIVATE_TERMINAL_KEY, ""); // 터미널키 저장.
+        put(JYSharedPreferences.PURCHASE_PASSWORD, "");     // 구매비번 저장.
+    }
+
+
+    /**
      * 페어링완료후나 스플래쉬에서 받은 셋탑박스 종류를 저장한다.
      * @param SetTopBoxKind
      */
