@@ -144,6 +144,7 @@ public class PvrMainListViewAdapter extends BaseAdapter {
 
         SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat       formatter3             = new SimpleDateFormat("MM.dd (E)");
 
         try {
             ListViewDataObject dobj            = (ListViewDataObject)getItem(position);
@@ -152,10 +153,12 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             String             RecordStartTime = jobj.getString("RecordStartTime");
             String             RecordEndTime   = jobj.getString("RecordEndTime");
 
-            TextView           titleTextView = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
-            NetworkImageView   channelLogo   = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
-            ImageView pvr_main_pvr = ViewHolder.get(convertView, R.id.pvr_main_pvr);
-            ProgressBar progBar = ViewHolder.get(convertView, R.id.progressBar1);
+            TextView           titleTextView          = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
+            TextView           pvr_main_textview_time = ViewHolder.get(convertView, R.id.pvr_main_textview_time);
+            TextView           pvr_main_textview_date = ViewHolder.get(convertView, R.id.pvr_main_textview_date);
+            NetworkImageView   channelLogo            = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
+            ImageView          pvr_main_pvr           = ViewHolder.get(convertView, R.id.pvr_main_pvr);
+            ProgressBar        progBar                = ViewHolder.get(convertView, R.id.progressBar1);
 
             if ( iTabNumber == 1 ) {
                 progBar.setVisibility(View.VISIBLE);
@@ -173,6 +176,10 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             String             dt21                     = formatter2.format(dt11).toString();
             String             dt22                     = formatter2.format(dt12).toString();
             String             dt23                     = formatter2.format(dt).toString();
+            String             dt31                     = formatter3.format(dt11).toString();
+
+            pvr_main_textview_time.setText(dt21);
+            pvr_main_textview_date.setText(dt31);
 
             Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
@@ -181,10 +188,11 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             if (i1 <= i3 && i3 <= i2 ) { // 예약녹화 걸려있지 않은 방송.
                 float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
                 progBar.setProgress((int)(f1 * 100));
-            } else {
+                pvr_main_pvr.setVisibility(View.VISIBLE);
+            } else if ( dt.compareTo(dt11) < 0 ) {
                 progBar.setProgress(0);
+                pvr_main_pvr.setVisibility(View.INVISIBLE);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {

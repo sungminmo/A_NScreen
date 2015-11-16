@@ -219,7 +219,7 @@ public class PvrMainActivity extends AppCompatActivity {
     };
 
     private void requestGetRecordReservelist() {
-        mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+//        mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
@@ -227,7 +227,7 @@ public class PvrMainActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
+//                mProgressDialog.dismiss();
                 //String sResultCode = parseGetRecordReservelist(request.getUtf8Response()); // 파싱 결과를 리턴 받는다.
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) {
@@ -256,7 +256,7 @@ public class PvrMainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+//                mProgressDialog.dismiss();
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {

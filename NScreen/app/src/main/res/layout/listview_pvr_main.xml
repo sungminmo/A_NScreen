@@ -32,7 +32,8 @@
         android:layout_gravity="left|top"
         android:background="@mipmap/icon_record"
         android:layout_marginTop="19.75dp"
-        android:layout_marginLeft="154.25dp" />
+        android:layout_marginLeft="154.25dp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/pvr_main_textview_program_title"
@@ -64,7 +65,8 @@
         android:id="@+id/pvr_main_imageview_series"
         android:layout_gravity="left|center_vertical"
         android:background="@mipmap/icon_series"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginLeft="20dp"
+        android:visibility="invisible" />
 
     <ProgressBar
         android:layout_width="fill_parent"
