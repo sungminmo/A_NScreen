@@ -269,7 +269,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                             categorys.add(category);
                         }
                     }
-                    categorys.remove(0);
+                    if ( categoryList.length() > 1 ) {
+                        categorys.remove(0);
+                    }
                     JSONObject category     = (JSONObject)categorys.get(0);
                     mCategoryNameTextView.setText(category.getString("categoryName"));
                     mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkError;
@@ -38,6 +39,7 @@ import com.jjiya.android.common.VodNewMoviePosterPagerAdapter;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.bean.MainCategoryObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +74,13 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // gui
     private              ViewPager              mBannerViewPager;
     private              List<JSONObject>       mBanners;
+
+    private              TextView               mSection1TextView;
+    private              TextView               mSection2TextView;
+    private              TextView               mSection3TextView;
+    private              LinearLayout           mSection1Linearlayout;
+    private              LinearLayout           mSection2Linearlayout;
+    private              LinearLayout           mSection3Linearlayout;
 
     private              ViewPager                     mPop20ViewPager;
     private              EightVodPosterPagerAdapter    mPop20PagerAdapter; // 인기순위 Top 20
@@ -132,27 +141,59 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         mBannerViewPager = (ViewPager)view.findViewById(R.id.vod_main_event_viewpager);
 
         // 인가 탑20
+        mSection1TextView = (TextView)view.findViewById(R.id.vod_main_section1_textview);
+        mSection1Linearlayout = (LinearLayout)view.findViewById(R.id.vod_main_pop20_more_linearlayout);
         mPop20ViewPager = (ViewPager)view.findViewById(R.id.vod_main_pop20_viewpager);
         mPop20ViewPager.setAdapter(mPop20PagerAdapter);
 
         // 신작영화
+        mSection2TextView = (TextView)view.findViewById(R.id.vod_main_section2_textview);
+        mSection2Linearlayout = (LinearLayout)view.findViewById(R.id.vod_main_newmovie_more_linearlayout);
         mNewMovieViewPager = (ViewPager)view.findViewById(R.id.vod_main_newmovie_viewpager);
         mNewMovieViewPager.setAdapter(mNewMoviePagerAdapter);
 
         // 이달의 추천 VOD
+        mSection3TextView = (TextView)view.findViewById(R.id.vod_main_section3_textview);
+        mSection3Linearlayout = (LinearLayout)view.findViewById(R.id.vod_main_thismonth_more_linearlayout);
         mThisMonthViewPager = (ViewPager)view.findViewById(R.id.vod_main_thismonth_viewpager);
         mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
 
-        // 카테고리 요청. 추천.
-        //requestGetCategoryTree();
+        //
+        MainCategoryObject cate1 = mPref.getMainCategoryObject(1);
+        MainCategoryObject cate2 = mPref.getMainCategoryObject(2);
+        MainCategoryObject cate3 = mPref.getMainCategoryObject(3);
+        mSection1TextView.setText(cate1.getsCategoryTitle());
+        mSection2TextView.setText(cate2.getsCategoryTitle());
+        mSection3TextView.setText(cate3.getsCategoryTitle());
+
+
         requestGetServiceBannerList(); // 배너 요청
 
 
-        ((LinearLayout)view.findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {
+        mSection1Linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
-                //startActivity(i);
+                MainCategoryObject cate = mPref.getMainCategoryObject(1);
+                mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, cate.getsCategoryId());
+                textView2.performClick();
+            }
+        });
+
+        mSection2Linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainCategoryObject cate = mPref.getMainCategoryObject(2);
+                mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, cate.getsCategoryId());
+                textView2.performClick();
+            }
+        });
+
+        mSection3Linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainCategoryObject cate = mPref.getMainCategoryObject(3);
+                mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, cate.getsCategoryId());
+                textView2.performClick();
             }
         });
 
@@ -451,7 +492,10 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // 인기 TOP 20
     private void requestGetPopularityChart() {
         //String url = mPref.getWebhasServerUrl() + "/getPopularityChart.xml?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
-        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        //String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId=713230&requestItems=weekly";
+        MainCategoryObject cate = mPref.getMainCategoryObject(1);
+        String url = mPref.getWebhasServerUrl() + "/getPopularityChart.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryId="+cate.getsCategoryId()+"&requestItems=weekly";
+
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -562,7 +606,8 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // http://192.168.40.5:8080/HApplicationServer/getContentGroupList.json?version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&contentGroupProfile=2&categoryId=723049
     // 금주의 신작영화
     private void requestGetContentGroupList() {
-        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&&categoryId=723049";
+        MainCategoryObject cate = mPref.getMainCategoryObject(2);
+        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&&categoryId="+cate.getsCategoryId();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -598,7 +643,8 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     // 이달의 추천 VOD
     private void requestGetContentGroupList2() {
-        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&&categoryId=713229";
+        MainCategoryObject cate = mPref.getMainCategoryObject(3);
+        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&&categoryId="+cate.getsCategoryId();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

@@ -87,7 +87,8 @@ public class LoadingActivity extends AppCompatActivity {
         // requestGetAppInitialize() 50%
         // requestGetWishList()      50%
 
-        requestGetAppInitialize();
+        //requestGetAppInitialize();
+        requestGetCategoryTreeForVodMain();
     }
 
     /**
@@ -203,10 +204,13 @@ public class LoadingActivity extends AppCompatActivity {
                     } else if (xpp.getName().equalsIgnoreCase("categoryId")) {
                         String categoryId = xpp.nextText();
                         if ( iCategoryLoop == 0 ) {
+                            mMainCategoryObject1.setsSortNo("1");
                             mMainCategoryObject1.setsCategoryId(categoryId);
                         } else if ( iCategoryLoop == 1 ) {
+                            mMainCategoryObject2.setsSortNo("2");
                             mMainCategoryObject2.setsCategoryId(categoryId);
                         } else if ( iCategoryLoop == 2 ) {
+                            mMainCategoryObject3.setsSortNo("3");
                             mMainCategoryObject3.setsCategoryId(categoryId);
                         }
                     } else if (xpp.getName().equalsIgnoreCase("categorytype")) {
@@ -241,6 +245,74 @@ public class LoadingActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * VOD 메인 탭 5개 중에, 4개 받아오기.
+     * http://58.141.255.79:8080/HApplicationServer/getCategoryTree.json?version=1&terminalKey=D049DBBA897611A7F6B6454471B5B6&categoryProfile=1&categoryId=0&depth=2&traverseType=DFS
+     */
+    private void requestGetCategoryTreeForVodMain() {
+        //mProgressBar.setProgress(70);
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetCategoryTreeForVodMain()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+terminalKey+"&&categoryProfile=1&categoryId=0&depth=2&traverseType=DFS";
+        mTextView.setText("CategoryTree...(H)");
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //mProgressBar.setProgress(80);
+                try {
+                    JSONObject root    = new JSONObject(response);
+                    String resultCode  = root.getString("resultCode");
+                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        JSONArray categoryList  = root.getJSONArray("categoryList");
+                        for ( int i = 0; i < categoryList.length(); i++ ) {
+                            JSONObject jo = (JSONObject)categoryList.get(i);
+                            String description = jo.getString("description");
+                            if ( "mobileTV_01".equals(description) ) {
+                                mPref.put(Constants.CATEGORY_ID_TAB2, jo.getString("categoryId"));
+                            } else if ( "mobileTV_02".equals(description) ) {
+                                mPref.put(Constants.CATEGORY_ID_TAB3, jo.getString("categoryId"));
+                            } else if ( "mobileTV_03".equals(description) ) {
+                                mPref.put(Constants.CATEGORY_ID_TAB4, jo.getString("categoryId"));
+                            } else if ( "mobileTV_04".equals(description) ) {
+                                mPref.put(Constants.CATEGORY_ID_TAB5, jo.getString("categoryId"));
+                            }
+                        }
+                    } else {
+                        //
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                requestGetAppInitialize();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+        //mProgressBar.setProgress(60);
     }
 
     /**
