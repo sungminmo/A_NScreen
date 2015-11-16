@@ -3,6 +3,7 @@ package com.stvn.nscreen.vod;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Parcelable;
@@ -361,21 +362,17 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
             v = mInflater.inflate(R.layout.viewpager_void_main_banner, null);
             try {
-                JSONObject       jo   = mBanners.get(position);
-                //final String           num  = jo.getString("num");
-                //String           iurl = mPref.getServerUrl() + jo.get("bImg2");
+                JSONObject jo   = mBanners.get(position);
+                final String assetId2  = jo.getString("assetId");
                 String imageUrl = jo.getString("android_imgurl");
                 NetworkImageView niv  = (NetworkImageView)v.findViewById(R.id.vod_main_banner_network_imageview);
                 niv.setImageUrl(imageUrl, mImageLoader);
                 niv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(mInstance, EventMainActivity.class);
-//                        intent.putExtra("num", num);
-//                        v = TopMainActivityGroup.topMainActivityGroup.getLocalActivityManager().startActivity("EventMainActivity", intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)).getDecorView();
-//                        TopMainActivityGroup.topMainActivityGroup.replaceView(v);
-
-                        //MainActivity.mainActivity.changeTabAndChangeActivity("event", "EventSubActivity", EventSubActivity.class);
+                        Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId2);
+                        getActivity().startActivity(intent);
                     }
                 });
 
