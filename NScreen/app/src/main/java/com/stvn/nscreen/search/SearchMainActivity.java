@@ -1,7 +1,6 @@
 package com.stvn.nscreen.search;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -201,7 +200,6 @@ public class SearchMainActivity extends CMBaseActivity {
             public void onResponse(KeyWordDataObject response) {
                 if(isFragmentVisible)
                 {
-                    mProgressDialog.dismiss();
                     isFragmentVisible = false;
                     return;
                 }
