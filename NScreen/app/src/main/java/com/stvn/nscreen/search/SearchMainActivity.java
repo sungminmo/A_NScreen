@@ -196,9 +196,7 @@ public class SearchMainActivity extends CMBaseActivity {
     {
         mLockListView = true;
         mKeywordList.clear();
-        mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment),false,true);
         String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/getSearchWord.json?version="+mVersion+"&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory=0&searchKeyword="+mKeywordView.getText().toString();
-        mKeywordView.setEnabled(false);
         final GsonRequest gsonRequest = new GsonRequest(url, KeyWordDataObject.class,null,new Response.Listener<KeyWordDataObject>(){
             @Override
             public void onResponse(KeyWordDataObject response) {
@@ -223,14 +221,10 @@ public class SearchMainActivity extends CMBaseActivity {
                     mKeywordEmptyView.setVisibility(View.GONE);
                 }
                 mAdapter.notifyDataSetChanged();;
-                mKeywordView.setEnabled(true);
-                mProgressDialog.dismiss();
             }
         }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
-                mKeywordView.setEnabled(true);
-                mProgressDialog.dismiss();
             }
         });
 
