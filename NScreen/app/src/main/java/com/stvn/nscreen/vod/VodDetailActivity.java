@@ -450,6 +450,33 @@ public class VodDetailActivity extends Activity {
         requestRecommendContentGroupByAssetId();
     }
 
+    /**
+     * 화면 전체 새로 고침.
+     * @param assetId
+     */
+    public void refreshAll(String aid){
+        assetId = aid;
+
+        isPrePlay = true;
+        relationVods.clear();
+        series.clear();
+        mPagerAdapter.clear();
+
+        LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
+        ll.removeAllViewsInLayout();
+
+
+        /**
+         * VOD 상세정보 요청
+         */
+        requestGetAssetInfo();
+
+        /**
+         * 화면 하단의 연관 VOD 요청
+         */
+        requestRecommendContentGroupByAssetId();
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
@@ -1003,9 +1030,13 @@ public class VodDetailActivity extends Activity {
                         seriesButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mInstance, VodDetailActivity.class);
-                                intent.putExtra("assetId", buttonAssetId);
-                                startActivity(intent);
+                                if ( isSeriesLink.equals("YES") ) {
+                                    refreshAll(buttonAssetId);
+                                } else {
+                                    Intent intent = new Intent(mInstance, VodDetailActivity.class);
+                                    intent.putExtra("assetId", buttonAssetId);
+                                    startActivity(intent);
+                                }
                             }
                         });
 

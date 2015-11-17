@@ -52,6 +52,17 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
         mVodDetailActivity = a;
     }
 
+    private void startActivityDetail(String assetId, String jstr) {
+        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
+        intent.putExtra("assetId", assetId);
+        intent.putExtra("jstr", jstr);
+        mVodDetailActivity.startActivity(intent);
+    }
+
+    public void clear(){
+        mVods.clear();
+    }
+
     /**
      * 디폴트 메소드 구현 부.
      */
@@ -113,21 +124,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /*
-                        Bundle param = new Bundle();
-                        param.putString("assetId", assetId1);
-                        FragmentManager fm = mFragment.getFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        VodDetailFragment df = new VodDetailFragment();
-                        df.setArguments(param);
-                        ft.replace(R.id.fragment_placeholder, df);
-                        ft.addToBackStack("DetailFragment");
-                        ft.commit();
-                        */
-                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId1);
-                        intent.putExtra("jstr", jo1.toString());
-                        mVodDetailActivity.startActivity(intent);
+                        startActivityDetail(assetId1, jo1.toString());
                     }
                 });
             } else {
@@ -150,21 +147,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /*
-                        Bundle param = new Bundle();
-                        param.putString("assetId", assetId2);
-                        FragmentManager fm = mFragment.getFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        VodDetailFragment df = new VodDetailFragment();
-                        df.setArguments(param);
-                        ft.replace(R.id.fragment_placeholder, df);
-                        ft.addToBackStack("DetailFragment");
-                        ft.commit();
-                        */
-                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId2);
-                        intent.putExtra("jstr", jo2.toString());
-                        mVodDetailActivity.startActivity(intent);
+                        startActivityDetail(assetId2, jo2.toString());
                     }
                 });
             } else {
@@ -187,21 +170,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /*
-                        Bundle param = new Bundle();
-                        param.putString("assetId", assetId3);
-                        FragmentManager fm = mFragment.getFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        VodDetailFragment df = new VodDetailFragment();
-                        df.setArguments(param);
-                        ft.replace(R.id.fragment_placeholder, df);
-                        ft.addToBackStack("DetailFragment");
-                        ft.commit();
-                        */
-                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId3);
-                        intent.putExtra("jstr", jo3.toString());
-                        mVodDetailActivity.startActivity(intent);
+                        startActivityDetail(assetId3, jo3.toString());
                     }
                 });
             } else {
@@ -224,21 +193,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /*
-                        Bundle param = new Bundle();
-                        param.putString("assetId", assetId4);
-                        FragmentManager fm = mFragment.getFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        VodDetailFragment df = new VodDetailFragment();
-                        df.setArguments(param);
-                        ft.replace(R.id.fragment_placeholder, df);
-                        ft.addToBackStack("DetailFragment");
-                        ft.commit();
-                        */
-                        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId4);
-                        intent.putExtra("jstr", jo4.toString());
-                        mVodDetailActivity.startActivity(intent);
+                        startActivityDetail(assetId4, jo4.toString());
                     }
                 });
             } else {
