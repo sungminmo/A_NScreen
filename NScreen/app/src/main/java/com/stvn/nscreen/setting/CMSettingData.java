@@ -60,6 +60,7 @@ public class CMSettingData {
     public void setPurchaseAuthPassword(Context context, String purchasePwd) {
         JYSharedPreferences preferences = new JYSharedPreferences(context);
         preferences.put(JYSharedPreferences.PURCHASE_PASSWORD, purchasePwd);
+        preferences.writePairingInfoToPhone();
     }
 
     /**
