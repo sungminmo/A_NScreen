@@ -202,15 +202,14 @@ public class VodDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if ( mPref.isPairingCompleted() == false ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                    alert.show();
+                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertMsg1  = mTitle;
+                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
                 } else {
                     isPrePlay = true;
                     requestContentUri();
@@ -998,6 +997,7 @@ public class VodDetailActivity extends Activity {
 
                         if ( assetId.equals(buttonAssetId) ) {
                             seriesButton.setSelected(true);
+                            seriesButton.setFocusable(true);
                         }
 
                         seriesButton.setOnClickListener(new View.OnClickListener() {

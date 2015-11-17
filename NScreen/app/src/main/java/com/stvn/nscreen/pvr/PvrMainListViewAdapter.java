@@ -160,14 +160,6 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             ImageView          pvr_main_pvr           = ViewHolder.get(convertView, R.id.pvr_main_pvr);
             ProgressBar        progBar                = ViewHolder.get(convertView, R.id.progressBar1);
 
-            if ( iTabNumber == 1 ) {
-                progBar.setVisibility(View.VISIBLE);
-                pvr_main_pvr.setVisibility(View.VISIBLE);
-            } else {
-                progBar.setVisibility(View.INVISIBLE);
-                pvr_main_pvr.setVisibility(View.INVISIBLE);
-            }
-
             titleTextView.setText(jobj.getString("ProgramName"));
             channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);
 
@@ -185,14 +177,30 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
             Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
 
-            if (i1 <= i3 && i3 <= i2 ) { // 예약녹화 걸려있지 않은 방송.
+            if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
                 float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                progBar.setVisibility(View.VISIBLE);
                 progBar.setProgress((int)(f1 * 100));
                 pvr_main_pvr.setVisibility(View.VISIBLE);
             } else if ( dt.compareTo(dt11) < 0 ) {
+                progBar.setVisibility(View.VISIBLE);
                 progBar.setProgress(0);
                 pvr_main_pvr.setVisibility(View.INVISIBLE);
+            } else {
+                progBar.setVisibility(View.INVISIBLE);
             }
+
+//            if (i1 <= i3 && i3 <= i2 ) { // 예약녹화 걸려있지 않은 방송.
+//                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+//                progBar.setProgress((int)(f1 * 100));
+//                pvr_main_pvr.setVisibility(View.VISIBLE);
+//            } else if ( dt.compareTo(dt11) < 0 ) {
+//                progBar.setProgress(0);
+//                pvr_main_pvr.setVisibility(View.INVISIBLE);
+//            }
+//            if ( dt.compareTo(dt12) > 0 ) {
+//                progBar.setVisibility(View.INVISIBLE);
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {

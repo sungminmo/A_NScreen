@@ -805,7 +805,7 @@ public class EpgSubActivity extends AppCompatActivity {
     }
 
 
-
+    /* 녹화 예약 목록 호출 */
     private void requestGetRecordReservelist() {
         mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
@@ -820,7 +820,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
-                if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
+                if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
                     requestGetChannelSchedule();
                 } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
                     requestGetChannelSchedule();
@@ -959,6 +959,7 @@ public class EpgSubActivity extends AppCompatActivity {
         return sResultCode;
     }
 
+    /* 채널 편성 정보 호출 */
     private void requestGetChannelSchedule() {
         mProgressDialog = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
@@ -1114,6 +1115,7 @@ public class EpgSubActivity extends AppCompatActivity {
      *  리스트뷰의 스와이프 메뉴로 호출되는 통신들 입니다. ******************************************************
      */
 
+    /* TV로 시청 */
     private void requestSetRemoteChannelControl(String channelId) {
         mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
@@ -1222,6 +1224,7 @@ public class EpgSubActivity extends AppCompatActivity {
         }
     }
 
+    /* 즉시녹화 */
     private void requestSetRecord(String channelId) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecord()"); }
@@ -1258,10 +1261,10 @@ public class EpgSubActivity extends AppCompatActivity {
                     });
                     alert.setMessage(errorString);
                     alert.show();
-                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
+                } else if ( "009".equals(RemoteChannelControl.get("resultCode")) ) {
                     String errorString = (String) RemoteChannelControl.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    alert.setMessage("고객님의 셋탑박스에서 제공되지 않는 채널입니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -1280,10 +1283,10 @@ public class EpgSubActivity extends AppCompatActivity {
                     });
                     alert.setMessage(errorString);
                     alert.show();
-                } else if ( "009".equals(RemoteChannelControl.get("resultCode")) ) {
+                } else if ( "011".equals(RemoteChannelControl.get("resultCode")) ) {
                     String errorString = (String) RemoteChannelControl.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("고객님의 셋탑박스에서 제공되지 않는 채널입니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    alert.setMessage("고객님의 셋탑박스는 현재 다른 채널을 녹화중입니다. 녹화를 중지해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -1291,10 +1294,21 @@ public class EpgSubActivity extends AppCompatActivity {
                     });
                     alert.setMessage(errorString);
                     alert.show();
-                } else if ( "012".equals(RemoteChannelControl.get("resultCode")) ) {
+                }else if ( "012".equals(RemoteChannelControl.get("resultCode")) ) {
                     String errorString = (String) RemoteChannelControl.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
                     alert.setMessage("고객님의 셋탑박스 설정에 의한 시청제한으로 녹화가 불가합니다. 셋탑박스 설정을 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(errorString);
+                    alert.show();
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String errorString = (String) RemoteChannelControl.get("errorString");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setMessage("셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -1365,6 +1379,7 @@ public class EpgSubActivity extends AppCompatActivity {
         }
     }
 
+    /* 녹화중지 */
     private void requestSetRecordStop(String channelId) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordStop()"); }
@@ -1438,6 +1453,7 @@ public class EpgSubActivity extends AppCompatActivity {
         }
     }
 
+    /* 예약녹화 */
     private void requestSetRecordReserve(String channelId, String starttime) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordReserve()"); }
@@ -1564,6 +1580,7 @@ public class EpgSubActivity extends AppCompatActivity {
         }
     }
 
+    /* 예약 녹화 취소 */
     private void requestSetRecordCancelReserve(String channelId, String starttime, String seriesId) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }

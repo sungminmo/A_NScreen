@@ -108,9 +108,13 @@ public class VodMainGridViewAdapter extends BaseAdapter {
             setPromotionSticker(promotionSticker, gridview_vod_main_promotionsticker_imageview);
             if ( "1".equals(publicationRight1) || "false".equals(publicationRight1) ) {
                 gridview_vod_main_tvonly_imageview.setVisibility(View.VISIBLE);
+            }else {
+                gridview_vod_main_tvonly_imageview.setVisibility(View.INVISIBLE);
             }
             if ( rating.startsWith("19") && mPref.isAdultVerification() == false ) {
                 gridview_vod_main_19_imageview.setVisibility(View.VISIBLE);
+            } else {
+                gridview_vod_main_19_imageview.setVisibility(View.INVISIBLE);
             }
             String assetId = null;
             if ( ! jo.isNull("assetId") ) {

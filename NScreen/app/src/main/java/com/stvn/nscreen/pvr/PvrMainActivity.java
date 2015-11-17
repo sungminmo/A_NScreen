@@ -426,6 +426,10 @@ public class PvrMainActivity extends AppCompatActivity {
                         sb.append(",\"Channel_logo_img\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("ProgramName")) {
                         sb.append(",\"ProgramName\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("RecordStartTime")) {
+                        sb.append(",\"RecordStartTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("RecordEndTime")) {
+                        sb.append(",\"RecordEndTime\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("RecordHD")) {
                         sb.append(",\"RecordHD\":\"").append(xpp.nextText()).append("\"}");
                         ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());

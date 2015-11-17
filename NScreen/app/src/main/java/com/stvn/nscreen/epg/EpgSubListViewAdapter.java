@@ -289,30 +289,30 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                     if ( 0 <= i3 && i3 < i2 ) {
                         i2 += 1440;
                         i3 += 1440;
-                        if (i1 < i3 && i3 <= i2) {
+                        if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
                             // 현재 방송 중.
                             float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
                             progBar.setProgress((int) (f1 * 100));
                         }
                     } else {
                         i2 += 1440;
-                        if (i1 < i3 && i3 <= i2) {
+                        if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
                             // 현재 방송 중.
                             float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
                             progBar.setProgress((int) (f1 * 100));
-                        } else if ( i3 < i1 ) {
+                        } else if ( dt.compareTo(dt11) < 0 ) {
                             // 미래 방송 중.
                             progBar.setProgress(0);
                         }
                     }
                 } else {
-                    if ( i3 < i1 ) {
+                    if ( dt.compareTo(dt11) < 0 ) {
                         // 미래 방송.
                         progBar.setProgress(0);
-                    } else if ( i3 > i2 ) {
+                    } else if ( dt.compareTo(dt12) > 0 ) {
                         // 과거 방송.
                         progBar.setProgress(100);
-                    }  else if ( i1 <= i3 && i3 <= i2 ) {
+                    }  else if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
                         // 현재 방송.
                         float f1 = ((float) i3 - (float) i1) / ((float) i2 - (float) i1);
                         progBar.setProgress((int) (f1 * 100));
