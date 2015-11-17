@@ -1,7 +1,6 @@
 package com.stvn.nscreen.search;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,10 +20,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
@@ -56,9 +53,7 @@ public class SearchMainActivity extends CMBaseActivity {
     private TextView mKeywordEmptyView;
 
     private String mVersion = "1";
-    private RequestQueue mRequestQueue;
 
-    private JYSharedPreferences mPref;
     private boolean mLockListView = true;
 
     private VolleyHelper mVolleyHelper;
@@ -73,9 +68,7 @@ public class SearchMainActivity extends CMBaseActivity {
         setContentView(R.layout.activity_search_main);
         setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
         setActionBarTitle("검색");
-        mRequestQueue = Volley.newRequestQueue(this);
         mVolleyHelper = VolleyHelper.getInstance(this);
-        mPref = new JYSharedPreferences(this);
         initView();
 
     }
@@ -195,16 +188,12 @@ public class SearchMainActivity extends CMBaseActivity {
     {
         mLockListView = true;
         mKeywordList.clear();
-        showProgressDialog("", getString(R.string.wait_a_moment), false, true);
-
         String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/getSearchWord.json?version="+mVersion+"&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory=0&searchKeyword="+mKeywordView.getText().toString();
-        mKeywordView.setEnabled(false);
         final GsonRequest gsonRequest = new GsonRequest(url, KeyWordDataObject.class,null,new Response.Listener<KeyWordDataObject>(){
             @Override
             public void onResponse(KeyWordDataObject response) {
                 if(isFragmentVisible)
                 {
-                    hideProgressDialog();
                     isFragmentVisible = false;
                     return;
                 }
@@ -223,14 +212,10 @@ public class SearchMainActivity extends CMBaseActivity {
                     mKeywordEmptyView.setVisibility(View.GONE);
                 }
                 mAdapter.notifyDataSetChanged();;
-                mKeywordView.setEnabled(true);
-                hideProgressDialog();
             }
         }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
-                mKeywordView.setEnabled(true);
-                hideProgressDialog();
             }
         });
 
