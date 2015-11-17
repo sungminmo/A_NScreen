@@ -20,10 +20,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
@@ -55,9 +53,7 @@ public class SearchMainActivity extends CMBaseActivity {
     private TextView mKeywordEmptyView;
 
     private String mVersion = "1";
-    private RequestQueue mRequestQueue;
 
-    private JYSharedPreferences mPref;
     private boolean mLockListView = true;
 
     private VolleyHelper mVolleyHelper;
@@ -72,9 +68,7 @@ public class SearchMainActivity extends CMBaseActivity {
         setContentView(R.layout.activity_search_main);
         setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
         setActionBarTitle("검색");
-        mRequestQueue = Volley.newRequestQueue(this);
         mVolleyHelper = VolleyHelper.getInstance(this);
-        mPref = new JYSharedPreferences(this);
         initView();
 
     }
