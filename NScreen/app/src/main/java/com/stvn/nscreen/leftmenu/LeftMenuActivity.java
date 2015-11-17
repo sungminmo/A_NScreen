@@ -13,8 +13,21 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.epg.EpgMainActivity;
 import com.stvn.nscreen.my.MyMainActivity;
@@ -25,14 +38,22 @@ import com.stvn.nscreen.setting.CMSettingCustomerCenterActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by limdavid on 15. 10. 30..
  */
 
 public class LeftMenuActivity extends Activity {
-    private static final String tag = LeftMenuActivity.class.getSimpleName();
-    private static LeftMenuActivity mInstance;
-    private JYSharedPreferences mPref;
+    private static final String              tag = LeftMenuActivity.class.getSimpleName();
+    private static       LeftMenuActivity    mInstance;
+    private              JYSharedPreferences mPref;
+    private RequestQueue mRequestQueue;
 
     private LinearLayout leftmenu_tv_linearLayout, leftmenu_remote_linearLayout, leftmenu_pvr_linearLayout, leftmenu_my_linearLayout, leftmenu_setting_linearLayout, leftmenu_right;
 
@@ -55,8 +76,9 @@ public class LeftMenuActivity extends Activity {
         WindowManager.LayoutParams wmlp = getWindow().getAttributes();
         wmlp.gravity = Gravity.LEFT;
 
-        mInstance = this;
-        mPref = new JYSharedPreferences(this);
+        mInstance     = this;
+        mPref         = new JYSharedPreferences(this);
+        mRequestQueue = Volley.newRequestQueue(this);
         if (mPref.isLogging()) {
             Log.d(tag, "onCreate()");
         }
@@ -111,9 +133,7 @@ public class LeftMenuActivity extends Activity {
                 CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(mInstance, PairingMainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        requestRemoveUser();
                     }
                 }, new DialogInterface.OnClickListener() {
                     @Override
@@ -256,4 +276,56 @@ public class LeftMenuActivity extends Activity {
             }
         });
     }
+
+    private void requestRemoveUser() {
+        if ( mPref.isLogging() ) { Log.d(tag, "requestRemoveUser()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String userId      = mPref.getValue(JYSharedPreferences.UUID,"");
+        String url = mPref.getWebhasServerUrl() + "/removeUser.json?version=1&terminalKey="+terminalKey+"&userId="+userId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject root    = new JSONObject(response);
+                    String resultCode  = root.getString("resultCode");
+                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
+                        mPref.removePairingInfo();
+                        mPref.makeUUID();   // 사용자가 일부러 재등록을 했다면, UUID를 새로 만들어 줘야 한다.
+                        Intent intent = new Intent(mInstance, PairingMainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        //
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
 }

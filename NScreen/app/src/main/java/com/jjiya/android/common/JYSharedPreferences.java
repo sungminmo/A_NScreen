@@ -347,6 +347,9 @@ public class JYSharedPreferences {
         put(JYSharedPreferences.PURCHASE_PASSWORD, "");     // 구매비번 저장.
         put(I_AM_ADULT,""); // 성인인증
         writePairingInfoToPhone();
+
+        makeUUID();   // 페어링 정보 날린다음 uuid가 없다. 그래서 uuid 새로 만든다.
+        writePairingInfoToPhone();
     }
 
 

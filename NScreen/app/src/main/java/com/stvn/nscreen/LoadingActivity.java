@@ -102,7 +102,7 @@ public class LoadingActivity extends AppCompatActivity {
                 if ( file.exists() ) {  // 만약 .nscreen 파일이 있다면, 이전에 사용하다가 앱을 삭제하고 다시 설치한 경우다. 이경우는 자동 재연동 되도록 해준다.
                     mPref.readPairingInfoFromPhone();
                 } else {
-                    mPref.makeUUID();   // 만약 .nscreen 파일이 업다면 정말 처음 설치한 것이다. 그냥 uuid 새로 만들자.
+                    //
                 }
             } catch (Exception e) {
                 e.printStackTrace();
