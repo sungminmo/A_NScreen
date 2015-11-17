@@ -47,8 +47,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="인기순위 Top20"
-                    android:id="@+id/textView3"
+                    android:id="@+id/vod_main_section1_textview"
                     android:layout_weight="1"
                     android:layout_marginLeft="16.5dp"
                     android:textColor="#000000"
@@ -97,11 +96,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="금주의 신작영화"
                     android:layout_weight="1"
                     android:layout_marginLeft="16.5dp"
                     android:textColor="#000000"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:id="@+id/vod_main_section2_textview" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,11 +142,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이달의 추천 VOD"
                     android:layout_weight="1"
                     android:layout_marginLeft="16.5dp"
                     android:textColor="#000000"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:id="@+id/vod_main_section3_textview" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

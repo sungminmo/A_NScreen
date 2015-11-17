@@ -74,6 +74,7 @@ public class JYSharedPreferences {
     public final static String WEBHAS_PUBLIC_TERMINAL_KEY = "A9D0D3B07231F38878AB0979D7C315A";
     public final static String WEBHAS_PRIVATE_TERMINAL_KEY = "WEBHAS_PRIVATE_TERMINAL_KEY"; // 폰마다 다른 키값.
     public final static String PURCHASE_PASSWORD = "PURCHASE_PASSWORD"; // 구매비밀번호.
+    public final static String VOD_OTHER_TAB_CATEGORY_ID = "VOD_OTHER_TAB_CATEGORY_ID";
 
     public JYSharedPreferences(Context c) {
         mContext = c;
@@ -220,6 +221,18 @@ public class JYSharedPreferences {
             return true;
         }
     }
+
+    /**
+     * 페어링 정보 날리기.
+     * LoadingActivity의 requestGetAppInitialize()에서 응답중에 SetTopBoxKind 값이 없으면 이넘을 호출해서
+     * 페어링 정보를 날려버린다.
+     */
+    public void removePairingInfo(){
+        put(RUMPERS_SETOPBOX_KIND, "");
+        put(JYSharedPreferences.WEBHAS_PRIVATE_TERMINAL_KEY, ""); // 터미널키 저장.
+        put(JYSharedPreferences.PURCHASE_PASSWORD, "");     // 구매비번 저장.
+    }
+
 
     /**
      * 페어링완료후나 스플래쉬에서 받은 셋탑박스 종류를 저장한다.
@@ -446,19 +459,32 @@ public class JYSharedPreferences {
         realm.beginTransaction();
         realm.allObjects(MainCategoryObject.class).clear();
         MainCategoryObject newObj1 = realm.createObject(MainCategoryObject.class); // Create a new object
+        newObj1.setsSortNo(obj1.getsSortNo());
         newObj1.setsCategoryId(obj1.getsCategoryId());
         newObj1.setsCategoryType(obj1.getsCategoryType());
         newObj1.setsCategoryTitle(obj1.getsCategoryTitle());
         MainCategoryObject newObj2 = realm.createObject(MainCategoryObject.class); // Create a new object
+        newObj2.setsSortNo(obj2.getsSortNo());
         newObj2.setsCategoryId(obj2.getsCategoryId());
         newObj2.setsCategoryType(obj2.getsCategoryType());
         newObj2.setsCategoryTitle(obj2.getsCategoryTitle());
         MainCategoryObject newObj3 = realm.createObject(MainCategoryObject.class); // Create a new object
+        newObj3.setsSortNo(obj3.getsSortNo());
         newObj3.setsCategoryId(obj3.getsCategoryId());
         newObj3.setsCategoryType(obj3.getsCategoryType());
         newObj3.setsCategoryTitle(obj3.getsCategoryTitle());
         realm.commitTransaction();
         // Realm Database **********************************************************************
+    }
+
+    public MainCategoryObject getMainCategoryObject(int i) {
+        String sSortNo = String.valueOf(i);
+        RealmResults<MainCategoryObject> results = mRealm.where(MainCategoryObject.class).equalTo("sSortNo", sSortNo).findAll();
+        if ( results.size() > 0 ) {
+            return results.get(0);
+        } else {
+            return null;
+        }
     }
 
     public void removeCategory(String channelId) {

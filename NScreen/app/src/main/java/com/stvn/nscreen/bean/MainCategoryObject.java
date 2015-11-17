@@ -9,9 +9,18 @@ import io.realm.annotations.PrimaryKey;
 public class MainCategoryObject extends RealmObject {
 
     @PrimaryKey
+    private String sSortNo;
     private String sCategoryId;
     private String sCategoryType;
     private String sCategoryTitle;
+
+    public String getsSortNo() {
+        return sSortNo;
+    }
+
+    public void setsSortNo(String sSortNo) {
+        this.sSortNo = sSortNo;
+    }
 
     public String getsCategoryId() {
         return sCategoryId;

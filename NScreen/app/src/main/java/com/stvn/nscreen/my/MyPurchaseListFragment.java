@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,28 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.CMDateUtil;
+import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.common.ListViewDataObject;
+import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
 import com.stvn.nscreen.util.CMAlertUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by leejunghoon on 15. 10. 31..
@@ -36,13 +53,18 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     private TextView mPurchasecount;
     private SwipeListView mListView;
     private MyPurchaseListAdapter mAdapter;
-    private ArrayList<String> mList = new ArrayList<>();
+    private ArrayList<ListViewDataObject> mList = new ArrayList<>();
     private boolean mLockListView = true;
     private int mTabIndex;
+
+    private RequestQueue mRequestQueue;
+    private JYSharedPreferences mPref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mInflater = inflater;
+        this.mPref = new JYSharedPreferences(getActivity());
+        this.mRequestQueue = Volley.newRequestQueue(getActivity());
         return mInflater.inflate(R.layout.fragment_mycnm_purchaselist,null);
     }
     @Override
@@ -50,7 +72,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
 
         initView();
-        initData();
     }
 
     private void initView()
@@ -61,11 +82,11 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
         mPurchasetab1.setOnClickListener(this);
         mPurchasetab2.setOnClickListener(this);
-        mPurchasecount.setText("19개의 VOD구매목록이 있습니다.");
 
         mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
-        mAdapter = new MyPurchaseListAdapter(getActivity(),mList);
+        mAdapter = new MyPurchaseListAdapter(getActivity(), mList);
         mAdapter.setmClicklitener(this);
+
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(this);
         mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
@@ -146,22 +167,22 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     }
 
 
-    private void initData() {
-
-        int count = 20;
-        if (mTabIndex == TAB_TV) {
-            count = 7;
-        }
-
-        for(int i=0;i<count;i++) {
-            mList.add(""+i);
-        }
-
-        mLockListView = false;
-        mAdapter.notifyDataSetChanged();
-        mListView.closeOpenedItems();;
-        setPurchaseListCountText(count);
-    }
+//    private void initData() {
+//
+//        int count = 20;
+//        if (mTabIndex == TAB_TV) {
+//            count = 7;
+//        }
+//
+//        for(int i=0;i<count;i++) {
+////            mList.add(""+i);
+//        }
+//
+//        mLockListView = false;
+//        mAdapter.notifyDataSetChanged();
+//        mListView.closeOpenedItems();;
+//        setPurchaseListCountText(count);
+//    }
 
     /**
      * 조회 개수 문구 설정
@@ -175,9 +196,22 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
      * TODO:해당 구매목록정보에서 유효기간 확인 후 해당 내용에 대한 처리를 한다.
      * */
     private void deletePurchaseItem(final int itemIndex) {
-//        mList.get(itemIndex);
-        // TODO:유효기간 만료 일 때
-        if (itemIndex %2 == 0) {
+
+        boolean isExpired = false;
+        String vodTitle = "";
+        ListViewDataObject obj = mList.get(itemIndex);
+        try {
+            JSONObject jsonObj = new JSONObject(obj.sJson);
+            String licenseEnd = jsonObj.getString("licenseEnd");
+            vodTitle = jsonObj.getString("assetTitle");
+            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd))) {
+                isExpired = true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (isExpired == true) {
             String alertTitle = getString(R.string.my_cnm_alert_title_expired);
             String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
             String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
@@ -188,13 +222,10 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 }
             }, true);
         }
-        // TODO:유효기간 만료가 아닐 때
         else {
-            String programTitle = "프로그램타이틀";
-
             String alertTitle = "VOD 구매목록 삭제";
             String alertMessage1 = "선택하신 VOD를 구매목록에서 삭제하시겠습니까?";
-            Spannable alertMessage2 = (Spannable)Html.fromHtml(programTitle + "<br/><font color=\"red\">삭제하신 VOD는 복구가 불가능합니다.</font>");
+            Spannable alertMessage2 = (Spannable)Html.fromHtml(vodTitle + "<br/><font color=\"red\">삭제하신 VOD는 복구가 불가능합니다.</font>");
             CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, "예", "아니오", true, false,
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -208,7 +239,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         }
                     });
         }
-
     }
 
     /**
@@ -229,9 +259,75 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                initData();
+                mList.clear();
+                setPurchaseListCountText(mList.size());
+                requestGetValidPurchaseLogList();
             }
         }, 300);
+    }
+
+    private void requestGetValidPurchaseLogList() {
+        ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+
+        String url = mPref.getWebhasServerUrl() + "/getValidPurchaseLogList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ((MyMainActivity) getActivity()).hideProgressDialog();
+
+                try {
+
+                    /**
+                     * *테스트용 샘플 데이터
+                    response = "{\"transactionId\":null,\"totalCount\":7,\"purchaseLogList\":[\n" +
+                            "{\"purchaseDeviceType\" : \"1\",  \"purchasedId\" : \"171742\", \"purchasedTime\" : \"2013-01-01 17:26:49\", assetId\" : \"cjc|T00000000000000A97D6\",\"assetTitle\" : \"토마스와친구들11 03화\", \"productId\" : \"476\",\"goodId\" : \"99506\",\"productType\" : \"RVOD\",\"productName\" : \"토마스와친구들11 03화\",\"price\" : 1500,\"paymentType\" : \"normal\",\"purchaseMethod\" : 2,\"categoryId\" : \"184939\",\"director\" : \"미상\", \"writer\" : \"\",\"starring\" : \"\",\"production\" : \"\",\"synopsis\" : \"오늘은 소도어섬에 매우 중요한 날이에요. 새로운 도서관이 문을 열거에요. 모두들 매우 기대하고 있었죠. 모든 아이들은 물론 어른들도 책 읽는 것과 이야기 듣는 것을 매우 좋아했어요. 새로운 도서관에서 매우 유명한 이야기꾼이 모두에게 이야기를 읽어준다는...\", \"genre\" : \"Animation\",\"runningTime\" : \"00:40\",\"rating\" : \"All\",\"soundMix\" : \"Dolby Digital\", \"copyProtection\" : true,\"encryption\" : true,\"HDContent\" : false,\"threeDimIndicator\" : \"00\",\"licenseStart\" : \"2012-12-05 00:00:00\", \"licenseEnd\" : \"2015-01-31 23:59:59\", \"353ilename\" : \"M0068191.mpg.cim2t.mpg\", \"imageFileName\" : \"ALYS000000008359412.jpg\", \"reviewRatingTotal\" : 0,\"reviewRatingCount\" : 0,\"seriesLink\" : 0,\"seriesId\" : \"\",\"seriesName\" : \"\",\"seriesCurIndex\" : 0,\"viewablePeriod\" : \"0000-00-01 00:00:00\"},\n" +
+                            "{\"purchaseDeviceType\" : \"0\",  \"purchasedId\" : \"171743\", \"purchasedTime\" : \"2013-08-07 18:45:49\", assetId\" : \"cjc|T00000000000000A97D6\",\"assetTitle\" : \"토마스와친구들11 03화\", \"productId\" : \"477\",\"goodId\" : \"99506\",\"productType\" : \"RVOD\",\"productName\" : \"토마스와친구들11 03화\",\"price\" : 5500,\"paymentType\" : \"normal\",\"purchaseMethod\" : 2,\"categoryId\" : \"184939\",\"director\" : \"미상\", \"writer\" : \"\",\"starring\" : \"\",\"production\" : \"\",\"synopsis\" : \"오늘은 소도어섬에 매우 중요한 날이에요. 새로운 도서관이 문을 열거에요. 모두들 매우 기대하고 있었죠. 모든 아이들은 물론 어른들도 책 읽는 것과 이야기 듣는 것을 매우 좋아했어요. 새로운 도서관에서 매우 유명한 이야기꾼이 모두에게 이야기를 읽어준다는...\", \"genre\" : \"Animation\",\"runningTime\" : \"00:40\",\"rating\" : \"All\",\"soundMix\" : \"Dolby Digital\", \"copyProtection\" : true,\"encryption\" : true,\"HDContent\" : false,\"threeDimIndicator\" : \"00\",\"licenseStart\" : \"2012-12-05 00:00:00\", \"licenseEnd\" : \"2014-12-31 23:59:59\", \"353ilename\" : \"M0068191.mpg.cim2t.mpg\", \"imageFileName\" : \"ALYS000000008359412.jpg\", \"reviewRatingTotal\" : 0,\"reviewRatingCount\" : 0,\"seriesLink\" : 0,\"seriesId\" : \"\",\"seriesName\" : \"\",\"seriesCurIndex\" : 0,\"viewablePeriod\" : \"0000-00-01 00:00:00\"},\n" +
+                            "{\"purchaseDeviceType\" : \"1\",  \"purchasedId\" : \"171744\", \"purchasedTime\" : \"2013-09-19 17:36:49\", assetId\" : \"cjc|T00000000000000A97D6\",\"assetTitle\" : \"토마스와친구들11 03화\", \"productId\" : \"478\",\"goodId\" : \"99506\",\"productType\" : \"RVOD\",\"productName\" : \"토마스와친구들11 03화\",\"price\" : 6500,\"paymentType\" : \"normal\",\"purchaseMethod\" : 2,\"categoryId\" : \"184939\",\"director\" : \"미상\", \"writer\" : \"\",\"starring\" : \"\",\"production\" : \"\",\"synopsis\" : \"오늘은 소도어섬에 매우 중요한 날이에요. 새로운 도서관이 문을 열거에요. 모두들 매우 기대하고 있었죠. 모든 아이들은 물론 어른들도 책 읽는 것과 이야기 듣는 것을 매우 좋아했어요. 새로운 도서관에서 매우 유명한 이야기꾼이 모두에게 이야기를 읽어준다는...\", \"genre\" : \"Animation\",\"runningTime\" : \"00:40\",\"rating\" : \"All\",\"soundMix\" : \"Dolby Digital\", \"copyProtection\" : true,\"encryption\" : true,\"HDContent\" : false,\"threeDimIndicator\" : \"00\",\"licenseStart\" : \"2012-12-05 00:00:00\", \"licenseEnd\" : \"2015-11-31 23:59:59\", \"353ilename\" : \"M0068191.mpg.cim2t.mpg\", \"imageFileName\" : \"ALYS000000008359412.jpg\", \"reviewRatingTotal\" : 0,\"reviewRatingCount\" : 0,\"seriesLink\" : 0,\"seriesId\" : \"\",\"seriesName\" : \"\",\"seriesCurIndex\" : 0,\"viewablePeriod\" : \"0000-00-01 00:00:00\"},\n" +
+                            "{\"purchaseDeviceType\" : \"0\",  \"purchasedId\" : \"171745\", \"purchasedTime\" : \"2013-12-11 04:28:49\", assetId\" : \"cjc|T00000000000000A97D6\",\"assetTitle\" : \"토마스와친구들11 03화\", \"productId\" : \"479\",\"goodId\" : \"99506\",\"productType\" : \"RVOD\",\"productName\" : \"토마스와친구들11 03화\",\"price\" : 2500,\"paymentType\" : \"normal\",\"purchaseMethod\" : 2,\"categoryId\" : \"184939\",\"director\" : \"미상\", \"writer\" : \"\",\"starring\" : \"\",\"production\" : \"\",\"synopsis\" : \"오늘은 소도어섬에 매우 중요한 날이에요. 새로운 도서관이 문을 열거에요. 모두들 매우 기대하고 있었죠. 모든 아이들은 물론 어른들도 책 읽는 것과 이야기 듣는 것을 매우 좋아했어요. 새로운 도서관에서 매우 유명한 이야기꾼이 모두에게 이야기를 읽어준다는...\", \"genre\" : \"Animation\",\"runningTime\" : \"00:40\",\"rating\" : \"All\",\"soundMix\" : \"Dolby Digital\", \"copyProtection\" : true,\"encryption\" : true,\"HDContent\" : false,\"threeDimIndicator\" : \"00\",\"licenseStart\" : \"2012-12-05 00:00:00\", \"licenseEnd\" : \"2015-12-31 23:59:59\", \"353ilename\" : \"M0068191.mpg.cim2t.mpg\", \"imageFileName\" : \"ALYS000000008359412.jpg\", \"reviewRatingTotal\" : 0,\"reviewRatingCount\" : 0,\"seriesLink\" : 0,\"seriesId\" : \"\",\"seriesName\" : \"\",\"seriesCurIndex\" : 0,\"viewablePeriod\" : \"0000-00-01 00:00:00\"},\n" +
+                            "{\"purchaseDeviceType\" : \"0\",  \"purchasedId\" : \"171746\", \"purchasedTime\" : \"2013-04-23 20:19:49\", assetId\" : \"cjc|T00000000000000A97D6\",\"assetTitle\" : \"토마스와친구들11 03화\", \"productId\" : \"480\",\"goodId\" : \"99506\",\"productType\" : \"RVOD\",\"productName\" : \"토마스와친구들11 03화\",\"price\" : 3500,\"paymentType\" : \"normal\",\"purchaseMethod\" : 2,\"categoryId\" : \"184939\",\"director\" : \"미상\", \"writer\" : \"\",\"starring\" : \"\",\"production\" : \"\",\"synopsis\" : \"오늘은 소도어섬에 매우 중요한 날이에요. 새로운 도서관이 문을 열거에요. 모두들 매우 기대하고 있었죠. 모든 아이들은 물론 어른들도 책 읽는 것과 이야기 듣는 것을 매우 좋아했어요. 새로운 도서관에서 매우 유명한 이야기꾼이 모두에게 이야기를 읽어준다는...\", \"genre\" : \"Animation\",\"runningTime\" : \"00:40\",\"rating\" : \"All\",\"soundMix\" : \"Dolby Digital\", \"copyProtection\" : true,\"encryption\" : true,\"HDContent\" : false,\"threeDimIndicator\" : \"00\",\"licenseStart\" : \"2012-12-05 00:00:00\", \"licenseEnd\" : \"2015-11-18 23:59:59\", \"353ilename\" : \"M0068191.mpg.cim2t.mpg\", \"imageFileName\" : \"ALYS000000008359412.jpg\", \"reviewRatingTotal\" : 0,\"reviewRatingCount\" : 0,\"seriesLink\" : 0,\"seriesId\" : \"\",\"seriesName\" : \"\",\"seriesCurIndex\" : 0,\"viewablePeriod\" : \"0000-00-01 00:00:00\"},\n" +
+                            "{\"purchaseDeviceType\" : \"1\",  \"purchasedId\" : \"171747\", \"purchasedTime\" : \"2013-06-30 11:11:49\", assetId\" : \"cjc|T00000000000000A97D6\",\"assetTitle\" : \"토마스와친구들11 03화\", \"productId\" : \"481\",\"goodId\" : \"99506\",\"productType\" : \"RVOD\",\"productName\" : \"토마스와친구들11 03화\",\"price\" : 2800,\"paymentType\" : \"normal\",\"purchaseMethod\" : 2,\"categoryId\" : \"184939\",\"director\" : \"미상\", \"writer\" : \"\",\"starring\" : \"\",\"production\" : \"\",\"synopsis\" : \"오늘은 소도어섬에 매우 중요한 날이에요. 새로운 도서관이 문을 열거에요. 모두들 매우 기대하고 있었죠. 모든 아이들은 물론 어른들도 책 읽는 것과 이야기 듣는 것을 매우 좋아했어요. 새로운 도서관에서 매우 유명한 이야기꾼이 모두에게 이야기를 읽어준다는...\", \"genre\" : \"Animation\",\"runningTime\" : \"00:40\",\"rating\" : \"All\",\"soundMix\" : \"Dolby Digital\", \"copyProtection\" : true,\"encryption\" : true,\"HDContent\" : false,\"threeDimIndicator\" : \"00\",\"licenseStart\" : \"2012-12-05 00:00:00\", \"licenseEnd\" : \"2015-11-16 20:59:59\", \"353ilename\" : \"M0068191.mpg.cim2t.mpg\", \"imageFileName\" : \"ALYS000000008359412.jpg\", \"reviewRatingTotal\" : 0,\"reviewRatingCount\" : 0,\"seriesLink\" : 0,\"seriesId\" : \"\",\"seriesName\" : \"\",\"seriesCurIndex\" : 0,\"viewablePeriod\" : \"0000-00-01 00:00:00\"},\n" +
+                            "{\"purchaseDeviceType\" : \"1\",  \"purchasedId\" : \"171748\", \"purchasedTime\" : \"2013-02-29 17:08:49\", assetId\" : \"cjc|T00000000000000A97D6\",\"assetTitle\" : \"토마스와친구들11 03화\", \"productId\" : \"482\",\"goodId\" : \"99506\",\"productType\" : \"RVOD\",\"productName\" : \"토마스와친구들11 03화\",\"price\" : 2900,\"paymentType\" : \"normal\",\"purchaseMethod\" : 2,\"categoryId\" : \"184939\",\"director\" : \"미상\", \"writer\" : \"\",\"starring\" : \"\",\"production\" : \"\",\"synopsis\" : \"오늘은 소도어섬에 매우 중요한 날이에요. 새로운 도서관이 문을 열거에요. 모두들 매우 기대하고 있었죠. 모든 아이들은 물론 어른들도 책 읽는 것과 이야기 듣는 것을 매우 좋아했어요. 새로운 도서관에서 매우 유명한 이야기꾼이 모두에게 이야기를 읽어준다는...\", \"genre\" : \"Animation\",\"runningTime\" : \"00:40\",\"rating\" : \"All\",\"soundMix\" : \"Dolby Digital\", \"copyProtection\" : true,\"encryption\" : true,\"HDContent\" : false,\"threeDimIndicator\" : \"00\",\"licenseStart\" : \"2012-12-05 00:00:00\", \"licenseEnd\" : \"2015-11-16 23:59:59\", \"353ilename\" : \"M0068191.mpg.cim2t.mpg\", \"imageFileName\" : \"ALYS000000008359412.jpg\", \"reviewRatingTotal\" : 0,\"reviewRatingCount\" : 0,\"seriesLink\" : 0,\"seriesId\" : \"\",\"seriesName\" : \"\",\"seriesCurIndex\" : 0,\"viewablePeriod\" : \"0000-00-01 00:00:00\"}\n" +
+                            "],\"resultCode\":100,\"totalPage\":0,\"errorString\":\"\",\"version\":\"1\"}";
+                    */
+                    JSONObject responseObject = new JSONObject(response);
+
+                    JSONArray puchaseArray = responseObject.getJSONArray("purchaseLogList");
+                    for (int i = 0; i < puchaseArray.length(); i++) {
+                        JSONObject jsonObj = puchaseArray.getJSONObject(i);
+                        ListViewDataObject obj = new ListViewDataObject(i, 0, jsonObj.toString());
+
+                        String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
+                        if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType)) {
+                            mList.add(obj);
+                        } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType) == false) {
+                            mList.add(obj);
+                        }
+                    }
+
+                    setPurchaseListCountText(mList.size());
+                    mAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((MyMainActivity)getActivity()).hideProgressDialog();
+                if ( mPref.isLogging() ) { VolleyLog.d("", "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                if ( mPref.isLogging() ) { Log.d("", "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
     }
 
     @Override

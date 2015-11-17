@@ -4,22 +4,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jjiya.android.common.CMDateUtil;
+import com.jjiya.android.common.ListViewDataObject;
+import com.jjiya.android.common.UiUtil;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SwipeListView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class MyPurchaseListAdapter extends BaseAdapter {
+public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 
 	LayoutInflater mInflater;
 	private Context mContext;
 	private View.OnClickListener mClicklitener;
-	private ArrayList<String> mList;
 
 	public View.OnClickListener getmClicklitener() {
 		return mClicklitener;
@@ -29,39 +33,22 @@ public class MyPurchaseListAdapter extends BaseAdapter {
 		this.mClicklitener = mClicklitener;
 	}
 
-	public MyPurchaseListAdapter(Context context, ArrayList<String> items)
-	{
-		// TODO Auto-generated constructor stub
-		mList = items;
-		mContext = context;
-		mInflater = LayoutInflater.from(context);
+	public MyPurchaseListAdapter(Context context, ArrayList<ListViewDataObject> items) {
+		super(context, 0, items);
+		this.mContext = context;
+		this.mInflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public int getCount() {
-		return mList.size();
-	}
-
-	@Override
-	public String getItem(int position) {
-		return mList.get(position);
-	}
-
-	@Override
-	public long getItemId(int position)
-	{
-		// TODO Auto-generated method stub
+	public long getItemId(int position) {
 		return position;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		// TODO Auto-generated method stub
-		
+	public View getView(int position, View convertView, ViewGroup parent) {
+
 		ViewHolder holder;
-		if (convertView == null)
-		{
+		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.row_mycnm_purchase, null);
 			holder = new ViewHolder();
 			holder.rowdate = (TextView)convertView.findViewById(R.id.row_date);
@@ -73,29 +60,43 @@ public class MyPurchaseListAdapter extends BaseAdapter {
 			holder.btn = (Button)convertView.findViewById(R.id.btn1);
 
 			convertView.setTag(holder);
-		}
-		else
-		{
+		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		((SwipeListView)parent).recycle(convertView, position);
-		String item = getItem(position);
+
+		ListViewDataObject info = getItem(position);
+
+		try {
+
+			JSONObject jsonObj = new JSONObject(info.sJson);
+			String assetTitle = jsonObj.getString("assetTitle");
+			holder.rowname.setText(assetTitle);
+
+			String price = jsonObj.getString("price");
+			holder.rowpay.setText(UiUtil.stringParserCommafy(price) + "원");
+
+			String purchasedTime = jsonObj.getString("purchasedTime");
+			String pDay = CMDateUtil.findDateWithFormat(purchasedTime, "MM.dd") +"("+ CMDateUtil.getDayOfWeek(purchasedTime)+")";
+			holder.rowdate.setText(pDay);
+
+			String pTime = CMDateUtil.findDateWithFormat(purchasedTime, "HH:mm");
+			holder.rowtime.setText(pTime);
+
+			String licenseEnd = jsonObj.getString("licenseEnd");
+			String remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd);
+			holder.rowterm.setText(remainLicense);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		holder.btn.setTag(position);
 		holder.btn.setOnClickListener(mClicklitener);
-
-		holder.rowdate.setText("08."+item+" (금)");
-		holder.rowtime.setText("16:15");
-
-		holder.rowname.setText("뉴스파이터");
-		holder.rowpay.setText("5000원");
-		holder.rowterm.setText("2일남음");
-
-
 		return convertView;
 	}
 	
 	class ViewHolder {
-
 		TextView rowdate;
 		TextView rowtime;
 		ImageView coupontype;

@@ -134,9 +134,15 @@ public class VodMainBaseFragment extends Fragment {
                 lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.transparent));
 
+                String categoryId = mPref.getValue(Constants.CATEGORY_ID_TAB2, "");
+                String categoryIdFromVodMain = mPref.getValue(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                if ( categoryIdFromVodMain.length() > 0 ) {
+                    mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                    categoryId = categoryIdFromVodMain;
+                }
                 Bundle param = new Bundle();
                 param.putString("tabId", "1"); // movie
-                param.putString("categoryId", Constants.CATEGORY_ID_MOVIE);
+                param.putString("categoryId", categoryId);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
@@ -165,9 +171,15 @@ public class VodMainBaseFragment extends Fragment {
                 lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.transparent));
 
+                String categoryId = mPref.getValue(Constants.CATEGORY_ID_TAB3, "");
+                String categoryIdFromVodMain = mPref.getValue(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                if ( categoryIdFromVodMain.length() > 0 ) {
+                    mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                    categoryId = categoryIdFromVodMain;
+                }
                 Bundle param = new Bundle();
                 param.putString("tabId", "2"); // ani
-                param.putString("categoryId", Constants.CATEGORY_ID_ANI);
+                param.putString("categoryId", categoryId);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
@@ -196,9 +208,15 @@ public class VodMainBaseFragment extends Fragment {
                 lineview4.setBackgroundColor(getResources().getColor(R.color.white));
                 lineview5.setBackgroundColor(getResources().getColor(R.color.transparent));
 
+                String categoryId = mPref.getValue(Constants.CATEGORY_ID_TAB4, "");
+                String categoryIdFromVodMain = mPref.getValue(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                if ( categoryIdFromVodMain.length() > 0 ) {
+                    mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                    categoryId = categoryIdFromVodMain;
+                }
                 Bundle param = new Bundle();
                 param.putString("tabId", "3"); // tv
-                param.putString("categoryId", Constants.CATEGORY_ID_TV);
+                param.putString("categoryId", categoryId);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
@@ -247,9 +265,15 @@ public class VodMainBaseFragment extends Fragment {
                     lineview4.setBackgroundColor(getResources().getColor(R.color.transparent));
                     lineview5.setBackgroundColor(getResources().getColor(R.color.white));
 
+                    String categoryId = mPref.getValue(Constants.CATEGORY_ID_TAB5, "");
+                    String categoryIdFromVodMain = mPref.getValue(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                    if ( categoryIdFromVodMain.length() > 0 ) {
+                        mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
+                        categoryId = categoryIdFromVodMain;
+                    }
                     Bundle param = new Bundle();
                     param.putString("tabId", "4"); // adult
-                    param.putString("categoryId", Constants.CATEGORY_ID_ADULT);
+                    param.putString("categoryId", categoryId);
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
