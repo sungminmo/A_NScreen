@@ -21,4 +21,14 @@ public class Constants {
 
     public static final String CODE_RUMPUS_ERROR_205_Not_Found          = "205";    // 예약녹화물이 없을때 내려오는 응답코드.
     public static final String CODE_RUMPUS_ERROR_205_Not_Found_authCode = "205";    // 셋탑의 인증번호를 폰에서 틀리게 올렸을대 내려오는 응답코드.
+
+    // 영화 27282, 애니 27281, tv다시보기 27279, 성인 20912
+//    public static final String CATEGORY_ID_MOVIE = "27282";
+//    public static final String CATEGORY_ID_ANI   = "27281";
+//    public static final String CATEGORY_ID_TV    = "27279";
+//    public static final String CATEGORY_ID_ADULT = "20912";
+    public static final String CATEGORY_ID_MOVIE = "1579721"; // 11/12일 전달받은 모바일전용카테고리
+    public static final String CATEGORY_ID_ANI   = "1579722"; // 11/12일 전달받은 모바일전용카테고리
+    public static final String CATEGORY_ID_TV    = "1579723"; // 11/12일 전달받은 모바일전용카테고리
+    public static final String CATEGORY_ID_ADULT = "1579724"; // 11/12일 전달받은 모바일전용카테고리
 }

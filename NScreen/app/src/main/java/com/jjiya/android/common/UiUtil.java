@@ -25,67 +25,67 @@ public class UiUtil {
      * @param starImage5
      */
     public static void setStarRating(Float rating, ImageView starImage1, ImageView starImage2, ImageView starImage3, ImageView starImage4, ImageView starImage5) {
-        if (rating == 0) {
+        if ( rating == 0 ) {
             starImage1.setImageResource(R.mipmap.series_star_off);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 0 && rating <= 1) {
+        } else if ( rating > 0 && rating <= 0.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on_half);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 1 && rating <= 2) {
+        } else if ( rating > 0.5 && rating <= 1.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_off);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 2 && rating <= 3) {
+        } else if ( rating > 1.0 && rating <= 1.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on_half);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 3 && rating <= 4) {
+        } else if ( rating > 1.5 && rating <= 2.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_off);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 4 && rating <= 5) {
+        } else if ( rating > 2.0 && rating <= 2.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on_half);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 5 && rating <= 6) {
+        } else if ( rating > 2.5 && rating <= 3.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_off);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 6 && rating <= 7) {
+        } else if ( rating > 3.0 && rating <= 3.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on_half);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 7 && rating <= 8) {
+        } else if ( rating > 3.5 && rating <= 4.0 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_off);
-        } else if (rating > 8 && rating < 10) {
+        } else if ( rating > 4.0 && rating < 4.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
             starImage4.setImageResource(R.mipmap.series_star_on);
             starImage5.setImageResource(R.mipmap.series_star_on_half);
-        } else if (rating == 10) {
+        } else if ( rating > 4.5 ) {
             starImage1.setImageResource(R.mipmap.series_star_on);
             starImage2.setImageResource(R.mipmap.series_star_on);
             starImage3.setImageResource(R.mipmap.series_star_on);
@@ -390,6 +390,38 @@ public class UiUtil {
      * @param PromotionSticker
      */
     public static void setPromotionSticker(String promotionSticker, String isNew, String hot, String assetNew, String assetHot, ImageView PromotionSticker) {
+
+        // string < - > int
+//        String str = "1234";
+//        int    num = 5678;
+//
+//        String str2 = String.valueOf(num);
+//        int    num2 = Integer.parseInt(str);
+
+        if ("0".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_01);
+        } else if ("11".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_09);
+        } else if ("12".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_07);
+        } else if ("13".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_03);
+        } else if ("14".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_08);
+        } else if ("15".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_04);
+        } else if ("16".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_02);
+        } else if ("17".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_05);
+        } else if ("18".equals(promotionSticker)) {
+            PromotionSticker.setImageResource(R.mipmap.vod_06);
+        } else {
+            PromotionSticker.setVisibility(View.GONE);
+        }
+    }
+
+    public static void setPromotionSticker(String promotionSticker, ImageView PromotionSticker) {
 
         // string < - > int
 //        String str = "1234";

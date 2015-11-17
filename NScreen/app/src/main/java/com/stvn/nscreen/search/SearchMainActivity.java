@@ -57,7 +57,6 @@ public class SearchMainActivity extends CMBaseActivity {
 
     private String mVersion = "1";
     private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
 
     private JYSharedPreferences mPref;
     private boolean mLockListView = true;

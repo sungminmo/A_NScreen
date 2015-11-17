@@ -1,5 +1,6 @@
 package com.stvn.nscreen.common;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
 
     private LinearLayout mMainView;
     private CMActionBar mActionBar;
+    private ProgressDialog mProgressDialog;
 
     private boolean usCustomActionBar;
     @Override
@@ -117,6 +119,28 @@ public class CMBaseActivity extends AppCompatActivity implements CMActionBar.CMA
 
         this.usCustomActionBar = true;
     }
+
+    /**
+     * Progress Bar 표출
+     * */
+    public void showProgressDialog(String title, String message) {
+        this.mProgressDialog = ProgressDialog.show(this, title, message);
+    }
+
+    public void showProgressDialog(String title, String message, boolean indeterminate, boolean cancelable) {
+        this.mProgressDialog = ProgressDialog.show(this, title, message, indeterminate, cancelable);
+    }
+
+    /**
+     * Progress Bar 닫기
+     * */
+    public void hideProgressDialog() {
+        if (this.mProgressDialog != null) {
+            this.mProgressDialog.dismiss();
+        }
+        this.mProgressDialog = null;
+    }
+
 
     /**
      * 액션바 내의 리스너 메소드

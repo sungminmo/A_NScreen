@@ -1,0 +1,191 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.stvn.nscreen.vod.VodMainFirstTabFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/fragment_vod_main_base"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
+
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40.75dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/frameLayout"
+                        android:layout_toEndOf="@+id/frameLayout"
+                        android:layout_marginTop="12.75dp"
+                        android:layout_marginBottom="11.5dp">
+
+                        <ImageButton
+                            android:id="@+id/vod_main_orther_category_choice_imageButton"
+                            android:layout_width="fill_parent"
+                            android:layout_height="40.75dp"
+                            android:layout_marginLeft="12.25dp"
+                            android:layout_marginRight="12.25dp"
+                            android:background="@mipmap/btn_nor"
+                            android:layout_gravity="center" />
+
+                        <TextView
+                            android:id="@+id/vod_main_orther_category_choice_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14.5sp"
+                            android:textColor="@color/violet"
+                            android:layout_gravity="center" />
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="25.25dp"
+                            android:background="@mipmap/ch_box_arrow" />
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/dimen_6"
+                        android:paddingRight="@dimen/dimen_6"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:background="@color/white"
+                        android:id="@+id/vod_main_other_tabbar_linearlayout"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dimen_45.75"
+                            android:layout_weight="1"
+                            android:id="@+id/vod_main_other_tab1_linearlayout"
+                            android:duplicateParentState="true"
+                            android:clickable="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/purchase_tab_selector"
+                                android:gravity="center"
+                                android:text="@string/vod_order_tab_name_realtime"
+                                android:textColor="@color/btn_subtab_selector_textcolor" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="7.7dp"
+                            android:background="#8a8c8e"
+                            android:layout_gravity="center_vertical" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dimen_45.75"
+                            android:layout_weight="1"
+                            android:id="@+id/vod_main_other_tab2_linearlayout"
+                            android:duplicateParentState="true"
+                            android:clickable="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/purchase_tab_selector"
+                                android:gravity="center"
+                                android:text="@string/vod_order_tab_name_week"
+                                android:textColor="@color/btn_subtab_selector_textcolor" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/violet"
+                        android:layout_marginBottom="12.75dp"
+                        android:layout_marginTop="1.25dp" />
+
+                    <GridView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/vod_main_gridview"
+                        android:numColumns="4"
+                        android:columnWidth="90dp"
+                        android:horizontalSpacing="5.5dp"
+                        android:verticalSpacing="9.25dp"
+                        android:gravity="center"
+                        android:stretchMode="columnWidth"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        />
+
+
+                    <!-- 인기 순위 Top20 -->
+
+
+                    <!-- 금주의 신작영화 -->
+
+
+                    <!-- 이달의 추천VOD -->
+
+
+                </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88000000"
+        android:visibility="gone"
+        android:id="@+id/vod_main_other_category_bg_framelayout">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="143dp" />
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/vod_main_other_category_listview"
+                android:layout_marginLeft="12.75dp"
+                android:layout_marginRight="12.75dp"
+                android:layout_marginBottom="80dp"
+                android:background="@color/white" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- 공통 뷰 (Left버튼, Right버튼, GNB) -->
+
+
+</FrameLayout>

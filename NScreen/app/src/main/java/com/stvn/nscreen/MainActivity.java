@@ -1,5 +1,7 @@
 package com.stvn.nscreen;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -20,6 +22,8 @@ import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.bean.WishObject;
+import com.stvn.nscreen.vod.VodMainFirstTabFragment;
+import com.stvn.nscreen.vod.VodMainOtherTabFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,27 +95,13 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.violet));              // finally change the color
         }
 
-        /* ActionBar TAB mode ------------------------------------------------------------------- */
-        /*
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        //actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.violet)));
 
-        VodMainFragment  vodMainFragment = new VodMainFragment();
-        VodEmptyFragment vodEmptyFragment = new VodEmptyFragment();
-
-        ActionBar.Tab tab1 = actionBar.newTab().setText("추천").setTabListener(new MainTabsListener(vodMainFragment));
-        ActionBar.Tab tab2 = actionBar.newTab().setText("영화").setTabListener(new MainTabsListener(vodEmptyFragment));
-        ActionBar.Tab tab3 = actionBar.newTab().setText("애니키즈").setTabListener(new MainTabsListener(vodEmptyFragment));
-        ActionBar.Tab tab4 = actionBar.newTab().setText("TV다시보기").setTabListener(new MainTabsListener(vodEmptyFragment));
-        ActionBar.Tab tab5 = actionBar.newTab().setText("성인").setTabListener(new MainTabsListener(vodEmptyFragment));
-
-        actionBar.addTab(tab1);
-        actionBar.addTab(tab2);
-        actionBar.addTab(tab3);
-        actionBar.addTab(tab4);
-        actionBar.addTab(tab5);
-        */
+        VodMainFirstTabFragment firstTabFragment = new VodMainFirstTabFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_placeholder, firstTabFragment);
+        fragmentTransaction.addToBackStack("VodMainOtherTabFragment");
+        fragmentTransaction.commit();
     }
 
     /*

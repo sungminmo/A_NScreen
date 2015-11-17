@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -11,10 +12,13 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,6 +36,7 @@ import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.WishObject;
+import com.stvn.nscreen.util.CMAlertUtil;
 import com.widevine.sampleplayer.VideoPlayerView;
 
 import org.json.JSONArray;
@@ -97,10 +102,13 @@ public class VodDetailActivity extends Activity {
     private Button mJimButton;      // 찜하기 버튼
     private Button mJimButton2;      // 찜하기 버튼
 
+    private HorizontalScrollView mSeriesScrollView;
+
 
     // activity
     private String assetId; // intent param
     private List<JSONObject> relationVods;
+    private List<JSONObject> series;
     private FourVodPosterPagerAdapter mPagerAdapter;
     private String isSeriesLink; //시리즈인지 연부. true/false
     private String mTitle;
@@ -137,16 +145,19 @@ public class VodDetailActivity extends Activity {
 
         //sJson   = getIntent().getExtras().getString("sJson");
         assetId   = getIntent().getExtras().getString("assetId");
+        // (HD)막돼먹은 영애씨 시즌14 02회(08/11
+        // assetId = "www.hchoice.co.kr|M4132449LFO281926301";
 //        try {
 //            JSONObject jo = new JSONObject(sJson);
 //            assetId = jo.getString("assetId");
 //            // (HD)막돼먹은 영애씨 시즌14 02회(08/11
 //            // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
-//            assetId = "www.hchoice.co.kr|M4132449LFO281926301";
+              // assetId = "www.hchoice.co.kr|M4132449LFO281926301";
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
         relationVods = new ArrayList<JSONObject>();
+        series = new ArrayList<JSONObject>();
         mPagerAdapter = new FourVodPosterPagerAdapter(this);
         mPagerAdapter.setImageLoader(mImageLoader);
         mPagerAdapter.setVodDetailActivity(this);
@@ -175,6 +186,7 @@ public class VodDetailActivity extends Activity {
         mTvOnlyTextView       = (TextView)findViewById(R.id.vod_detail_tvonly_textview);
         mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
+        mSeriesScrollView     = (HorizontalScrollView)findViewById(R.id.mSeriesScrollView);
 
         ImageButton backButton = (ImageButton)findViewById(R.id.vod_detail_topmenu_left_imagebutton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -189,16 +201,28 @@ public class VodDetailActivity extends Activity {
         mPrePlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isPrePlay = true;
-                requestContentUri();
+                if ( mPref.isPairingCompleted() == false ) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(getString(R.string.error_not_paring_compleated3));
+                    alert.show();
+                } else {
+                    isPrePlay = true;
+                    requestContentUri();
+                }
             }
         });
 
         // 미리보기 | 구매하기 | 찜하기
-        mPurchaseButton       = (Button)findViewById(R.id.vod_detail_order_button);
-        mPurchaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                mPurchaseButton       = (Button)findViewById(R.id.vod_detail_order_button);
+                mPurchaseButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                 //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
                 //startActivity(i);
 
@@ -222,15 +246,26 @@ public class VodDetailActivity extends Activity {
                 ft.commit();
                 */
 
-                Intent intent = new Intent(mInstance, VodBuyActivity.class);
-                intent.putExtra("assetId", mInstance.assetId);
-                intent.putExtra("isSeriesLink", isSeriesLink);
-                intent.putExtra("mTitle", mTitle);
-                intent.putExtra("sListPrice", sListPrice);
-                intent.putExtra("sPrice", sPrice);
-                intent.putExtra("productId", productId);
-                intent.putExtra("goodId", goodId);
-                startActivityForResult(intent, 1000);
+                if ( mPref.isPairingCompleted() == false ) {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMsg1  = mTitle;
+                    String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }, true);
+                } else {
+                    Intent intent = new Intent(mInstance, VodBuyActivity.class);
+                    intent.putExtra("assetId", mInstance.assetId);
+                    intent.putExtra("isSeriesLink", isSeriesLink);
+                    intent.putExtra("mTitle", mTitle);
+                    intent.putExtra("sListPrice", sListPrice);
+                    intent.putExtra("sPrice", sPrice);
+                    intent.putExtra("productId", productId);
+                    intent.putExtra("goodId", goodId);
+                    startActivityForResult(intent, 1000);
+                }
             }
         });
 
@@ -261,15 +296,26 @@ public class VodDetailActivity extends Activity {
                 ft.commit();
                 */
 
-                Intent intent = new Intent(mInstance, VodBuyActivity.class);
-                intent.putExtra("assetId", mInstance.assetId);
-                intent.putExtra("isSeriesLink", isSeriesLink);
-                intent.putExtra("mTitle", mTitle);
-                intent.putExtra("sListPrice", sListPrice);
-                intent.putExtra("sPrice", sPrice);
-                intent.putExtra("productId", productId);
-                intent.putExtra("goodId", goodId);
-                startActivityForResult(intent, 1000);
+                if ( mPref.isPairingCompleted() == false ) {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMsg1  = mTitle;
+                    String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }, true);
+                } else {
+                    Intent intent = new Intent(mInstance, VodBuyActivity.class);
+                    intent.putExtra("assetId", mInstance.assetId);
+                    intent.putExtra("isSeriesLink", isSeriesLink);
+                    intent.putExtra("mTitle", mTitle);
+                    intent.putExtra("sListPrice", sListPrice);
+                    intent.putExtra("sPrice", sPrice);
+                    intent.putExtra("productId", productId);
+                    intent.putExtra("goodId", goodId);
+                    startActivityForResult(intent, 1000);
+                }
             }
         });
 
@@ -278,8 +324,19 @@ public class VodDetailActivity extends Activity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isPrePlay = false;
-                requestContentUri();
+                if ( mPref.isPairingCompleted() == false ) {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMsg1  = mTitle;
+                    String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }, true);
+                } else {
+                    isPrePlay = false;
+                    requestContentUri();
+                }
             }
         });
 
@@ -290,40 +347,81 @@ public class VodDetailActivity extends Activity {
             public void onClick(View v) {
                 if ( mPref.isWishAsset(assetId) == false ) {
                     // 찜 안한 VOD
-                    requestAddRemoveWishItem("addWishItem");
-                    Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-                    img.setBounds( 0, 0, 35, 35 );
-                    mJimButton.setCompoundDrawables( null, null, img, null );
-                    mJimButton.setText("찜해제");
+                    if ( mPref.isPairingCompleted() == false ) {
+                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertMsg1  = mTitle;
+                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
+                    } else {
+                        requestAddRemoveWishItem("addWishItem");
+                        Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                        img.setBounds(0, 0, 35, 35);
+                        mJimButton.setCompoundDrawables(null, null, img, null);
+                        mJimButton.setText("찜해제");
+
+                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     // 찜 한 VOD
+
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
-                    img.setBounds( 0, 0, 35, 35 );
-                    mJimButton.setCompoundDrawables( null, null, img, null );
+                    img.setBounds(0, 0, 35, 35);
+                    mJimButton.setCompoundDrawables(null, null, img, null);
                     mJimButton.setText("찜하기");
+
+                    Toast.makeText(VodDetailActivity.this, "찜 하기가 해제 되었습니다.", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-        mJimButton2 = (Button)findViewById(R.id.vod_detail_jjim_button);
+        mJimButton2 = (Button)findViewById(R.id.vod_detail_jjim_button2);
         mJimButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if ( mPref.isWishAsset(assetId) == false ) {
                     // 찜 안한 VOD
-                    requestAddRemoveWishItem("addWishItem");
-                    Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-                    img.setBounds( 0, 0, 35, 35 );
-                    mJimButton2.setCompoundDrawables( null, null, img, null );
-                    mJimButton2.setText("찜해제");
+                        if ( mPref.isPairingCompleted() == false ) {
+                            String alertTitle = "셋탑박스 연동 필요";
+                            String alertMsg1  = mTitle;
+                            String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                            CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }, true);
+                        } else {
+                            requestAddRemoveWishItem("addWishItem");
+                            Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                            img.setBounds(0, 0, 35, 35);
+                            mJimButton2.setCompoundDrawables(null, null, img, null);
+                            mJimButton2.setText("찜해제");
+
+                            Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                        }
                 } else {
                     // 찜 한 VOD
+                    if ( mPref.isPairingCompleted() == false ) {
+                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertMsg1  = mTitle;
+                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
+                    }
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
                     img.setBounds( 0, 0, 35, 35 );
-                    mJimButton2.setCompoundDrawables( null, null, img, null );
+                    mJimButton2.setCompoundDrawables(null, null, img, null);
                     mJimButton2.setText("찜하기");
+
+                    Toast.makeText(VodDetailActivity.this, "찜 하기가 해제 되었습니다.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -400,6 +498,7 @@ public class VodDetailActivity extends Activity {
                     // asset
                     JSONObject asset            = jo.getJSONObject("asset");
                     fileName                    = asset.getString("fileName");
+                    String categoryId           = asset.getString("categoryId");
                     String imageFileName        = asset.getString("imageFileName");
                     String rating               = asset.getString("rating");
                     String reviewRatingCount    = asset.getString("reviewRatingCount");
@@ -410,6 +509,7 @@ public class VodDetailActivity extends Activity {
                     String director             = asset.getString("director");
                     String starring             = asset.getString("starring");
                     String synopsis             = asset.getString("synopsis");
+                    String seriesId             = asset.getString("seriesId");
                     boolean seriesLink          = asset.getBoolean("seriesLink");
                     String promotionSticker     = asset.getString("promotionSticker");
                     String title                = asset.getString("title");
@@ -461,25 +561,38 @@ public class VodDetailActivity extends Activity {
                     if ( seriesLink == true ) {      // 시리즈 보여라
                         isSeriesLink = "YES";
                         mSeriesLinearLayout.setVisibility(View.VISIBLE);
+
+                        String sCategoryId = asset.getString("categoryId");
+                        String sSeriesId = asset.getString("seriesId");
+
+                        requestGetSeriesAssetList(sSeriesId, sCategoryId);
+
                     } else {                         // 시리즈 감춰라.
                         isSeriesLink = "NO";
                         mSeriesLinearLayout.setVisibility(View.GONE);
                     }
                     if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
                         mPlayLinearLayout.setVisibility(View.GONE);
-                        if ("0".equals(previewPeriod)) { // 미리보기 없음.
+                        if ( ! "2".equals(publicationRight) ) {
                             mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
                         } else {
-                            mPurchaseLinearLayout.setVisibility(View.VISIBLE);
+                            if ("0".equals(previewPeriod)) { // 미리보기 없음.
+                                mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                            } else {
+                                mPurchaseLinearLayout.setVisibility(View.VISIBLE);
+                            }
                         }
                     } else {                         // 구매했다. 감쳐라.
+                        mPurchaseLinearLayout2.setVisibility(View.GONE);
                         mPurchaseLinearLayout.setVisibility(View.GONE);
-                        mPlayLinearLayout.setVisibility(View.VISIBLE);
+                        if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
+                            mTvOnlyTextView.setText("["+title+"] 은 (는)");
+                            mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            mPlayLinearLayout.setVisibility(View.VISIBLE);
+                        }
                     }
-                    if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
-                        mTvOnlyTextView.setText("["+title+"] 는 (은)");
-                        mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
-                    }
+
 
                     // 값들 찍어주기. -----------------------------------------------------------------
 
@@ -522,7 +635,13 @@ public class VodDetailActivity extends Activity {
                     }
                     sPrice = price;
                     sListPrice = listPrice;
-                    mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
+                    if ( "".equals(purchasedTime) ) {
+                        mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
+                    } else {
+                        mPriceTextView.setText("이미 구매하셨습니다.");
+                        String strColor = "#7b5aa3";
+                        mPriceTextView.setTextColor(Color.parseColor(strColor));
+                    }
                     mGenreTextView.setText(genre+" / "+runningTime);
                     mDirectorTextView.setText(director);
                     mStarringTextView.setText(starring);
@@ -622,7 +741,7 @@ public class VodDetailActivity extends Activity {
      * http://58.141.255.79:8080/HApplicationServer/removeWishItem.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1&assetId=www.hchoice.co.kr|M4166179LSG353388601
      */
     private void requestAddRemoveWishItem(String action) {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestAddRemoveWishItem()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String encAssetId  = null;
@@ -635,7 +754,7 @@ public class VodDetailActivity extends Activity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 try {
                     JSONObject jo      = new JSONObject(response);
                     String resultCode  = jo.getString("resultCode");
@@ -663,7 +782,7 @@ public class VodDetailActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -684,14 +803,14 @@ public class VodDetailActivity extends Activity {
      * http://58.141.255.79:8080/HApplicationServer/getWishList.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1
      */
     private void requestGetWishList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 try {
                     JSONObject jo      = new JSONObject(response);
                     String resultCode  = jo.getString("resultCode");
@@ -721,7 +840,7 @@ public class VodDetailActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -818,6 +937,97 @@ public class VodDetailActivity extends Activity {
                         intent.putExtra("title", mTitle);
                         startActivityForResult(intent, 111);
                         //startActivity(intent);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void requestGetSeriesAssetList(String seriesId, String categoryId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetSeriesAssetList()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String url = mPref.getWebhasServerUrl() + "/getSeriesAssetList.json?version=1&terminalKey="+terminalKey+"&seriesId="+seriesId+"&categoryId="+categoryId+"&assetProfile=3";
+
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                try {
+                    JSONObject jo            = new JSONObject(response);
+                    JSONArray  assetList     = jo.getJSONArray("assetList");
+
+                    for ( int i = 0; i < assetList.length(); i++ ) {
+                        JSONObject asset = (JSONObject) assetList.get(i);
+
+                        series.add(asset);
+
+                        final String buttonAssetId = asset.getString("assetId");
+                        String categoryId          = asset.getString("categoryId");
+                        String seriesCurIndex      = asset.getString("seriesCurIndex");
+                        String seriesEndIndex      = asset.getString("seriesEndIndex");
+                        String seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
+                        String seriesId            = asset.getString("seriesId");
+
+                        // Button seriesButton = new Button(mInstance);
+                        // android:layout_width="41.25dp"
+                        // android:layout_height="27.75dp"
+                        // android:layout_marginLeft="15.5dp"
+
+                        Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
+                        seriesButton.setText(seriesCurIndex + "회");
+
+                        if ( assetId.equals(buttonAssetId) ) {
+                            seriesButton.setSelected(true);
+                        }
+
+                        seriesButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mInstance, VodDetailActivity.class);
+                                intent.putExtra("assetId", buttonAssetId);
+                                startActivity(intent);
+                            }
+                        });
+
+                        LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        ll.addView(seriesButton, lp);
+
+                        if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
+                            mSeriesScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSeriesScrollView.fullScroll(ScrollView.FOCUS_RIGHT); // 1회를 표시한다.
+                                }
+                            });
+                        } else { // 종료되지 않은 시리즈.
+                            mSeriesScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSeriesScrollView.fullScroll(ScrollView.FOCUS_LEFT); // 가장 최근 회를 표시한다.
+                                }
+                            });
+                        }
                     }
 
                 } catch (JSONException e) {

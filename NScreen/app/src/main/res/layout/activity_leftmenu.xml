@@ -293,16 +293,17 @@
             android:background="@drawable/btn_service_selector"
             android:layout_marginBottom="8dp" />
 
-        <Button
+        <TextView
             android:layout_width="182.75dp"
             android:layout_height="26.75dp"
             android:text="버전정보"
-            android:id="@+id/button6"
+            android:id="@+id/leftmenu_version_textview"
             android:layout_gravity="center_horizontal"
             android:textColor="#7b5aa3"
             android:textSize="12.5sp"
             android:background="@drawable/btn_service_selector"
-            android:layout_marginBottom="54.5dp" />
+            android:layout_marginBottom="54.5dp"
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout

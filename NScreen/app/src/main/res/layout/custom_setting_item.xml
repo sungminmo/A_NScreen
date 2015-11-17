@@ -22,20 +22,25 @@
         </RelativeLayout>
         <TextView
             android:id="@+id/setting_item_title"
-            android:layout_width="@dimen/dimen_0"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:text=""
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:gravity="left|center_vertical" />
+
+        <View
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
         <LinearLayout
             android:id="@+id/setting_item_title_sub_layout"
             android:orientation="horizontal"
-            android:layout_width="@dimen/dimen_0"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.8"
+            android:layout_marginRight="@dimen/dimen_5"
             android:visibility="gone">
             <TextView
                 android:id="@+id/setting_item_title_sub1"
@@ -54,6 +59,8 @@
                 android:text=""
                 android:textSize="12sp"
                 android:textColor="@color/black"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:gravity="left|center_vertical" />
         </LinearLayout>
         <RelativeLayout

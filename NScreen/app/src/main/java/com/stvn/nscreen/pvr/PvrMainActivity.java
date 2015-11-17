@@ -126,6 +126,10 @@ public class PvrMainActivity extends AppCompatActivity {
                         requestSetRecordCancelReserve(sChannelId, starttime);
                     }
                     break;
+                    case 2: {
+
+                    }
+                    break;
                 }
                 return false;
             }
@@ -151,7 +155,7 @@ public class PvrMainActivity extends AppCompatActivity {
                 button2.setSelected(true);
                 textView1.setVisibility(View.GONE);
                 textView2.setVisibility(View.VISIBLE);
-                requestGetrecordlist();
+                requestGetRecordlist();
             }
         });
 
@@ -172,6 +176,9 @@ public class PvrMainActivity extends AppCompatActivity {
                 } break;
                 case 1: {
                     createMenu1(menu);  // 녹화예약취소
+                } break;
+                case 2: {
+                    createMenu2(menu); // 녹화물삭제
                 } break;
             }
         }
@@ -199,6 +206,16 @@ public class PvrMainActivity extends AppCompatActivity {
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
         }
+
+        private void createMenu2(SwipeMenu menu) { // 녹화물삭제
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0xEA, 0x55, 0x55)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("삭제");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+        }
     };
 
     private void requestGetRecordReservelist() {
@@ -206,16 +223,19 @@ public class PvrMainActivity extends AppCompatActivity {
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
-        // for test
-        //String          url     = "http://192.168.44.10/SMApplicationserver/getrecordReservelist.asp?Version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&deviceId=68590725-3b42-4cea-ab80-84c91c01bad2";
         String          url     = mPref.getRumpersServerUrl() + "/getRecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d(tag, response);
                 mProgressDialog.dismiss();
+                //String sResultCode = parseGetRecordReservelist(request.getUtf8Response()); // 파싱 결과를 리턴 받는다.
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
-                if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
+                if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) {
+                    // 녹화물 없음이므로 정상.
+                    textView1.setText("총 0개의 녹화예약 콘텐츠가 있습니다.");
+                    mAdapter.setTabNumber(1);
+                    mAdapter.notifyDataSetChanged();
+                } else if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
                     String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
                     AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
                     ad.setTitle("알림").setMessage(msg).setCancelable(false)
@@ -229,6 +249,7 @@ public class PvrMainActivity extends AppCompatActivity {
                     alert.show();
                 } else {
                     textView1.setText("총 " + mAdapter.getCount() + "개의 녹화예약 콘텐츠가 있습니다.");
+                    mAdapter.setTabNumber(1);
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -349,9 +370,9 @@ public class PvrMainActivity extends AppCompatActivity {
         return sResultCode;
     }
 
-    private void requestGetrecordlist() {
+    private void requestGetRecordlist() {
         mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
-        if ( mPref.isLogging() ) { Log.d(tag, "requestGetrecordlist()"); }
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordlist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = mPref.getWebhasTerminalKey();
         String          url     = mPref.getRumpersServerUrl() + "/getrecordlist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
@@ -362,6 +383,7 @@ public class PvrMainActivity extends AppCompatActivity {
                 mProgressDialog.dismiss();
                 parseGetrecordlist(response);
                 textView2.setText("총 " + mAdapter.getCount() + "개의 녹화 콘텐츠가 있습니다.");
+                mAdapter.setTabNumber(2);
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {

@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.stvn.nscreen.setting.notice.CMSettingNoticeActivity;
+import com.stvn.nscreen.setting.pay_channel.CMSettingPayChannelActivity;
+import com.stvn.nscreen.setting.region.CMSettingRegionActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
 /**
@@ -267,9 +270,17 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                     public void positiveClickEvent(DialogInterface dialog, String text) {
 
                         String savedPassword = CMSettingData.getInstance().getPurchaseAuthPassword(CMSettingMainActivity.this);
-                        if (TextUtils.isEmpty(savedPassword) == false && text.equals(savedPassword)) {
-                            Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
-                            startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+                        if (TextUtils.isEmpty(text)) {
+                            CMAlertUtil.Alert(CMSettingMainActivity.this, "구매인증 비밀번호 입력", "인증번호를 입력하세요.");
+                        } else if (TextUtils.isEmpty(savedPassword)) {
+                            CMAlertUtil.Alert(CMSettingMainActivity.this, "구매인증 비밀번호 입력", "등록된 구매 인증번호가 없습니다.");
+                        } else {
+                            if (text.equals(savedPassword)) {
+                                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingPurchaseAuthActivity.class);
+                                startActivityForResult(nextIntent, CMSetting_Purchase_Auth_Tag);
+                            } else {
+                                CMAlertUtil.Alert(CMSettingMainActivity.this, "구매인증 비밀번호 입력", "구매인증번호가 일치하지 않습니다.");
+                            }
                         }
                     }
                     @Override
@@ -284,6 +295,8 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case R.id.setting_notice_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingNoticeActivity.class);
+                startActivity(nextIntent);
                 break;
             }
             case R.id.setting_pay_channel_Index: {
@@ -292,6 +305,9 @@ public class CMSettingMainActivity extends CMBaseActivity implements View.OnClic
                 break;
             }
             case R.id.setting_customer_center_Index: {
+                Intent nextIntent = new Intent(CMSettingMainActivity.this, CMSettingCustomerCenterActivity.class);
+                nextIntent.putExtra("GUIDE_ID", "2");
+                startActivity(nextIntent);
                 break;
             }
             case R.id.setting_item_image: {

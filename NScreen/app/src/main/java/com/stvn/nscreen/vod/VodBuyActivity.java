@@ -23,6 +23,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,7 +62,7 @@ public class VodBuyActivity extends Activity {
     private              long                 totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
 
     private              LinearLayout         vod_buy_step1_one_linearlayout, vod_buy_step1_serise_linearlayout, vod_buy_step1_oneproduct_linearlayout, vod_buy_step1_packeage_linearlayout, vod_buy_step1_month_linearlayout, vod_buy_step1_month_all_linearlayout;
-    private              LinearLayout         vod_buy_step2_normal_linearlayout, vod_buy_step2_normal_dis_linearlayout, vod_buy_step2_coupon_linearlayout, vod_buy_step2_point_linearlayout;
+    private              LinearLayout         vod_buy_step2_normal_linearlayout, vod_buy_step2_normal_dis_linearlayout, vod_buy_step2_coupon_linearlayout, vod_buy_step2_point_linearlayout, vod_buy_step2_linearlayout2;
 
 
 
@@ -96,17 +97,18 @@ public class VodBuyActivity extends Activity {
         vod_buy_step2_coupon_linearlayout     = (LinearLayout)findViewById(R.id.vod_buy_step2_coupon_linearlayout);
         vod_buy_step2_point_linearlayout      = (LinearLayout)findViewById(R.id.vod_buy_step2_point_linearlayout);
         vod_buy_step2_linearlayout            = (LinearLayout)findViewById(R.id.vod_buy_step2_linearlayout);
+        vod_buy_step2_linearlayout2           = (LinearLayout)findViewById(R.id.vod_buy_step2_linearlayout2);
         vod_buy_title_textview                = (TextView)findViewById(R.id.vod_buy_title_textview);
         vod_buy_step1_one_price               = (TextView)findViewById(R.id.vod_buy_step1_one_price);
         vod_buy_step2_normal_price            = (TextView)findViewById(R.id.vod_buy_step2_normal_price);
 
         vod_buy_title_textview.setText(mTitle);
         if ( sListPrice.equals(sPrice) ) {
-            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원/월 [부가세 별도]");
-            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원/월 [부가세 별도]");
+            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원 [부가세 별도]");
+            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원 [부가세 별도]");
         } else {
-            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원/월 [부가세 별도]");
-            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원/월 [부가세 별도]");
+            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원 [부가세 별도]");
+            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원 [부가세 별도]");
         }
         if ( "YES".equals(isSeriesLink) ) {
             vod_buy_step1_one_linearlayout.setVisibility(View.VISIBLE);
@@ -121,6 +123,7 @@ public class VodBuyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_linearlayout2.setVisibility(View.GONE);
                 vod_buy_step1_one_linearlayout.setSelected(true);
                 vod_buy_step1_serise_linearlayout.setSelected(false);
                 vod_buy_step1_oneproduct_linearlayout.setSelected(false);
@@ -134,6 +137,7 @@ public class VodBuyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_linearlayout2.setVisibility(View.GONE);
                 vod_buy_step1_one_linearlayout.setSelected(false);
                 vod_buy_step1_serise_linearlayout.setSelected(true);
                 vod_buy_step1_oneproduct_linearlayout.setSelected(false);
@@ -147,6 +151,7 @@ public class VodBuyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_linearlayout2.setVisibility(View.GONE);
                 vod_buy_step1_one_linearlayout.setSelected(false);
                 vod_buy_step1_serise_linearlayout.setSelected(false);
                 vod_buy_step1_oneproduct_linearlayout.setSelected(true);
@@ -160,6 +165,7 @@ public class VodBuyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_linearlayout2.setVisibility(View.GONE);
                 vod_buy_step1_one_linearlayout.setSelected(false);
                 vod_buy_step1_serise_linearlayout.setSelected(false);
                 vod_buy_step1_oneproduct_linearlayout.setSelected(false);
@@ -172,7 +178,8 @@ public class VodBuyActivity extends Activity {
         vod_buy_step1_month_linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_linearlayout.setVisibility(View.GONE);
+                vod_buy_step2_linearlayout2.setVisibility(View.VISIBLE);
                 vod_buy_step1_one_linearlayout.setSelected(false);
                 vod_buy_step1_serise_linearlayout.setSelected(false);
                 vod_buy_step1_oneproduct_linearlayout.setSelected(false);
@@ -185,7 +192,8 @@ public class VodBuyActivity extends Activity {
         vod_buy_step1_month_all_linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vod_buy_step2_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_linearlayout.setVisibility(View.GONE);
+                vod_buy_step2_linearlayout2.setVisibility(View.VISIBLE);
                 vod_buy_step1_one_linearlayout.setSelected(false);
                 vod_buy_step1_serise_linearlayout.setSelected(false);
                 vod_buy_step1_oneproduct_linearlayout.setSelected(false);
@@ -413,7 +421,7 @@ public class VodBuyActivity extends Activity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 int resultCode = 0;
-                String jstr = "";
+                final String jstr = "";
                 // {"resultCode":100,"discountCouponPaymentList":[],"transactionId":null,"errorString":"","version":"2","enrolledEventIdList":[]}
                 try {
                     JSONObject jo      = new JSONObject(response);
@@ -422,15 +430,25 @@ public class VodBuyActivity extends Activity {
                     FragmentManager fm = getFragmentManager();
                     fm.popBackStack("VodBuyFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     */
-                    jstr = jo.toString();
+                    // jstr = jo.toString();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent();
-                intent.putExtra("jstr", jstr);
-                setResult(RESULT_OK, intent);
-                finish();
+
+                String alertTitle = "구매완료";
+                String alertMsg1  = mTitle;
+                String alertMsg2  = getString(R.string.success_purchase);
+                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent();
+                        intent.putExtra("jstr", jstr);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                }, true);
             }
         }, new Response.ErrorListener() {
             @Override

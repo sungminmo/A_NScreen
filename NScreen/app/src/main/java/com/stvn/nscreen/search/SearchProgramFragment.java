@@ -1,6 +1,5 @@
 package com.stvn.nscreen.search;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -46,7 +45,6 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     private ArrayList<SearchProgramDataObject> mProgramlist = new ArrayList<SearchProgramDataObject>();
     private SearchProgramAdapter mAdapter;
     private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
     private String mAreaCode = "0";
     private String mKeyword;
     private int pageNo = 0;
@@ -157,7 +155,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     public void reqProgramList()
     {
         mLockListView = true;
-        mProgressDialog	 = ProgressDialog.show(getActivity(),"",getString(R.string.wait_a_moment));
+        ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+
         String url = Constants.SERVER_URL_AIRCODE_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -165,12 +164,12 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 //Log.d(tag, response);
                 parseGetSearchList(response);
                 mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
                 CMLog.e("CM", error.getMessage());
             }
         }) {

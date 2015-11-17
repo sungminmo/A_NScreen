@@ -59,7 +59,7 @@ import java.util.Map;
 
 public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
-    private static final String                  tag = VodMainFragment.class.getSimpleName();
+    private static final String                  tag = VodMainFirstTabFragment.class.getSimpleName();
     private static       VodMainFirstTabFragment mInstance;
     private              JYSharedPreferences     mPref;
 
@@ -83,6 +83,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     public VodMainFirstTabFragment() {
         // Required empty public constructor
+
     }
 
 
@@ -91,6 +92,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vod_main_first_tab, container, false);
 
+        setMyContext(this.getActivity());
 
         mInstance     = this;
         mPref         = new JYSharedPreferences(this.getActivity());
@@ -113,7 +115,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
 
         // 먼저 공통 뷰 초기화 부터 해준다. (Left버튼, Right버튼, GNB)
-        view = initializeBaseView(view);
+        view = initializeBaseView(view, 0);
 
         // 공통 뷰 초기화가 끝났으면, 이놈을 위한 초기화를 한다.
         view = initializeView(view);
@@ -141,7 +143,8 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
 
         // 카테고리 요청. 추천.
-        requestGetCategoryTree();
+        //requestGetCategoryTree();
+        requestGetServiceBannerList(); // 배너 요청
 
 
         ((LinearLayout)view.findViewById(R.id.vod_main_pop20_more_linearlayout)).setOnClickListener(new View.OnClickListener() {
@@ -158,65 +161,91 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // 카테고리 요청.
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
-    private void requestGetCategoryTree() {
-        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(),"",getString(R.string.wait_a_moment));
-        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
-        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject first       = new JSONObject(response);
-                    int        resultCode  = first.getInt("resultCode");
-                    String     errorString = first.getString("errorString");
-
-                    categorys              = new ArrayList<JSONObject>();
-                    JSONArray  categoryList = first.getJSONArray("categoryList");
-                    for ( int i = 0; i < categoryList.length(); i++ ) {
-                        JSONObject category     = (JSONObject)categoryList.get(i);
-                        int        viewerType   = category.getInt("viewerType");
-                        String     categoryId   = category.getString("categoryId");
-                        String     categoryName = category.getString("categoryName");
-
-                        /**
-                         ViewerType = 30, getContentGroupList (보통 리스트)
-                         ViewerType = 200, getPopularityChart (인기순위)
-                         ViewerType = 41, ㅎetBundleProductList (묶음)
-                         ViewerType = 310, recommendContentGroupByAssetId (연관)
-                         */
-                        if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
-                            categorys.add(category);
-                        }
-                    }
-                } catch ( JSONException e ) {
-                    e.printStackTrace();
-                }
-                requestGetServiceBannerList(); // 배너 요청
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
-                if (error instanceof TimeoutError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
-                } else if (error instanceof NoConnectionError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
-                } else if (error instanceof ServerError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
-                } else if (error instanceof NetworkError) {
-                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
-                }
-                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
-                return params;
-            }
-        };
-        mRequestQueue.add(request);
-    }
+//    private void requestGetCategoryTree() {
+//
+//        /**
+//         * 버젼 체크해서 얼럿 띄우자.
+//         */
+//        String serverVer  = mPref.getAppVersionForServer();
+//        String appVer     = mPref.getAppVersionForApp();
+//        Float  fVerServer = Float.valueOf(serverVer);
+//        Float  fVerApp    = Float.valueOf(appVer);
+//        if ( fVerServer > fVerApp ) {
+//            StringBuilder sb   = new StringBuilder();
+//            sb.append("지금 사용하시는 버전보다 더 최신버전이 존재합니다. 구글 마켓에서 업데이트 하신 뒤 사용하시기 바랍니다.").append("\n")
+//                    .append("사용 중인 버전 : ").append(appVer + " ver.\n")
+//            .append("최신 버전 : ").append(serverVer).append(" ver.");
+//            AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+//            alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                }
+//            });
+//            alert.setMessage(sb.toString());
+//            alert.show();
+//        }
+//
+//
+//        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
+//        //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
+//        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713230&depth=3&traverseType=DFS";
+//        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject first       = new JSONObject(response);
+//                    int        resultCode  = first.getInt("resultCode");
+//                    String     errorString = first.getString("errorString");
+//
+//                    categorys              = new ArrayList<JSONObject>();
+//                    JSONArray  categoryList = first.getJSONArray("categoryList");
+//                    for ( int i = 0; i < categoryList.length(); i++ ) {
+//                        JSONObject category     = (JSONObject)categoryList.get(i);
+//                        int        viewerType   = category.getInt("viewerType");
+//                        String     categoryId   = category.getString("categoryId");
+//                        String     categoryName = category.getString("categoryName");
+//
+//                        /**
+//                         ViewerType = 30, getContentGroupList (보통 리스트)
+//                         ViewerType = 200, getPopularityChart (인기순위)
+//                         ViewerType = 41, ㅎetBundleProductList (묶음)
+//                         ViewerType = 310, recommendContentGroupByAssetId (연관)
+//                         */
+//                        if ( viewerType == 30 || viewerType == 200 || viewerType == 41 ) {
+//                            categorys.add(category);
+//                        }
+//                    }
+//                } catch ( JSONException e ) {
+//                    e.printStackTrace();
+//                }
+//                requestGetServiceBannerList(); // 배너 요청
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                mProgressDialog.dismiss();
+//                if (error instanceof TimeoutError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+//                } else if (error instanceof NoConnectionError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+//                } else if (error instanceof ServerError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+//                } else if (error instanceof NetworkError) {
+//                    Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+//                }
+//                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+//            }
+//        }) {
+//            @Override
+//            protected Map<String,String> getParams(){
+//                Map<String,String> params = new HashMap<String, String>();
+//                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+//                return params;
+//            }
+//        };
+//        mRequestQueue.add(request);
+//    }
 
 
     // 배너 요청
@@ -576,7 +605,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
+                //mProgressDialog.dismiss();
                 try {
                     JSONObject first            = new JSONObject(response);
                     JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
@@ -592,7 +621,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                //mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {

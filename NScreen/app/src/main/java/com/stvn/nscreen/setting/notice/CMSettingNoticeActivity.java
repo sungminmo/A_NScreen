@@ -1,4 +1,4 @@
-package com.stvn.nscreen.setting;
+package com.stvn.nscreen.setting.notice;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,8 +20,6 @@ import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
 import com.stvn.nscreen.util.CMLog;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -34,15 +32,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 설정화면 > 유료채널 안내 관리
- * Created by kimwoodam on 2015. 9. 30..
+ * 설정화면 > 공지사항
+ * Created by kimwoodam on 2015. 11. 15..
  */
-
-public class CMSettingPayChannelActivity extends CMBaseActivity implements AdapterView.OnItemClickListener {
+public class CMSettingNoticeActivity extends CMBaseActivity implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
-    private CMSettingPayChannelAdapter mAdapter;
-    private ArrayList<ListViewDataObject> mPayChannelList;
+    private CMSettingNoticeAdapter mAdapter;
+    private ArrayList<ListViewDataObject> mNoticeList;
 
     // network
     private RequestQueue mRequestQueue;
@@ -53,15 +50,15 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_pay_channel);
-        setActionBarInfo("유료채널 안내", CMActionBar.CMActionBarStyle.BACK);
+        setContentView(R.layout.activity_setting_notice);
+        setActionBarInfo("공지사항", CMActionBar.CMActionBarStyle.BACK);
 
-        mPref = new JYSharedPreferences(this);
-        mRequestQueue = Volley.newRequestQueue(this);
-        mPayChannelList = new ArrayList<ListViewDataObject>();
+        this.mPref = new JYSharedPreferences(this);
+        this.mRequestQueue = Volley.newRequestQueue(this);
+        this.mNoticeList = new ArrayList<ListViewDataObject>();
         initializeView();
 
-        requestPayChannelList();
+        requestNoticeList();
     }
 
     @Override
@@ -74,20 +71,20 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
      * */
     private void initializeView() {
 
-        this.mAdapter = new CMSettingPayChannelAdapter(this, mPayChannelList);
-        this.mListView = (ListView)findViewById(R.id.setting_pay_channel_listview);
+        this.mAdapter = new CMSettingNoticeAdapter(this, mNoticeList);
+        this.mListView = (ListView)findViewById(R.id.setting_notice_listview);
         this.mListView.setOnItemClickListener(this);
         this.mListView.setAdapter(this.mAdapter);
     }
 
-    private void requestPayChannelList() {
+    private void requestNoticeList() {
         mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
 
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0&mode=PAY";
+        String url = mPref.getRumpersServerUrl() + "/GetServiceNoticeInfo.asp";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                parsePayChannelList(response);
+                parseNoticeList(response);
                 mAdapter.notifyDataSetChanged();
                 mProgressDialog.dismiss();
             }
@@ -101,17 +98,13 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("version", String.valueOf(1));
-                params.put("areaCode", String.valueOf(0));
-                params.put("mode", "PAY");
-                CMLog.d("CMSettingPayChannelActivity", params.toString());
                 return params;
             }
         };
         mRequestQueue.add(request);
     }
 
-    private void parsePayChannelList(String response) {
+    private void parseNoticeList(String response) {
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
@@ -124,26 +117,29 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
             int eventType = xpp.getEventType();
             while ( eventType != XmlPullParser.END_DOCUMENT ) {
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (xpp.getName().equalsIgnoreCase("channelId")) {
-                        sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
-                        sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelName")) {
-                        sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelInfo")) {
-                        sb.append(",\"channelInfo\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelOnAirHD")) {
-                        sb.append(",\"channelOnAirHD\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelLogoImg")) {
-                        sb.append(",\"channelLogoImg\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirID")) {
-                        sb.append(",\"channelProgramOnAirID\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTime")) {
-                        sb.append(",\"channelProgramOnAirTime\":\"").append(xpp.nextText()).append("\"");
-                    } else if (xpp.getName().equalsIgnoreCase("channelView")) {
-                        sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
+
+                    if (xpp.getName().equalsIgnoreCase("noticeId")) {
+                        sb.append("{\"noticeId\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("notice_Location")) {
+                        sb.append(",\"notice_Location\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("notice_area")) {
+                        sb.append(",\"notice_area\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("notice_product")) {
+                        sb.append(",\"notice_product\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("notice_StartDate")) {
+                        sb.append(",\"notice_StartDate\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("notice_EndDate")) {
+                        sb.append(",\"notice_EndDate\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("notice_Title")) {
+                        sb.append(",\"notice_Title\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("notice_Content")) {
+                        String strContent = xpp.nextText().replaceAll("\"", "'");
+                        strContent = strContent.replaceAll("\\n", "<br/>");
+                        strContent = strContent.replaceAll("\\r", "<br/>");
+
+                        sb.append(",\"notice_Content\":\"").append(strContent).append("\"}");
                         ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
-                        mPayChannelList.add(obj);
+                        mNoticeList.add(obj);
                         sb.setLength(0);
                     }
                 }
@@ -161,15 +157,8 @@ public class CMSettingPayChannelActivity extends CMBaseActivity implements Adapt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ListViewDataObject info = (ListViewDataObject)parent.getItemAtPosition(position);
-        try {
-            JSONObject jsonObj = new JSONObject(info.sJson);
-
-            Intent nextIntent = new Intent(CMSettingPayChannelActivity.this, CMSettingPayChannelDetailActivity.class);
-            nextIntent.putExtra("Channel_Title", jsonObj.getString("channelName"));
-            startActivity(nextIntent);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Intent nextIntent = new Intent(CMSettingNoticeActivity.this, CMSettingNoticeDetailActivity.class);
+        nextIntent.putExtra("Notice_Info", info.sJson);
+        startActivity(nextIntent);
     }
 }

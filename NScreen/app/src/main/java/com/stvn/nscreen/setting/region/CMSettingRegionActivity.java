@@ -1,7 +1,6 @@
-package com.stvn.nscreen.setting;
+package com.stvn.nscreen.setting.region;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +18,7 @@ import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.CMActionBar;
 import com.stvn.nscreen.common.CMBaseActivity;
+import com.stvn.nscreen.setting.CMSettingData;
 import com.stvn.nscreen.util.CMLog;
 
 import org.json.JSONException;
@@ -48,7 +48,6 @@ public class CMSettingRegionActivity extends CMBaseActivity implements View.OnCl
 
     // network
     private RequestQueue mRequestQueue;
-    private ProgressDialog mProgressDialog;
     private JYSharedPreferences mPref;
 
     @Override
@@ -129,7 +128,7 @@ public class CMSettingRegionActivity extends CMBaseActivity implements View.OnCl
     }
 
     private void requestGetChannelAreaList() {
-        this.mProgressDialog	 = ProgressDialog.show(this, "", getString(R.string.wait_a_moment));
+        showProgressDialog("", getString(R.string.wait_a_moment));
 
         String url = mPref.getAircodeServerUrl() + "/getChannelArea.xml?version=1";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
@@ -137,12 +136,12 @@ public class CMSettingRegionActivity extends CMBaseActivity implements View.OnCl
             public void onResponse(String response) {
                 parseChannelAreaList(response);
                 mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
+                hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                hideProgressDialog();
                 CMLog.e("CMSettingPayChannelActivity", error.getMessage());
             }
         }) {

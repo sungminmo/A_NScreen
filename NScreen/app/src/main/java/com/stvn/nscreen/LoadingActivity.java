@@ -1,6 +1,5 @@
 package com.stvn.nscreen;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,7 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
-import com.widevine.sampleplayer.VideoPlayerView;
+import com.stvn.nscreen.bean.MainCategoryObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +37,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +50,9 @@ public class LoadingActivity extends AppCompatActivity {
     // network
     private              RequestQueue        mRequestQueue;
     private              Map<String, Object> mGetAppInitialize;
+    private              MainCategoryObject mMainCategoryObject1;
+    private              MainCategoryObject mMainCategoryObject2;
+    private              MainCategoryObject mMainCategoryObject3;
 
     // ui
     private              ProgressBar         mProgressBar;
@@ -65,7 +68,9 @@ public class LoadingActivity extends AppCompatActivity {
         mPref             = new JYSharedPreferences(this);
         mRequestQueue     = Volley.newRequestQueue(this);
         mGetAppInitialize = new HashMap<String, Object>();
-
+        mMainCategoryObject1 = new MainCategoryObject();
+        mMainCategoryObject2 = new MainCategoryObject();
+        mMainCategoryObject3 = new MainCategoryObject();
 
         mProgressBar  = (ProgressBar)findViewById(R.id.loading_progressbar);
         mTextView     = (TextView)findViewById(R.id.loading_textview);
@@ -90,16 +95,33 @@ public class LoadingActivity extends AppCompatActivity {
      */
     private void requestGetAppInitialize() {
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetAppInitialize()"); }
-        String url  = mPref.getRumpersServerUrl() + "/GetAppInitialize.asp?appType=A&appId=002cc6d42269f3143470c116a3de51aa6128737c";
+        String url  = mPref.getRumpersServerUrl() + "/GetAppInitialize.asp?appType=A&appId="+mPref.getValue(JYSharedPreferences.UUID, "");
+        mTextView.setText("AppInitialize...(R)");
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+//                try {
+//                    response = URLEncoder.encode(response, "EUC-KR");
+//                } catch ( UnsupportedEncodingException e ) {
+//                    e.printStackTrace();
+//                }
                 mProgressBar.setProgress(30);
                 parseGetAppInitialize(response);
                 mProgressBar.setProgress(40);
                 if ( Constants.CODE_RUMPUS_OK.equals(mGetAppInitialize.get("resultCode")) ) {
                     // ok
-                    //requestGetWishList();
+                    String SetTopBoxKind = (String)mGetAppInitialize.get("SetTopBoxKind");
+                    if ( "".equals(SetTopBoxKind) ) {
+                        // 작업해야됨!!! 셋탑박스 종류가 안내려왔으니, 페어링 정보를 초기화(제거) 해야 한다.
+                    } else {
+                        mPref.setSettopBoxKind(SetTopBoxKind);
+                    }
+                    // 메인 category 저장.
+                    mPref.addMainCategory(mMainCategoryObject1, mMainCategoryObject2, mMainCategoryObject3);
+                    // 서버로부터 받은 앱의 버젼 저장.
+                    String appversion = (String)mGetAppInitialize.get("appversion");
+                    mPref.setAppVersionForServer(appversion);
+
                     if ( mPref.isPairingCompleted() ) {
                         mProgressBar.setProgress(50);
                         requestGetWishList();
@@ -152,7 +174,10 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void parseGetAppInitialize(String response) {
+        response = response.replace("<![CDATA[","");
+        response = response.replace("]]>", "");
         XmlPullParserFactory factory = null;
+        int iCategoryLoop = 0;
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -166,6 +191,42 @@ public class LoadingActivity extends AppCompatActivity {
                     if (xpp.getName().equalsIgnoreCase("resultCode")) {
                         String resultCode = xpp.nextText();
                         mGetAppInitialize.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        mGetAppInitialize.put("errorString", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("appversion")) {
+                        String appversion = xpp.nextText();
+                        mGetAppInitialize.put("appversion", appversion);
+                    } else if (xpp.getName().equalsIgnoreCase("SetTopBoxKind")) {
+                        String SetTopBoxKind = xpp.nextText();
+                        mGetAppInitialize.put("SetTopBoxKind", SetTopBoxKind);
+                    } else if (xpp.getName().equalsIgnoreCase("categoryId")) {
+                        String categoryId = xpp.nextText();
+                        if ( iCategoryLoop == 0 ) {
+                            mMainCategoryObject1.setsCategoryId(categoryId);
+                        } else if ( iCategoryLoop == 1 ) {
+                            mMainCategoryObject2.setsCategoryId(categoryId);
+                        } else if ( iCategoryLoop == 2 ) {
+                            mMainCategoryObject3.setsCategoryId(categoryId);
+                        }
+                    } else if (xpp.getName().equalsIgnoreCase("categorytype")) {
+                        String categorytype = xpp.nextText();
+                        if ( iCategoryLoop == 0 ) {
+                            mMainCategoryObject1.setsCategoryType(categorytype);
+                        } else if ( iCategoryLoop == 1 ) {
+                            mMainCategoryObject2.setsCategoryType(categorytype);
+                        } else if ( iCategoryLoop == 2 ) {
+                            mMainCategoryObject3.setsCategoryType(categorytype);
+                        }
+                    } else if (xpp.getName().equalsIgnoreCase("category_title")) {
+                        String category_title = xpp.nextText();
+                        if ( iCategoryLoop == 0 ) {
+                            mMainCategoryObject1.setsCategoryTitle(category_title); iCategoryLoop++;
+                        } else if ( iCategoryLoop == 1 ) {
+                            mMainCategoryObject2.setsCategoryTitle(category_title); iCategoryLoop++;
+                        } else if ( iCategoryLoop == 2 ) {
+                            mMainCategoryObject3.setsCategoryTitle(category_title); iCategoryLoop++;
+                        }
                     } else if (xpp.getName().equalsIgnoreCase("errorString")) {
                         String errorString = xpp.nextText();
                         mGetAppInitialize.put("errorString", errorString);
@@ -191,6 +252,7 @@ public class LoadingActivity extends AppCompatActivity {
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
+        mTextView.setText("WishList...(H)");
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -231,6 +293,15 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
             }
         }) {
             @Override

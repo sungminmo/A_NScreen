@@ -1,4 +1,4 @@
-package com.stvn.nscreen.setting;
+package com.stvn.nscreen.setting.region;
 
 import android.content.Context;
 import android.text.TextUtils;

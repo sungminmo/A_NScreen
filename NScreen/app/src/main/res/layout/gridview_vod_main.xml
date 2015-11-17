@@ -33,7 +33,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
+        android:id="@+id/gridview_vod_main_ranking_imageview"
         android:layout_gravity="left|top"
         android:background="@mipmap/icon_rank"
         android:layout_marginLeft="0.5dp" />
@@ -42,7 +42,7 @@
         android:layout_width="22dp"
         android:layout_height="wrap_content"
         android:text="0"
-        android:id="@+id/vod_main_grid_rank_textview"
+        android:id="@+id/gridview_vod_main_ranking_textview"
         android:textSize="11.5sp"
         android:textColor="#ffffff"
         android:gravity="center_horizontal"
@@ -51,19 +51,27 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView3"
+        android:id="@+id/gridview_vod_main_promotionsticker_imageview"
         android:layout_gravity="right|top"
         android:layout_marginRight="2.25dp"
-        android:layout_marginTop="3.25dp"
-        android:background="@mipmap/vod_01" />
+        android:layout_marginTop="3.25dp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView4"
+        android:id="@+id/gridview_vod_main_tvonly_imageview"
         android:layout_gravity="right|bottom"
-        android:background="@mipmap/icon_nor"
         android:layout_marginRight="2.25dp"
-        android:layout_marginBottom="19.5dp" />
+        android:layout_marginBottom="19.5dp"
+        android:background="@mipmap/icon_onlytv"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridview_vod_main_19_imageview"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@mipmap/icon_19"
+        android:visibility="invisible" />
 
 </FrameLayout>

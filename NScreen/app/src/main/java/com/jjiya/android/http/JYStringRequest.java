@@ -7,9 +7,11 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.jjiya.android.common.JYSharedPreferences;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +48,7 @@ public class JYStringRequest extends StringRequest {
         return map;
     }
 
+    /*
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         Map<String, String> headers = response.headers;
@@ -62,6 +65,24 @@ public class JYStringRequest extends StringRequest {
             }
         }
         return super.parseNetworkResponse(response);
+//        String responseUtf8 = null;
+//        try {
+//            responseUtf8 = new String(response.data,"UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return super.parseNetworkResponse(responseUtf8);
     }
-
+    */
+    @Override
+    protected Response<String> parseNetworkResponse(NetworkResponse response) {
+        String utf8String;
+        try {
+            utf8String = new String(response.data, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            utf8String = new String(response.data);
+        }
+        return Response.success(utf8String, HttpHeaderParser.parseCacheHeaders(response));
+    }
 }
