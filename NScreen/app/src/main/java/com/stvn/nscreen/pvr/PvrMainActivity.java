@@ -2,6 +2,7 @@ package com.stvn.nscreen.pvr;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,9 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.epg.EpgSubActivity;
+import com.stvn.nscreen.pairing.PairingMainActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,12 +71,28 @@ public class PvrMainActivity extends AppCompatActivity {
     private              ProgressDialog         mProgressDialog;
     private              Map<String, Object>    mNetworkError;
 
-    private              PvrMainListViewAdapter mAdapter;
+    private              ArrayList<JSONObject>  mReservs;  // 전체 얘약 목록
+    private              PvrMainListViewAdapter mAdapter;  // 시리즈 중복은 제외한 예약 목록
     private              SwipeMenuListView      mListView;
 
     private              ImageButton            pvr_main_backBtn;
     private              Button                 button1, button2;
     private              TextView               textView1, textView2;
+
+    private String getSeriesJson(String str){
+        StringBuffer sb = new StringBuffer();
+        try {
+            for (int i = 0; i < mReservs.size(); i++) {
+                JSONObject jo = mReservs.get(i);
+                if (str.equals(jo.getString("SeriesId"))) {
+                    sb.append("[").append(jo.toString()).append("]");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +112,7 @@ public class PvrMainActivity extends AppCompatActivity {
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
         mNetworkError = new HashMap<String, Object>();
+        mReservs      = new ArrayList<JSONObject>();
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
         mAdapter      = new PvrMainListViewAdapter(this, null);
@@ -103,19 +126,33 @@ public class PvrMainActivity extends AppCompatActivity {
         mListView     = (SwipeMenuListView)findViewById(R.id.pvr_main_listview);
         mListView.setAdapter(mAdapter);
         mListView.setMenuCreator(creator);
+        mListView.setOnItemClickListener(mItemClickListener);
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 ListViewDataObject item = (ListViewDataObject) mAdapter.getItem(position);
-                String sChannelId=null;
-                String starttime=null;
+                String sRecordId     = null;
+                String sSeriesId     = null;
+                String sChannelId    = null;
+                String sProgramName  = null;
+                String starttime     = null;
+                String recordingtype = null;
                 try {
                     JSONObject jo = new JSONObject (item.sJson);
+                    sRecordId = jo.getString("RecordId");
+                    sSeriesId = jo.getString("SeriesId");
                     sChannelId = jo.getString("ChannelId");
+                    sProgramName = jo.getString("ProgramName");
                     starttime  = jo.getString("RecordStartTime");
+                    recordingtype = jo.getString("RecordingType");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                final String sChannelId2 = sChannelId;
+                final String starttime2 = starttime;
+                final String recordingtype2 = recordingtype;
+                final String sRecordId2 = sRecordId;
+                final String sSeriesId2 = sSeriesId;
                 int iMenuType = mAdapter.getItemViewType(position);
                 switch (iMenuType) {
                     case 0: {
@@ -123,11 +160,62 @@ public class PvrMainActivity extends AppCompatActivity {
                     }
                     break;
                     case 1: {
-                        requestSetRecordCancelReserve(sChannelId, starttime);
+                        if ( "NULL".equals(sSeriesId) ) { // 단편
+                            String ReserveCancel = "2";
+                            requestSetRecordCancelReserve(sChannelId, starttime, ReserveCancel);
+                        } else if ( !"NULL".equals(sSeriesId) ) { // 시리즈
+                            String alertTitle = "녹화예약취소확인";
+                            String alertMsg1 = sProgramName;
+                            String alertMsg2 = getString(R.string.error_not_paring_compleated6);
+                            CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String ReserveCancel = "2";
+                                    requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String ReserveCancel = "1";
+                                    requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                        }
                     }
                     break;
                     case 2: {
+                        if ( "NULL".equals(sSeriesId) ) { // 단편
+                            String ReserveCancel = "2";
+                            requestSetRecordDele(sChannelId, starttime, sRecordId);
+                        } else if ( !"NULL".equals(sSeriesId) ) { // 시리즈
+                            String alertTitle = "녹화예약취소확인";
+                            String alertMsg1 = sProgramName;
+                            String alertMsg2 = getString(R.string.error_not_paring_compleated6);
+                            CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String ReserveCancel = "1";
+                                    requestSetRecordSeriesDele(sChannelId2, starttime2, sRecordId2, sSeriesId2);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String ReserveCancel = "2";
+                                    requestSetRecordDele(sChannelId2, starttime2, sRecordId2);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
+                                }
+                            });
+                        }
                     }
                     break;
                 }
@@ -139,6 +227,7 @@ public class PvrMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAdapter.clear();
+                mAdapter.notifyDataSetChanged();
                 button1.setSelected(true);
                 button2.setSelected(false);
                 textView1.setVisibility(View.VISIBLE);
@@ -151,6 +240,7 @@ public class PvrMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAdapter.clear();
+                mAdapter.notifyDataSetChanged();
                 button1.setSelected(false);
                 button2.setSelected(true);
                 textView1.setVisibility(View.GONE);
@@ -162,6 +252,29 @@ public class PvrMainActivity extends AppCompatActivity {
         button1.setSelected(true);
         requestGetRecordReservelist();
     }
+
+    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(tag, "mItemClickListener() " + position);
+            ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
+
+            try {
+                JSONObject jo              = new JSONObject(dobj.sJson);
+                String     sSeriesId  = jo.getString("SeriesId");
+
+                if ( !"NULL".equals(sSeriesId) ) {
+                    Intent intent = new Intent(mInstance, PvrSubActivity.class);
+                    intent.putExtra("SeriesId", sSeriesId);
+                    String jstr = getSeriesJson(sSeriesId);
+                    intent.putExtra("jstr", jstr);
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     /**
      * Swipe Menu for ListView
@@ -360,16 +473,31 @@ public class PvrMainActivity extends AppCompatActivity {
         }
 
         if ( strings.size() > 0 ) {
-            for ( int i = 0; i < strings.size(); i++ ) {
-                String str = strings.get(i);
-                ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, str);
-                mAdapter.addItem(obj);
+            try {
+                for (int i = 0; i < strings.size(); i++) {
+                    String str = strings.get(i);
+                    JSONObject jo = new JSONObject(str);
+                    mReservs.add(jo);  // 모든 예약 목록 저장.
+                    String RecordingType = jo.getString("RecordingType");
+                    String SeriesId = jo.getString("SeriesId");
+                    if ("0".equals(RecordingType) && (!"NULL".equals(SeriesId))) {
+                        // nothing
+                    } else {
+                        ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, str);
+                        mAdapter.addItem(obj);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
 
         return sResultCode;
     }
 
+    /**
+     * 녹화물 리스트 요청
+     */
     private void requestGetRecordlist() {
         mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordlist()"); }
@@ -422,6 +550,10 @@ public class PvrMainActivity extends AppCompatActivity {
                         sb.append("{\"RecordId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("RecordingType")) {
                         sb.append(",\"RecordingType\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("SeriesId")) {
+                        sb.append(",\"SeriesId\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("ChannelId")) {
+                        sb.append(",\"ChannelId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("Channel_logo_img")) {
                         sb.append(",\"Channel_logo_img\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("ProgramName")) {
@@ -518,7 +650,170 @@ public class PvrMainActivity extends AppCompatActivity {
         }
     }
 
-    private void requestSetRecordCancelReserve(String channelId, String starttime) {
+    /**
+     * 녹화물 삭제
+     * @param channelId
+     * @param starttime
+     * @param sRecordId
+     */
+    private void requestSetRecordDele(String channelId, String starttime, String sRecordId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordDele()"); }
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordDele.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime + "&deleteType=0&RecordId=" + sRecordId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecordDele(response);
+                mAdapter.clear();
+                mAdapter.notifyDataSetChanged();
+                textView2.setText("총 개의 녹화 콘텐츠가 있습니다.");
+                requestGetRecordlist();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecordDele(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestSetRecordSeriesDele(String channelId, String starttime, String sRecordId, String sSeriesId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordSeriesDele()"); }
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordSeriesDele.asp?version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime + "&deleteType=0&RecordId=" + sRecordId + "SeriesId=" + sSeriesId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecordSeriesDele(response);
+                mAdapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecordSeriesDele(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestSetRecordCancelReserve(String channelId, String starttime, String recordingtype) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }
         try {
@@ -529,12 +824,13 @@ public class PvrMainActivity extends AppCompatActivity {
         String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url  = mPref.getRumpersServerUrl() + "/SetRecordCancelReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
-                + channelId + "&StartTime=" + starttime + "&ReserveCancel=2";
+                + channelId + "&StartTime=" + starttime + "&ReserveCancel=" + recordingtype;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 parseSetRecordCancelReserve(response);
+                mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override

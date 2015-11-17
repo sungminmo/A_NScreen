@@ -236,6 +236,94 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/type5"
+        android:paddingTop="@dimen/dimen_10"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/type5_title"
+            android:textSize="18sp"
+            android:textColor="@color/search_programtext_violet"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dimen_10" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_1"
+            android:background="@color/search_programtext_violet"
+            android:layout_marginTop="@dimen/dimen_5"
+            android:layout_marginLeft="@dimen/dimen_2"
+            android:layout_marginRight="@dimen/dimen_2" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dimen_10"
+            android:paddingBottom="@dimen/dimen_5"
+            android:paddingLeft="@dimen/dimen_5"
+            android:paddingRight="@dimen/dimen_5"
+            android:id="@+id/type5_text"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dimen_10"
+            android:paddingBottom="@dimen/dimen_5"
+            android:paddingLeft="@dimen/dimen_5"
+            android:paddingRight="@dimen/dimen_5"
+            android:id="@+id/type5_text2"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/black" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dimen_5"
+            android:paddingLeft="@dimen/dimen_4"
+            android:paddingRight="@dimen/dimen_4">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/type5_cancel"
+                android:background="@drawable/btn_cancel_color_selector"
+                android:textColor="@color/white"
+                android:text="취소"
+                android:textSize="15sp"
+                android:gravity="center" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/type5_series1"
+                android:background="@drawable/btn_ok_color_selector"
+                android:textColor="@color/white"
+                android:text="단편예약삭제"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/dimen_4" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/type5_series2"
+                android:background="@drawable/btn_cancel_color_selector"
+                android:textColor="@color/white"
+                android:text="시리즈예약삭제"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/dimen_4" />
+        </LinearLayout>
+    </LinearLayout>
+
 
 
 </LinearLayout>

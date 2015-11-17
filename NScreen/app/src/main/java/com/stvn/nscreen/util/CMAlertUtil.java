@@ -160,7 +160,17 @@ public class CMAlertUtil {
         mDialog.show();
     }
 
-    // title / msg / btnOk
+    /**
+     * DialogType4 : 확인 버튼을 가지는 다이얼로그
+     * @param ctx
+     * @param title
+     * @param msg1
+     * @param msg2
+     * @param isbold1
+     * @param isbold2
+     * @param listener
+     * @param isOneButton
+     */
     public static void Alert1(Context ctx, String title, String msg1, String msg2, boolean isbold1, boolean isbold2, DialogInterface.OnClickListener listener, boolean isOneButton) {
 
         CMAlertDialog.CMDialogType type = CMAlertDialog.CMDialogType.DialogType2;
@@ -175,12 +185,47 @@ public class CMAlertUtil {
         mDialog.show();
     }
 
+    /**
+     * DialogType2 : 확인 취소 버튼을 가지는 다이얼로그
+     * @param ctx
+     * @param title
+     * @param msg1
+     * @param msg2
+     * @param isbold1
+     * @param isbold2
+     * @param listener
+     * @param canclelistener
+     */
     public static void Alert1(Context ctx, String title, String msg1, String msg2, boolean isbold1, boolean isbold2, DialogInterface.OnClickListener listener, DialogInterface.OnClickListener canclelistener) {
 
         CMAlertDialog mDialog = new CMAlertDialog(ctx);
         mDialog.setTitle(title);
         mDialog.setMessage(msg1, msg2, isbold1, isbold2);
         mDialog.setPositiveButton("확인", listener);
+        mDialog.setNegativeButton("취소", canclelistener);
+        mDialog.show();
+    }
+
+    /**
+     * 단편예약삭제 / 시리즈예약삭제 / 취소
+     * @param ctx
+     * @param title
+     * @param msg1
+     * @param msg2
+     * @param isbold1
+     * @param isbold2
+     * @param serieslistener
+     * @param listener
+     * @param canclelistener
+     */
+    public static void Alert_series_delete(Context ctx, String title, String msg1, String msg2, boolean isbold1, boolean isbold2, DialogInterface.OnClickListener serieslistener, DialogInterface.OnClickListener listener, DialogInterface.OnClickListener canclelistener) {
+
+        //CMAlertDialog mDialog = new CMAlertDialog(ctx);
+        CMAlertDialog mDialog = new CMAlertDialog(ctx, CMAlertDialog.CMDialogType.DialogType5);
+        mDialog.setTitle(title);
+        mDialog.setMessage(msg1, msg2, isbold1, isbold2);
+        mDialog.setNeutralButton("시리즈예약삭제", serieslistener);
+        mDialog.setPositiveButton("단편예약삭제", listener);
         mDialog.setNegativeButton("취소", canclelistener);
         mDialog.show();
     }

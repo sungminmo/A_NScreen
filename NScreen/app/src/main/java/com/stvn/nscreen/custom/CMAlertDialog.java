@@ -27,14 +27,16 @@ import com.stvn.nscreen.util.CMAlertUtil;
 
 public class CMAlertDialog extends Dialog{
 
-    private LinearLayout mType1,mType2,mType3;
+    private LinearLayout mType1,mType2,mType3,mType5;
     private ImageView mType1_close;
     private TextView mType1_Title,mType1_Content;
     private TextView mType2_Title,mType2_Content1,mType2_Content2;
     private TextView mType3_Title,mType3_Content1,mType3_Content2;
+    private TextView mType5_Title,mType5_Content1,mType5_Content2;
     private EditText mType3_Field;
     private Button mType2_Cancel,mType2_Ok;
     private Button mType3_Cancel,mType3_Ok;
+    private Button mType5_Cancel,mType5_series1,mType5_series2;
     private CMDialogType mType;
     private int mType3_min_length, mType3_max_length;
     private String mType3_Field_Text;
@@ -44,10 +46,11 @@ public class CMAlertDialog extends Dialog{
      * DialogType2 : 확인 취소 버튼을 가지는 다이얼로그
      * DialogType3 : 입력박스 및 확인 취소 버튼을 가지는 다이얼로그
      * DialogType4 : 확인 버튼을 가지는 다이얼로그
+     * DialogType5 : 취소 단편예약삭제 시리즈예약삭제 버튼을 가지는 다이얼로그
      */
 
     public enum CMDialogType{
-        DialogType1, DialogType2, DialogType3, DialogType4
+        DialogType1, DialogType2, DialogType3, DialogType4, DialogType5;
     };
 
 
@@ -97,15 +100,27 @@ public class CMAlertDialog extends Dialog{
         mType3_Content2 = (TextView)findViewById(R.id.type3_text2);
         mType3_Cancel = (Button)findViewById(R.id.type3_cancel);
         mType3_Ok = (Button)findViewById(R.id.type3_ok);
+
+        //Dialog Type5
+        mType5 = (LinearLayout)findViewById(R.id.type5);
+        mType5_Title = (TextView)findViewById(R.id.type5_title);
+        mType5_Content1 = (TextView)findViewById(R.id.type5_text);
+        mType5_Content2 = (TextView)findViewById(R.id.type5_text2);
+        mType5_Cancel = (Button)findViewById(R.id.type5_cancel);
+        mType5_series1 = (Button)findViewById(R.id.type5_series1);
+        mType5_series2 = (Button)findViewById(R.id.type5_series2);
+
         switch (mType)
         {
             case DialogType1:
                 mType1.setVisibility(View.VISIBLE);
                 mType2.setVisibility(View.GONE);
+                mType5_series2.setVisibility(View.GONE);
                 break;
             case DialogType2:
                 mType1.setVisibility(View.GONE);
                 mType2.setVisibility(View.VISIBLE);
+                mType5_series2.setVisibility(View.GONE);
                 mType2_Ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -113,6 +128,24 @@ public class CMAlertDialog extends Dialog{
                     }
                 });
                 mType2_Cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+                break;
+            case DialogType3:
+                mType1.setVisibility(View.GONE);
+                mType2.setVisibility(View.GONE);
+                mType3.setVisibility(View.VISIBLE);
+                mType5_series2.setVisibility(View.GONE);
+                mType3_Ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+                mType3_Cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dismiss();
@@ -129,26 +162,32 @@ public class CMAlertDialog extends Dialog{
                     }
                 });
                 mType2_Cancel.setVisibility(View.GONE);
+                mType5_series2.setVisibility(View.GONE);
                 findViewById(R.id.type2_empty_l).setVisibility(View.INVISIBLE);
                 findViewById(R.id.type2_empty_r).setVisibility(View.INVISIBLE);
                 break;
-            case DialogType3:
+            case DialogType5:
                 mType1.setVisibility(View.GONE);
-                mType2.setVisibility(View.GONE);
-                mType3.setVisibility(View.VISIBLE);
-                mType3_Ok.setOnClickListener(new View.OnClickListener() {
+                mType5.setVisibility(View.VISIBLE);
+                mType5_series2.setVisibility(View.VISIBLE);
+                mType5_Cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dismiss();
                     }
                 });
-                mType3_Cancel.setOnClickListener(new View.OnClickListener() {
+                mType5_series2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dismiss();
                     }
                 });
-                break;
+                mType5_series1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
         }
     }
 
@@ -159,9 +198,11 @@ public class CMAlertDialog extends Dialog{
             case DialogType1:
                 mType1_Content.setText(msg);
                 break;
-            case DialogType2: case DialogType4:
+            case DialogType2: case DialogType4: case DialogType5:
                 mType2_Content1.setText(msg);
+                mType5_Content1.setText(msg);
                 mType2_Content2.setVisibility(View.GONE);
+                mType5_Content2.setVisibility(View.GONE);
                 break;
             case DialogType3:
                 mType3_Content1.setText(msg);
@@ -178,8 +219,9 @@ public class CMAlertDialog extends Dialog{
             case DialogType1:
                 mType1_Title.setText(title);
                 break;
-            case DialogType2: case DialogType4:
+            case DialogType2: case DialogType4: case DialogType5:
                 mType2_Title.setText(title);
+                mType5_Title.setText(title);
                 break;
             case DialogType3:
                 mType3_Title.setText(title);
@@ -189,11 +231,14 @@ public class CMAlertDialog extends Dialog{
 
     public void setMessage(String msg1,String msg2) {
         mType2_Content1.setText(msg1);
+        mType5_Content1.setText(msg1);
 
         if (TextUtils.isEmpty(msg2)) {
             mType2_Content2.setVisibility(View.GONE);
+            mType5_Content2.setVisibility(View.GONE);
         } else {
             mType2_Content2.setText(msg2);
+            mType5_Content2.setText(msg2);
         }
 
         if (mType == CMDialogType.DialogType3) {
@@ -210,15 +255,20 @@ public class CMAlertDialog extends Dialog{
     public void setMessage(String msg1,String msg2,boolean isbold1,boolean isbold2)
     {
         mType2_Content1.setText(msg1);
+        mType5_Content1.setText(msg1);
         if(isbold1)
             mType2_Content1.setTypeface(null,Typeface.BOLD);
+            mType5_Content1.setTypeface(null,Typeface.BOLD);
 
         if (TextUtils.isEmpty(msg2)) {
             mType2_Content2.setVisibility(View.GONE);
+            mType5_Content2.setVisibility(View.GONE);
         } else {
             mType2_Content2.setText(msg2);
+            mType5_Content2.setText(msg2);
             if(isbold2)
                 mType2_Content2.setTypeface(null,Typeface.BOLD);
+                mType5_Content2.setTypeface(null,Typeface.BOLD);
         }
 
 
@@ -242,15 +292,20 @@ public class CMAlertDialog extends Dialog{
     public void setMessage(String msg1,Spannable msg2,boolean isbold1,boolean isbold2)
     {
         mType2_Content1.setText(msg1);
+        mType5_Content1.setText(msg1);
         if(isbold1)
             mType2_Content1.setTypeface(null,Typeface.BOLD);
+            mType5_Content1.setTypeface(null,Typeface.BOLD);
 
         if (TextUtils.isEmpty(msg2)) {
             mType2_Content2.setVisibility(View.GONE);
+            mType5_Content2.setVisibility(View.GONE);
         } else {
             mType2_Content2.setText(msg2);
+            mType5_Content2.setText(msg2);
             if(isbold2)
-                mType2_Content2.setTypeface(null,Typeface.BOLD);
+                mType5_Content2.setTypeface(null,Typeface.BOLD);
+                mType5_Content2.setTypeface(null,Typeface.BOLD);
         }
 
         if (mType.compareTo(CMDialogType.DialogType3) == 0) {
@@ -276,7 +331,17 @@ public class CMAlertDialog extends Dialog{
     public void setPositiveButton(String text,final DialogInterface.OnClickListener listener)
     {
         mType2_Ok.setText(text);
+        mType5_series2.setText(text);
         mType2_Ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                if (listener != null) {
+                    listener.onClick(CMAlertDialog.this, DialogInterface.BUTTON_POSITIVE);
+                }
+            }
+        });
+        mType5_series2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -293,12 +358,35 @@ public class CMAlertDialog extends Dialog{
     public void setNegativeButton(String text,final DialogInterface.OnClickListener listener)
     {
         mType2_Cancel.setText(text);
+        mType5_Cancel.setText(text);
         mType2_Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
                 if (listener != null) {
                     listener.onClick(CMAlertDialog.this, DialogInterface.BUTTON_NEGATIVE);
+                }
+            }
+        });
+        mType5_Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                if (listener != null) {
+                    listener.onClick(CMAlertDialog.this, DialogInterface.BUTTON_NEGATIVE);
+                }
+            }
+        });
+    }
+
+    public void setNeutralButton(String text, final DialogInterface.OnClickListener serieslistener) {
+        mType5_series1.setText(text);
+        mType5_series1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                if (serieslistener != null) {
+                    serieslistener.onClick(CMAlertDialog.this, DialogInterface.BUTTON_NEUTRAL);
                 }
             }
         });

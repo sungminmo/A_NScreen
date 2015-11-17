@@ -106,11 +106,14 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3))); // 끝시간
             Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3))); // 현재시간
 
-            if (i1 <= i3 && i3 <= i2 ) { // 예약녹화 걸려있지 않은 방송.
+            if (dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) { // 예약녹화 걸려있지 않은 방송.
                 return 0; // 녹화중지
-            } else {
+            } else if ( dt.compareTo(dt11) < 0 ) {
                 return 1; // 녹화 예약 취소
+            } else if ( dt.compareTo(dt12) > 0 ) {
+                return 2;
             }
+
         } catch ( JSONException e ) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -153,12 +156,25 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             String             RecordStartTime = jobj.getString("RecordStartTime");
             String             RecordEndTime   = jobj.getString("RecordEndTime");
 
-            TextView           titleTextView          = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
-            TextView           pvr_main_textview_time = ViewHolder.get(convertView, R.id.pvr_main_textview_time);
-            TextView           pvr_main_textview_date = ViewHolder.get(convertView, R.id.pvr_main_textview_date);
-            NetworkImageView   channelLogo            = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
-            ImageView          pvr_main_pvr           = ViewHolder.get(convertView, R.id.pvr_main_pvr);
-            ProgressBar        progBar                = ViewHolder.get(convertView, R.id.progressBar1);
+            TextView           titleTextView             = ViewHolder.get(convertView, R.id.pvr_main_textview_program_title);
+            TextView           pvr_main_textview_time    = ViewHolder.get(convertView, R.id.pvr_main_textview_time);
+            TextView           pvr_main_textview_date    = ViewHolder.get(convertView, R.id.pvr_main_textview_date);
+            NetworkImageView   channelLogo               = ViewHolder.get(convertView, R.id.pvr_main_imagebutton_channel_logo);
+            ImageView          pvr_main_pvr              = ViewHolder.get(convertView, R.id.pvr_main_pvr);
+            ImageView          pvr_main_imageview_series = ViewHolder.get(convertView, R.id.pvr_main_imageview_series);
+            ProgressBar        progBar                   = ViewHolder.get(convertView, R.id.progressBar1);
+
+            if ( !("0".equals(RecordStartTime)) ) {
+                pvr_main_imageview_series.setVisibility(View.INVISIBLE);
+                pvr_main_textview_date.setVisibility(View.VISIBLE);
+                pvr_main_textview_time.setVisibility(View.VISIBLE);
+                progBar.setVisibility(View.VISIBLE);
+            } else if ( "0".equals(RecordStartTime) ) {
+                pvr_main_imageview_series.setVisibility(View.VISIBLE);
+                pvr_main_textview_date.setVisibility(View.INVISIBLE);
+                pvr_main_textview_time.setVisibility(View.INVISIBLE);
+                progBar.setVisibility(View.INVISIBLE);
+            }
 
             titleTextView.setText(jobj.getString("ProgramName"));
             channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);
@@ -180,13 +196,13 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
                 float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
                 progBar.setVisibility(View.VISIBLE);
-                progBar.setProgress((int)(f1 * 100));
+                progBar.setProgress((int) (f1 * 100));
                 pvr_main_pvr.setVisibility(View.VISIBLE);
             } else if ( dt.compareTo(dt11) < 0 ) {
                 progBar.setVisibility(View.VISIBLE);
                 progBar.setProgress(0);
                 pvr_main_pvr.setVisibility(View.INVISIBLE);
-            } else {
+            } else if ( dt.compareTo(dt12) > 0 || !("1".equals(jobj.getString("RecordingType"))) ){
                 progBar.setVisibility(View.INVISIBLE);
             }
 

@@ -16,18 +16,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:src="@mipmap/btn_back"
-            android:background="@color/transparent" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="뉴스파이터"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" />
+            android:background="@color/transparent"
+            android:id="@+id/pvr_sub_backBtn" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -36,9 +26,21 @@
             android:layout_gravity="left|center_vertical"
             android:background="@mipmap/icon_series_title" />
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="뉴스파이터"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginLeft="150dp" />
+
     </FrameLayout>
 
-    <ListView
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/pvr_sub_listview"
