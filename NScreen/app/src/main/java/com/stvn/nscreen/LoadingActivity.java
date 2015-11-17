@@ -1,12 +1,16 @@
 package com.stvn.nscreen;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Environment;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.common.crypt.AESCrypt;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.bean.MainCategoryObject;
 
@@ -34,12 +39,17 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -84,11 +94,44 @@ public class LoadingActivity extends AppCompatActivity {
         mProgressBar.setProgress(10);
         mTextView.setText("초기화 중입니다.");
 
+
+        if ( mPref.getValue(JYSharedPreferences.UUID, "").equals("") ) {
+            // 앱을 설치하고 처음 실행했다면, 여디로 들어온다.
+            try {
+                File file = new File(Environment.getExternalStorageDirectory(), "/.cnm/.nscreen"); // /storage/emulated/0
+                if ( file.exists() ) {  // 만약 .nscreen 파일이 있다면, 이전에 사용하다가 앱을 삭제하고 다시 설치한 경우다. 이경우는 자동 재연동 되도록 해준다.
+                    mPref.readPairingInfoFromPhone();
+                } else {
+                    mPref.makeUUID();   // 만약 .nscreen 파일이 업다면 정말 처음 설치한 것이다. 그냥 uuid 새로 만들자.
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+
         // requestGetAppInitialize() 50%
         // requestGetWishList()      50%
 
         //requestGetAppInitialize();
+
+        //mPref.writePairingInfoToPhone();
+        //mPref.readPairingInfoFromPhone();
         requestGetCategoryTreeForVodMain();
+    }
+
+    private String makeKey(String DeviceId){
+        String etc = "ilovejiyoonjiwoonyounghee!!!!!!!";
+        StringBuffer sb = new StringBuffer();
+        sb.append(DeviceId);
+        int posi = 0;
+        while ( sb.length() < 32 ) {
+            sb.append(etc.charAt(posi));
+            posi++;
+        }
+        return sb.toString();
     }
 
     /**
@@ -101,11 +144,6 @@ public class LoadingActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-//                try {
-//                    response = URLEncoder.encode(response, "EUC-KR");
-//                } catch ( UnsupportedEncodingException e ) {
-//                    e.printStackTrace();
-//                }
                 mProgressBar.setProgress(30);
                 parseGetAppInitialize(response);
                 mProgressBar.setProgress(40);

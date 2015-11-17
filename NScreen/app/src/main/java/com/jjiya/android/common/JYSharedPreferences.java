@@ -9,8 +9,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 
+import com.jjiya.android.common.crypt.AESCrypt;
 import com.stvn.nscreen.LoadingActivity;
 import com.stvn.nscreen.bean.BookmarkChannelObject;
 import com.stvn.nscreen.bean.MainCategoryObject;
@@ -21,14 +23,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -169,6 +175,12 @@ public class JYSharedPreferences {
         return "";
     }
 
+    public void makeUUID() {
+        java.util.UUID uuid = java.util.UUID.randomUUID();
+        put(UUID, uuid.toString());
+        writePairingInfoToPhone();
+    }
+
 
     /**
      * private키가 있다면 privatekey를 사용. 없다면, publickey 사용.
@@ -210,6 +222,107 @@ public class JYSharedPreferences {
     }
 
     /**
+     * 폰마다 다른 암/복호화 키를 만들기 위한 함수.
+     * 안드로이드 아이디를 넘기면, 32자리 문자열을 만든다.
+     * @param ANDROID_ID
+     * @return
+     */
+    private String makeKey(String ANDROID_ID){
+        String etc = "ilovejiyoonjiwoonyounghee!!!!!!!";
+        StringBuffer sb = new StringBuffer();
+        sb.append(ANDROID_ID);
+        int posi = 0;
+        while ( sb.length() < 32 ) {
+            sb.append(etc.charAt(posi));
+            posi++;
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 페어링 정보를 폰에 저장한다.
+     * 주의. 만약 본 메소드를 수정해야 한다면, readPairingInfoFromPhone() 메소드와 쌍으로 같이 맞쳐줘야 한다.
+     */
+    public void writePairingInfoToPhone() {
+        try {
+            String uuid  = getValue(UUID,"");
+            String tk    = getValue(WEBHAS_PRIVATE_TERMINAL_KEY,"");
+            String pwd   = getValue(PURCHASE_PASSWORD,"");
+            String stb   = getValue(RUMPERS_SETOPBOX_KIND,"");
+            String adult = getValue(I_AM_ADULT,"");
+
+            JSONObject root = new JSONObject();
+            root.put(UUID, uuid);
+            root.put(WEBHAS_PRIVATE_TERMINAL_KEY, tk);
+            root.put(PURCHASE_PASSWORD, pwd);
+            root.put(RUMPERS_SETOPBOX_KIND, stb);
+            root.put(I_AM_ADULT, adult);
+
+            String jstr = root.toString();
+
+            String androidId    = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+            String key          = makeKey(androidId);
+            AESCrypt crypt      = new AESCrypt(key);
+            String encryptedStr = crypt.encrypt(jstr);
+
+            File cnmdir = new File(Environment.getExternalStorageDirectory(), "/.cnm"); // /storage/emulated/0
+            if ( !cnmdir.exists() ) {
+                cnmdir.mkdir();
+            }
+            File file = new File(cnmdir, ".nscreen");
+            if ( !file.exists() ) {
+                file.createNewFile();
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, false /*append*/));
+            writer.write(encryptedStr);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 페어링 정보를 폰에서 읽어 온다.
+     */
+    public void readPairingInfoFromPhone() {
+        try {
+            File cnmdir = new File(Environment.getExternalStorageDirectory(), "/.cnm"); // /storage/emulated/0
+            File file = new File(cnmdir, ".nscreen");
+            FileInputStream fis = new FileInputStream(file);
+            int readCount = (int)file.length();
+            byte[] buffer = new byte[readCount];
+            fis.read(buffer);
+            fis.close();
+
+            String readStr      = new String(buffer, "UTF-8");
+            String androidId    = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+            String key          = makeKey(androidId);
+            AESCrypt crypt      = new AESCrypt(key);
+            String decryptedStr = crypt.decrypt(readStr);
+
+            JSONObject jo = new JSONObject(decryptedStr);
+            String uuid   = jo.getString(UUID);
+            String tk     = jo.getString(WEBHAS_PRIVATE_TERMINAL_KEY);
+            String pwd    = jo.getString(PURCHASE_PASSWORD);
+            String stb    = jo.getString(RUMPERS_SETOPBOX_KIND);
+            String adult  = jo.getString(I_AM_ADULT);
+
+            put(UUID, uuid);
+            put(WEBHAS_PRIVATE_TERMINAL_KEY, tk);
+            put(PURCHASE_PASSWORD, pwd);
+            put(RUMPERS_SETOPBOX_KIND, stb);
+            put(I_AM_ADULT, adult);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * 페어링 한적이 있기? 없기?
      * 캐스트이즈 private terminal key 가 있는지 여부로 판단한다.
      * @return  있지. 없지.
@@ -228,9 +341,12 @@ public class JYSharedPreferences {
      * 페어링 정보를 날려버린다.
      */
     public void removePairingInfo(){
-        put(RUMPERS_SETOPBOX_KIND, "");
+        put(UUID, "");
+        put(RUMPERS_SETOPBOX_KIND, ""); // 셋탑종류
         put(JYSharedPreferences.WEBHAS_PRIVATE_TERMINAL_KEY, ""); // 터미널키 저장.
         put(JYSharedPreferences.PURCHASE_PASSWORD, "");     // 구매비번 저장.
+        put(I_AM_ADULT,""); // 성인인증
+        writePairingInfoToPhone();
     }
 
 
@@ -256,6 +372,7 @@ public class JYSharedPreferences {
      */
     public void setIAmAdult() {
         put(I_AM_ADULT, I_AM_ADULT);
+        writePairingInfoToPhone();
     }
 
     public boolean isAdultVerification() {

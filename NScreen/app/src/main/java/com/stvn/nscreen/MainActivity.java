@@ -61,12 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if ( mPref.getValue(JYSharedPreferences.UUID, "").equals("") ) {
-            // 앱을 설치하고 처음 실행했다면, 여디로 들어온다.
-            // UUID 없으면 만들기.
-            UUID uuid = UUID.randomUUID();
-            mPref.put(JYSharedPreferences.UUID, uuid.toString());
-        }
+
 
         if ( mPref.isPairingCompleted() ) {
             requestGetWishList();

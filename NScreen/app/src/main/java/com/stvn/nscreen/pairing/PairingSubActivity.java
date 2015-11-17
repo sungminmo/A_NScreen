@@ -321,6 +321,7 @@ public class PairingSubActivity extends AppCompatActivity {
                         String terminalKey = jo.getString("terminalKey");
                         mPref.put(JYSharedPreferences.WEBHAS_PRIVATE_TERMINAL_KEY, terminalKey); // 터미널키 저장.
                         mPref.put(JYSharedPreferences.PURCHASE_PASSWORD, mPurchasePassword);     // 구매비번 저장.
+                        mPref.writePairingInfoToPhone();
                         // 그다음은 페어링 완료 UI 처리 해야 됨.
                         Intent intent = new Intent(mInstance, PairingCheckActivity.class);
                         startActivity(intent);
