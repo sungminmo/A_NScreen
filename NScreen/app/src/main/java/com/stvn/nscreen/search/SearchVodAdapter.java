@@ -74,7 +74,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		SearchVodDataObject item = getItem(position);
-		holder.poster.setImageUrl(item.imageFileName, mImageLoader);
+		holder.poster.setImageUrl(item.smallImageFileName, mImageLoader);
 
 		holder.event.setVisibility(View.VISIBLE);
 		int imgresource = R.mipmap.vod_01;
