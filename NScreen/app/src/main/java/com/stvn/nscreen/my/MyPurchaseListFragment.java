@@ -1,6 +1,7 @@
 package com.stvn.nscreen.my;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
 import com.stvn.nscreen.util.CMAlertUtil;
+import com.stvn.nscreen.vod.VodDetailActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -124,7 +126,21 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             @Override
             public void onClickFrontView(int position) {
-                CMAlertUtil.ToastShort(getActivity(), position + "번째 리스트 클릭");
+                ListViewDataObject obj = mList.get(position);
+
+                String assetId = "";
+                try {
+                    JSONObject jsonObj = new JSONObject(obj.sJson);
+                    assetId = jsonObj.getString("assetId");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (TextUtils.isEmpty(assetId) == false) {
+                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                    intent.putExtra("assetId", assetId);
+                    startActivity(intent);
+                }
             }
 
             @Override

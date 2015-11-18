@@ -4,21 +4,24 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.jjiya.android.common.CMDateUtil;
+import com.jjiya.android.common.ListViewDataObject;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SwipeListView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class MyDibListAdapter extends BaseAdapter {
+public class MyDibListAdapter extends ArrayAdapter<ListViewDataObject> {
 
 	LayoutInflater mInflater;
 	private Context mContext;
 	private View.OnClickListener mClicklitener;
-	ArrayList<String> mList = new ArrayList<String>();
 
 	public View.OnClickListener getmClicklitener() {
 		return mClicklitener;
@@ -28,39 +31,21 @@ public class MyDibListAdapter extends BaseAdapter {
 		this.mClicklitener = mClicklitener;
 	}
 
-	public MyDibListAdapter(Context context, ArrayList<String> items)
-	{
-		// TODO Auto-generated constructor stub
+	public MyDibListAdapter(Context context, ArrayList<ListViewDataObject> items) {
+		super(context, 0, items);
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
-		mList = items;
 	}
 
 	@Override
-	public int getCount() {
-		return mList.size();
-	}
-
-	@Override
-	public String getItem(int position) {
-		return mList.get(position);
-	}
-
-	@Override
-	public long getItemId(int position)
-	{
-		// TODO Auto-generated method stub
+	public long getItemId(int position) {
 		return position;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		// TODO Auto-generated method stub
-		
+	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-		if (convertView == null)
-		{
+		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.row_mycnm_watch, null);
 			holder = new ViewHolder();
 			holder.rowdate = (TextView)convertView.findViewById(R.id.row_date);
@@ -76,15 +61,31 @@ public class MyDibListAdapter extends BaseAdapter {
 		}
 
 		((SwipeListView)parent).recycle(convertView, position);
-		String item = getItem(position);
+
+		ListViewDataObject info = getItem(position);
+
+		try {
+
+			JSONObject jsonObj = new JSONObject(info.sJson);
+			JSONObject assetObj = jsonObj.getJSONObject("asset");
+
+			String title = assetObj.getString("title");
+			holder.rowname.setText(title);
+
+			String addTime = jsonObj.getString("addTime");
+			String pDay = CMDateUtil.findDateWithFormat(addTime, "MM.dd") +"("+ CMDateUtil.getDayOfWeek(addTime)+")";
+			holder.rowdate.setText(pDay);
+
+			String pTime = CMDateUtil.findDateWithFormat(addTime, "HH:mm");
+			holder.rowtime.setText(pTime);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
 		holder.btn.setTag(position);
 		holder.btn.setOnClickListener(mClicklitener);
-
-		holder.rowdate.setText("08.28 (금)");
-		holder.rowtime.setText("16:15");
-
-		holder.rowname.setText("뉴스파이터");
-
 
 		return convertView;
 	}
