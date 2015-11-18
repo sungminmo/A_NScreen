@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -82,7 +84,15 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
         ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
 
 		String includeAdultCategory = CMSettingData.getInstance().getAdultSearchRestriction(getActivity())?"0":"1";
-        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+mKeyword+"&contentGroupProfile=2";
+        // swlim. "무한도전 Classic"은 검색이 안되서 아래의 URLEncoder 적용.
+        String searchWord = mKeyword;
+        try {
+            searchWord = URLEncoder.encode(searchWord, "UTF-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        // String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+mKeyword+"&contentGroupProfile=2";
+        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+searchWord+"&contentGroupProfile=2";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
