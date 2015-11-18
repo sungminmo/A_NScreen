@@ -95,8 +95,8 @@ public class VodDetailActivity extends Activity {
     private ViewPager mViewPager;
     private String viewable;
 
-    private Button mPurchaseButton; // 구매하기 버튼
-    private Button mPurchaseButton2; // 구매하기 버튼
+    private Button mPurchaseButton; // 구매하기 버튼  (버튼 3개 레이아웃)
+    private Button mPurchaseButton2; // 구매하기 버튼 (버튼 2개 레이아웃)
     private Button mPrePlayButton;  // 미리보기 버튼
     private Button mPlayButton;     // 시청하기 버튼
     private Button mJimButton;      // 찜하기 버튼
@@ -257,13 +257,14 @@ public class VodDetailActivity extends Activity {
                     }, true);
                 } else {
                     Intent intent = new Intent(mInstance, VodBuyActivity.class);
-                    intent.putExtra("assetId", mInstance.assetId);
+                    intent.putExtra("assetId",      mInstance.assetId);
                     intent.putExtra("isSeriesLink", isSeriesLink);
-                    intent.putExtra("mTitle", mTitle);
-                    intent.putExtra("sListPrice", sListPrice);
-                    intent.putExtra("sPrice", sPrice);
-                    intent.putExtra("productId", productId);
-                    intent.putExtra("goodId", goodId);
+                    intent.putExtra("mTitle",       mTitle);
+                    intent.putExtra("sListPrice",   sListPrice);
+                    intent.putExtra("sPrice",       sPrice);
+                    intent.putExtra("productId",    productId);
+                    intent.putExtra("goodId",       goodId);
+                    intent.putExtra("productType",  productType);  // RVOD, ....
                     startActivityForResult(intent, 1000);
                 }
             }
@@ -307,13 +308,14 @@ public class VodDetailActivity extends Activity {
                     }, true);
                 } else {
                     Intent intent = new Intent(mInstance, VodBuyActivity.class);
-                    intent.putExtra("assetId", mInstance.assetId);
+                    intent.putExtra("assetId",      mInstance.assetId);
                     intent.putExtra("isSeriesLink", isSeriesLink);
-                    intent.putExtra("mTitle", mTitle);
-                    intent.putExtra("sListPrice", sListPrice);
-                    intent.putExtra("sPrice", sPrice);
-                    intent.putExtra("productId", productId);
-                    intent.putExtra("goodId", goodId);
+                    intent.putExtra("mTitle",       mTitle);
+                    intent.putExtra("sListPrice",   sListPrice);
+                    intent.putExtra("sPrice",       sPrice);
+                    intent.putExtra("productId",    productId);
+                    intent.putExtra("goodId",       goodId);
+                    intent.putExtra("productType",  productType);  // RVOD, ....
                     startActivityForResult(intent, 1000);
                 }
             }

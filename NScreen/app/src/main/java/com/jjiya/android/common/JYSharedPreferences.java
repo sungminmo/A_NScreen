@@ -378,6 +378,11 @@ public class JYSharedPreferences {
         writePairingInfoToPhone();
     }
 
+    public void removeIAmAdult() {
+        put(I_AM_ADULT, "");
+        writePairingInfoToPhone();
+    }
+
     public boolean isAdultVerification() {
         if ( getValue(I_AM_ADULT, "").equals("") ) {
             return false;

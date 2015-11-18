@@ -68,7 +68,9 @@ public class CMSettingData {
      * */
     public boolean isAdultAuth(Context context) {
         JYSharedPreferences preferences = new JYSharedPreferences(context);
-        return preferences.getValue(CMConstants.ADULT_AUTH_CHECK_KEY, false);
+        // swlim.
+        //return preferences.getValue(CMConstants.ADULT_AUTH_CHECK_KEY, false);
+        return preferences.isAdultVerification();
     }
 
     /**
@@ -76,7 +78,9 @@ public class CMSettingData {
      * */
     public void setAdultAuth(Context context, boolean isAuth) {
         JYSharedPreferences preferences = new JYSharedPreferences(context);
-        preferences.put(CMConstants.ADULT_AUTH_CHECK_KEY, isAuth);
+        // swlim.
+        //preferences.put(CMConstants.ADULT_AUTH_CHECK_KEY, isAuth);
+        preferences.setIAmAdult();
     }
 
     /**
