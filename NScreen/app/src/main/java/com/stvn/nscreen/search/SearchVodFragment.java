@@ -81,7 +81,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
         mLockListView = true;
         ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
 
-		String includeAdultCategory = CMSettingData.getInstance().isAdultAuth(getActivity())?"1":"0";
+		String includeAdultCategory = CMSettingData.getInstance().getAdultSearchRestriction(getActivity())?"0":"1";
         String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+mKeyword+"&contentGroupProfile=2";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
