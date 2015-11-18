@@ -483,10 +483,9 @@ public class VodDetailActivity extends Activity {
         switch(requestCode){
             case 1000: {    // 결제
                 if ( resultCode == RESULT_OK ) {
-                    /**
-                     * VOD 상세정보 요청
-                     */
-                    requestGetAssetInfo();
+                    // 결제가 완료됐으니, 전부 새로 고침.
+                    String oldAssetId = assetId;
+                    refreshAll(oldAssetId);
                 } else if ( resultCode == RESULT_CANCELED ) {
                     // nothing
                 }
