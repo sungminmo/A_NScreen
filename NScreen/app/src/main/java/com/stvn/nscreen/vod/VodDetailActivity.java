@@ -117,6 +117,7 @@ public class VodDetailActivity extends Activity {
 
 
     // for 결재
+    private String productType; // RVOD, ....
     private String productId;
     private String goodId;
 
@@ -543,6 +544,7 @@ public class VodDetailActivity extends Activity {
 
                     JSONArray productLists      = asset.getJSONArray("productList");
                     JSONObject product          = (JSONObject)productLists.get(0);
+                    productType                 = product.getString("productType");
                     productId                   = product.getString("productId");
                     goodId                      = product.getString("goodId");
                     Integer viewablePeriodState = product.getInt("viewablePeriodState");
@@ -607,6 +609,12 @@ public class VodDetailActivity extends Activity {
                                 mPurchaseLinearLayout.setVisibility(View.VISIBLE);
                             }
                         }
+                        // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
+                        if ( "FOD".equals(productType) ) {
+                            mPurchaseLinearLayout.setVisibility(View.GONE);
+                            mPurchaseLinearLayout2.setVisibility(View.GONE);
+                            mPlayLinearLayout.setVisibility(View.VISIBLE);
+                        }
                     } else {                         // 구매했다. 감쳐라.
                         mPurchaseLinearLayout2.setVisibility(View.GONE);
                         mPurchaseLinearLayout.setVisibility(View.GONE);
@@ -666,6 +674,10 @@ public class VodDetailActivity extends Activity {
                         mPriceTextView.setText("이미 구매하셨습니다.");
                         String strColor = "#7b5aa3";
                         mPriceTextView.setTextColor(Color.parseColor(strColor));
+                    }
+                    // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
+                    if ( "FOD".equals(productType) || "0".equals(price) ) {
+                        mPriceTextView.setText("무료시청");
                     }
                     mGenreTextView.setText(genre+" / "+runningTime);
                     mDirectorTextView.setText(director);
