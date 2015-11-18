@@ -21,15 +21,14 @@
                 android:src="@mipmap/icon_menu_normal"
                 android:background="@color/transparent" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/title_activity_main"
-                android:id="@+id/textView"
-                android:textSize="16.25sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:gravity="center_vertical|center_horizontal" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vod_base_ImageView"
+                android:gravity="center_vertical|center_horizontal"
+                android:src="@mipmap/bi"
+                android:layout_gravity="center"
+                android:layout_marginTop="-4dp" />
 
             <ImageButton
                 android:layout_width="50dp"
