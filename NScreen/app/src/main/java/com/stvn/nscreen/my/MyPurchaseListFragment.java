@@ -219,7 +219,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         try {
             JSONObject jsonObj = new JSONObject(obj.sJson);
             String licenseEnd = jsonObj.getString("licenseEnd");
-            vodTitle = jsonObj.getString("assetTitle");
+            vodTitle = jsonObj.getString("productName");
             if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd))) {
                 isExpired = true;
             }
