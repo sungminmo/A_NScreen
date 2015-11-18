@@ -203,6 +203,8 @@ public class VodBuyActivity extends Activity {
             }
         });
 
+        vod_buy_step2_normal_linearlayout.setSelected(true);
+
         vod_buy_step2_normal_linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

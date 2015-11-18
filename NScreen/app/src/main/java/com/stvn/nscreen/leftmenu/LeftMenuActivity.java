@@ -199,7 +199,7 @@ public class LeftMenuActivity extends Activity {
                         }
                     }, true);
                 } else {
-                    // 페어링은 했지만, HD/PVR이 아니면 화면 진입 못함.
+                    // 페어링은 했지만, PVR이 아니면 화면 진입 못함.
                     if ("PVR".toLowerCase().equals(SetTopBoxKind)) {
                         Intent intent = new Intent(mInstance, PvrMainActivity.class);
                         startActivity(intent);

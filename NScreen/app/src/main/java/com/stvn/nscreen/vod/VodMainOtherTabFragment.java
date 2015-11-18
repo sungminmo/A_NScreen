@@ -501,24 +501,30 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
          */
         mTabbar.setVisibility(View.GONE);
 
-        Toast.makeText(mInstance.getActivity(), "ViewerType: "+mCurrCategoryObject.getsViewerType(), Toast.LENGTH_LONG).show();
+        Toast.makeText(mInstance.getActivity(), "ViewerType: " + mCurrCategoryObject.getsViewerType(), Toast.LENGTH_LONG).show();
 
-        if ( "0".equals(mCurrCategoryObject.getsViewerType())
-                || "10".equals(mCurrCategoryObject.getsViewerType())
-                || "20".equals(mCurrCategoryObject.getsViewerType())
-                || "30".equals(mCurrCategoryObject.getsViewerType())
-                || "60".equals(mCurrCategoryObject.getsViewerType())
-                || "1031".equals(mCurrCategoryObject.getsViewerType()) ) {
-            requestGetContentGroupList();
-        } else if ( "200".equals(mCurrCategoryObject.getsViewerType()) ) {
+        if ("200".equals(mCurrCategoryObject.getsViewerType())) {
             mTabbar.setVisibility(View.VISIBLE);
             requestGetPopularityChart();
-        } else if ( "41".equals(mCurrCategoryObject.getsViewerType()) ) {
-            //
-        } else if ( "310".equals(mCurrCategoryObject.getsViewerType()) ) {
-            //
         } else {
-            //
+            mTabbar.setVisibility(View.GONE);
+            requestGetContentGroupList();
+//        if ( "0".equals(mCurrCategoryObject.getsViewerType())
+//                || "10".equals(mCurrCategoryObject.getsViewerType())
+//                || "20".equals(mCurrCategoryObject.getsViewerType())
+//                || "30".equals(mCurrCategoryObject.getsViewerType())
+//                || "60".equals(mCurrCategoryObject.getsViewerType())
+//                || "1031".equals(mCurrCategoryObject.getsViewerType()) ) {
+//            requestGetContentGroupList();
+//        } else if ( "200".equals(mCurrCategoryObject.getsViewerType()) ) {
+//            mTabbar.setVisibility(View.VISIBLE);
+//            requestGetPopularityChart();
+//        } else if ( "41".equals(mCurrCategoryObject.getsViewerType()) ) {
+//            //
+//        } else if ( "310".equals(mCurrCategoryObject.getsViewerType()) ) {
+//            //
+//        } else {
+        //
         }
     }
 
