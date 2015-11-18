@@ -30,6 +30,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -156,8 +157,15 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     {
         mLockListView = true;
         ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
-
-        String url = Constants.SERVER_URL_AIRCODE_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
+        // swlim. "아빠를 부탁해" 처럼 공백이 있으면 검색 결과가 안나와서 아래의 URLEncoder 적용.
+        String searchWord = mKeyword;
+        try {
+            searchWord = URLEncoder.encode(searchWord, "UTF-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        //String url = Constants.SERVER_URL_AIRCODE_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
+        String url = Constants.SERVER_URL_AIRCODE_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+searchWord+"&offset="+pageNo+"&limit="+limitCnt;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
