@@ -779,13 +779,14 @@ public class VodDetailActivity extends Activity {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestAddRemoveWishItem()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String encAssetId  = null;
         try {
             encAssetId  = URLDecoder.decode(assetId, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = mPref.getWebhasServerUrl() + "/"+action+".json?version=1&terminalKey="+terminalKey+"&&assetId="+encAssetId;
+        String url = mPref.getWebhasServerUrl() + "/"+action+".json?version=1&terminalKey="+terminalKey+"&assetId="+encAssetId + "&userId=" + uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
