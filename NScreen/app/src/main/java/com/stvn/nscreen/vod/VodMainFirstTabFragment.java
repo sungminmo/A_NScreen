@@ -40,6 +40,7 @@ import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.MainCategoryObject;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -291,23 +292,20 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     @Override
     public void onBackPressedCallback() {
-        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
-        ad.setTitle("알림")
-                .setMessage(getString(R.string.app_name)+"를 종료하시겠습니까?")
-                .setCancelable(false)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getActivity().finish();
-                    }
-                }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+        String alertTitle = "C&M NScreen";
+        String alertMsg1 = getString(R.string.app_name)+"를 종료하시겠습니까?";
+        String alertMsg2 = "";
+        CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // 'No'
+                getActivity().finish();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
             }
         });
-        AlertDialog alert = ad.create();
-        alert.show();
     }
 
     // 배너 요청

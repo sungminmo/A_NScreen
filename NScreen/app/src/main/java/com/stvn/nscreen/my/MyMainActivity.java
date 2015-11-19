@@ -26,7 +26,7 @@ public class MyMainActivity extends CMBaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_main);
         setActionBarStyle(CMActionBar.CMActionBarStyle.BACK);
-        setActionBarTitle("MY C&M");
+        setActionBarTitle("마이 C&M");
 
         initView();
     }
