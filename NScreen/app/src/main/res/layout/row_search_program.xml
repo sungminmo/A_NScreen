@@ -17,6 +17,15 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:id="@+id/not_pairing"
+            android:text="셋탑 미연동"
+            android:textColor="@color/white"
+            android:background="@color/black"
+            android:visibility="gone"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/rec_start"
             android:text="즉시 녹화"
             android:textColor="@color/white"

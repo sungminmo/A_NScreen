@@ -8,9 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
@@ -20,6 +24,7 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SearchProgramDataObject;
 import com.stvn.nscreen.common.SwipeListView;
+import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMLog;
 import com.stvn.nscreen.util.CMUtil;
 
@@ -52,6 +57,13 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     private int limitCnt = 10;
     private int mTotCnt = 0;
 
+    private Map<String, Object> mStbStateMap;
+    private String mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private String mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private String mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private String mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private String mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+
     private JYSharedPreferences mPref;
     private boolean mLockListView = true;
 
@@ -68,8 +80,14 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
         mRequestQueue = Volley.newRequestQueue(getActivity());
         mPref = new JYSharedPreferences(getActivity());
         mKeyword = getArguments().getString("KEYWORD");
+        mStbStateMap = new HashMap<String, Object>();
         initView();
-        reqProgramList();
+
+        if (mPref.isPairingCompleted() == true) { // 페어링 했을 시
+            requestGetSetTopStatus(); // 셋탑 상태 - 예약녹화물 리스트 - 한 채널 평성표 차례대로 호출.
+        } else { // 페어링 안했을 시
+            reqProgramList();
+        }
     }
 
     private void initView()
@@ -151,6 +169,110 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             }
 
         });
+    }
+
+    private void requestGetSetTopStatus() {
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url = mPref.getRumpersServerUrl() + "/GetSetTopStatus.asp?deviceId="+uuid;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                parseGetSetTopStatus(response);
+
+                String resultCode = (String) mStbStateMap.get("resultCode");
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
+                    mStbState             = (String) mStbStateMap.get("state");
+                    mStbRecordingchannel1 = (String) mStbStateMap.get("recordingchannel1");
+                    mStbRecordingchannel2 = (String) mStbStateMap.get("recordingchannel2");
+                    mStbWatchingchannel   = (String) mStbStateMap.get("watchingchannel");
+                    mStbPipchannel        = (String) mStbStateMap.get("pipchannel");
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else {
+                    String errorString = (String)mStbStateMap.get("errorString");
+                    StringBuilder sb   = new StringBuilder();
+                    sb.append("API: GetSetTopStatus\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+
+                    CMAlertUtil.Alert(getActivity(), "알림", sb.toString());
+                }
+                reqProgramList();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError) {
+                    CMAlertUtil.ToastShort(getActivity(), getActivity().getString(R.string.error_network_timeout));
+                } else if (error instanceof NoConnectionError) {
+                    CMAlertUtil.ToastShort(getActivity(), getActivity().getString(R.string.error_network_noconnectionerror));
+                } else if (error instanceof ServerError) {
+                    CMAlertUtil.ToastShort(getActivity(), getActivity().getString(R.string.error_network_servererror));
+                } else if (error instanceof NetworkError) {
+                    CMAlertUtil.ToastShort(getActivity(), getActivity().getString(R.string.error_network_networkerrorr));
+                }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseGetSetTopStatus(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        mStbStateMap.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("errorString", errorString);
+
+                    } else if (xpp.getName().equalsIgnoreCase("state")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("state", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel1")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("recordingchannel1", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel2")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("recordingchannel2", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("watchingchannel")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("watchingchannel", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("pipchannel")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("pipchannel", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void reqProgramList()

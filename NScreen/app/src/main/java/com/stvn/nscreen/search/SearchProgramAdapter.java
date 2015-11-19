@@ -17,6 +17,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchProgramDataObject;
 import com.stvn.nscreen.common.SwipeListView;
@@ -31,12 +32,20 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private View.OnClickListener clickListener;
+    private JYSharedPreferences mPref;
+
+    private String mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private String mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private String mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private String mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private String mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
 
     public SearchProgramAdapter(Context context, List<SearchProgramDataObject> items) {
         super(context, 0, items);
         // TODO Auto-generated constructor stub
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        mPref = new JYSharedPreferences(mContext);
         mRequestQueue = Volley.newRequestQueue(mContext);
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(100);
@@ -49,6 +58,14 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                 return mCache.get(url);
             }
         });
+    }
+
+    public void setStbState(String state, String recCh1, String recCh2, String watchCh, String pipCh) {
+        this.mStbState             = state;
+        this.mStbRecordingchannel1 = recCh1; // ID
+        this.mStbRecordingchannel2 = recCh2; // ID
+        this.mStbWatchingchannel   = watchCh;
+        this.mStbPipchannel        = pipCh;
     }
 
     @Override
@@ -74,6 +91,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
             holder.chage = (ImageView) convertView.findViewById(R.id.ch_age);
             holder.chhd = (ImageView) convertView.findViewById(R.id.ch_hd);
             holder.progress = (ProgressBar) convertView.findViewById(R.id.ch_progress);
+            holder.notPairing = (Button) convertView.findViewById(R.id.not_pairing);
             holder.recstart = (Button) convertView.findViewById(R.id.rec_start);
             holder.recstop = (Button) convertView.findViewById(R.id.rec_stop);
             holder.watchtv = (Button) convertView.findViewById(R.id.watch_tv);
@@ -125,7 +143,11 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
             }
         }
 
-        getSwipeLayout(item, position, holder);
+        if (mPref.isPairingCompleted()) {
+            getSwipeLayout(null, position, holder);
+        }
+
+
 
         holder.progress.setProgress(position);
 
@@ -140,6 +162,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
         holder.cancelreservationrec.setVisibility(View.GONE);
         holder.setreservationwatch.setVisibility(View.GONE);
         holder.cancelreservationwatch.setVisibility(View.GONE);
+        holder.notPairing.setVisibility(View.GONE);
         holder.recstart.setTag(position);
         holder.recstop.setTag(position);
         holder.watchtv.setTag(position);
@@ -148,41 +171,46 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
         holder.setreservationwatch.setTag(position);
         holder.cancelreservationwatch.setTag(position);
 
-        switch (position % 9) {
-            case 0:                // PVR STB > 현재방송중 : 즉시녹화,TV로시청
-                holder.recstart.setVisibility(View.VISIBLE);
-                holder.watchtv.setVisibility(View.VISIBLE);
-                break;
-            case 1:                // PVR STB > 현재방송중 > 녹화중 : 즉시녹화중지,TV로시청
-                holder.recstop.setVisibility(View.VISIBLE);
-                holder.watchtv.setVisibility(View.VISIBLE);
-                break;
-            case 2:                // PVR STB > 미래방송 >  : 녹화예약설정,시청예약설정
-                holder.setreservationrec.setVisibility(View.VISIBLE);
-                holder.setreservationwatch.setVisibility(View.VISIBLE);
-                break;
-            case 3:                // PVR STB > 미래방송 > 녹화예약중  : 녹화예약취소,시청예약설정
-                holder.cancelreservationrec.setVisibility(View.VISIBLE);
-                holder.setreservationwatch.setVisibility(View.VISIBLE);
-                break;
-            case 4:                // PVR STB > 미래방송 > 시청예약중  : 녹화예약설정,시청예약취소
-                holder.setreservationrec.setVisibility(View.VISIBLE);
-                holder.cancelreservationwatch.setVisibility(View.VISIBLE);
-                break;
-            case 5:                // PVR STB > 미래방송 > 시청예약중/녹화예약중  : 녹화예약취소,시청예약취소
-                holder.cancelreservationrec.setVisibility(View.VISIBLE);
-                holder.cancelreservationwatch.setVisibility(View.VISIBLE);
-                break;
-            case 6:                // HD STB > 현재방송 > TV로 시청
-                holder.watchtv.setVisibility(View.VISIBLE);
-                break;
-            case 7:                // HD STB > 미래방송 > 시청예약설정
-                holder.setreservationwatch.setVisibility(View.VISIBLE);
-                break;
-            case 8:                // HD STB > 미래방송 > 시청예약중 >  시청예약취소
-                holder.cancelreservationwatch.setVisibility(View.VISIBLE);
-                break;
+        if (item == null) {
+            holder.notPairing.setVisibility(View.VISIBLE);
         }
+
+
+//        switch (position % 9) {
+//            case 0:                // PVR STB > 현재방송중 : 즉시녹화,TV로시청
+//                holder.recstart.setVisibility(View.VISIBLE);
+//                holder.watchtv.setVisibility(View.VISIBLE);
+//                break;
+//            case 1:                // PVR STB > 현재방송중 > 녹화중 : 즉시녹화중지,TV로시청
+//                holder.recstop.setVisibility(View.VISIBLE);
+//                holder.watchtv.setVisibility(View.VISIBLE);
+//                break;
+//            case 2:                // PVR STB > 미래방송 >  : 녹화예약설정,시청예약설정
+//                holder.setreservationrec.setVisibility(View.VISIBLE);
+//                holder.setreservationwatch.setVisibility(View.VISIBLE);
+//                break;
+//            case 3:                // PVR STB > 미래방송 > 녹화예약중  : 녹화예약취소,시청예약설정
+//                holder.cancelreservationrec.setVisibility(View.VISIBLE);
+//                holder.setreservationwatch.setVisibility(View.VISIBLE);
+//                break;
+//            case 4:                // PVR STB > 미래방송 > 시청예약중  : 녹화예약설정,시청예약취소
+//                holder.setreservationrec.setVisibility(View.VISIBLE);
+//                holder.cancelreservationwatch.setVisibility(View.VISIBLE);
+//                break;
+//            case 5:                // PVR STB > 미래방송 > 시청예약중/녹화예약중  : 녹화예약취소,시청예약취소
+//                holder.cancelreservationrec.setVisibility(View.VISIBLE);
+//                holder.cancelreservationwatch.setVisibility(View.VISIBLE);
+//                break;
+//            case 6:                // HD STB > 현재방송 > TV로 시청
+//                holder.watchtv.setVisibility(View.VISIBLE);
+//                break;
+//            case 7:                // HD STB > 미래방송 > 시청예약설정
+//                holder.setreservationwatch.setVisibility(View.VISIBLE);
+//                break;
+//            case 8:                // HD STB > 미래방송 > 시청예약중 >  시청예약취소
+//                holder.cancelreservationwatch.setVisibility(View.VISIBLE);
+//                break;
+//        }
 
     }
 
@@ -198,6 +226,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
         ProgressBar progress;
 
         //Swipe 영역 버튼
+        Button notPairing;//셋탑미연동
         Button recstart;//즉시녹화
         Button recstop;//즉시녹화취소
         Button watchtv;//TV로시청
