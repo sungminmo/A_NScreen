@@ -25,6 +25,7 @@ import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.util.CMAlertUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,7 +50,10 @@ public class VodBuyActivity extends Activity {
     private              LinearLayout        vod_buy_step2_linearlayout;
 
     // activity
+    private              JSONArray            couponList;
     // for 결재
+    private              JSONArray            productList;
+    private              JSONArray            discountCouponMasterIdList;
     private              String               productType; // RVOD, ....
     private              String               productId;
     private              String               goodId;
@@ -65,8 +69,91 @@ public class VodBuyActivity extends Activity {
     private              LinearLayout         vod_buy_step1_one_linearlayout, vod_buy_step1_serise_linearlayout, vod_buy_step1_oneproduct_linearlayout, vod_buy_step1_packeage_linearlayout, vod_buy_step1_month_linearlayout, vod_buy_step1_month_all_linearlayout;
     private              LinearLayout         vod_buy_step2_normal_linearlayout, vod_buy_step2_normal_dis_linearlayout, vod_buy_step2_coupon_linearlayout, vod_buy_step2_point_linearlayout, vod_buy_step2_linearlayout2;
 
+    // 사용가능한 쿠폰이 있는지 찾아서 리턴한다.
+    private String getUsableCouponId(){
+        String couponId = null;
+        try {
+            StringBuffer masters = new StringBuffer();
+            for (int i = 0; i < discountCouponMasterIdList.length(); i++) {
+                String id = (String)discountCouponMasterIdList.get(i);
+                masters.append("[").append(id).append("]");
+            }
+            for (int i = 0; i < couponList.length(); i++) {
+                JSONObject jo = (JSONObject)couponList.get(i);
+                String id = jo.getString("discountCouponMasterId");
+                StringBuffer key = new StringBuffer().append("[").append(id).append("]");
+                if ( masters.toString().contains(key) ) {
+                    return id;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return couponId;
+    }
 
+    private void setUI() {
+        vod_buy_title_textview.setText(mTitle);
+        // 금액 표시 부분.
+        if ( sListPrice.equals(sPrice) ) {
+            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원 [부가세 별도]");
+            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원 [부가세 별도]");
+        } else {
+            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원 [부가세 별도]");
+            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원 [부가세 별도]");
+        }
+//        // 시리즈에 따른 처리.
+//        if ( "YES".equals(isSeriesLink) ) {
+//            vod_buy_step1_one_linearlayout.setVisibility(View.VISIBLE);         // 단일 회차 구매
+//            vod_buy_step1_serise_linearlayout.setVisibility(View.VISIBLE);      // 시리즈 전체회차 구매
+//        } else {
+//            vod_buy_step1_one_linearlayout.setVisibility(View.VISIBLE);         // 단일 회차 구매
+//            vod_buy_step1_month_linearlayout.setVisibility(View.VISIBLE);       // 월정액
+//            vod_buy_step1_month_all_linearlayout.setVisibility(View.VISIBLE);   // 통합 월정액
+//        }
 
+        // step1 -----------------------------------------------------------------------------------
+        // RVOD (단일상품 또는 단일회차 버튼 표시 해야 한다. isSeriesLink
+        try {
+            for ( int i = 0; i< productList.length(); i++ ) {
+                JSONObject jo = (JSONObject)productList.get(i);
+                String productType = jo.getString("productType");
+                if ( "RVOD".equals(productType) ) { //
+                    if ( "YES".equals(isSeriesLink) ) { // 시리즈이면 "단일 회차 구매" 표시
+                        vod_buy_step1_oneproduct_linearlayout.setVisibility(View.VISIBLE);
+                    } else {                            // 시리즈이면 "단일상품 구매" 표시
+                        vod_buy_step1_oneproduct_linearlayout.setVisibility(View.VISIBLE);
+                    }
+                }
+                if ( "Bundle".equals(productType) ) { // 묶음 할인상품 구매
+                    vod_buy_step1_packeage_linearlayout.setVisibility(View.VISIBLE);
+                }
+
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        // step2 -----------------------------------------------------------------------------------
+        // vod_buy_step2_normal_linearlayout        // 일반결제 (비쿠폰구매)
+        // vod_buy_step2_normal_dis_linearlayout    // 일반결제 (쿠폰구매)
+
+//        totalMoneyBalance  = jo.getLong("totalMoneyBalance");
+//        String errorString = jo.getString("errorString");
+//        couponList         = jo.getJSONArray("couponList");
+
+        if ( couponList.length() == 0 ) {   // 쿠폰이 없으면 무조건 일반결제 (비쿠폰구매)를 보이자.
+            vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
+            vod_buy_step2_normal_linearlayout.setSelected(true);
+        } else {
+            vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
+            // 쿠폰이 있다면, 적용가능한 쿠폰이 있는지 비교해야 한다.
+            String couponId = getUsableCouponId();
+            if ( couponId != null ) {
+                vod_buy_step2_normal_linearlayout.setVisibility(View.GONE);
+                vod_buy_step2_normal_dis_linearlayout.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +164,14 @@ public class VodBuyActivity extends Activity {
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
 
+        try {
+            String productListStr = getIntent().getExtras().getString("productList");
+            String discountCouponMasterIdListStr = getIntent().getExtras().getString("discountCouponMasterIdList");
+            productList = new JSONArray(productListStr);
+            discountCouponMasterIdList = new JSONArray(discountCouponMasterIdListStr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         productType   = getIntent().getExtras().getString("productType");
         assetId       = getIntent().getExtras().getString("assetId");
         isSeriesLink  = getIntent().getExtras().getString("isSeriesLink");
@@ -88,38 +183,23 @@ public class VodBuyActivity extends Activity {
         pointBalance      = 0l;
         totalMoneyBalance = 0l;
 
-        vod_buy_step1_one_linearlayout        = (LinearLayout)findViewById(R.id.vod_buy_step1_one_linearlayout);
-        vod_buy_step1_serise_linearlayout     = (LinearLayout)findViewById(R.id.vod_buy_step1_serise_linearlayout);
-        vod_buy_step1_oneproduct_linearlayout = (LinearLayout)findViewById(R.id.vod_buy_step1_oneproduct_linearlayout);
-        vod_buy_step1_packeage_linearlayout   = (LinearLayout)findViewById(R.id.vod_buy_step1_packeage_linearlayout);
-        vod_buy_step1_month_linearlayout      = (LinearLayout)findViewById(R.id.vod_buy_step1_month_linearlayout);
-        vod_buy_step1_month_all_linearlayout  = (LinearLayout)findViewById(R.id.vod_buy_step1_month_all_linearlayout);
-        vod_buy_step2_normal_linearlayout     = (LinearLayout)findViewById(R.id.vod_buy_step2_normal_linearlayout);
-        vod_buy_step2_normal_dis_linearlayout = (LinearLayout)findViewById(R.id.vod_buy_step2_normal_dis_linearlayout);
-        vod_buy_step2_coupon_linearlayout     = (LinearLayout)findViewById(R.id.vod_buy_step2_coupon_linearlayout);
-        vod_buy_step2_point_linearlayout      = (LinearLayout)findViewById(R.id.vod_buy_step2_point_linearlayout);
-        vod_buy_step2_linearlayout            = (LinearLayout)findViewById(R.id.vod_buy_step2_linearlayout);
-        vod_buy_step2_linearlayout2           = (LinearLayout)findViewById(R.id.vod_buy_step2_linearlayout2);
+        vod_buy_step1_one_linearlayout        = (LinearLayout)findViewById(R.id.vod_buy_step1_one_linearlayout);        // 단일 회차 구매
+        vod_buy_step1_serise_linearlayout     = (LinearLayout)findViewById(R.id.vod_buy_step1_serise_linearlayout);     // 시리즈 전체회차 구매
+        vod_buy_step1_oneproduct_linearlayout = (LinearLayout)findViewById(R.id.vod_buy_step1_oneproduct_linearlayout); // 단일상품 구매
+        vod_buy_step1_packeage_linearlayout   = (LinearLayout)findViewById(R.id.vod_buy_step1_packeage_linearlayout);   // 묶음 할인상품 구매
+        vod_buy_step1_month_linearlayout      = (LinearLayout)findViewById(R.id.vod_buy_step1_month_linearlayout);      // 월정액
+        vod_buy_step1_month_all_linearlayout  = (LinearLayout)findViewById(R.id.vod_buy_step1_month_all_linearlayout);  // 통합 월정액
+
+        vod_buy_step2_normal_linearlayout     = (LinearLayout)findViewById(R.id.vod_buy_step2_normal_linearlayout);     // 일반결제 (할인권없을때구매)
+        vod_buy_step2_normal_dis_linearlayout = (LinearLayout)findViewById(R.id.vod_buy_step2_normal_dis_linearlayout); // 일반결제 (할인권있을때구매)
+        vod_buy_step2_coupon_linearlayout     = (LinearLayout)findViewById(R.id.vod_buy_step2_coupon_linearlayout);     // 쿠폰결제
+        vod_buy_step2_point_linearlayout      = (LinearLayout)findViewById(R.id.vod_buy_step2_point_linearlayout);      // TV포인트
+        vod_buy_step2_linearlayout            = (LinearLayout)findViewById(R.id.vod_buy_step2_linearlayout);            // STEP2. 결제방법선택
+        vod_buy_step2_linearlayout2           = (LinearLayout)findViewById(R.id.vod_buy_step2_linearlayout2);           // 월정액 안내
         vod_buy_title_textview                = (TextView)findViewById(R.id.vod_buy_title_textview);
         vod_buy_step1_one_price               = (TextView)findViewById(R.id.vod_buy_step1_one_price);
         vod_buy_step2_normal_price            = (TextView)findViewById(R.id.vod_buy_step2_normal_price);
 
-        vod_buy_title_textview.setText(mTitle);
-        if ( sListPrice.equals(sPrice) ) {
-            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원 [부가세 별도]");
-            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sListPrice)) + "원 [부가세 별도]");
-        } else {
-            vod_buy_step1_one_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원 [부가세 별도]");
-            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.parseInt(sPrice)) + "원 [부가세 별도]");
-        }
-        if ( "YES".equals(isSeriesLink) ) {
-            vod_buy_step1_one_linearlayout.setVisibility(View.VISIBLE);
-            vod_buy_step1_serise_linearlayout.setVisibility(View.VISIBLE);
-        } else {
-            vod_buy_step1_one_linearlayout.setVisibility(View.VISIBLE);
-            vod_buy_step1_month_linearlayout.setVisibility(View.VISIBLE);
-            vod_buy_step1_month_all_linearlayout.setVisibility(View.VISIBLE);
-        }
 
         vod_buy_step1_one_linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +285,7 @@ public class VodBuyActivity extends Activity {
             }
         });
 
-        vod_buy_step2_normal_linearlayout.setSelected(true);
+
 
         vod_buy_step2_normal_linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,10 +356,6 @@ public class VodBuyActivity extends Activity {
         cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                FragmentManager fm = getFragmentManager();
-                fm.popBackStack("VodBuyFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                */
                 Intent intent = new Intent();
                 intent.putExtra("jstr", "");
                 setResult(RESULT_CANCELED, intent);
@@ -300,6 +376,7 @@ public class VodBuyActivity extends Activity {
     }
 
 
+
     /**
      * 5.23.1 GetPointBalance
      * 포인트 잔액을 얻어낸다
@@ -315,9 +392,6 @@ public class VodBuyActivity extends Activity {
             public void onResponse(String response) {
                 //mProgressDialog.dismiss();
                 // {"resultCode":252,"transactionId":null,"pointBalance":0,"errorString":"Authentication fail, code(2000)","version":"1"}
-
-                requestGetCouponBalance2(); // 사용가능한 쿠폰 정보를 얻어낸다.
-
                 try {
                     JSONObject jo      = new JSONObject(response);
                     int resultCode     = jo.getInt("resultCode");
@@ -341,6 +415,8 @@ public class VodBuyActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                requestGetCouponBalance2(); // 사용가능한 쿠폰 정보를 얻어낸다.
             }
         }, new Response.ErrorListener() {
             @Override
@@ -381,10 +457,14 @@ public class VodBuyActivity extends Activity {
                     int resultCode     = jo.getInt("resultCode");
                     totalMoneyBalance  = jo.getLong("totalMoneyBalance");
                     String errorString = jo.getString("errorString");
-
+                    couponList         = jo.getJSONArray("couponList");
+//                    if ( couponList == null ) {
+//                        couponList = new JSONArray();
+//                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                setUI();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -430,10 +510,7 @@ public class VodBuyActivity extends Activity {
                 try {
                     JSONObject jo      = new JSONObject(response);
                     resultCode         = jo.getInt("resultCode");
-                    /*
-                    FragmentManager fm = getFragmentManager();
-                    fm.popBackStack("VodBuyFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    */
+
                     // jstr = jo.toString();
 
                 } catch (JSONException e) {

@@ -118,6 +118,9 @@ public class VodDetailActivity extends Activity {
 
 
     // for 결재
+    private JSONArray productList;
+    private JSONArray discountCouponMasterIdList;
+
     private String productType; // RVOD, ....
     private String productId;
     private String goodId;
@@ -225,26 +228,6 @@ public class VodDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
 
-                /*
-                Bundle param = new Bundle();
-                param.putString("assetId", mInstance.assetId);
-                param.putString("isSeriesLink", isSeriesLink);
-                param.putString("mTitle", mTitle);
-                param.putString("sListPrice", sListPrice);
-                param.putString("sPrice", sPrice);
-                param.putString("productId", productId);
-                param.putString("goodId", goodId);
-
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                VodBuyFragment vf = new VodBuyFragment();
-                vf.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, vf);
-                ft.addToBackStack("VodBuyFragment");
-                ft.commit();
-                */
-
                 if ( mPref.isPairingCompleted() == false ) {
                     String alertTitle = "셋탑박스 연동 필요";
                     String alertMsg1  = mTitle;
@@ -264,6 +247,9 @@ public class VodDetailActivity extends Activity {
                     intent.putExtra("productId",    productId);
                     intent.putExtra("goodId",       goodId);
                     intent.putExtra("productType",  productType);  // RVOD, ....
+                    intent.putExtra("productList",  productList.toString());  // RVOD, ....
+                    intent.putExtra("discountCouponMasterIdList",  discountCouponMasterIdList.toString());
+
                     startActivityForResult(intent, 1000);
                 }
             }
@@ -273,27 +259,6 @@ public class VodDetailActivity extends Activity {
         mPurchaseButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                /*
-                Bundle param = new Bundle();
-                param.putString("assetId", mInstance.assetId);
-                param.putString("isSeriesLink", isSeriesLink);
-                param.putString("mTitle", mTitle);
-                param.putString("sListPrice", sListPrice);
-                param.putString("sPrice", sPrice);
-                param.putString("productId", productId);
-                param.putString("goodId", goodId);
-
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                VodBuyFragment vf = new VodBuyFragment();
-                vf.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, vf);
-                ft.addToBackStack("VodBuyFragment");
-                ft.commit();
-                */
-
                 if ( mPref.isPairingCompleted() == false ) {
                     String alertTitle = "셋탑박스 연동 필요";
                     String alertMsg1  = mTitle;
@@ -313,6 +278,8 @@ public class VodDetailActivity extends Activity {
                     intent.putExtra("productId",    productId);
                     intent.putExtra("goodId",       goodId);
                     intent.putExtra("productType",  productType);  // RVOD, ....
+                    intent.putExtra("productList",  productList.toString());
+                    intent.putExtra("discountCouponMasterIdList",  discountCouponMasterIdList.toString());
                     startActivityForResult(intent, 1000);
                 }
             }
@@ -540,9 +507,9 @@ public class VodDetailActivity extends Activity {
                     String title                = asset.getString("title");
                     String publicationRight     = asset.getString("publicationRight"); // 1: TV ONLY, 2 MOBILE
 
-
-                    JSONArray productLists      = asset.getJSONArray("productList");
-                    JSONObject product          = (JSONObject)productLists.get(0);
+                    discountCouponMasterIdList  = asset.getJSONArray("discountCouponMasterIdList");
+                    productList                 = asset.getJSONArray("productList");
+                    JSONObject product          = (JSONObject)productList.get(0);
                     productType                 = product.getString("productType");
                     productId                   = product.getString("productId");
                     goodId                      = product.getString("goodId");

@@ -247,9 +247,10 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                         category.put("isOpened", false);
                         String     parentCategoryId = category.getString("parentCategoryId");
                         int        viewerType       = category.getInt("viewerType");
-                        if ( ! parentCategoryId.equals("0") || ! (viewerType == 0) || ! (viewerType == 60) ) {
-                            categorys.add(category);
-                        }
+                        //if ( ! parentCategoryId.equals("0") || ! (viewerType == 0) || ! (viewerType == 60) ) {
+                        //if ( ! parentCategoryId.equals("0") || ! (viewerType == 0) || ! (viewerType == 60) ) {
+                                                                  categorys.add(category);
+                        //}
                     }
                     if ( categoryList.length() > 1 ) {
                         categorys.remove(0);
