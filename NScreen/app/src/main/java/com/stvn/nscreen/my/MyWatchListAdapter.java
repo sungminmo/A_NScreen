@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SwipeListView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class MyWatchListAdapter extends BaseAdapter {
@@ -18,7 +21,7 @@ public class MyWatchListAdapter extends BaseAdapter {
 	LayoutInflater mInflater;
 	private Context mContext;
 	private View.OnClickListener mClicklitener;
-	private ArrayList<String> mList;
+	private ArrayList<JSONObject> mList;
 
 	public View.OnClickListener getmClicklitener() {
 		return mClicklitener;
@@ -28,11 +31,10 @@ public class MyWatchListAdapter extends BaseAdapter {
 		this.mClicklitener = mClicklitener;
 	}
 
-	public MyWatchListAdapter(Context context, ArrayList<String> items)
+	public MyWatchListAdapter(Context context, ArrayList<JSONObject> arr)
 	{
-		// TODO Auto-generated constructor stub
-		mList = items;
-		mContext = context;
+		mList     = arr;
+		mContext  = context;
 		mInflater = LayoutInflater.from(context);
 	}
 
@@ -42,22 +44,19 @@ public class MyWatchListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public String getItem(int position) {
+	public JSONObject getItem(int position) {
 		return mList.get(position);
 	}
 
 	@Override
 	public long getItemId(int position)
 	{
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent)
 	{
-		// TODO Auto-generated method stub
-		
 		ViewHolder holder;
 		if (convertView == null)
 		{
@@ -75,15 +74,20 @@ public class MyWatchListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		((SwipeListView)parent).recycle(convertView, position);
-		String item = getItem(position);
-		holder.btn.setTag(position);
-		holder.btn.setOnClickListener(mClicklitener);
+		try {
+			JSONObject jo   = getItem(position);
+			String sTitle   = jo.getString("sTitle");
+			String sDate    = jo.getString("sDate");
+			String[] sDates = sDate.split(",");
 
-		holder.rowdate.setText("08.28 (금)");
-		holder.rowtime.setText("16:15");
-
-		holder.rowname.setText("뉴스파이터");
-
+			holder.btn.setTag(position);
+			holder.btn.setOnClickListener(mClicklitener);
+			holder.rowdate.setText(sDates[0]);
+			holder.rowtime.setText(sDates[1]);
+			holder.rowname.setText(sTitle);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 
 		return convertView;
 	}

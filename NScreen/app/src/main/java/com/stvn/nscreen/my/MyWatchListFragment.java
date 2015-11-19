@@ -1,6 +1,7 @@
 package com.stvn.nscreen.my;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,24 +12,30 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
+import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
 import com.stvn.nscreen.util.CMAlertUtil;
+import com.stvn.nscreen.vod.VodDetailActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by leejunghoon on 15. 10. 31..
  */
 
 public class MyWatchListFragment extends Fragment implements View.OnClickListener,AbsListView.OnScrollListener{
-    LayoutInflater mInflater;
-    private TextView mPurchasecount;
-    private SwipeListView mListView;
-    private MyWatchListAdapter mAdapter;
-    private ArrayList<String> mList = new ArrayList<>();
-    private boolean mLockListView = true;
+    LayoutInflater                mInflater;
+    private TextView              mPurchasecount;
+    private SwipeListView         mListView;
+    private MyWatchListAdapter    mAdapter;
+    private ArrayList<JSONObject> mList;
+    private boolean               mLockListView = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,16 +46,20 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        JYSharedPreferences preferences = new JYSharedPreferences(getActivity());
+        mList = preferences.getAllWatchVodObject();
         initView();
-        initData();
+        initData(mList.size());
     }
 
     private void initView()
     {
+
+
         mPurchasecount = (TextView)getView().findViewById(R.id.purchasecount);
 
         mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
-        mAdapter = new MyWatchListAdapter(getActivity(),mList);
+        mAdapter = new MyWatchListAdapter(getActivity(), mList);
         mAdapter.setmClicklitener(this);
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(this);
@@ -87,7 +98,17 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onClickFrontView(int position) {
-                CMAlertUtil.ToastShort(getActivity(), position + "번째 리스트 클릭");
+                //CMAlertUtil.ToastShort(getActivity(), position + "번째 리스트 클릭");
+                try {
+                    JSONObject jo = mList.get(position);
+                    String assetId = jo.getString("sAssetId");
+                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                    intent.putExtra("assetId", assetId);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -128,17 +149,11 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    private void initData()
+    private void initData(int iCountOfArray)
     {
-        int count = 20;
-        for(int i=0;i<count;i++)
-        {
-            mList.add(""+i);
-        }
         mAdapter.notifyDataSetChanged();
         mLockListView = false;
-
-        setWatchListCountText(count);
+        setWatchListCountText(iCountOfArray);
     }
 
     /**
@@ -155,21 +170,21 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
     private void deleteWatchItem(final int itemIndex) {
 //        mList.get(itemIndex);
         // TODO:유효기간 만료 일 때
-        if (itemIndex %2 == 0) {
-            String alertTitle = getString(R.string.my_cnm_alert_title_expired);
-            String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
-            String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
-            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    mListView.dismiss(itemIndex);
-                }
-            }, true);
-        }
-        // TODO:유효기간 만료가 아닐 때
-        else {
-            String programTitle = "프로그램타이틀";
-
+//        if (itemIndex %2 == 0) {
+//            String alertTitle = getString(R.string.my_cnm_alert_title_expired);
+//            String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+//            String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
+//            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    mListView.dismiss(itemIndex);
+//                }
+//            }, true);
+//        }
+//        else {
+        JSONObject jo = mList.get(itemIndex);
+        try {
+            String programTitle = jo.getString("sTitle");
             String alertTitle = "VOD 시청목록 삭제";
             String alertMessage = "선택하신 VOD를\n시청목록에서 삭제하시겠습니까?";
 
@@ -177,6 +192,8 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            JYSharedPreferences pref = new JYSharedPreferences(getActivity());
+                            pref.removeWatchVod(itemIndex);
                             mListView.dismiss(itemIndex);
                         }
                     }, new DialogInterface.OnClickListener() {
@@ -185,8 +202,9 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                             mListView.closeOpenedItems();
                         }
                     });
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
     }
 
     @Override
