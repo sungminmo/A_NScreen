@@ -1,5 +1,6 @@
 package com.stvn.nscreen.vod;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -16,22 +17,19 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jjiya.android.common.Constants;
+import com.jjiya.android.common.IOnBackPressedListener;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.stvn.nscreen.MainActivity;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.leftmenu.LeftMenuActivity;
 import com.stvn.nscreen.search.SearchMainActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
-import com.widevine.sampleplayer.SettingsActivity;
-
-import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 
-public class VodMainBaseFragment extends Fragment {
+public class VodMainBaseFragment extends Fragment implements IOnBackPressedListener {
 
     //private static VodMainBaseFragment mInstance;
     private static Context             mContext;
@@ -40,7 +38,7 @@ public class VodMainBaseFragment extends Fragment {
 
     // UI
     private int iMyTabNumber;
-    TextView textView1, textView2, textView3, textView4, textView5;
+    TextView mTab1TextView, textView2, textView3, textView4, textView5;
     View lineview1, lineview2, lineview3, lineview4, lineview5;
     ImageButton leftImageButton, rightImageButton;
 
@@ -54,6 +52,10 @@ public class VodMainBaseFragment extends Fragment {
         mPref = new JYSharedPreferences(c);
     }
 
+    public int getiMyTabNumber() {
+        return iMyTabNumber;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -65,6 +67,12 @@ public class VodMainBaseFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity)activity).setOnBackPressedListener(this);
+    }
+
     /**
      * VOD 메인의 공통 화면 UI 설정
      */
@@ -72,7 +80,7 @@ public class VodMainBaseFragment extends Fragment {
 
         iMyTabNumber = iTabNumber;
 
-        textView1 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView1);
+        mTab1TextView = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView1);
         textView2 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView2);
         textView3 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView3);
         textView4 = (TextView) view.findViewById(R.id.vod_fragment_topmenu_textView4);
@@ -84,15 +92,15 @@ public class VodMainBaseFragment extends Fragment {
         lineview4 = (View) view.findViewById(R.id.vod_fragment_topmenu_lineview4);
         lineview5 = (View) view.findViewById(R.id.vod_fragment_topmenu_lineview5);
 
-        textView1.setOnClickListener(new View.OnClickListener() {
+        mTab1TextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textView1.setTypeface(null, Typeface.BOLD);
+                mTab1TextView.setTypeface(null, Typeface.BOLD);
                 textView2.setTypeface(null, Typeface.NORMAL);
                 textView3.setTypeface(null, Typeface.NORMAL);
                 textView4.setTypeface(null, Typeface.NORMAL);
                 textView5.setTypeface(null, Typeface.NORMAL);
-                textView1.setTextColor(getResources().getColor(R.color.white));
+                mTab1TextView.setTextColor(getResources().getColor(R.color.white));
                 textView2.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView3.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView4.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
@@ -118,12 +126,12 @@ public class VodMainBaseFragment extends Fragment {
         textView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textView1.setTypeface(null, Typeface.NORMAL);
+                mTab1TextView.setTypeface(null, Typeface.NORMAL);
                 textView2.setTypeface(null, Typeface.BOLD);
                 textView3.setTypeface(null, Typeface.NORMAL);
                 textView4.setTypeface(null, Typeface.NORMAL);
                 textView5.setTypeface(null, Typeface.NORMAL);
-                textView1.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                mTab1TextView.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView2.setTextColor(getResources().getColor(R.color.white));
                 textView3.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView4.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
@@ -136,7 +144,7 @@ public class VodMainBaseFragment extends Fragment {
 
                 String categoryId = mPref.getValue(Constants.CATEGORY_ID_TAB2, "");
                 String categoryIdFromVodMain = mPref.getValue(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
-                if ( categoryIdFromVodMain.length() > 0 ) {
+                if (categoryIdFromVodMain.length() > 0) {
                     mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
                     categoryId = categoryIdFromVodMain;
                 }
@@ -155,12 +163,12 @@ public class VodMainBaseFragment extends Fragment {
         textView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textView1.setTypeface(null, Typeface.NORMAL);
+                mTab1TextView.setTypeface(null, Typeface.NORMAL);
                 textView2.setTypeface(null, Typeface.NORMAL);
                 textView3.setTypeface(null, Typeface.BOLD);
                 textView4.setTypeface(null, Typeface.NORMAL);
                 textView5.setTypeface(null, Typeface.NORMAL);
-                textView1.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                mTab1TextView.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView2.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView3.setTextColor(getResources().getColor(R.color.white));
                 textView4.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
@@ -173,7 +181,7 @@ public class VodMainBaseFragment extends Fragment {
 
                 String categoryId = mPref.getValue(Constants.CATEGORY_ID_TAB3, "");
                 String categoryIdFromVodMain = mPref.getValue(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
-                if ( categoryIdFromVodMain.length() > 0 ) {
+                if (categoryIdFromVodMain.length() > 0) {
                     mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
                     categoryId = categoryIdFromVodMain;
                 }
@@ -192,12 +200,12 @@ public class VodMainBaseFragment extends Fragment {
         textView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textView1.setTypeface(null, Typeface.NORMAL);
+                mTab1TextView.setTypeface(null, Typeface.NORMAL);
                 textView2.setTypeface(null, Typeface.NORMAL);
                 textView3.setTypeface(null, Typeface.NORMAL);
                 textView4.setTypeface(null, Typeface.BOLD);
                 textView5.setTypeface(null, Typeface.NORMAL);
-                textView1.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                mTab1TextView.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView2.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView3.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                 textView4.setTextColor(getResources().getColor(R.color.white));
@@ -210,7 +218,7 @@ public class VodMainBaseFragment extends Fragment {
 
                 String categoryId = mPref.getValue(Constants.CATEGORY_ID_TAB4, "");
                 String categoryIdFromVodMain = mPref.getValue(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
-                if ( categoryIdFromVodMain.length() > 0 ) {
+                if (categoryIdFromVodMain.length() > 0) {
                     mPref.put(JYSharedPreferences.VOD_OTHER_TAB_CATEGORY_ID, "");
                     categoryId = categoryIdFromVodMain;
                 }
@@ -249,12 +257,12 @@ public class VodMainBaseFragment extends Fragment {
                     alert.show();
                 } else {
 
-                    textView1.setTypeface(null, Typeface.NORMAL);
+                    mTab1TextView.setTypeface(null, Typeface.NORMAL);
                     textView2.setTypeface(null, Typeface.NORMAL);
                     textView3.setTypeface(null, Typeface.NORMAL);
                     textView4.setTypeface(null, Typeface.NORMAL);
                     textView5.setTypeface(null, Typeface.BOLD);
-                    textView1.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+                    mTab1TextView.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                     textView2.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                     textView3.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
                     textView4.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
@@ -309,12 +317,12 @@ public class VodMainBaseFragment extends Fragment {
     }
 
     private void changeTabUI() {
-        textView1.setTypeface(null, Typeface.NORMAL);
+        mTab1TextView.setTypeface(null, Typeface.NORMAL);
         textView2.setTypeface(null, Typeface.NORMAL);
         textView3.setTypeface(null, Typeface.NORMAL);
         textView4.setTypeface(null, Typeface.NORMAL);
         textView5.setTypeface(null, Typeface.NORMAL);
-        textView1.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
+        mTab1TextView.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
         textView2.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
         textView3.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
         textView4.setTextColor(getResources().getColor(R.color.violet_topmenu_unselected));
@@ -327,8 +335,8 @@ public class VodMainBaseFragment extends Fragment {
 
         switch ( iMyTabNumber ) {
             case 0: {
-                textView1.setTypeface(null, Typeface.BOLD);
-                textView1.setTextColor(getResources().getColor(R.color.white));
+                mTab1TextView.setTypeface(null, Typeface.BOLD);
+                mTab1TextView.setTextColor(getResources().getColor(R.color.white));
                 lineview1.setBackgroundColor(getResources().getColor(R.color.white));
             } break;
             case 1: {
@@ -353,4 +361,8 @@ public class VodMainBaseFragment extends Fragment {
             } break;
         }
     }
+
+
+    @Override
+    public void onBackPressedCallback() { }
 }

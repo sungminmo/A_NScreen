@@ -223,8 +223,6 @@ public class VodDetailActivity extends Activity {
                 mPurchaseButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
-                //startActivity(i);
 
                 /*
                 Bundle param = new Bundle();
@@ -274,8 +272,6 @@ public class VodDetailActivity extends Activity {
         mPurchaseButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
-                //startActivity(i);
 
                 /*
                 Bundle param = new Bundle();

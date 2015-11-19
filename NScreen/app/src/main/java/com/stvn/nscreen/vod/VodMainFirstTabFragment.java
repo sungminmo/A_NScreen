@@ -289,6 +289,26 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 //        mRequestQueue.add(request);
 //    }
 
+    @Override
+    public void onBackPressedCallback() {
+        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+        ad.setTitle("알림")
+                .setMessage(getString(R.string.app_name)+"를 종료하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getActivity().finish();
+                    }
+                }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 'No'
+            }
+        });
+        AlertDialog alert = ad.create();
+        alert.show();
+    }
 
     // 배너 요청
     private void requestGetServiceBannerList() {

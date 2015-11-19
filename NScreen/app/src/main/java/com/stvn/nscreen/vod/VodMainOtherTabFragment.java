@@ -2,24 +2,18 @@ package com.stvn.nscreen.vod;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,32 +29,20 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
-import com.jjiya.android.common.EightVodPosterPagerAdapter;
+import com.jjiya.android.common.IOnBackPressedListener;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
-import com.jjiya.android.common.UiUtil;
-import com.jjiya.android.common.VodNewMoviePosterPagerAdapter;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.SubCategoryObject;
-import com.stvn.nscreen.epg.EpgMainListViewAdapter;
-import com.stvn.nscreen.epg.EpgSubActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -72,7 +54,7 @@ import java.util.TreeMap;
  * A simple {@link Fragment} subclass.
  */
 
-public class VodMainOtherTabFragment extends VodMainBaseFragment implements View.OnClickListener {
+public class VodMainOtherTabFragment extends VodMainBaseFragment implements View.OnClickListener, IOnBackPressedListener {
 
     private static final String                  tag = VodMainOtherTabFragment.class.getSimpleName();
     private static       VodMainOtherTabFragment mInstance;
@@ -655,5 +637,11 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mRequestQueue.add(request);
     }
 
-
+    /**
+     * IOnBackPressedListener
+     */
+    @Override
+    public void onBackPressedCallback() {
+        mTab1TextView.performClick();
+    }
 }
