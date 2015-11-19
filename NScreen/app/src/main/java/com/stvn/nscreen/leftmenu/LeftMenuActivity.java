@@ -99,11 +99,13 @@ public class LeftMenuActivity extends Activity {
         leftmenu_version_textview.setText("현재 버전 " + appVer);
 
         if (mPref.isPairingCompleted() == true) {
-            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("셋탑박스와 연동중입니다.");
             ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("");
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview2)).setText("셋탑박스와 연동중입니다.");
             leftmenu_pairing_button1.setVisibility(View.GONE);
             leftmenu_pairing_button2.setVisibility(View.VISIBLE);
         } else {
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("원활한 서비스 이용을 위해");
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview2)).setText("셋탑박스를 연동해주세요.");
             leftmenu_pairing_button1.setVisibility(View.VISIBLE);
             leftmenu_pairing_button2.setVisibility(View.GONE);
         }
