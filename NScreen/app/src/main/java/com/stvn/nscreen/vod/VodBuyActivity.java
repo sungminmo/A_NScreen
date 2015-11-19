@@ -50,6 +50,7 @@ public class VodBuyActivity extends Activity {
 
     // activity
     // for 결재
+    private              String               productType; // RVOD, ....
     private              String               productId;
     private              String               goodId;
     private              String               assetId; // intent param
@@ -76,6 +77,7 @@ public class VodBuyActivity extends Activity {
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
 
+        productType   = getIntent().getExtras().getString("productType");
         assetId       = getIntent().getExtras().getString("assetId");
         isSeriesLink  = getIntent().getExtras().getString("isSeriesLink");
         mTitle        = getIntent().getExtras().getString("mTitle");

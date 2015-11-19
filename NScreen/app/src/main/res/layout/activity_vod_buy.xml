@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="56.25dp"
         android:orientation="horizontal"
-        android:background="@mipmap/title_bar_bg"
-        android:layout_marginBottom="27.25dp">
+        android:background="@mipmap/title_bar_bg">
 
         <TextView
             android:id="@+id/vod_buy_title_textview"
@@ -37,7 +36,7 @@
     </FrameLayout>
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView2" >
 
@@ -49,14 +48,16 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="334.5dp"
-                android:layout_height="216.5dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="12.75dp"
                 android:layout_marginRight="12.75dp"
                 android:layout_marginBottom="17.25dp"
                 android:gravity="center_horizontal"
                 android:background="#F0F0F2"
-                android:id="@+id/vod_buy_step1_linearlayout">
+                android:id="@+id/vod_buy_step1_linearlayout"
+                android:layout_marginTop="27.5dp"
+                android:paddingBottom="12.75dp">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -86,7 +87,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step1_one_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,7 +100,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4,500원 [부가세 별도]"
+                        android:text="원 [부가세 별도]"
                         android:id="@+id/vod_buy_step1_one_price"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
@@ -116,7 +117,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step1_serise_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -129,7 +130,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10,000원 [부가세 별도]"
+                        android:text="원 [부가세 별도]"
                         android:id="@+id/textView42"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
@@ -145,7 +146,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step1_oneproduct_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -158,7 +159,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4,500원 [부가세 별도]"
+                        android:text="원 [부가세 별도]"
                         android:id="@+id/textView44"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
@@ -174,7 +175,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step1_packeage_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -187,7 +188,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10,000원 [부가세 별도]"
+                        android:text="원 [부가세 별도]"
                         android:id="@+id/textView46"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
@@ -203,7 +204,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step1_month_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -216,7 +217,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12,000원/월 [부가세 별도]"
+                        android:text="원/월 [부가세 별도]"
                         android:id="@+id/textView48"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
@@ -232,7 +233,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step1_month_all_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -245,7 +246,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20,000원/월 [부가세 별도]"
+                        android:text="원/월 [부가세 별도]"
                         android:id="@+id/textView50"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
@@ -256,7 +257,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="334.5dp"
-                android:layout_height="216.5dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="12.75dp"
                 android:layout_marginRight="12.75dp"
@@ -264,7 +265,7 @@
                 android:gravity="center_horizontal"
                 android:background="#F0F0F2"
                 android:id="@+id/vod_buy_step2_linearlayout"
-                android:visibility="invisible">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -350,7 +351,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4,500원 [부가세 별도]"
+                            android:text="원 [부가세 별도]"
                             android:id="@+id/vod_buy_step2_normal_price"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
@@ -366,7 +367,7 @@
                     android:layout_marginBottom="3dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/vod_buy_step2_normal_dis_linearlayout">
 
                     <LinearLayout
@@ -432,7 +433,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4,500원 [부가세 별도]"
+                            android:text="원 [부가세 별도]"
                             android:id="@+id/textView64"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
@@ -470,7 +471,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4,500원"
+                            android:text="원"
                             android:id="@+id/textView55"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
@@ -531,7 +532,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="잔액:12,000원"
+                            android:text="잔액:원"
                             android:id="@+id/textView59"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
@@ -568,7 +569,7 @@
                 android:orientation="vertical"
                 android:layout_width="334.5dp"
                 android:layout_height="204dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_marginLeft="12.75dp"
                 android:layout_marginRight="12.75dp"
                 android:layout_marginBottom="49.5dp"
