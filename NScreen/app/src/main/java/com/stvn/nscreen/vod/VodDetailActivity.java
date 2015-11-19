@@ -47,6 +47,7 @@ import org.w3c.dom.Text;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -957,6 +958,10 @@ public class VodDetailActivity extends Activity {
                     투모로우랜드 "widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm"
                      */
                         contentUri = contentUri.replace("http://","widevine://");
+
+                        // VOD시청목록 남기기
+                        Date watchDate = new Date();
+                        mPref.addWatchVod(watchDate, assetId, mTitle);
 
                         Intent intent = new Intent(mInstance, VideoPlayerView.class);
                         //intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
