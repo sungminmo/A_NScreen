@@ -70,8 +70,8 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 		try {
 
 			JSONObject jsonObj = new JSONObject(info.sJson);
-			String assetTitle = jsonObj.getString("assetTitle");
-			holder.rowname.setText(assetTitle);
+			String productName = jsonObj.getString("productName");
+			holder.rowname.setText(productName);
 
 			String price = jsonObj.getString("price");
 			holder.rowpay.setText(UiUtil.stringParserCommafy(price) + "원");
