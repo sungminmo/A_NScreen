@@ -164,6 +164,14 @@
             android:label="@string/title_activity_vod_buy"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".vod.VodBuyDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_epg_choice"
+            android:screenOrientation="unspecified"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
 
         <!-- player -->
         <activity
