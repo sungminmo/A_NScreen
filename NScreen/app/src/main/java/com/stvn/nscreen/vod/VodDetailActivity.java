@@ -207,9 +207,9 @@ public class VodDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if ( mPref.isPairingCompleted() == false ) {
-                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertTitle = "셋탑박스 미 연동";
                         String alertMsg1  = mTitle;
-                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                        String alertMsg2  = getString(R.string.error_not_paring_compleated7);
                         CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
