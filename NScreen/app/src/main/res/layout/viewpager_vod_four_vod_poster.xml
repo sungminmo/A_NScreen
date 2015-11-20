@@ -25,6 +25,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/four_vod_poster_onlytv1"
+                android:background="@mipmap/icon_onlytv"
+                android:layout_gravity="right|bottom"
+                android:layout_marginBottom="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:visibility="gone" />
+
         </FrameLayout>
 
 
@@ -40,6 +50,16 @@
                 android:background="#cacaca"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/four_vod_poster_onlytv2"
+                android:background="@mipmap/icon_onlytv"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:visibility="gone" />
 
         </FrameLayout>
 
@@ -57,6 +77,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/four_vod_poster_onlytv3"
+                android:background="@mipmap/icon_onlytv"
+                android:layout_gravity="right|bottom"
+                android:layout_marginBottom="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:visibility="gone" />
+
         </FrameLayout>
 
 
@@ -72,6 +102,16 @@
                 android:background="#cacaca"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/four_vod_poster_onlytv4"
+                android:background="@mipmap/icon_onlytv"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:visibility="gone" />
 
         </FrameLayout>
 

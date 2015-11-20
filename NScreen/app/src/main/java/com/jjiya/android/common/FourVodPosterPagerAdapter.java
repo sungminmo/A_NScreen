@@ -112,11 +112,19 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 } else {
                     assetId1 = jo1.getString("primaryAssetId");
                 }
+                final Boolean mobilePublicationRight1 = jo1.getBoolean("mobilePublicationRight");
+                ImageView four_vod_poster_onlytv1 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv1);
+                if ( mobilePublicationRight1 == false ) {
+                    four_vod_poster_onlytv1.setVisibility(View.VISIBLE);
+                }
                 TextView title1 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview1);
                 title1.setText(jo1.getString("title"));
                 String imageFileName1 = jo1.getString("imageFileName");
                 NetworkImageView niv1 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1);
                 niv1.setImageUrl(imageFileName1, mImageLoader);
+                if ( "0".equals(mobilePublicationRight1) ) {
+
+                }
                 niv1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -134,6 +142,11 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     assetId2 = jo2.getString("assetId");
                 } else {
                     assetId2 = jo2.getString("primaryAssetId");
+                }
+                final Boolean mobilePublicationRight2 = jo2.getBoolean("mobilePublicationRight");
+                ImageView four_vod_poster_onlytv2 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv2);
+                if ( mobilePublicationRight2 == false ) {
+                    four_vod_poster_onlytv2.setVisibility(View.VISIBLE);
                 }
                 TextView title2 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview2);
                 title2.setText(jo2.getString("title"));
@@ -158,6 +171,11 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 } else {
                     assetId3 = jo3.getString("primaryAssetId");
                 }
+                final Boolean mobilePublicationRight3 = jo3.getBoolean("mobilePublicationRight");
+                ImageView four_vod_poster_onlytv3 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv3);
+                if ( mobilePublicationRight3 == false ) {
+                    four_vod_poster_onlytv3.setVisibility(View.VISIBLE);
+                }
                 TextView title3 = (TextView) v.findViewById(R.id.eight_vod_poster_title_textview3);
                 title3.setText(jo3.getString("title"));
                 String imageFileName3 = jo3.getString("imageFileName");
@@ -180,6 +198,11 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     assetId4 = jo4.getString("assetId");
                 } else {
                     assetId4 = jo4.getString("primaryAssetId");
+                }
+                final Boolean mobilePublicationRight4 = jo4.getBoolean("mobilePublicationRight");
+                ImageView four_vod_poster_onlytv4 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv4);
+                if ( mobilePublicationRight4 == false ) {
+                    four_vod_poster_onlytv4.setVisibility(View.VISIBLE);
                 }
                 TextView title4 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview4);
                 title4.setText(jo4.getString("title"));
