@@ -16,6 +16,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
 
 import org.json.JSONException;
@@ -122,22 +123,22 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
+
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId1);
@@ -185,22 +186,21 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId2);
@@ -248,22 +248,21 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId3);
@@ -311,22 +310,21 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId4);
@@ -374,22 +372,21 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating5.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId5);
@@ -437,22 +434,21 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating6.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId6);
@@ -500,22 +496,21 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating7.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId7);
@@ -563,22 +558,21 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating8.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            AlertDialog.Builder ad = new AlertDialog.Builder(mFragment.getActivity());
-                            ad.setTitle("알림").setMessage(mFragment.getActivity().getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     Intent intent = new Intent(mFragment.getActivity(), CMSettingMainActivity.class);
                                     mFragment.getActivity().startActivity(intent);
                                 }
-                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            }, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {// 'No'
-                                    dialog.dismiss();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             });
-                            AlertDialog alert = ad.create();
-                            alert.show();
                         } else {
                             Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
                             intent.putExtra("assetId", assetId8);

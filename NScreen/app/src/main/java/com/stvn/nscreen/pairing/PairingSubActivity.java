@@ -22,6 +22,7 @@ import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,15 +131,15 @@ public class PairingSubActivity extends AppCompatActivity {
                     // addUser 성공 했으면, 바로 5.1.2 AuthenticateDevice 호출해서 webhas private tk 받기.
                     requestAuthenticateDevice();
                 } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found_authCode.equals(resultCode) ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                    String alertTitle = "인증 번호";
+                    String alertMessage1 = getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode);
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode));
-                    alert.show();
+                    }, true);
                 } else if ( "211".equals(resultCode) ) {   // @TODO 반드시 삭제해야됨. 현재 서버가 정상처리인데 211로 에러 내려옴.
                     // 임시처리
                     requestAuthenticateDevice();

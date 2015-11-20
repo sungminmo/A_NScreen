@@ -16,7 +16,7 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical|center_horizontal"
-            android:text="마이 C&amp;M"
+            android:text="마이 씨앤앰"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/white" />

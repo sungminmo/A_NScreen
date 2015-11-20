@@ -41,6 +41,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -504,15 +505,15 @@ public class EpgSubActivity extends AppCompatActivity {
                     }
                     break;
                     case 6: { // 미 페어링
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertMessage1 = getString(R.string.error_not_paring_compleated3);
+                        String alertMessage2 = "";
+                        CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+
                             }
-                        });
-                        alert.setMessage(getString(R.string.error_not_paring_compleated3));
-                        alert.show();
+                        }, true);
                     }
                     break;
                 }
@@ -1130,38 +1131,35 @@ public class EpgSubActivity extends AppCompatActivity {
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "채널 변경";
+                    String alertMessage1 = "셋탑박스가 꺼져있습니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "채널 변경";
+                    String alertMessage1 = "VOD 시청중엔 채널변경이 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "채널 변경";
+                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불과능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 }
             }
         }, new Response.ErrorListener() {
@@ -1240,82 +1238,75 @@ public class EpgSubActivity extends AppCompatActivity {
                     // ok
                     reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("Duplicated Recording Reserve Request", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "Duplicated Recording Reserve Request";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "009".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("고객님의 셋탑박스에서 제공되지 않는 채널입니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "011".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("고객님의 셋탑박스는 현재 다른 채널을 녹화중입니다. 녹화를 중지해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "고객님의 셋탑박스는 현재 다른 채널을 녹화중입니다. 녹화를 중지해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 }else if ( "012".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("고객님의 셋탑박스 설정에 의한 시청제한으로 녹화가 불가합니다. 셋탑박스 설정을 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "고객님의 셋탑박스 설정에 의한 시청제한으로 녹화가 불가합니다. 셋탑박스 설정을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 }
                 reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
@@ -1472,52 +1463,45 @@ public class EpgSubActivity extends AppCompatActivity {
                 mProgressDialog.dismiss();
                 parseSetRecordReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
-                    // ok
-                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
-                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("Duplicated Recording Reserve Request", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "Duplicated Recording Reserve Request";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String errorString = (String) RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setMessage("셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 }
             }
         }, new Response.ErrorListener() {
@@ -1602,38 +1586,35 @@ public class EpgSubActivity extends AppCompatActivity {
                     // ok
                     reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화예약취소 불가";
+                    String alertMessage1 = "셋탑박스가 꺼져있습니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화예약취소 불가";
+                    String alertMessage1 = "VOD 시청중엔 채널변경이 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "녹화예약취소 불가";
+                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불과능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 }
             }
         }, new Response.ErrorListener() {

@@ -24,6 +24,7 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.leftmenu.LeftMenuActivity;
 import com.stvn.nscreen.search.SearchMainActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -239,22 +240,21 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
             public void onClick(View v) {
 
                 if (mPref.isAdultVerification() == false) {
-                    AlertDialog.Builder ad = new AlertDialog.Builder(mContext);
-                    ad.setTitle("알림").setMessage(getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String alertTitle = "성인인증 필요";
+                    String alertMsg1 = getString(R.string.error_not_adult1);
+                    String alertMsg2 = getString(R.string.error_not_adult2);
+                    CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                             Intent intent = new Intent(mContext, CMSettingMainActivity.class);
                             startActivity(intent);
                         }
-                    }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    }, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {// 'No'
-                            dialog.dismiss();
+                        public void onClick(DialogInterface dialog, int which) {
+
                         }
                     });
-                    AlertDialog alert = ad.create();
-                    alert.show();
                 } else {
 
                     mTab1TextView.setTypeface(null, Typeface.NORMAL);
