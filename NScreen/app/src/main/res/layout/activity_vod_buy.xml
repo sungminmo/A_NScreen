@@ -189,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="원 [부가세 별도]"
-                        android:id="@+id/textView46"
+                        android:id="@+id/vod_buy_step1_packeage_textview"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
                 </LinearLayout>
@@ -568,7 +568,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="TV포인트"
-                            android:id="@+id/textView58"
+                            android:id="@+id/vod_buy_step2_tv_point_title_textview"
                             android:textColor="@drawable/btn_selector_textcolor"
                             android:textSize="16sp" />
 
@@ -591,7 +591,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="보유 쿠폰 차감 결제"
+                            android:text="보유 포인트 차감 결제"
                             android:id="@+id/vod_buy_step2_tv_can2_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="14sp" />
@@ -602,7 +602,7 @@
                             android:text=""
                             android:id="@+id/vod_buy_step2_tv_can_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
-                            android:textSize="14sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -612,7 +612,7 @@
                 android:orientation="vertical"
                 android:layout_width="334.5dp"
                 android:layout_height="204dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_marginLeft="12.75dp"
                 android:layout_marginRight="12.75dp"
                 android:layout_marginBottom="49.5dp"

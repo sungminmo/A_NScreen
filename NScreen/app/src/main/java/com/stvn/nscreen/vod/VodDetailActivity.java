@@ -124,6 +124,7 @@ public class VodDetailActivity extends Activity {
     private String productType; // RVOD, ....
     private String productId;
     private String goodId;
+    private String categoryId;
 
 
 
@@ -207,9 +208,9 @@ public class VodDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if ( mPref.isPairingCompleted() == false ) {
-                        String alertTitle = "셋탑박스 미 연동";
+                        String alertTitle = "셋탑박스 연동 필요";
                         String alertMsg1  = mTitle;
-                        String alertMsg2  = getString(R.string.error_not_paring_compleated7);
+                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
                         CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -246,8 +247,10 @@ public class VodDetailActivity extends Activity {
                     intent.putExtra("sPrice",       sPrice);
                     intent.putExtra("productId",    productId);
                     intent.putExtra("goodId",       goodId);
+                    intent.putExtra("categoryId",   categoryId);
                     intent.putExtra("productType",  productType);  // RVOD, ....
                     intent.putExtra("productList",  productList.toString());  // RVOD, ....
+                    intent.putExtra("viewable",     viewable);  // 시청기간
                     intent.putExtra("discountCouponMasterIdList",  discountCouponMasterIdList.toString());
 
                     startActivityForResult(intent, 1000);
@@ -277,8 +280,10 @@ public class VodDetailActivity extends Activity {
                     intent.putExtra("sPrice",       sPrice);
                     intent.putExtra("productId",    productId);
                     intent.putExtra("goodId",       goodId);
+                    intent.putExtra("categoryId",   categoryId);
                     intent.putExtra("productType",  productType);  // RVOD, ....
                     intent.putExtra("productList",  productList.toString());
+                    intent.putExtra("viewable",     viewable);  // 시청기간
                     intent.putExtra("discountCouponMasterIdList",  discountCouponMasterIdList.toString());
                     startActivityForResult(intent, 1000);
                 }
@@ -490,7 +495,7 @@ public class VodDetailActivity extends Activity {
                     // asset
                     JSONObject asset            = jo.getJSONObject("asset");
                     fileName                    = asset.getString("fileName");
-                    String categoryId           = asset.getString("categoryId");
+                    categoryId                  = asset.getString("categoryId");
                     String imageFileName        = asset.getString("imageFileName");
                     String rating               = asset.getString("rating");
                     String reviewRatingCount    = asset.getString("reviewRatingCount");
@@ -609,6 +614,7 @@ public class VodDetailActivity extends Activity {
 
                     if( viewablePeriodState == 1 ) {
                         mViewableTextView.setText("무제한시청");
+                        viewable = "무제한시청";
                     } else {
                         viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10))) + "일";
                         viewablePeriod = viewable;

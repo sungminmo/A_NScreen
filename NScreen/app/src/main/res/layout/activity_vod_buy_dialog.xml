@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="일반결제 [부가세 별도]"
-            android:id="@+id/textView66"
+            android:id="@+id/dialog_buy_paymethod"
             android:textSize="12.75sp"
             android:textColor="#000000"
             android:layout_marginTop="26dp"
@@ -36,70 +36,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3,000 원"
-            android:id="@+id/textView68"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:layout_marginTop="26dp"
-            android:layout_gravity="right|top"
-            android:layout_marginRight="3dp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="47.5dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="17.5dp"
-        android:layout_marginRight="17.5dp"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="쿠폰사용 [부가세 별도]"
-            android:id="@+id/textView82"
-            android:textSize="12.75sp"
-            android:textColor="#000000"
-            android:layout_marginTop="26dp"
-            android:layout_marginLeft="5.5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3,000 원"
-            android:id="@+id/textView83"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:layout_marginTop="26dp"
-            android:layout_gravity="right|top"
-            android:layout_marginRight="3dp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="47.5dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="17.5dp"
-        android:layout_marginRight="17.5dp"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TV포인트 [부가세 별도]"
-            android:id="@+id/textView84"
-            android:textSize="12.75sp"
-            android:textColor="#000000"
-            android:layout_marginTop="26dp"
-            android:layout_marginLeft="5.5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3,000 원"
-            android:id="@+id/textView85"
+            android:text="원"
+            android:id="@+id/dialog_buy_price"
             android:textSize="15sp"
             android:textColor="#000000"
             android:layout_marginTop="26dp"
@@ -124,47 +62,6 @@
         android:layout_marginRight="17.5dp"
         android:visibility="visible">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="시청기간"
-            android:id="@+id/textView74"
-            android:textSize="12.75sp"
-            android:textColor="#8a8c8e"
-            android:layout_marginTop="8.5dp"
-            android:layout_marginLeft="5.5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="24 시간"
-            android:id="@+id/textView81"
-            android:textColor="#8a8c8e"
-            android:textSize="15sp"
-            android:layout_gravity="right|top"
-            android:layout_marginTop="8.5dp"
-            android:layout_marginRight="3dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="구매 비밀번호 입력해주세요."
-            android:id="@+id/textView52"
-            android:layout_gravity="center_horizontal|bottom"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:layout_marginBottom="17.5dp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="79.25dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="17.5dp"
-        android:layout_marginRight="17.5dp"
-        android:visibility="gone">
-
         <FrameLayout
             android:orientation="horizontal"
             android:layout_width="137dp"
@@ -184,10 +81,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="24 시간"
-                android:id="@+id/textView89"
+                android:text="시간"
+                android:id="@+id/dialog_buy_time"
                 android:textColor="#8a8c8e"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_gravity="right|top"
                 android:layout_marginTop="8.5dp"
                 android:layout_marginRight="3dp" />
@@ -197,7 +94,9 @@
             android:orientation="horizontal"
             android:layout_width="137dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right|top">
+            android:layout_gravity="right|top"
+            android:id="@+id/dailog_buy_cupon_frame"
+            android:visibility="invisible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -212,12 +111,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2000원 차감"
-                android:id="@+id/textView87"
+                android:id="@+id/dailog_buy_minus"
                 android:layout_marginTop="8.5dp"
                 android:layout_marginRight="3dp"
                 android:layout_gravity="right|top"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textColor="#8a8c8e" />
         </FrameLayout>
 
@@ -225,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="구매 비밀번호 입력해주세요."
-            android:id="@+id/textView90"
+            android:id="@+id/dialog_buy_info"
             android:layout_gravity="center_horizontal|bottom"
             android:textSize="15sp"
             android:textColor="#000000"
@@ -235,13 +133,17 @@
     <EditText
         android:layout_width="274dp"
         android:layout_height="29dp"
-        android:id="@+id/editText"
+        android:id="@+id/dialog_buy_pwd_edittext"
         android:layout_gravity="center_horizontal"
         android:background="@mipmap/setting_pw_box_nor"
         android:layout_marginLeft="17.5dp"
         android:layout_marginRight="17.5dp"
         android:layout_marginBottom="37.5dp"
-        android:password="true" />
+        android:imeOptions="actionDone"
+        android:password="true"
+        android:inputType="textPassword"
+        android:gravity="center"
+        android:maxLength="20" />
 
     <LinearLayout
         android:orientation="horizontal"
