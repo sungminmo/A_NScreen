@@ -86,7 +86,7 @@
                     android:paddingLeft="35dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
-                    android:id="@+id/vod_buy_step1_one_linearlayout"
+                    android:id="@+id/vod_buy_step1_one_serise_linearlayout"
                     android:visibility="gone">
 
                     <TextView
@@ -101,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="원 [부가세 별도]"
-                        android:id="@+id/vod_buy_step1_one_price"
+                        android:id="@+id/vod_buy_step1_one_serise_price_textview"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
 
@@ -117,7 +117,7 @@
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
                     android:id="@+id/vod_buy_step1_serise_linearlayout"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -131,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="원 [부가세 별도]"
-                        android:id="@+id/textView42"
+                        android:id="@+id/vod_buy_step1_serise_textview"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
                 </LinearLayout>
@@ -145,7 +145,7 @@
                     android:paddingLeft="35dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
-                    android:id="@+id/vod_buy_step1_oneproduct_linearlayout"
+                    android:id="@+id/vod_buy_step1_one_product_linearlayout"
                     android:visibility="gone">
 
                     <TextView
@@ -160,7 +160,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="원 [부가세 별도]"
-                        android:id="@+id/textView44"
+                        android:id="@+id/vod_buy_step1_one_product_price_textview"
                         android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
                 </LinearLayout>
@@ -194,34 +194,77 @@
                         android:textColor="@drawable/btn_purchase_textcolor" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:layout_width="309dp"
-                    android:layout_height="49.25dp"
-                    android:layout_marginBottom="3dp"
-                    android:paddingLeft="35dp"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/btn_purchase_selector"
-                    android:id="@+id/vod_buy_step1_month_linearlayout"
-                    android:visibility="gone">
+                <LinearLayout android:clickable="true" android:orientation="vertical" android:layout_width="309dp"
+                    android:layout_height="49.25dp" android:layout_marginBottom="3dp" android:paddingLeft="35dp"
+                    android:gravity="center_vertical" android:background="@drawable/btn_purchase_selector"
+                    android:id="@+id/vod_buy_step1_month_linearlayout1" android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="월정액"
-                        android:id="@+id/textView47"
-                        android:textSize="16sp"
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="월정액" android:id="@+id/vod_buy_step1_month_type_textview1" android:textSize="16sp"
                         android:textColor="@drawable/btn_selector_textcolor" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="원/월 [부가세 별도]"
-                        android:id="@+id/textView48"
-                        android:textSize="12.75dp"
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="원/월 [부가세 별도]" android:id="@+id/vod_buy_step1_month_price_textview1" android:textSize="12.75dp"
                         android:textColor="@drawable/btn_purchase_textcolor" />
                 </LinearLayout>
+
+                <LinearLayout android:clickable="true" android:orientation="vertical" android:layout_width="309dp"
+                    android:layout_height="49.25dp" android:layout_marginBottom="3dp" android:paddingLeft="35dp"
+                    android:gravity="center_vertical" android:background="@drawable/btn_purchase_selector"
+                    android:id="@+id/vod_buy_step1_month_linearlayout2" android:visibility="gone">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="월정액" android:id="@+id/vod_buy_step1_month_type_textview2" android:textSize="16sp"
+                        android:textColor="@drawable/btn_selector_textcolor" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="원/월 [부가세 별도]" android:id="@+id/vod_buy_step1_month_price_textview2" android:textSize="12.75dp"
+                        android:textColor="@drawable/btn_purchase_textcolor" />
+                </LinearLayout>
+
+                <LinearLayout android:clickable="true" android:orientation="vertical" android:layout_width="309dp"
+                    android:layout_height="49.25dp" android:layout_marginBottom="3dp" android:paddingLeft="35dp"
+                    android:gravity="center_vertical" android:background="@drawable/btn_purchase_selector"
+                    android:id="@+id/vod_buy_step1_month_linearlayout3" android:visibility="gone">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="월정액" android:id="@+id/vod_buy_step1_month_type_textview3" android:textSize="16sp"
+                        android:textColor="@drawable/btn_selector_textcolor" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="원/월 [부가세 별도]" android:id="@+id/vod_buy_step1_month_price_textview3" android:textSize="12.75dp"
+                        android:textColor="@drawable/btn_purchase_textcolor" />
+                </LinearLayout>
+
+                <LinearLayout android:clickable="true" android:orientation="vertical" android:layout_width="309dp"
+                    android:layout_height="49.25dp" android:layout_marginBottom="3dp" android:paddingLeft="35dp"
+                    android:gravity="center_vertical" android:background="@drawable/btn_purchase_selector"
+                    android:id="@+id/vod_buy_step1_month_linearlayout4" android:visibility="gone">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="월정액" android:id="@+id/vod_buy_step1_month_type_textview4" android:textSize="16sp"
+                        android:textColor="@drawable/btn_selector_textcolor" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="원/월 [부가세 별도]" android:id="@+id/vod_buy_step1_month_price_textview4" android:textSize="12.75dp"
+                        android:textColor="@drawable/btn_purchase_textcolor" />
+                </LinearLayout>
+
+
+                <LinearLayout android:clickable="true" android:orientation="vertical" android:layout_width="309dp"
+                    android:layout_height="49.25dp" android:layout_marginBottom="3dp" android:paddingLeft="35dp"
+                    android:gravity="center_vertical" android:background="@drawable/btn_purchase_selector"
+                    android:id="@+id/vod_buy_step1_month_linearlayout5" android:visibility="gone">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="월정액" android:id="@+id/vod_buy_step1_month_type_textview5" android:textSize="16sp"
+                        android:textColor="@drawable/btn_selector_textcolor" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="원/월 [부가세 별도]" android:id="@+id/vod_buy_step1_month_price_textview5" android:textSize="12.75dp"
+                        android:textColor="@drawable/btn_purchase_textcolor" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:clickable="true"
@@ -434,7 +477,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="원 [부가세 별도]"
-                            android:id="@+id/textView64"
+                            android:id="@+id/vod_buy_step2_dis_price_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
                     </LinearLayout>
@@ -471,8 +514,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="원"
-                            android:id="@+id/textView55"
+                            android:text="잔액:원"
+                            android:id="@+id/vod_buy_step2_coupon_point_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
                     </LinearLayout>
@@ -495,8 +538,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="[잔액부족-복합결제 가능]"
-                            android:id="@+id/textView57"
+                            android:text=""
+                            android:id="@+id/vod_buy_step2_coupon_can_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
                     </LinearLayout>
@@ -533,7 +576,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="잔액:원"
-                            android:id="@+id/textView59"
+                            android:id="@+id/vod_buy_step2_tv_point_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="12.75sp" />
                     </LinearLayout>
@@ -549,15 +592,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="보유 쿠폰 차감 결제"
-                            android:id="@+id/textView60"
+                            android:id="@+id/vod_buy_step2_tv_can2_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="[TV포인트 결제 가능]"
-                            android:id="@+id/textView61"
+                            android:text=""
+                            android:id="@+id/vod_buy_step2_tv_can_textview"
                             android:textColor="@drawable/btn_purchase_textcolor"
                             android:textSize="14sp" />
                     </LinearLayout>
