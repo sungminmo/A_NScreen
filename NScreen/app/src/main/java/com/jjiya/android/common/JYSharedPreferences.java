@@ -17,6 +17,7 @@ import com.stvn.nscreen.LoadingActivity;
 import com.stvn.nscreen.bean.BookmarkChannelObject;
 import com.stvn.nscreen.bean.MainCategoryObject;
 import com.stvn.nscreen.bean.WatchTvObject;
+import com.stvn.nscreen.bean.WatchVodObject;
 import com.stvn.nscreen.bean.WishObject;
 
 import org.json.JSONArray;
@@ -32,8 +33,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -84,7 +87,6 @@ public class JYSharedPreferences {
 
     public JYSharedPreferences(Context c) {
         mContext = c;
-
         //RealmConfiguration config = new RealmConfiguration.Builder(mContext).build();
         //Realm.deleteRealm(config);
         mRealm   = Realm.getInstance(c);
@@ -626,6 +628,63 @@ public class JYSharedPreferences {
         }
         realm.commitTransaction();
         // Realm Database **********************************************************************
+    }
+
+    /***********************************************************************************************
+     * VOD시청
+     */
+    public void addWatchVod(Date watchDate, String assetId, String title) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        RealmResults<WatchVodObject> result = mRealm.where(WatchVodObject.class).findAll();
+        realm.beginTransaction();
+        WatchVodObject obj = realm.createObject(WatchVodObject.class); // Create a new object
+        obj.setiSeq(result.size());
+        obj.setdDate(watchDate);
+        obj.setsAssetId(assetId);
+        obj.setsTitle(title);
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
+
+    public void removeWatchVod(int iSeq) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<WatchVodObject> results = mRealm.where(WatchVodObject.class).equalTo("iSeq", iSeq).findAll();
+        if ( results.size() > 0 ) {
+            WatchVodObject obj = results.get(0);
+            obj.removeFromRealm();
+        } else {
+            //
+        }
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
+
+
+    public ArrayList<JSONObject> getAllWatchVodObject() {
+        ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
+        RealmResults<WatchVodObject> results = mRealm.where(WatchVodObject.class).findAll();
+        try {
+            SimpleDateFormat sd    = new SimpleDateFormat("MM.dd (E),HH:mm");
+            for (int i = 0; i < results.size(); i++) {
+                WatchVodObject  obj    = results.get(i);
+                JSONObject       jo    = new JSONObject();
+
+                String           sDate = sd.format(obj.getdDate()).toString();
+                jo.put("iSeq", obj.getiSeq());
+                jo.put("sDate", sDate);
+                jo.put("sAssetId", obj.getsAssetId());
+                jo.put("sTitle", obj.getsTitle());
+                arr.add(jo);
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        return arr;
     }
 }
 

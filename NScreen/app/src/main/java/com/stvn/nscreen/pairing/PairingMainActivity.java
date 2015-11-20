@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import java.util.regex.Pattern;
 
@@ -55,7 +56,7 @@ public class PairingMainActivity extends AppCompatActivity {
         pairing_main_ok_ment2 = (LinearLayout) findViewById(R.id.pairing_main_ok_ment2);
 
         mPurchasePassword1Edittext.setFilters(new InputFilter[] {filterAlpha});
-        mPurchasePassword2Edittext.setFilters(new InputFilter[] {filterAlpha});
+        mPurchasePassword2Edittext.setFilters(new InputFilter[]{filterAlpha});
 
 
         cancleButton.setOnClickListener(new View.OnClickListener() {
@@ -77,36 +78,39 @@ public class PairingMainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if ( ! mPurchasePassword1Edittext.getText().toString().equals(mPurchasePassword2Edittext.getText().toString()) ) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                    String alertTitle = "비밀번호 오류";
+                    String alertMsg1 = "비밀번호가 일치하지 않습니다.";
+                    String alertMsg2 = "";
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+                            mPurchasePassword1Edittext.getText().clear();
+                            mPurchasePassword2Edittext.getText().clear();
                         }
-                    });
-                    alert.setMessage("비밀번호가 일치하지 않습니다.");
-                    alert.show();
+                    }, true);
                 } else {
                     if ( mPurchasePassword2Edittext.getText().toString().length() < 4 ) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        String alertTitle = "비밀번호 오류";
+                        String alertMsg1 = "4자 이상의 비밀번호를 입력해 주십시오.";
+                        String alertMsg2 = "";
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                                mPurchasePassword1Edittext.getText().clear();
+                                mPurchasePassword2Edittext.getText().clear();
                             }
-                        });
-                        alert.setMessage("4자 이상의 비밀번호를 입력해 주십시오.");
-                        alert.show();
+                        }, true);
                     } else if ( mPurchasePassword2Edittext.getText().toString().length() > 20 ) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        String alertTitle = "비밀번호 오류";
+                        String alertMsg1 = "20자 이하의 비밀번호를 입력해 주십시오.";
+                        String alertMsg2 = "";
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                                mPurchasePassword1Edittext.getText().clear();
+                                mPurchasePassword2Edittext.getText().clear();
                             }
-                        });
-                        alert.setMessage("20자 이하의 비밀번호를 입력해 주십시오.");
-                        alert.show();
+                        }, true);
                     } else {
                         Intent intent = new Intent(PairingMainActivity.this, com.stvn.nscreen.pairing.PairingSubActivity.class);
                         intent.putExtra("purchasePassword", mPurchasePassword2Edittext.getText().toString());

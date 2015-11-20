@@ -40,6 +40,7 @@ import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.MainCategoryObject;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -289,6 +290,23 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 //        mRequestQueue.add(request);
 //    }
 
+    @Override
+    public void onBackPressedCallback() {
+        String alertTitle = "C&M NScreen";
+        String alertMsg1 = getString(R.string.app_name)+"를 종료하시겠습니까?";
+        String alertMsg2 = "";
+        CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().finish();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+    }
 
     // 배너 요청
     private void requestGetServiceBannerList() {

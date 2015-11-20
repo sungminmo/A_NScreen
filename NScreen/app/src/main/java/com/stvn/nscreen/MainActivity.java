@@ -19,11 +19,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.Constants;
+import com.jjiya.android.common.IOnBackPressedListener;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
-import com.stvn.nscreen.bean.WishObject;
 import com.stvn.nscreen.vod.VodMainFirstTabFragment;
-import com.stvn.nscreen.vod.VodMainOtherTabFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,14 +30,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-
-import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String              tag = MainActivity.class.getSimpleName();
     public  static       MainActivity        mInstance;
+    private IOnBackPressedListener mIOnBackPressedListener;
     private              JYSharedPreferences mPref;
     private              ProgressDialog      mProgressDialog;
     // network
@@ -97,6 +94,19 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragment_placeholder, firstTabFragment);
         fragmentTransaction.addToBackStack("VodMainOtherTabFragment");
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if ( mIOnBackPressedListener == null ) {
+            super.onBackPressed();
+        } else {
+            mIOnBackPressedListener.onBackPressedCallback();
+        }
+    }
+
+    public void setOnBackPressedListener(IOnBackPressedListener listener) {
+        mIOnBackPressedListener = listener;
     }
 
     /*
@@ -183,4 +193,7 @@ public class MainActivity extends AppCompatActivity {
         };
         mRequestQueue.add(request);
     }
+
+//    public void setOnBackPressedListener(VodMainBaseFragment vodMainBaseFragment) {
+//    }
 }

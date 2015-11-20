@@ -47,6 +47,7 @@ import org.w3c.dom.Text;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +118,9 @@ public class VodDetailActivity extends Activity {
 
 
     // for 결재
+    private JSONArray productList;
+    private JSONArray discountCouponMasterIdList;
+
     private String productType; // RVOD, ....
     private String productId;
     private String goodId;
@@ -223,28 +227,6 @@ public class VodDetailActivity extends Activity {
                 mPurchaseButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
-                //startActivity(i);
-
-                /*
-                Bundle param = new Bundle();
-                param.putString("assetId", mInstance.assetId);
-                param.putString("isSeriesLink", isSeriesLink);
-                param.putString("mTitle", mTitle);
-                param.putString("sListPrice", sListPrice);
-                param.putString("sPrice", sPrice);
-                param.putString("productId", productId);
-                param.putString("goodId", goodId);
-
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                VodBuyFragment vf = new VodBuyFragment();
-                vf.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, vf);
-                ft.addToBackStack("VodBuyFragment");
-                ft.commit();
-                */
 
                 if ( mPref.isPairingCompleted() == false ) {
                     String alertTitle = "셋탑박스 연동 필요";
@@ -265,6 +247,9 @@ public class VodDetailActivity extends Activity {
                     intent.putExtra("productId",    productId);
                     intent.putExtra("goodId",       goodId);
                     intent.putExtra("productType",  productType);  // RVOD, ....
+                    intent.putExtra("productList",  productList.toString());  // RVOD, ....
+                    intent.putExtra("discountCouponMasterIdList",  discountCouponMasterIdList.toString());
+
                     startActivityForResult(intent, 1000);
                 }
             }
@@ -274,29 +259,6 @@ public class VodDetailActivity extends Activity {
         mPurchaseButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent i = new Intent(VodMainFragment.this, VodCategoryMainActivity.class);
-                //startActivity(i);
-
-                /*
-                Bundle param = new Bundle();
-                param.putString("assetId", mInstance.assetId);
-                param.putString("isSeriesLink", isSeriesLink);
-                param.putString("mTitle", mTitle);
-                param.putString("sListPrice", sListPrice);
-                param.putString("sPrice", sPrice);
-                param.putString("productId", productId);
-                param.putString("goodId", goodId);
-
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                VodBuyFragment vf = new VodBuyFragment();
-                vf.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, vf);
-                ft.addToBackStack("VodBuyFragment");
-                ft.commit();
-                */
-
                 if ( mPref.isPairingCompleted() == false ) {
                     String alertTitle = "셋탑박스 연동 필요";
                     String alertMsg1  = mTitle;
@@ -316,6 +278,8 @@ public class VodDetailActivity extends Activity {
                     intent.putExtra("productId",    productId);
                     intent.putExtra("goodId",       goodId);
                     intent.putExtra("productType",  productType);  // RVOD, ....
+                    intent.putExtra("productList",  productList.toString());
+                    intent.putExtra("discountCouponMasterIdList",  discountCouponMasterIdList.toString());
                     startActivityForResult(intent, 1000);
                 }
             }
@@ -543,9 +507,9 @@ public class VodDetailActivity extends Activity {
                     String title                = asset.getString("title");
                     String publicationRight     = asset.getString("publicationRight"); // 1: TV ONLY, 2 MOBILE
 
-
-                    JSONArray productLists      = asset.getJSONArray("productList");
-                    JSONObject product          = (JSONObject)productLists.get(0);
+                    discountCouponMasterIdList  = asset.getJSONArray("discountCouponMasterIdList");
+                    productList                 = asset.getJSONArray("productList");
+                    JSONObject product          = (JSONObject)productList.get(0);
                     productType                 = product.getString("productType");
                     productId                   = product.getString("productId");
                     goodId                      = product.getString("goodId");
@@ -604,11 +568,14 @@ public class VodDetailActivity extends Activity {
                         mPlayLinearLayout.setVisibility(View.GONE);
                         if ( ! "2".equals(publicationRight) ) {
                             mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                            mPurchaseLinearLayout.setVisibility(View.GONE);
                         } else {
                             if ("0".equals(previewPeriod)) { // 미리보기 없음.
                                 mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                                mPurchaseLinearLayout.setVisibility(View.GONE);
                             } else {
                                 mPurchaseLinearLayout.setVisibility(View.VISIBLE);
+                                mPurchaseLinearLayout2.setVisibility(View.GONE);
                             }
                         }
                         // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
@@ -783,13 +750,14 @@ public class VodDetailActivity extends Activity {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestAddRemoveWishItem()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String encAssetId  = null;
         try {
             encAssetId  = URLDecoder.decode(assetId, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = mPref.getWebhasServerUrl() + "/"+action+".json?version=1&terminalKey="+terminalKey+"&&assetId="+encAssetId;
+        String url = mPref.getWebhasServerUrl() + "/"+action+".json?version=1&terminalKey="+terminalKey+"&assetId="+encAssetId + "&userId=" + uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -957,6 +925,10 @@ public class VodDetailActivity extends Activity {
                     투모로우랜드 "widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm"
                      */
                         contentUri = contentUri.replace("http://","widevine://");
+
+                        // VOD시청목록 남기기
+                        Date watchDate = new Date();
+                        mPref.addWatchVod(watchDate, assetId, mTitle);
 
                         Intent intent = new Intent(mInstance, VideoPlayerView.class);
                         //intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
