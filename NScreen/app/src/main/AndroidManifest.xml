@@ -153,12 +153,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
-            android:name=".vod.VodDetailActivity"
-            android:label="@string/title_activity_vod_detail"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        </activity>
+        <activity android:name=".vod.VodDetailActivity" android:label="@string/title_activity_vod_detail" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".vod.VodDetailBundleActivity" android:label="@string/title_activity_vod_detail_bundle" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".vod.VodDetailBundle2Activity" android:label="@string/title_activity_vod_detail" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name=".vod.VodBuyActivity"
             android:label="@string/title_activity_vod_buy"

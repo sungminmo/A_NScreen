@@ -119,6 +119,22 @@ public class VodBuyActivity extends Activity {
         return couponId;
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        switch(requestCode){
+            case 3000: {    // 묶음 할인상품 구매.
+                if ( resultCode == RESULT_OK ) {
+                    vod_buy_step1_one_product_linearlayout.setSelected(false);
+                    vod_buy_step1_packeage_linearlayout.setSelected(true);
+                } else if ( resultCode == RESULT_CANCELED ) {
+                    vod_buy_step1_one_product_linearlayout.setSelected(true);
+                    vod_buy_step1_packeage_linearlayout.setSelected(false);
+                }
+            } break;
+        }
+    }
+
     private void setUI() {
         vod_buy_title_textview.setText(mTitle);
         // 금액 표시 부분.
@@ -132,6 +148,8 @@ public class VodBuyActivity extends Activity {
                 int price = jo.getInt("price"); // 정가
                 int listPrice = jo.getInt("listPrice"); //할인적용가
                 String productType = jo.getString("productType");
+                final String productId2   = jo.getString("productId");
+                Log.d(tag, "productType: "+productType);
                 if ( "RVOD".equals(productType) ) { //
                     if ( "YES".equals(isSeriesLink) ) { // 시리즈이면 "단일 회차 구매" 표시
                         vod_buy_step1_one_serise_linearlayout.setVisibility(View.VISIBLE);
@@ -140,6 +158,13 @@ public class VodBuyActivity extends Activity {
                     } else {                            // 시리즈이면 "단일상품 구매" 표시
                         vod_buy_step1_one_product_linearlayout.setVisibility(View.VISIBLE);  // 단일 상품 구매
                         vod_buy_step1_one_product_price_textview.setText(UiUtil.toNumFormat(listPrice)+"원/월 [부가세 별도]");
+                        vod_buy_step1_one_product_linearlayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                vod_buy_step1_one_product_linearlayout.setSelected(true);
+                                vod_buy_step1_packeage_linearlayout.setSelected(false);
+                            }
+                        });
                     }
                 }
                 if ( "Package".equals(productType) ) {
@@ -148,6 +173,16 @@ public class VodBuyActivity extends Activity {
                 }
                 if ( "Bundle".equals(productType) ) { // 묶음 할인상품 구매
                     vod_buy_step1_packeage_linearlayout.setVisibility(View.VISIBLE);
+                    vod_buy_step1_packeage_linearlayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent intent = new Intent(mInstance, VodDetailBundleActivity.class);
+                            intent.putExtra("assetId",   assetId);
+                            intent.putExtra("productId", productId2);
+                            startActivityForResult(intent, 3000);
+                        }
+                    });
                 }
                 if ( "SVOD".equals(productType) ) {
                     String productName = jo.getString("productName");

@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="49.75dp"
+            android:background="@color/violet">
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/vod_detail_bundle_topmenu_left_imagebutton"
+                android:src="@mipmap/btn_back"
+                android:background="@color/transparent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/title_activity_vod_detail"
+                android:id="@+id/textView"
+                android:textSize="16.25sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center_vertical|center_horizontal" />
+
+
+        </FrameLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="185.25dp">
+
+        <FrameLayout
+            android:layout_width="124.75dp"
+            android:layout_height="match_parent">
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:layout_width="112dp"
+                android:layout_height="163dp"
+                android:id="@+id/vod_detail_bundle_imagefilename_imageview"
+                android:background="#bbbbbb"
+                android:layout_marginLeft="12.75dp"
+                android:layout_marginTop="13.75dp"
+                android:layout_gravity="right|top" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13.75dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="title"
+                    android:id="@+id/vod_detail_bundle_title"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="7.25dp"
+                    android:singleLine="true"
+                    android:layout_marginRight="12.75dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.75dp"
+                android:background="@color/white"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="60.75dp"
+                    android:layout_height="wrap_content"
+                    android:text="묶음가격"
+                    android:id="@+id/textView8"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#9a9a9a"
+                    android:singleLine="true"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="14,500원"
+                    android:id="@+id/vod_detail_bundle_price_textview"
+                    android:textSize="11sp"
+                    android:textColor="@color/black"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10,000원"
+                    android:id="@+id/vod_detail_bundle_pricelist_textview"
+                    android:textSize="11sp"
+                    android:textColor="@color/red"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[부가세 별도]"
+                    android:textSize="11sp"
+                    android:textColor="@color/black"
+                    android:singleLine="true"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.75dp"
+                android:background="@color/white"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="60.75dp"
+                    android:layout_height="wrap_content"
+                    android:text="시청기간"
+                    android:id="@+id/textView11"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#9a9a9a"
+                    android:singleLine="true"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="time"
+                    android:id="@+id/vod_detail_bundle_time_textview"
+                    android:textSize="11sp"
+                    android:textColor="@color/black"
+                    android:singleLine="true"
+                    android:layout_marginRight="12.75dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.75dp"
+                android:background="@color/white"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="60.75dp"
+                    android:layout_height="wrap_content"
+                    android:text="시청기기"
+                    android:id="@+id/textView12"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#9a9a9a"
+                    android:singleLine="true"
+                    android:gravity="center_horizontal" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_tv"
+                    android:layout_marginRight="3dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vod_detail_bundle_device_mobile_imageview"
+                    android:src="@mipmap/icon_mobile"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:background="#b4b6b8"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginBottom="8.75dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="121dp"
+            android:gravity="center_horizontal">
+
+
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/poster1_netwokr_imageview"
+                    android:background="#cacaca"
+                    android:layout_width="82.75dp"
+                    android:layout_height="121dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="0.5dp"
+                    android:visibility="invisible" />
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/poster2_netwokr_imageview"
+                    android:background="#cacaca"
+                    android:layout_width="82.75dp"
+                    android:layout_height="121dp"
+                    android:layout_marginTop="0.5dp"
+                    android:layout_marginLeft="6dp"
+                    android:visibility="invisible" />
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/poster3_netwokr_imageview"
+                android:background="#cacaca"
+                android:layout_width="82.75dp"
+                android:layout_height="121dp"
+                android:layout_marginTop="0.5dp"
+                android:layout_marginLeft="6dp"
+                android:visibility="invisible" />
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/poster4_netwokr_imageview"
+                android:background="#cacaca"
+                android:layout_width="82.75dp"
+                android:layout_height="121dp"
+                android:layout_marginTop="0.5dp"
+                android:layout_marginLeft="6dp"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="17.25dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/poster1_title_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:id="@+id/poster2_title_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:id="@+id/poster3_title_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:id="@+id/poster4_title_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="17.25dp"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/poster1_price_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:id="@+id/poster2_price_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:id="@+id/poster3_price_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:id="@+id/poster4_price_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="121dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10.25dp">
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/poster5_netwokr_imageview"
+                android:background="#cacaca"
+                android:layout_width="82.75dp"
+                android:layout_height="121dp"
+                android:layout_marginTop="0.5dp"
+                android:layout_marginLeft="6dp"
+                android:visibility="invisible" />
+
+
+            <FrameLayout
+                android:layout_width="82.75dp"
+                android:layout_height="121dp"
+                android:layout_marginLeft="6dp">
+
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="82.75dp"
+                android:layout_height="121dp"
+                android:layout_marginLeft="6dp">
+
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="82.75dp"
+                android:layout_height="121dp"
+                android:layout_marginLeft="6dp">
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="16.75dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/poster5_title_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="16.75dp"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/poster5_price_textview"
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+
+            <TextView
+                android:layout_width="82.75dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="10.5sp"
+                android:textColor="#3c3c3c"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:layout_marginTop="3.5dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+
+
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40.75dp"
+        android:layout_marginLeft="12.25dp"
+        android:layout_marginRight="12.25dp"
+            android:visibility="visible"
+            android:layout_marginBottom="7.25dp"
+            android:layout_gravity="bottom">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="구매하기"
+            android:id="@+id/vod_detail_bundle_ok_button"
+            android:background="@mipmap/btn_select"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+
+    </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
