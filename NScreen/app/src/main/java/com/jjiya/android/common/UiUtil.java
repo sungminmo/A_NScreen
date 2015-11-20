@@ -286,7 +286,7 @@ public class UiUtil {
      * @return String
      */
     public static String toNumFormat(int num) {
-        DecimalFormat df = new DecimalFormat("#,###");
+        DecimalFormat df = new DecimalFormat("###,###,###");
         return df.format(num);
     }
 
