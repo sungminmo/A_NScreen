@@ -17,11 +17,11 @@
     <FrameLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="46.25dp"
+        android:layout_height="47.5dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
         android:layout_marginRight="17.5dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
     <FrameLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="46.25dp"
+        android:layout_height="47.5dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
         android:layout_marginRight="17.5dp"
@@ -79,7 +79,7 @@
     <FrameLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="46.25dp"
+        android:layout_height="47.5dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
         android:layout_marginRight="17.5dp"
@@ -112,7 +112,8 @@
         android:layout_height="0.5dp"
         android:background="#8a8c8e"
         android:layout_marginRight="17.5dp"
-        android:layout_marginLeft="17.5dp" />
+        android:layout_marginLeft="17.5dp"
+        android:layout_marginTop="2.5dp" />
 
     <FrameLayout
         android:orientation="horizontal"
@@ -121,7 +122,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="17.5dp"
         android:layout_marginRight="17.5dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -246,11 +247,14 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="39.5dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="3dp">
 
         <Button
             android:layout_width="150.25dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="취소"
             android:id="@+id/backBtn"
             android:textColor="#ffffff"
@@ -262,7 +266,7 @@
 
         <Button
             android:layout_width="150.25dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="구매하기"
             android:id="@+id/purchaseBtn"
             android:textSize="14.5sp"

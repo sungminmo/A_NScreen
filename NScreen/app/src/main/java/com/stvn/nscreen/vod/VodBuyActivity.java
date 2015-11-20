@@ -308,27 +308,14 @@ public class VodBuyActivity extends Activity {
         purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
-                ad.setTitle("알림")
-                        .setMessage("구매비밀번호는 작업중 입니다. 확인을 누르시면 결제 됩니다.")
-                        .setCancelable(false)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestPurchaseAssetEx2();
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 'No'
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog alert = ad.create();
-                alert.show();
+                Intent intent = new Intent(mInstance, VodBuyDialog.class);
+                intent.putExtra("productId", productId);
+                intent.putExtra("goodId", goodId);
+                intent.putExtra("mTitle", mTitle);
+                startActivity(intent);
             }
         });
+
         Button cancleButton   = (Button)findViewById(R.id.vod_buy_cancle_button);
         cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -475,57 +462,5 @@ public class VodBuyActivity extends Activity {
      * uiComponentDomain=0&
      * uiComponentId=0
      */
-    private void requestPurchaseAssetEx2() {
-        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
-        String terminalKey = mPref.getWebhasTerminalKey();
-        String url = mPref.getWebhasServerUrl() + "/purchaseAssetEx2.json?version=2&terminalKey="+terminalKey
-                +"&productId="+productId +"&goodId="+goodId+"&uiComponentDomain=0&uiComponentId=0";
-        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                mProgressDialog.dismiss();
-                int resultCode = 0;
-                final String jstr = "";
-                // {"resultCode":100,"discountCouponPaymentList":[],"transactionId":null,"errorString":"","version":"2","enrolledEventIdList":[]}
-                try {
-                    JSONObject jo      = new JSONObject(response);
-                    resultCode         = jo.getInt("resultCode");
 
-                    // jstr = jo.toString();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                String alertTitle = "구매완료";
-                String alertMsg1  = mTitle;
-                String alertMsg2  = getString(R.string.success_purchase);
-                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Intent intent = new Intent();
-                        intent.putExtra("jstr", jstr);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                }, true);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
-                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("version", String.valueOf(1));
-                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
-                return params;
-            }
-        };
-        mRequestQueue.add(request);
-    }
 }
