@@ -582,7 +582,12 @@ public class VodDetailActivity extends Activity {
                         if ( "FOD".equals(productType) ) {
                             mPurchaseLinearLayout.setVisibility(View.GONE);
                             mPurchaseLinearLayout2.setVisibility(View.GONE);
-                            mPlayLinearLayout.setVisibility(View.VISIBLE);
+                            if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
+                                mTvOnlyTextView.setText("["+title+"] 은 (는)");
+                                mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
+                            } else {
+                                mPlayLinearLayout.setVisibility(View.VISIBLE);
+                            }
                         }
                     } else {                         // 구매했다. 감쳐라.
                         mPurchaseLinearLayout2.setVisibility(View.GONE);
