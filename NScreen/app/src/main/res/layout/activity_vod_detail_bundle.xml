@@ -120,7 +120,8 @@
                     android:textColor="@color/red"
                     android:singleLine="true"
                     android:textStyle="bold"
-                    android:layout_marginLeft="8dp" />
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -129,7 +130,9 @@
                     android:textSize="11sp"
                     android:textColor="@color/black"
                     android:singleLine="true"
-                    android:layout_marginLeft="4dp" />
+                    android:layout_marginLeft="4dp"
+                    android:id="@+id/vod_detail_bundle_pricevbat_textview"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -537,10 +540,21 @@
             android:id="@+id/vod_detail_bundle_ok_button"
             android:background="@mipmap/btn_select"
             android:textColor="#FFFFFF"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="시청을 원하시는 VOD를 선택해주세요."
+                android:id="@+id/vod_detail_bundle_already_textview"
+                android:textSize="14sp"
+                android:textColor="#7b5aa3"
+                android:gravity="center"
+                android:visibility="gone" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>

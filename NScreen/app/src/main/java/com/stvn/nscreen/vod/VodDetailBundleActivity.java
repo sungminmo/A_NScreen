@@ -5,8 +5,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -65,7 +68,9 @@ public class VodDetailBundleActivity extends Activity {
     private TextView mTitleTextView;
     private NetworkImageView mMovieImageImageView;
     private TextView mPriceTextView;
-    private TextView mViewableTextView;
+    private TextView mPricelistTextView;
+    private TextView PricevbatTextview;
+    private TextView mTimeTextView;
     private ImageView mMobileImageView;
 
     private JSONArray mBundleAssetList;
@@ -88,6 +93,9 @@ public class VodDetailBundleActivity extends Activity {
     private TextView mPrice4;
     private TextView mPrice5;
 
+    private TextView mAleady;
+    private Button okButton;
+
     // activity
     private String assetId; // intent param
     private String productId;
@@ -106,11 +114,13 @@ public class VodDetailBundleActivity extends Activity {
         assetId   = getIntent().getExtras().getString("assetId");
         productId = getIntent().getExtras().getString("productId");
 
-        mTitleTextView        = (TextView)findViewById(R.id.vod_detail_title);
-        mMovieImageImageView  = (NetworkImageView)findViewById(R.id.vod_detail_imagefilename_imageview);
-        mPriceTextView        = (TextView)findViewById(R.id.vod_detail_price_textview);
-        mViewableTextView     = (TextView)findViewById(R.id.vod_detail_viewable_textview);
-        mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
+        mTitleTextView        = (TextView)findViewById(R.id.vod_detail_bundle_title);
+        mMovieImageImageView  = (NetworkImageView)findViewById(R.id.vod_detail_bundle_imagefilename_imageview);
+        mPriceTextView        = (TextView)findViewById(R.id.vod_detail_bundle_price_textview);
+        mPricelistTextView    = (TextView)findViewById(R.id.vod_detail_bundle_pricelist_textview);
+        PricevbatTextview     = (TextView)findViewById(R.id.vod_detail_bundle_pricevbat_textview);
+        mTimeTextView         = (TextView)findViewById(R.id.vod_detail_bundle_time_textview);
+        mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_bundle_device_mobile_imageview);
 
         mPoster1 = (NetworkImageView)findViewById(R.id.poster1_netwokr_imageview);
         mPoster2 = (NetworkImageView)findViewById(R.id.poster1_netwokr_imageview);
@@ -130,7 +140,7 @@ public class VodDetailBundleActivity extends Activity {
         mPrice4 = (TextView)findViewById(R.id.poster4_price_textview);
         mPrice5 = (TextView)findViewById(R.id.poster5_price_textview);
 
-
+        mAleady = (TextView)findViewById(R.id.vod_detail_bundle_already_textview);
 
         ImageButton backButton = (ImageButton)findViewById(R.id.vod_detail_bundle_topmenu_left_imagebutton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +151,7 @@ public class VodDetailBundleActivity extends Activity {
             }
         });
 
-        Button okButton = (Button)findViewById(R.id.vod_detail_bundle_ok_button);
+        okButton = (Button)findViewById(R.id.vod_detail_bundle_ok_button);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +181,6 @@ public class VodDetailBundleActivity extends Activity {
 //            }
 //        });
 
-        
         requestGetBundleProductInfo();
     }
 
@@ -211,7 +220,59 @@ public class VodDetailBundleActivity extends Activity {
 
                     // asset
                     JSONObject bundleProduct = jo.getJSONObject("bundleProduct");
+
+                    String joProductName = bundleProduct.getString("productName"); // 패키지 이름
+                    String joImageFileName = bundleProduct.getString("imageFileName"); // 이미지
+                    String joPurchasedTime = bundleProduct.getString("purchasedTime"); // 구매시간
+                    String joSuggestedPrice = bundleProduct.getString("suggestedPriceTotal"); // 총합
+                    String joPrice = bundleProduct.getString("price"); // 가격
+                    String joRentalDuration = bundleProduct.getString("rentalDuration"); // 유효기간
+                    String joRentalDurationUnit = bundleProduct.getString("rentalDurationUnit"); // 유효기간 단위 0: hour, 1: day, 2: week, 3: month, 4: year
+                    String joMobilePublicationRight = bundleProduct.getString("mobilePublicationRight"); // 모바일 유무
+
+                    mTitleTextView.setText(joProductName);
+                    mMovieImageImageView.setImageUrl(joImageFileName, mImageLoader);
+                    if ( joPurchasedTime == null ) {
+                        mPriceTextView.setVisibility(View.VISIBLE);
+                        mPriceTextView.setText(joSuggestedPrice + " 원");
+                        mPriceTextView.setPaintFlags(mPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        mPricelistTextView.setVisibility(View.VISIBLE);
+                        mPricelistTextView.setText(joPrice + " 원");
+                        PricevbatTextview.setVisibility(View.VISIBLE);
+                        mAleady.setVisibility(View.GONE);
+                        okButton.setVisibility(View.VISIBLE);
+                    } else if ( joPurchasedTime != null ) {
+                        mPriceTextView.setText("이미 구매하셨습니다.");
+                        String strColor = "#7b5aa3";
+                        mPriceTextView.setTextColor(Color.parseColor(strColor));
+                        mAleady.setVisibility(View.GONE);
+                        okButton.setVisibility(View.VISIBLE);
+                        mAleady.setVisibility(View.VISIBLE);
+                        okButton.setVisibility(View.GONE);
+                    }
+
+                    if ( "0".equals(joRentalDurationUnit) ) {
+                        joRentalDurationUnit = "시간";
+                    } else if ( "1".equals(joRentalDurationUnit) ) {
+                        joRentalDurationUnit = "일";
+                    } else if ( "2".equals(joRentalDurationUnit) ) {
+                        joRentalDurationUnit = "주";
+                    } else if ( "3".equals(joRentalDurationUnit) ) {
+                        joRentalDurationUnit = "개월";
+                    } else if ( "4".equals(joRentalDurationUnit) ) {
+                        joRentalDurationUnit = "년";
+                    }
+
+                    mTimeTextView.setText(joRentalDuration + joRentalDurationUnit);
+
+                    if ( "0".equals(joMobilePublicationRight) ) {
+                        mMobileImageView.setVisibility(View.GONE);
+                    } else if ( "1".equals(joMobilePublicationRight) ) {
+                        mMobileImageView.setVisibility(View.VISIBLE);
+                    }
+
                     mBundleAssetList         = bundleProduct.getJSONArray("bundleAssetList");
+
 
                     for ( int i = 0; i < mBundleAssetList.length(); i++ ) {
                         JSONObject bundle = mBundleAssetList.getJSONObject(i);
@@ -223,7 +284,7 @@ public class VodDetailBundleActivity extends Activity {
                             mPoster1.setVisibility(View.VISIBLE);
                             mPoster1.setImageUrl(imageFileName, mImageLoader);
                             mTitle1.setText(displayName);
-                            mPrice1.setText(UiUtil.toNumFormat((int)suggestedPrice));
+                            mPrice1.setText(UiUtil.toNumFormat((int)suggestedPrice) + " 원");
                             mPoster1.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
@@ -234,16 +295,60 @@ public class VodDetailBundleActivity extends Activity {
                             });
                         }
                         if ( i == 1 ) {
-
+                            mPoster2.setVisibility(View.VISIBLE);
+                            mPoster2.setImageUrl(imageFileName, mImageLoader);
+                            mTitle2.setText(displayName);
+                            mPrice2.setText(UiUtil.toNumFormat((int)suggestedPrice));
+                            mPoster1.setOnClickListener(new View.OnClickListener(){
+                                @Override
+                                public void onClick(View v){
+                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
+                                    intent.putExtra("assetId", assetId2);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                         if ( i == 2 ) {
-
+                            mPoster3.setVisibility(View.VISIBLE);
+                            mPoster3.setImageUrl(imageFileName, mImageLoader);
+                            mTitle3.setText(displayName);
+                            mPrice3.setText(UiUtil.toNumFormat((int)suggestedPrice));
+                            mPoster3.setOnClickListener(new View.OnClickListener(){
+                                @Override
+                                public void onClick(View v){
+                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
+                                    intent.putExtra("assetId", assetId2);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                         if ( i == 3 ) {
-
+                            mPoster4.setVisibility(View.VISIBLE);
+                            mPoster4.setImageUrl(imageFileName, mImageLoader);
+                            mTitle4.setText(displayName);
+                            mPrice4.setText(UiUtil.toNumFormat((int)suggestedPrice));
+                            mPoster4.setOnClickListener(new View.OnClickListener(){
+                                @Override
+                                public void onClick(View v){
+                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
+                                    intent.putExtra("assetId", assetId2);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                         if ( i == 4 ) {
-
+                            mPoster5.setVisibility(View.VISIBLE);
+                            mPoster5.setImageUrl(imageFileName, mImageLoader);
+                            mTitle5.setText(displayName);
+                            mPrice5.setText(UiUtil.toNumFormat((int)suggestedPrice));
+                            mPoster5.setOnClickListener(new View.OnClickListener(){
+                                @Override
+                                public void onClick(View v){
+                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
+                                    intent.putExtra("assetId", assetId2);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     }
 //
