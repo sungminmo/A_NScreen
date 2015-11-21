@@ -147,17 +147,11 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
             @Override
             public int onChangeSwipeMode(int position) {
-//                int swipeMode = 0;
-//                switch (position%2)
-//                {
-//                    case 0:// 기본설정된 Swipe모드
-//                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-//                        break;
-//                    case 1:// Swipe None
-//                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
-//                        break;
-//                }
-                return super.onChangeSwipeMode(position);
+//
+                int swipemode = mProgramlist.get(position).getSwipeMode();
+
+                return swipemode;
+//                return super.onChangeSwipeMode(position);
             }
 
             @Override

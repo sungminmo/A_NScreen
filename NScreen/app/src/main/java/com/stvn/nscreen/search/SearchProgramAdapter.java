@@ -49,7 +49,6 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
     private SimpleDateFormat mTodayFormat;
     private SimpleDateFormat mCompareFormat;
     private Date mToday;
-    private ViewGroup mParent;
 
 
     public SearchProgramAdapter(Context context, List<SearchProgramDataObject> items) {
@@ -126,7 +125,6 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
             holder = (ViewHolder) convertView.getTag();
         }
 
-        mParent = parent;
         ((SwipeListView) parent).recycle(convertView, position);
         SearchProgramDataObject item = getItem(position);
         holder.chlogo.setImageUrl(item.getChannelLogoImg(), mImageLoader);
@@ -192,7 +190,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
         holder.cancelreservationrec.setTag(position);
         holder.setreservationwatch.setTag(position);
         holder.cancelreservationwatch.setTag(position);
-        ((SwipeListView) mParent).setSwipeMode(SwipeListView.SWIPE_MODE_DEFAULT);
+        item.setSwipeMode(SwipeListView.SWIPE_MODE_DEFAULT);
         if (item == null) {
             holder.notPairing.setVisibility(View.VISIBLE);
         }
@@ -233,7 +231,8 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                     if(mToday.compareTo(date)>0) //현재방송중이거나 과거방송
                     {
                         // 정책변경으로 인해 현재 방송중인 프로그램은 레이어 노출 불가
-                        ((SwipeListView) mParent).setSwipeMode(SwipeListView.SWIPE_MODE_NONE);
+                        item.setSwipeMode(SwipeListView.SWIPE_MODE_NONE);
+//                        ((SwipeListView) mParent).setSwipeMode(SwipeListView.SWIPE_MODE_NONE);
                     }else
                     {
                         JSONObject reservItem = getStbRecordReserveWithChunnelId(item.getChannelId(), item);
