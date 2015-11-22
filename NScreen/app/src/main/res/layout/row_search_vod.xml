@@ -30,8 +30,8 @@
         android:textSize="10.5sp"
         android:textColor="@color/black"
         android:gravity="center_horizontal|top"
-        android:maxLines="2"
         android:id="@+id/programname"
+        android:singleLine="true"
         />
 
 

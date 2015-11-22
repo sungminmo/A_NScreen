@@ -91,6 +91,7 @@ public class SearchMainActivity extends CMBaseActivity {
         mKeywordView.addTextChangedListener(mKeywordWatcher);
         mKeywordEmptyView = (TextView)findViewById(R.id.keyword_emptyview);
         mKeywordEmptyView.setVisibility(View.VISIBLE);
+        mKeywordEmptyView.setText("성인 콘텐츠를 검색하시려면\n설정 > 성인검색 제한 설정을 해제 해주세요.");
         mKeywordListView.setVisibility(View.GONE);
         mClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +210,8 @@ public class SearchMainActivity extends CMBaseActivity {
                 }else
                 {
                     mKeywordListView.setVisibility(View.GONE);
-                    mKeywordEmptyView.setVisibility(View.GONE);
+                    mKeywordEmptyView.setText("검색 창에 원하시는 검색어를\n입력해주세요.");
+                    mKeywordEmptyView.setVisibility(View.VISIBLE);
                 }
                 mAdapter.notifyDataSetChanged();;
             }

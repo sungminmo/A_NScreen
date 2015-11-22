@@ -28,6 +28,8 @@ import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMLog;
 import com.stvn.nscreen.util.CMUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -38,6 +40,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +69,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
     private JYSharedPreferences mPref;
     private boolean mLockListView = true;
+    private ArrayList<JSONObject> mStbRecordReservelist = new ArrayList<JSONObject>();
+    private HashMap<String, Object>   RemoteChannelControl = new HashMap<String,Object>();
 
     @Nullable
     @Override
@@ -86,8 +91,9 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
         if (mPref.isPairingCompleted() == true) { // 페어링 했을 시
             requestGetSetTopStatus(); // 셋탑 상태 - 예약녹화물 리스트 - 한 채널 평성표 차례대로 호출.
         } else { // 페어링 안했을 시
-            reqProgramList();
+            requestGetRecordReservelist();
         }
+//            reqProgramList();
     }
 
     private void initView()
@@ -141,17 +147,11 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
             @Override
             public int onChangeSwipeMode(int position) {
-//                int swipeMode = 0;
-//                switch (position%2)
-//                {
-//                    case 0:// 기본설정된 Swipe모드
-//                        swipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-//                        break;
-//                    case 1:// Swipe None
-//                        swipeMode = SwipeListView.SWIPE_MODE_NONE;
-//                        break;
-//                }
-                return super.onChangeSwipeMode(position);
+//
+                int swipemode = mProgramlist.get(position).getSwipeMode();
+
+                return swipemode;
+//                return super.onChangeSwipeMode(position);
             }
 
             @Override
@@ -169,6 +169,21 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             }
 
         });
+    }
+
+    private void reloadAll()
+    {
+        pageNo = 0;
+        limitCnt = 10;
+        mTotCnt = 0;
+        mProgramlist.clear();
+        mStbRecordReservelist.clear();
+        if (mPref.isPairingCompleted() == true) { // 페어링 했을 시
+            requestGetSetTopStatus(); // 셋탑 상태 - 예약녹화물 리스트 - 한 채널 평성표 차례대로 호출.
+        } else { // 페어링 안했을 시
+            requestGetRecordReservelist();
+        }
+
     }
 
     private void requestGetSetTopStatus() {
@@ -203,7 +218,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
                     CMAlertUtil.Alert(getActivity(), "알림", sb.toString());
                 }
-                reqProgramList();
+//                reqProgramList();
+                requestGetRecordReservelist();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -275,6 +291,140 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
         }
     }
 
+    /* 녹화 예약 목록 호출 */
+    private void requestGetRecordReservelist() {
+        ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+        String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
+        String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        // for test
+        //String          url     = "http://192.168.44.10/SMApplicationserver/getrecordReservelist.asp?Version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&deviceId=68590725-3b42-4cea-ab80-84c91c01bad2";
+        String          url     = mPref.getRumpersServerUrl() + "/getRecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
+                String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
+                if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
+                    reqProgramList();
+                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
+                    reqProgramList();
+                } else { // 그외는 error
+                    String msg = "getRecordReservelist("+sResultCode+":"+mStbStateMap.get("errorString")+")";
+                    CMAlertUtil.Alert(getActivity(), "알림", msg);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private String parseGetRecordReservelist(String response) {
+        String               sResultCode = "0";   // 응답받은 resultCode
+        StringBuilder        sb          = new StringBuilder();
+        StringBuilder        sb2         = new StringBuilder(); // for array
+        XmlPullParserFactory factory     = null;
+        List<String> strings     = new ArrayList<String>();
+
+        response = response.replace("<![CDATA[","");
+        response = response.replace("]]>", "");
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("UTF-8")), "UTF-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("response")) {
+                        //
+                    } else if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        sResultCode = xpp.nextText(); mStbStateMap.put("resultCode",sResultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        mStbStateMap.put("errorString",xpp.nextText());
+                    } else if (xpp.getName().equalsIgnoreCase("Reserve_Item")) {
+                        //
+                    } else if (xpp.getName().equalsIgnoreCase("RecordingType")) {
+                        // array start -------------------------------------------------------------
+                        sb2.append("{\"RecordingType\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("OverlapId")) {
+                        sb2.append(",\"OverlapId\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("SeriesId")) {
+                        sb2.append(",\"SeriesId\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("ScheduleId")) {
+                        sb2.append(",\"ScheduleId\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("ChannelId")) {
+                        sb2.append(",\"ChannelId\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("ChannelNo")) {
+                        sb2.append(",\"ChannelNo\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("ChannelName")) {
+                        sb2.append(",\"ChannelName\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("Program_Grade")) {
+                        sb2.append(",\"Program_Grade\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("Channel_logo_img")) {
+                        sb2.append(",\"Channel_logo_img\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("ProgramName")) {
+                        sb2.append(",\"ProgramName\":\"").append(xpp.nextText()).append("\"");  // <![CDATA[ ]]>  한글 깨짐.
+                    } else if (xpp.getName().equalsIgnoreCase("RecordStartTime")) {
+                        sb2.append(",\"RecordStartTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("RecordEndTime")) {
+                        sb2.append(",\"RecordEndTime\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("RecordHD")) {
+                        sb2.append(",\"RecordHD\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("RecordPaytype")) {
+                        sb2.append(",\"RecordPaytype\":\"").append(xpp.nextText()).append("\"");
+                    } else if (xpp.getName().equalsIgnoreCase("RecordStatus")) {
+                        // array end -----------------------------------------------------------
+                        sb2.append(",\"RecordStatus\":\"").append(xpp.nextText()).append("\"}");
+                        strings.add(sb2.toString());
+                        sb2.setLength(0);
+                        //} else if ( bStartedArr == true && xpp.getName().equalsIgnoreCase("Reserve_Item")) {
+
+                    } else if (xpp.getName().equalsIgnoreCase("response")) {
+                        //
+                    }
+                }
+                eventType = xpp.next();
+            }
+            sb.append("}");
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if ( strings.size() > 0 ) {
+            try {
+                for (int i = 0; i < strings.size(); i++) {
+                    String str = strings.get(i);
+                    mStbRecordReservelist.add(new JSONObject(str));
+                }
+            } catch ( JSONException e ) {
+                e.printStackTrace();
+            }
+            mAdapter.setStbRecordReservelist(mStbRecordReservelist);
+        }
+
+        return sResultCode;
+    }
+
+
     public void reqProgramList()
     {
         mLockListView = true;
@@ -288,6 +438,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
         }
         //String url = Constants.SERVER_URL_AIRCODE_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+mKeyword+"&offset="+pageNo+"&limit="+limitCnt;
         String url = Constants.SERVER_URL_AIRCODE_REAL+"/searchSchedule.xml?version=1&areaCode="+mAreaCode+"&searchString="+searchWord+"&offset="+pageNo+"&limit="+limitCnt;
+        CMLog.d("ljh","url : "+url);
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -391,9 +542,158 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
         }
     }
 
+
+    /* 예약녹화 */
+    private void requestSetRecordReserve(String channelId, String starttime) {
+        ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
+                parseSetRecordReserve(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                } else {
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    CMAlertUtil.Alert(getActivity(), "알림", errorString);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
+
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecordReserve(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* 예약 녹화 취소 */
+    private void requestSetRecordCancelReserve(String channelId, String starttime, String seriesId) {
+        ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordCancelReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime + "&seriesId=" + seriesId + "&ReserveCancel=2";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
+                parseSetRecordCancelReserve(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    // ok
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                } else  {        // Hold Mode
+                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    CMAlertUtil.Alert(getActivity(), "알림", errorString);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((SearchMainActivity)getActivity()).hideProgressDialog();
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseSetRecordCancelReserve(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        RemoteChannelControl.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        RemoteChannelControl.put("errorString", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     View.OnClickListener mSwipeButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            int position = (int)v.getTag();
             switch (v.getId())
             {
                 case R.id.watch_tv:         // TV로 시청
@@ -403,8 +703,27 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 case R.id.rec_stop:         // 녹화중지
                     break;
                 case R.id.set_reservation_rec: //예약녹화설정
+                    try {
+                        JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
+                        String starttime = null;
+                        starttime = reservjo.getString("RecordStartTime");
+                        requestSetRecordReserve(mProgramlist.get(position).getChannelId(), starttime);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case R.id.cancel_reservation_rec: // 예약녹화취소
+                    try {
+                        JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
+                        String starttime = null;
+                        starttime = reservjo.getString("RecordStartTime");
+                        String seriesid = reservjo.getString("SeriesId");
+                        requestSetRecordCancelReserve(mProgramlist.get(position).getChannelId(), starttime, seriesid);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case R.id.set_reservation_watch: //예약시청설정
                     break;
@@ -413,6 +732,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             }
         }
     };
+
+
 
 
     @Override
