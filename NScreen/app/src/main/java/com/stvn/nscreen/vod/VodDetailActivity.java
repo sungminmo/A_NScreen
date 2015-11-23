@@ -565,7 +565,7 @@ public class VodDetailActivity extends Activity {
                 mSeriesLinearLayout.setVisibility(View.VISIBLE);
 
                 if ( episodePeerExistence.length() > 0 ) {
-                    // 종진아 여기다가 처리 해줘.
+                    setUISeriesButton(episodePeerList);
                     // episodePeerList
                 } else {
                     // 기존의 getAssetInfo를 통해서 시리즈 표시하는 방법.
@@ -675,6 +675,78 @@ public class VodDetailActivity extends Activity {
                 mMobileImageView.setVisibility(View.VISIBLE);
             }
         } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setUISeriesButton(JSONArray assetList) {
+        try {
+            for ( int i = 0; i < assetList.length(); i++ ) {
+                JSONObject asset = (JSONObject) assetList.get(i);
+
+                series.add(asset);
+
+                String thisAssetId = "";
+                if ( asset.isNull("assetId") ) {
+                    thisAssetId = asset.getString("primaryAssetId");
+                } else {
+                    thisAssetId = asset.getString("assetId");
+                }
+                final String buttonAssetId = thisAssetId;
+
+                String categoryId          = asset.getString("categoryId");
+                String seriesCurIndex      = asset.getString("seriesCurIndex");
+                String seriesEndIndex      = asset.getString("seriesEndIndex");
+                String seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
+                String seriesId            = asset.getString("seriesId");
+
+                // Button seriesButton = new Button(mInstance);
+                // android:layout_width="41.25dp"
+                // android:layout_height="27.75dp"
+                // android:layout_marginLeft="15.5dp"
+
+                Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
+                seriesButton.setText(seriesCurIndex + "회");
+
+                if ( assetId.equals(buttonAssetId) ) {
+                    seriesButton.setSelected(true);
+                    seriesButton.setFocusable(true);
+                }
+
+                seriesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ( isSeriesLink.equals("YES") ) {
+                            refreshAll(buttonAssetId);
+                        } else {
+                            Intent intent = new Intent(mInstance, VodDetailActivity.class);
+                            intent.putExtra("assetId", buttonAssetId);
+                            startActivity(intent);
+                        }
+                    }
+                });
+
+                LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                ll.addView(seriesButton, lp);
+
+                if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
+                    mSeriesScrollView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_RIGHT); // 1회를 표시한다.
+                        }
+                    });
+                } else { // 종료되지 않은 시리즈.
+                    mSeriesScrollView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_LEFT); // 가장 최근 회를 표시한다.
+                        }
+                    });
+                }
+            }
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -1125,64 +1197,7 @@ public class VodDetailActivity extends Activity {
                     JSONObject jo            = new JSONObject(response);
                     JSONArray  assetList     = jo.getJSONArray("assetList");
 
-                    for ( int i = 0; i < assetList.length(); i++ ) {
-                        JSONObject asset = (JSONObject) assetList.get(i);
-
-                        series.add(asset);
-
-                        final String buttonAssetId = asset.getString("assetId");
-                        String categoryId          = asset.getString("categoryId");
-                        String seriesCurIndex      = asset.getString("seriesCurIndex");
-                        String seriesEndIndex      = asset.getString("seriesEndIndex");
-                        String seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
-                        String seriesId            = asset.getString("seriesId");
-
-                        // Button seriesButton = new Button(mInstance);
-                        // android:layout_width="41.25dp"
-                        // android:layout_height="27.75dp"
-                        // android:layout_marginLeft="15.5dp"
-
-                        Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
-                        seriesButton.setText(seriesCurIndex + "회");
-
-                        if ( assetId.equals(buttonAssetId) ) {
-                            seriesButton.setSelected(true);
-                            seriesButton.setFocusable(true);
-                        }
-
-                        seriesButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if ( isSeriesLink.equals("YES") ) {
-                                    refreshAll(buttonAssetId);
-                                } else {
-                                    Intent intent = new Intent(mInstance, VodDetailActivity.class);
-                                    intent.putExtra("assetId", buttonAssetId);
-                                    startActivity(intent);
-                                }
-                            }
-                        });
-
-                        LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        ll.addView(seriesButton, lp);
-
-                        if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
-                            mSeriesScrollView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSeriesScrollView.fullScroll(ScrollView.FOCUS_RIGHT); // 1회를 표시한다.
-                                }
-                            });
-                        } else { // 종료되지 않은 시리즈.
-                            mSeriesScrollView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSeriesScrollView.fullScroll(ScrollView.FOCUS_LEFT); // 가장 최근 회를 표시한다.
-                                }
-                            });
-                        }
-                    }
+                    setUISeriesButton(assetList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
