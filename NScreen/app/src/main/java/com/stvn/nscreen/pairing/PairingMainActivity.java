@@ -77,15 +77,16 @@ public class PairingMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if ( ! mPurchasePassword1Edittext.getText().toString().equals(mPurchasePassword2Edittext.getText().toString()) ) {
+                if ( ! mPurchasePassword2Edittext.getText().toString().equals(mPurchasePassword1Edittext.getText().toString()) ) {
                     String alertTitle = "비밀번호 오류";
                     String alertMsg1 = "비밀번호가 일치하지 않습니다.";
                     String alertMsg2 = "";
                     CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mPurchasePassword1Edittext.getText().clear();
                             mPurchasePassword2Edittext.getText().clear();
+                            mPurchasePassword1Edittext.getText().clear();
+                            mPurchasePassword1Edittext.requestFocus();
                         }
                     }, true);
                 } else {

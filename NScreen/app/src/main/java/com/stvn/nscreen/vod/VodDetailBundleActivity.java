@@ -232,7 +232,7 @@ public class VodDetailBundleActivity extends Activity {
 
                     mTitleTextView.setText(joProductName);
                     mMovieImageImageView.setImageUrl(joImageFileName, mImageLoader);
-                    if ( joPurchasedTime == null ) {
+                    if ( "".equals(joPurchasedTime) ) {
                         mPriceTextView.setVisibility(View.VISIBLE);
                         mPriceTextView.setText(joSuggestedPrice + " 원");
                         mPriceTextView.setPaintFlags(mPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -241,7 +241,7 @@ public class VodDetailBundleActivity extends Activity {
                         PricevbatTextview.setVisibility(View.VISIBLE);
                         mAleady.setVisibility(View.GONE);
                         okButton.setVisibility(View.VISIBLE);
-                    } else if ( joPurchasedTime != null ) {
+                    } else if ( !"".equals(joPurchasedTime) ) {
                         mPriceTextView.setText("이미 구매하셨습니다.");
                         String strColor = "#7b5aa3";
                         mPriceTextView.setTextColor(Color.parseColor(strColor));
