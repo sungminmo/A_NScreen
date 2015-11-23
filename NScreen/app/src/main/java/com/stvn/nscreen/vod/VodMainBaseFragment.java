@@ -96,6 +96,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
         mTab1TextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 mTab1TextView.setTypeface(null, Typeface.BOLD);
                 textView2.setTypeface(null, Typeface.NORMAL);
                 textView3.setTypeface(null, Typeface.NORMAL);

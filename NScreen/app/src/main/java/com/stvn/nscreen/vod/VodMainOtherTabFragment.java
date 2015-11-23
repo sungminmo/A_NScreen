@@ -1,9 +1,13 @@
 package com.stvn.nscreen.vod;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -67,6 +71,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     private              ImageLoader            mImageLoader;
     private              SubCategoryObject      mCurrCategoryObject;
 
+    private              BroadcastReceiver      mBroadcastReceiver;
+    private              boolean                isNeedReloadData; // 성인인증.
+
     // gui
     private              GridView               mGridView;
     private              VodMainGridViewAdapter mAdapter;
@@ -97,6 +104,44 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                isNeedReloadData = true;
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("I_AM_ADULT");
+        getActivity().registerReceiver(mBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if ( mBroadcastReceiver != null ) {
+            getActivity().unregisterReceiver(mBroadcastReceiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ( isNeedReloadData == true ) {
+            isNeedReloadData = false;
+            if ( getiMyTabNumber() == 1 ) {
+                textView2.performClick();
+            } else if ( getiMyTabNumber() == 2 ) {
+                textView3.performClick();
+            } else if ( getiMyTabNumber() == 3 ) {
+                textView4.performClick();
+            } else if ( getiMyTabNumber() == 4 ) {
+                textView5.performClick();
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +158,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mCurrCategoryObject = new SubCategoryObject();
 
         mInstance     = this;
-        mPref         = new JYSharedPreferences(this.getActivity());
+        if ( mPref == null ) {
+            mPref = new JYSharedPreferences(this.getActivity());
+        }
         mRequestQueue = Volley.newRequestQueue(this.getActivity());
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
         mImageLoader  = new ImageLoader(mRequestQueue, imageCache);
@@ -305,6 +352,8 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 String     parentCategoryId = jo.getString("parentCategoryId");
                 String     viewerType       = jo.getString("viewerType");
 
+
+
                 if ( leaf == true || ( leaf == false && "30".equals(viewerType)) ) { // 하부카테고리가 없으므로 닫을 것.
                     mCategoryBgFramelayout.setVisibility(View.GONE);
                     mCategoryId = categoryId;
@@ -356,6 +405,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 //if ( leaf == false && mCategoryId.equals(parentCategoryId) ) {
                 if ( mCategoryId.equals(parentCategoryId) ) {
                     mCateDepth1.put(categoryId, parentCategoryId);
+                }
+                if ( "1598483".equals(categoryId) ) {
+                    Log.d(tag, "aaa");
                 }
             }
             for ( int i = 0; i < categorys.size(); i++ ) {
@@ -645,6 +697,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mRequestQueue.add(request);
     }
 
+
     /**
      * IOnBackPressedListener
      */
@@ -652,4 +705,6 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     public void onBackPressedCallback() {
         mTab1TextView.performClick();
     }
+
+
 }

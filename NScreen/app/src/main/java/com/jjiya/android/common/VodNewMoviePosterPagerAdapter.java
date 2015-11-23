@@ -47,6 +47,10 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
         mPref           = new JYSharedPreferences(c);
     }
 
+    public void clear() {
+        mVods.clear();
+    }
+
     public void setFragment(Fragment f) {
         mFragment = f;
     }

@@ -51,6 +51,10 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
         mFragment = f;
     }
 
+    public void clear(){
+        mVods.clear();
+    }
+
     /**
      * 디폴트 메소드 구현 부.
      */

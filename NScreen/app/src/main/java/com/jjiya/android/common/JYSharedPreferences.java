@@ -19,6 +19,7 @@ import com.stvn.nscreen.bean.MainCategoryObject;
 import com.stvn.nscreen.bean.WatchTvObject;
 import com.stvn.nscreen.bean.WatchVodObject;
 import com.stvn.nscreen.bean.WishObject;
+import com.stvn.nscreen.vod.VodMainBaseFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,16 +81,17 @@ public class JYSharedPreferences {
 
     // Public TerminalKey = 8A5D2E45D3874824FF23EC97F78D358
     // Private terminalKey = C5E6DBF75F13A2C1D5B2EFDB2BC940
-    public final static String WEBHAS_PUBLIC_TERMINAL_KEY = "A9D0D3B07231F38878AB0979D7C315A";
+    public final static String WEBHAS_PUBLIC_TERMINAL_KEY  = "A9D0D3B07231F38878AB0979D7C315A";
     public final static String WEBHAS_PRIVATE_TERMINAL_KEY = "WEBHAS_PRIVATE_TERMINAL_KEY"; // 폰마다 다른 키값.
-    public final static String PURCHASE_PASSWORD = "PURCHASE_PASSWORD"; // 구매비밀번호.
-    public final static String VOD_OTHER_TAB_CATEGORY_ID = "VOD_OTHER_TAB_CATEGORY_ID";
+    public final static String PURCHASE_PASSWORD           = "PURCHASE_PASSWORD"; // 구매비밀번호.
+    public final static String VOD_OTHER_TAB_CATEGORY_ID   = "VOD_OTHER_TAB_CATEGORY_ID";
+
 
     public JYSharedPreferences(Context c) {
         mContext = c;
         //RealmConfiguration config = new RealmConfiguration.Builder(mContext).build();
         //Realm.deleteRealm(config);
-        mRealm   = Realm.getInstance(c);
+        mRealm = Realm.getInstance(c);
     }
 
     public boolean isLogging() {

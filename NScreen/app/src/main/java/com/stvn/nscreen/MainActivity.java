@@ -3,7 +3,11 @@ package com.stvn.nscreen;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,51 +38,29 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String              tag = MainActivity.class.getSimpleName();
-    public  static       MainActivity        mInstance;
-    private IOnBackPressedListener mIOnBackPressedListener;
-    private              JYSharedPreferences mPref;
-    private              ProgressDialog      mProgressDialog;
+    private static final String                 tag = MainActivity.class.getSimpleName();
+    public  static       MainActivity           mInstance;
+    private              IOnBackPressedListener mIOnBackPressedListener;
+    private              JYSharedPreferences    mPref;
+    private              ProgressDialog         mProgressDialog;
     // network
-    private              RequestQueue        mRequestQueue;
+    private              RequestQueue           mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         mInstance     = this;
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
 
-
         String sWebhasTerminalKey = mPref.getWebhasTerminalKey();
         Log.d(tag, "sWebhasTerminalKey:"+sWebhasTerminalKey);
-
-
-
-
 
         if ( mPref.isPairingCompleted() ) {
             requestGetWishList();
         }
-
-
-        /**
-         * @param programId "S321387639"
-         * @param seriesId ""
-         * @param programTitle "국악무대"
-         * @param programBroadcastingStartTime "2015-11-10 16:02:00"
-         */
-        //mPref.addWatchTvAlarm("S321387639", "", "국악무대5000",  "2015-11-10 20:50:00");
-        //mPref.addWatchTvAlarm("S321387640", "", "국악무대5030",  "2015-11-10 20:50:30");
-        //mPref.addWatchTvAlarm("S321387641", "", "국악무대5100",  "2015-11-10 20:51:00");
-        //mPref.addWatchTvAlarm("S321387642", "", "국악무대5130",  "2015-11-10 20:51:30");
-        //mPref.addWatchTvAlarm("S321387643", "", "국악무대10", "2015-11-10 20:54:00");
-
-        //mPref.removeWatchTvAlarm(1);
 
         /* StatusBarColor ----------------------------------------------------------------------- */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -87,13 +70,19 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.violet));              // finally change the color
         }
 
-
         VodMainFirstTabFragment firstTabFragment = new VodMainFirstTabFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_placeholder, firstTabFragment);
         fragmentTransaction.addToBackStack("VodMainOtherTabFragment");
         fragmentTransaction.commit();
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -108,33 +97,6 @@ public class MainActivity extends AppCompatActivity {
     public void setOnBackPressedListener(IOnBackPressedListener listener) {
         mIOnBackPressedListener = listener;
     }
-
-    /*
-    class MainTabsListener implements ActionBar.TabListener {
-        private Fragment fragment;
-        public MainTabsListener(Fragment fragment) {
-            this.fragment = fragment;
-        }
-
-        @Override
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            //do what you want when tab is reselected, I do nothing
-            //Toast.makeText(mInstance, "Reselected()", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            ft.replace(R.id.fragment_placeholder, fragment);
-            //Toast.makeText(mInstance, "Selected()", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            ft.remove(fragment);
-            //Toast.makeText(mInstance, "Unselected()", Toast.LENGTH_SHORT).show();
-        }
-    }
-    */
 
     /**
      * 찜하기 리스트 받기
