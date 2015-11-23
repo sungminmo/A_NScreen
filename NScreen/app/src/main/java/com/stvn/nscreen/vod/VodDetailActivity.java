@@ -113,6 +113,9 @@ public class VodDetailActivity extends Activity {
     private String primaryAssetId;       // intent param (episodePeerExistence==1일 경우 이값이 넘오온다.)
     private String episodePeerId;        // getEpisodePeerListByContentGroupId
     private JSONArray episodePeerList;
+    private String seriesCurIndex;        // getAssetListByEpisodePeerId
+    private String seriesEndIndex;        // getAssetListByEpisodePeerId
+    private String seriesTotalAssetCount; // getAssetListByEpisodePeerId
 
     private List<JSONObject> relationVods;
     private List<JSONObject> series;
@@ -565,8 +568,7 @@ public class VodDetailActivity extends Activity {
                 mSeriesLinearLayout.setVisibility(View.VISIBLE);
 
                 if ( episodePeerExistence.length() > 0 ) {
-                    setUISeriesButton(episodePeerList);
-                    // episodePeerList
+                    //
                 } else {
                     // 기존의 getAssetInfo를 통해서 시리즈 표시하는 방법.
                     String sCategoryId = asset.getString("categoryId");
@@ -687,18 +689,19 @@ public class VodDetailActivity extends Activity {
                 series.add(asset);
 
                 String thisAssetId = "";
+                int thisSeriesIndex = 0;
                 if ( asset.isNull("assetId") ) {
                     thisAssetId = asset.getString("primaryAssetId");
+                    thisSeriesIndex = asset.getInt("seriesIndex");
                 } else {
-                    thisAssetId = asset.getString("assetId");
+                    thisAssetId           = asset.getString("assetId");
+                    //seriesCurIndex        = asset.getString("seriesCurIndex");
+                    thisSeriesIndex       = asset.getInt("seriesCurIndex");
+                    seriesEndIndex        = asset.getString("seriesEndIndex");
+                    seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
                 }
                 final String buttonAssetId = thisAssetId;
 
-                String categoryId          = asset.getString("categoryId");
-                String seriesCurIndex      = asset.getString("seriesCurIndex");
-                String seriesEndIndex      = asset.getString("seriesEndIndex");
-                String seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
-                String seriesId            = asset.getString("seriesId");
 
                 // Button seriesButton = new Button(mInstance);
                 // android:layout_width="41.25dp"
@@ -706,7 +709,7 @@ public class VodDetailActivity extends Activity {
                 // android:layout_marginLeft="15.5dp"
 
                 Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
-                seriesButton.setText(seriesCurIndex + "회");
+                seriesButton.setText(thisSeriesIndex + "회");
 
                 if ( assetId.equals(buttonAssetId) ) {
                     seriesButton.setSelected(true);
@@ -927,7 +930,15 @@ public class VodDetailActivity extends Activity {
                     JSONObject jo        = new JSONObject(response);
                     JSONArray  assetList = jo.getJSONArray("assetList");
                     JSONObject asset     = (JSONObject)assetList.get(0);
+
+                    seriesCurIndex        = asset.getString("seriesCurIndex");
+                    seriesEndIndex        = asset.getString("seriesEndIndex");
+                    seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
+
                     setUIAsset(asset);
+
+                    setUISeriesButton(episodePeerList);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
