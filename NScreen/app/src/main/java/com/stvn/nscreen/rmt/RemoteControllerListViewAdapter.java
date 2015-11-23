@@ -2,6 +2,7 @@ package com.stvn.nscreen.rmt;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,11 +68,17 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
     }
 
     public String getChannelNumberWithChannelId(String cid) {
+        if ( cid == null ) {
+            return "";
+        }
         String rtn = "";
         for ( int i = 0; i < mDatas.size(); i++ ) {
             ListViewDataObject obj = mDatas.get(i);
             try {
                 JSONObject jo = new JSONObject(obj.sJson);
+                if ( cid == null || jo.isNull("channelId") ) {
+                    Log.d(tag, "getChannelNumberWithChannelId cid: " + cid);
+                }
                 String channelId = jo.getString("channelId");
                 if ( cid.equals(channelId) == true ) {
                     String channelNumber = jo.getString("channelNumber");
