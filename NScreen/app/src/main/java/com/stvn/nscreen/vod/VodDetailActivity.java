@@ -108,6 +108,12 @@ public class VodDetailActivity extends Activity {
 
     // activity
     private String assetId; // intent param
+    private String episodePeerExistence; // intent param (episodePeerExistence==1일 경우 이값이 넘오온다.)
+    private String contentGroupId;       // intent param (episodePeerExistence==1일 경우 이값이 넘오온다.)
+    private String primaryAssetId;       // intent param (episodePeerExistence==1일 경우 이값이 넘오온다.)
+    private String episodePeerId;        // getEpisodePeerListByContentGroupId
+    private JSONArray episodePeerList;
+
     private List<JSONObject> relationVods;
     private List<JSONObject> series;
     private FourVodPosterPagerAdapter mPagerAdapter;
@@ -151,6 +157,15 @@ public class VodDetailActivity extends Activity {
 
         //sJson   = getIntent().getExtras().getString("sJson");
         assetId   = getIntent().getExtras().getString("assetId");
+        if ( getIntent().getExtras().get("episodePeerExistence") == null ) {
+            episodePeerExistence = "";
+            contentGroupId       = "";
+            primaryAssetId       = "";
+        } else {
+            episodePeerExistence = getIntent().getExtras().getString("episodePeerExistence");
+            contentGroupId       = getIntent().getExtras().getString("contentGroupId");
+            primaryAssetId       = getIntent().getExtras().getString("primaryAssetId");
+        }
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
         // assetId = "www.hchoice.co.kr|M4132449LFO281926301";
 //        try {
@@ -413,8 +428,17 @@ public class VodDetailActivity extends Activity {
         // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
         /**
          * VOD 상세정보 요청
+         * episodePeerExistence
          */
-        requestGetAssetInfo();
+        if ( episodePeerExistence.length() > 0 ) {
+            // episodePeerExistence
+            // contentGroupId
+            requestGetEpisodePeerListByContentGroupId();
+        } else {
+            requestGetAssetInfo();
+        }
+
+
 
         /**
          * 화면 하단의 연관 VOD 요청
@@ -472,6 +496,189 @@ public class VodDetailActivity extends Activity {
         }
     }
 
+    private void setUIAsset(JSONObject asset) {
+        try {
+            fileName                    = asset.getString("fileName");
+            categoryId                  = asset.getString("categoryId");
+            String imageFileName        = asset.getString("imageFileName");
+            String rating               = asset.getString("rating");
+            String reviewRatingCount    = asset.getString("reviewRatingCount");
+            String reviewRatingTotal    = asset.getString("reviewRatingTotal");
+            boolean HDContent           = asset.getBoolean("HDContent");
+            String genre                = asset.getString("genre");
+            String runningTime          = asset.getString("runningTime");
+            String director             = asset.getString("director");
+            String starring             = asset.getString("starring");
+            String synopsis             = asset.getString("synopsis");
+            String seriesId             = asset.getString("seriesId");
+            boolean seriesLink          = asset.getBoolean("seriesLink");
+            String promotionSticker     = asset.getString("promotionSticker");
+            String title                = asset.getString("title");
+            String publicationRight     = asset.getString("publicationRight"); // 1: TV ONLY, 2 MOBILE
+
+            discountCouponMasterIdList  = asset.getJSONArray("discountCouponMasterIdList");
+            productList                 = asset.getJSONArray("productList");
+            JSONObject product          = (JSONObject)productList.get(0);
+            productType                 = product.getString("productType");
+            productId                   = product.getString("productId");
+            goodId                      = product.getString("goodId");
+            Integer viewablePeriodState = product.getInt("viewablePeriodState");
+            String viewablePeriod       = product.getString("viewablePeriod");
+
+
+            String isNew                = ""; // 0:없음, 1:있음.
+            Object isNewObj             = asset.get("isNew");
+            if ( isNewObj != null ) { isNew = asset.getString("isNew"); }
+            String assetNew          = "0"; // 0:없음, 1:new일부만, 2:new단체
+            if ( ! asset.isNull("assetNew") ) {
+                assetNew = asset.getString("assetNew");
+            }
+            String assetHot          = "0"; // 0:없음, 1:new일부만, 2:new단체
+            if ( ! asset.isNull("assetHot") ) {
+                assetHot = asset.getString("assetHot");
+            }
+            String hot               = ""; // 0:없음, 1:있음.
+            if ( ! asset.isNull("hot") ) {
+                hot = asset.getString("hot");
+            }
+
+            String runningTimeMinute = String.valueOf((Integer.parseInt(runningTime.substring(0, 2)) * 60) + Integer.parseInt(runningTime.substring(3))) + "분";
+            runningTime = runningTimeMinute;
+
+            String previewPeriod     = asset.getString("previewPeriod");      // 미리보기 시간.
+
+            // productList
+            //JSONArray productList    = asset.getJSONArray("productList");
+            //JSONObject product       = productLists.getJSONObject(0);
+            String price             = product.getString("price");
+            String listPrice         = product.getString("listPrice");
+            String purchasedId       = product.getString("purchasedId");
+            String purchasedTime     = product.getString("purchasedTime");
+
+            // LinearLayout 감추기/보이기 -----------------------------------------------------
+            // mSeriesLinearLayout   // 시리즈 회차 버튼
+            // mPurchaseLinearLayout // 미리비기/구매하기/찜하기
+            // mPlayLinearLayout     // 시청하기
+            // mTvOnlyLiearLayout    // TV에서 시청가능합니다.
+            if ( seriesLink == true ) {      // 시리즈 보여라
+                isSeriesLink = "YES";
+                mSeriesLinearLayout.setVisibility(View.VISIBLE);
+
+                if ( episodePeerExistence.length() > 0 ) {
+                    // 종진아 여기다가 처리 해줘.
+                    // episodePeerList
+                } else {
+                    // 기존의 getAssetInfo를 통해서 시리즈 표시하는 방법.
+                    String sCategoryId = asset.getString("categoryId");
+                    String sSeriesId   = asset.getString("seriesId");
+                    requestGetSeriesAssetList(sSeriesId, sCategoryId);
+                }
+            } else {                         // 시리즈 감춰라.
+                isSeriesLink = "NO";
+                mSeriesLinearLayout.setVisibility(View.GONE);
+            }
+            if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
+                mPlayLinearLayout.setVisibility(View.GONE);
+                if ( ! "2".equals(publicationRight) ) {
+                    mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                    mPurchaseLinearLayout.setVisibility(View.GONE);
+                } else {
+                    if ("0".equals(previewPeriod)) { // 미리보기 없음.
+                        mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
+                        mPurchaseLinearLayout.setVisibility(View.GONE);
+                    } else {
+                        mPurchaseLinearLayout.setVisibility(View.VISIBLE);
+                        mPurchaseLinearLayout2.setVisibility(View.GONE);
+                    }
+                }
+                // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
+                if ( "FOD".equals(productType) ) {
+                    mPurchaseLinearLayout.setVisibility(View.GONE);
+                    mPurchaseLinearLayout2.setVisibility(View.GONE);
+                    if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
+                        mTvOnlyTextView.setText("["+title+"] 은 (는)");
+                        mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        mPlayLinearLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+            } else {                         // 구매했다. 감쳐라.
+                mPurchaseLinearLayout2.setVisibility(View.GONE);
+                mPurchaseLinearLayout.setVisibility(View.GONE);
+                if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
+                    mTvOnlyTextView.setText("["+title+"] 은 (는)");
+                    mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    mPlayLinearLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+
+            // 값들 찍어주기. -----------------------------------------------------------------
+
+            mMovieImageImageView.setImageUrl(imageFileName, mImageLoader);
+
+            UiUtil.setPromotionSticker(promotionSticker, isNew, hot, assetNew, assetHot, mPromotionSticker);
+
+            if( viewablePeriodState == 1 ) {
+                mViewableTextView.setText("무제한시청");
+                viewable = "무제한시청";
+            } else {
+                viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10))) + "일";
+                viewablePeriod = viewable;
+                mViewableTextView.setText(viewablePeriod);
+            }
+
+            mTitleTextView.setText(asset.getString("title"));
+            mTitle = title;
+            if ( "00".equals(rating) ) {
+                mRatingImageView.setImageResource(R.mipmap.btn_age_all);
+            } else if ( "07".equals(rating) ) {
+                mRatingImageView.setImageResource(R.mipmap.btn_age_7);
+            } else if ( "12".equals(rating) ) {
+                mRatingImageView.setImageResource(R.mipmap.btn_age_12);
+            } else if ( "15".equals(rating) ) {
+                mRatingImageView.setImageResource(R.mipmap.btn_age_15);
+            } else if ( "19".equals(rating) ) {
+                mRatingImageView.setImageResource(R.mipmap.btn_age_19);
+            }
+            Float lreviewRatingCount = Float.parseFloat(reviewRatingCount);
+            Float lreviewRatingTotal = Float.parseFloat(reviewRatingTotal);
+            Float reviewRating = 0f;
+            if ( lreviewRatingTotal > 0 ) { reviewRating = lreviewRatingTotal / lreviewRatingCount;
+            }
+            UiUtil.setStarRating(reviewRating, mReviewStar1ImageView, mReviewStar2ImageView, mReviewStar3ImageView, mReviewStar4ImageView, mReviewStar5ImageView);
+
+            if ( HDContent == true ) {
+                mHdSdImageView.setImageResource(R.mipmap.btn_size_hd);
+            } else {
+                mHdSdImageView.setImageResource(R.mipmap.btn_size_sd);
+            }
+            sPrice = price;
+            sListPrice = listPrice;
+            if ( "".equals(purchasedTime) ) {
+                mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
+            } else {
+                mPriceTextView.setText("이미 구매하셨습니다.");
+                String strColor = "#7b5aa3";
+                mPriceTextView.setTextColor(Color.parseColor(strColor));
+            }
+            // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
+            if ( "FOD".equals(productType) || "0".equals(price) ) {
+                mPriceTextView.setText("무료시청");
+            }
+            mGenreTextView.setText(genre+" / "+runningTime);
+            mDirectorTextView.setText(director);
+            mStarringTextView.setText(starring);
+            mSynopsisTextView.setText(synopsis);
+            if ( "2".equals(publicationRight) ) {
+                mMobileImageView.setVisibility(View.VISIBLE);
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+    }
+
     private void requestGetAssetInfo() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetAssetInfo()"); }
@@ -488,185 +695,12 @@ public class VodDetailActivity extends Activity {
             public void onResponse(String response) {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
-
                 try {
                     JSONObject jo            = new JSONObject(response);
-
                     // asset
                     JSONObject asset            = jo.getJSONObject("asset");
-                    fileName                    = asset.getString("fileName");
-                    categoryId                  = asset.getString("categoryId");
-                    String imageFileName        = asset.getString("imageFileName");
-                    String rating               = asset.getString("rating");
-                    String reviewRatingCount    = asset.getString("reviewRatingCount");
-                    String reviewRatingTotal    = asset.getString("reviewRatingTotal");
-                    boolean HDContent           = asset.getBoolean("HDContent");
-                    String genre                = asset.getString("genre");
-                    String runningTime          = asset.getString("runningTime");
-                    String director             = asset.getString("director");
-                    String starring             = asset.getString("starring");
-                    String synopsis             = asset.getString("synopsis");
-                    String seriesId             = asset.getString("seriesId");
-                    boolean seriesLink          = asset.getBoolean("seriesLink");
-                    String promotionSticker     = asset.getString("promotionSticker");
-                    String title                = asset.getString("title");
-                    String publicationRight     = asset.getString("publicationRight"); // 1: TV ONLY, 2 MOBILE
 
-                    discountCouponMasterIdList  = asset.getJSONArray("discountCouponMasterIdList");
-                    productList                 = asset.getJSONArray("productList");
-                    JSONObject product          = (JSONObject)productList.get(0);
-                    productType                 = product.getString("productType");
-                    productId                   = product.getString("productId");
-                    goodId                      = product.getString("goodId");
-                    Integer viewablePeriodState = product.getInt("viewablePeriodState");
-                    String viewablePeriod       = product.getString("viewablePeriod");
-
-
-                    String isNew                = ""; // 0:없음, 1:있음.
-                    Object isNewObj             = asset.get("isNew");
-                    if ( isNewObj != null ) { isNew = asset.getString("isNew"); }
-                    String assetNew          = "0"; // 0:없음, 1:new일부만, 2:new단체
-                    if ( ! asset.isNull("assetNew") ) {
-                        assetNew = asset.getString("assetNew");
-                    }
-                    String assetHot          = "0"; // 0:없음, 1:new일부만, 2:new단체
-                    if ( ! asset.isNull("assetHot") ) {
-                        assetHot = asset.getString("assetHot");
-                    }
-                    String hot               = ""; // 0:없음, 1:있음.
-                    if ( ! asset.isNull("hot") ) {
-                        hot = asset.getString("hot");
-                    }
-
-                    String runningTimeMinute = String.valueOf((Integer.parseInt(runningTime.substring(0, 2)) * 60) + Integer.parseInt(runningTime.substring(3))) + "분";
-                    runningTime = runningTimeMinute;
-
-                    String previewPeriod     = asset.getString("previewPeriod");      // 미리보기 시간.
-
-                    // productList
-                    //JSONArray productList    = asset.getJSONArray("productList");
-                    //JSONObject product       = productLists.getJSONObject(0);
-                    String price             = product.getString("price");
-                    String listPrice         = product.getString("listPrice");
-                    String purchasedId       = product.getString("purchasedId");
-                    String purchasedTime     = product.getString("purchasedTime");
-
-                    // LinearLayout 감추기/보이기 -----------------------------------------------------
-                    // mSeriesLinearLayout   // 시리즈 회차 버튼
-                    // mPurchaseLinearLayout // 미리비기/구매하기/찜하기
-                    // mPlayLinearLayout     // 시청하기
-                    // mTvOnlyLiearLayout    // TV에서 시청가능합니다.
-                    if ( seriesLink == true ) {      // 시리즈 보여라
-                        isSeriesLink = "YES";
-                        mSeriesLinearLayout.setVisibility(View.VISIBLE);
-
-                        String sCategoryId = asset.getString("categoryId");
-                        String sSeriesId = asset.getString("seriesId");
-
-                        requestGetSeriesAssetList(sSeriesId, sCategoryId);
-
-                    } else {                         // 시리즈 감춰라.
-                        isSeriesLink = "NO";
-                        mSeriesLinearLayout.setVisibility(View.GONE);
-                    }
-                    if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
-                        mPlayLinearLayout.setVisibility(View.GONE);
-                        if ( ! "2".equals(publicationRight) ) {
-                            mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
-                            mPurchaseLinearLayout.setVisibility(View.GONE);
-                        } else {
-                            if ("0".equals(previewPeriod)) { // 미리보기 없음.
-                                mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
-                                mPurchaseLinearLayout.setVisibility(View.GONE);
-                            } else {
-                                mPurchaseLinearLayout.setVisibility(View.VISIBLE);
-                                mPurchaseLinearLayout2.setVisibility(View.GONE);
-                            }
-                        }
-                        // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
-                        if ( "FOD".equals(productType) ) {
-                            mPurchaseLinearLayout.setVisibility(View.GONE);
-                            mPurchaseLinearLayout2.setVisibility(View.GONE);
-                            if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
-                                mTvOnlyTextView.setText("["+title+"] 은 (는)");
-                                mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
-                            } else {
-                                mPlayLinearLayout.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    } else {                         // 구매했다. 감쳐라.
-                        mPurchaseLinearLayout2.setVisibility(View.GONE);
-                        mPurchaseLinearLayout.setVisibility(View.GONE);
-                        if ( ! "2".equals(publicationRight) ) { // 1: TV ONLY, 2 MOBILE
-                            mTvOnlyTextView.setText("["+title+"] 은 (는)");
-                            mTvOnlyLiearLayout.setVisibility(View.VISIBLE);
-                        } else {
-                            mPlayLinearLayout.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-
-                    // 값들 찍어주기. -----------------------------------------------------------------
-
-                    mMovieImageImageView.setImageUrl(imageFileName, mImageLoader);
-
-                    UiUtil.setPromotionSticker(promotionSticker, isNew, hot, assetNew, assetHot, mPromotionSticker);
-
-                    if( viewablePeriodState == 1 ) {
-                        mViewableTextView.setText("무제한시청");
-                        viewable = "무제한시청";
-                    } else {
-                        viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10))) + "일";
-                        viewablePeriod = viewable;
-                        mViewableTextView.setText(viewablePeriod);
-                    }
-
-                    mTitleTextView.setText(asset.getString("title"));
-                    mTitle = title;
-                    if ( "00".equals(rating) ) {
-                        mRatingImageView.setImageResource(R.mipmap.btn_age_all);
-                    } else if ( "07".equals(rating) ) {
-                        mRatingImageView.setImageResource(R.mipmap.btn_age_7);
-                    } else if ( "12".equals(rating) ) {
-                        mRatingImageView.setImageResource(R.mipmap.btn_age_12);
-                    } else if ( "15".equals(rating) ) {
-                        mRatingImageView.setImageResource(R.mipmap.btn_age_15);
-                    } else if ( "19".equals(rating) ) {
-                        mRatingImageView.setImageResource(R.mipmap.btn_age_19);
-                    }
-                    Float lreviewRatingCount = Float.parseFloat(reviewRatingCount);
-                    Float lreviewRatingTotal = Float.parseFloat(reviewRatingTotal);
-                    Float reviewRating = 0f;
-                    if ( lreviewRatingTotal > 0 ) { reviewRating = lreviewRatingTotal / lreviewRatingCount;
-                    }
-                    UiUtil.setStarRating(reviewRating, mReviewStar1ImageView, mReviewStar2ImageView, mReviewStar3ImageView, mReviewStar4ImageView, mReviewStar5ImageView);
-
-                    if ( HDContent == true ) {
-                        mHdSdImageView.setImageResource(R.mipmap.btn_size_hd);
-                    } else {
-                        mHdSdImageView.setImageResource(R.mipmap.btn_size_sd);
-                    }
-                    sPrice = price;
-                    sListPrice = listPrice;
-                    if ( "".equals(purchasedTime) ) {
-                        mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
-                    } else {
-                        mPriceTextView.setText("이미 구매하셨습니다.");
-                        String strColor = "#7b5aa3";
-                        mPriceTextView.setTextColor(Color.parseColor(strColor));
-                    }
-                    // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
-                    if ( "FOD".equals(productType) || "0".equals(price) ) {
-                        mPriceTextView.setText("무료시청");
-                    }
-                    mGenreTextView.setText(genre+" / "+runningTime);
-                    mDirectorTextView.setText(director);
-                    mStarringTextView.setText(starring);
-                    mSynopsisTextView.setText(synopsis);
-                    if ( "2".equals(publicationRight) ) {
-                        mMobileImageView.setVisibility(View.VISIBLE);
-                    }
-
+                    setUIAsset(asset);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -729,6 +763,99 @@ public class VodDetailActivity extends Activity {
                         mPagerAdapter.addVod(content);
                     }
                     mViewPager.setAdapter(mPagerAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void requestGetEpisodePeerListByContentGroupId() {
+        //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetEpisodePeerListByContentGroupId()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        // /getEpisodePeerListByContentGroupId.xml?version=1&terminalKey=598C9A357473F582E49EB8389FFBC0&contentGroupId=497612&episodePeerProfile=2
+        String url = mPref.getWebhasServerUrl() + "/getEpisodePeerListByContentGroupId.json?"
+                + "version=1"
+                + "&terminalKey="+terminalKey
+                + "&contentGroupId="+contentGroupId
+                + "&episodePeerProfile=2";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                //mProgressDialog.dismiss();
+                try {
+                    JSONObject jo            = new JSONObject(response);
+                    // episodePeerList
+                    episodePeerList = jo.getJSONArray("episodePeerList");
+                    for ( int i = 0; i < episodePeerList.length(); i++ ) {
+                        JSONObject episodePeer = episodePeerList.getJSONObject(i);
+                        String loopPrimaryAssetId  = episodePeer.getString("primaryAssetId");
+                        if ( primaryAssetId.equals(loopPrimaryAssetId) ) {
+                            episodePeerId = episodePeer.getString("episodePeerId");
+                            requestGetAssetListByEpisodePeerId();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void requestGetAssetListByEpisodePeerId() {
+        //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetAssetListByEpisodePeerId()"); }
+        String terminalKey = mPref.getWebhasTerminalKey();
+        // /getEpisodePeerListByContentGroupId.xml?version=1&terminalKey=598C9A357473F582E49EB8389FFBC0&contentGroupId=497612&episodePeerProfile=2
+        String url = mPref.getWebhasServerUrl() + "/getAssetListByEpisodePeerId.json?"
+                + "version=1"
+                + "&terminalKey="+terminalKey
+                + "&episodePeerId="+episodePeerId
+                + "&assetProfile=9";
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //Log.d(tag, response);
+                //mProgressDialog.dismiss();
+                try {
+                    JSONObject jo        = new JSONObject(response);
+                    JSONArray  assetList = jo.getJSONArray("assetList");
+                    JSONObject asset     = (JSONObject)assetList.get(0);
+                    setUIAsset(asset);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

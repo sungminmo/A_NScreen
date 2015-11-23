@@ -144,10 +144,27 @@ public class VodMainGridViewAdapter extends BaseAdapter {
                             }
                         });
                     } else {
-                        Intent intent = new Intent(mContext, VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId1);
-                        intent.putExtra("jstr", jo.toString());
-                        mContext.startActivity(intent);
+                        if ( jo.isNull("episodePeerExistence") ) {
+                            Intent intent = new Intent(mContext, VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId1);
+                            intent.putExtra("jstr", jo.toString());
+                            mContext.startActivity(intent);
+                        } else {
+                            try {
+                                Intent intent = new Intent(mContext, VodDetailActivity.class);
+                                String episodePeerExistence = jo.getString("episodePeerExistence");
+                                String contentGroupId = jo.getString("contentGroupId");
+                                String primaryAssetId = jo.getString("primaryAssetId");
+                                intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                intent.putExtra("contentGroupId", contentGroupId);
+                                intent.putExtra("primaryAssetId", primaryAssetId);
+                                intent.putExtra("assetId", assetId1);
+                                intent.putExtra("jstr", jo.toString());
+                                mContext.startActivity(intent);
+                            } catch ( JSONException e ) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             });
