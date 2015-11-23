@@ -418,8 +418,8 @@ public class EpgSubActivity extends AppCompatActivity {
                         if (index == 0) { // left button
                             try {
                                 JSONObject jo = new JSONObject(item.sJson);
-                                String programId    = jo.getString("programId");
-                                String seriesId     = jo.getString("seriesId");
+                                String programId = jo.getString("programId");
+                                String seriesId = jo.getString("seriesId");
                                 String programTitle = jo.getString("programTitle");
                                 String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
                                 mPref.addWatchTvReserveAlarm(programId, seriesId, programTitle, programBroadcastingStartTime);
@@ -442,8 +442,8 @@ public class EpgSubActivity extends AppCompatActivity {
                         if (index == 0) { // left button
                             try {
                                 JSONObject jo = new JSONObject(item.sJson);
-                                String programId    = jo.getString("programId");
-                                String seriesId     = jo.getString("seriesId");
+                                String programId = jo.getString("programId");
+                                String seriesId = jo.getString("seriesId");
                                 String programTitle = jo.getString("programTitle");
                                 String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
                                 mPref.addWatchTvReserveAlarm(programId, seriesId, programTitle, programBroadcastingStartTime);
@@ -468,7 +468,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     case 4: { // 시청예약취소 / 녹화예약
                         if (index == 0) { // left button
                             try {
-                                JSONObject jo    = new JSONObject(item.sJson);
+                                JSONObject jo = new JSONObject(item.sJson);
                                 String programId = jo.getString("programId");
                                 mPref.removeWatchTvReserveAlarm(programId);
                                 mAdapter.notifyDataSetChanged();
@@ -490,7 +490,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     case 5: { // 시청예약취소 / 녹화예약취소
                         if (index == 0) { // left button
                             try {
-                                JSONObject jo    = new JSONObject(item.sJson);
+                                JSONObject jo = new JSONObject(item.sJson);
                                 String programId = jo.getString("programId");
                                 mPref.removeWatchTvReserveAlarm(programId);
                                 mAdapter.notifyDataSetChanged();
@@ -514,14 +514,46 @@ public class EpgSubActivity extends AppCompatActivity {
                         }, true);
                     }
                     break;
+                    case 7: { // TV로 시청
+                        requestSetRemoteChannelControl(sChannelId);
+                    }
+                    break;
+                    case 8: { // 시청예약
+                        try {
+                            JSONObject jo = new JSONObject(item.sJson);
+                            String programId = jo.getString("programId");
+                            String seriesId = jo.getString("seriesId");
+                            String programTitle = jo.getString("programTitle");
+                            String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
+                            mPref.addWatchTvReserveAlarm(programId, seriesId, programTitle, programBroadcastingStartTime);
+                            mAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                    case 9: { // 시청예약취소
+                        try {
+                            JSONObject jo = new JSONObject(item.sJson);
+                            String programId = jo.getString("programId");
+                            mPref.removeWatchTvReserveAlarm(programId);
+                            mAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
                 }
-
                 return false;
             }
         });
 
         if ( mPref.isPairingCompleted() == true ) { // 페어링 안했을 시
-            requestGetSetTopStatus(); // 셋탑 상태 - 예약녹화물 리스트 - 한 채널 평성표 차례대로 호출.
+            if ( "SMART".equals(mPref.getSettopBoxKind()) ) {
+                requestGetChannelSchedule();
+            } else {
+                requestGetSetTopStatus(); // 셋탑 상태 - 예약녹화물 리스트 - 한 채널 평성표 차례대로 호출.
+            }
         } else { // 페어링 했을 시
             requestGetChannelSchedule(); // 한 채널 평성표 호출.
         }
@@ -563,6 +595,15 @@ public class EpgSubActivity extends AppCompatActivity {
                 } break;
                 case 6: {
                     createMenu6(menu); // 미 페어링 상태
+                } break;
+                case 7: {
+                    createMenu7(menu); // TV로 시청
+                } break;
+                case 8: {
+                    createMenu8(menu); // 시청에약
+                } break;
+                case 9: {
+                    createMenu9(menu); // 시청예약취소
                 }
             }
         }
@@ -678,6 +719,36 @@ public class EpgSubActivity extends AppCompatActivity {
             item1.setBackground(new ColorDrawable(Color.rgb(0x00, 0x00, 0x00)));
             item1.setWidth(dp2px(180));
             item1.setTitle("셋탑 미 연동");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+        }
+
+        private void createMenu7(SwipeMenu menu) { // TV로 시청
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0xF7, 0xBD, 0x33)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("TV로 시청");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);
+            menu.addMenuItem(item1);
+        }
+
+        private void createMenu8(SwipeMenu menu) { // 시청예약
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("시청예약");
+            item1.setTitleSize(12);
+            item1.setTitleColor(Color.WHITE);;
+            menu.addMenuItem(item1);
+        }
+
+        private void createMenu9(SwipeMenu menu) { // 시청예약취소
+            SwipeMenuItem item1 = new SwipeMenuItem(getApplicationContext());
+            item1.setBackground(new ColorDrawable(Color.rgb(0x7F, 0x94, 0x24)));
+            item1.setWidth(dp2px(90));
+            item1.setTitle("시청예약취소");
             item1.setTitleSize(12);
             item1.setTitleColor(Color.WHITE);
             menu.addMenuItem(item1);
