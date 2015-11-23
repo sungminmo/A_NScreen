@@ -135,7 +135,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                 return 6;
             }
 
-            if ( "PVR".equals(mStbState) ) {
+            if ( "PVR".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) ) {
                 if (mCurrDateNo != 0) { // 오늘이 아니라면...
                     JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
                     if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
