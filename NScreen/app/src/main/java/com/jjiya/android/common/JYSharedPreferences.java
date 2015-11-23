@@ -463,11 +463,16 @@ public class JYSharedPreferences {
                 JSONObject jo      = arr.getJSONObject(i);
                 JSONObject asset   = jo.getJSONObject("asset");
                 String     assetId = asset.getString("assetId");
-                // 객체를 생성하거나 데이터를 수정하는 작업을 수행한다.
-                WishObject wish = realm.createObject(WishObject.class); // Create a new object
-                wish.setsAssetId(assetId);
-                wish.setsPhoneNumber(jo.getString("phoneNumber"));
-                wish.setsUserId(jo.getString("userId"));
+                RealmResults<WishObject> results = mRealm.where(WishObject.class).equalTo("sAssetId", assetId).findAll();
+                if ( results.size() > 0 ) {
+                    // skip
+                } else {
+                    // 객체를 생성하거나 데이터를 수정하는 작업을 수행한다.
+                    WishObject wish = realm.createObject(WishObject.class); // Create a new object
+                    wish.setsAssetId(assetId);
+                    wish.setsPhoneNumber(jo.getString("phoneNumber"));
+                    wish.setsUserId(jo.getString("userId"));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
