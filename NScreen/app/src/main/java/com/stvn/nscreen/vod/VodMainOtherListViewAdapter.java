@@ -77,14 +77,16 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
         }
 
         try {
-            ListViewDataObject dobj                    = (ListViewDataObject)getItem(position);
-            JSONObject         jo                     = new JSONObject(dobj.sJson);
+            ListViewDataObject dobj = (ListViewDataObject)getItem(position);
+            JSONObject         jo   = new JSONObject(dobj.sJson);
 
-            String  categoryName     = jo.getString("categoryName");
-            boolean leaf             = jo.getBoolean("leaf");
-            boolean isOpened         = jo.getBoolean("isOpened");
-            boolean is2Depth         = false;
-            boolean is3Depth         = false;
+            String  categoryName    = jo.getString("categoryName");
+            boolean leaf            = jo.getBoolean("leaf");
+            int     viewerType      = jo.getInt("viewerType");
+            boolean isOpened        = jo.getBoolean("isOpened");
+            boolean is2Depth        = false;
+            boolean is3Depth        = false;
+
             if ( ! jo.isNull("is2Depth") ) {
                 is2Depth = jo.getBoolean("is2Depth");
             }
@@ -140,9 +142,12 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
                         imageView2.setImageResource(R.mipmap.depth1_arrow);
                     }
                 }
-
             }
-
+            //
+            if ( viewerType == 30 ) {
+                imageView1.setVisibility(View.GONE);
+                imageView2.setVisibility(View.GONE);
+            }
             textview.setText(categoryName);
 
         } catch (JSONException e) {

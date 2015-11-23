@@ -230,7 +230,6 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
     private void requestGetCategoryTree() {
         mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
-        //String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS";
         String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId="+mCategoryId+"&depth=4&traverseType=DFS";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -243,19 +242,14 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
 
                     JSONArray  categoryList = first.getJSONArray("categoryList");
                     for ( int i = 0; i < categoryList.length(); i++ ) {
-                        JSONObject category     = (JSONObject)categoryList.get(i);
+                        JSONObject category = (JSONObject)categoryList.get(i);
                         category.put("isOpened", false);
-                        String     parentCategoryId = category.getString("parentCategoryId");
-                        int        viewerType       = category.getInt("viewerType");
-                        //if ( ! parentCategoryId.equals("0") || ! (viewerType == 0) || ! (viewerType == 60) ) {
-                        //if ( ! parentCategoryId.equals("0") || ! (viewerType == 0) || ! (viewerType == 60) ) {
-                                                                  categorys.add(category);
-                        //}
+                        categorys.add(category);
                     }
                     if ( categoryList.length() > 1 ) {
                         categorys.remove(0);
                     }
-                    JSONObject category     = (JSONObject)categorys.get(0);
+                    JSONObject category = (JSONObject)categorys.get(0);
                     mCategoryNameTextView.setText(category.getString("categoryName"));
                     mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));
                     mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
@@ -311,7 +305,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 String     parentCategoryId = jo.getString("parentCategoryId");
                 String     viewerType       = jo.getString("viewerType");
 
-                if ( leaf == true ) { // 하부카테고리가 없으므로 닫을 것.
+                if ( leaf == true || ( leaf == false && "30".equals(viewerType)) ) { // 하부카테고리가 없으므로 닫을 것.
                     mCategoryBgFramelayout.setVisibility(View.GONE);
                     mCategoryId = categoryId;
                     //mCategoryAdapter.clear();
@@ -358,6 +352,8 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 JSONObject category         = (JSONObject)categorys.get(i);
                 String     categoryId       = category.getString("categoryId");
                 String     parentCategoryId = category.getString("parentCategoryId");
+                boolean    leaf             = category.getBoolean("leaf");
+                //if ( leaf == false && mCategoryId.equals(parentCategoryId) ) {
                 if ( mCategoryId.equals(parentCategoryId) ) {
                     mCateDepth1.put(categoryId, parentCategoryId);
                 }
@@ -366,34 +362,41 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 JSONObject category         = (JSONObject)categorys.get(i);
                 String     categoryId       = category.getString("categoryId");
                 String     parentCategoryId = category.getString("parentCategoryId");
-                String aaa = mCateDepth1.get(parentCategoryId);
+                String     aaa              = mCateDepth1.get(parentCategoryId);
                 if ( aaa != null ) {
-                    mCateDepth2.put(categoryId, parentCategoryId);
+                    //boolean leaf = category.getBoolean("leaf");
+                    //if ( leaf == false ) {
+                        mCateDepth2.put(categoryId, parentCategoryId);
+                    //}
                 }
             }
             for ( int i = 0; i < categorys.size(); i++ ) {
                 JSONObject category         = (JSONObject)categorys.get(i);
                 String     categoryId       = category.getString("categoryId");
                 String     parentCategoryId = category.getString("parentCategoryId");
-                String aaa = mCateDepth2.get(parentCategoryId);
+                String     aaa              = mCateDepth2.get(parentCategoryId);
                 if ( aaa != null ) {
-                    mCateDepth3.put(categoryId, parentCategoryId);
+                    //boolean leaf = category.getBoolean("leaf");
+                    //if ( leaf == false ) {
+                        mCateDepth3.put(categoryId, parentCategoryId);
+                    //}
                 }
             }
-            int i = 0;
+
+            int loop = 0;
             TreeMap<String,String> tm = new TreeMap<String,String>(mCateDepth1);
             Iterator<String> iteratorKey = tm.keySet( ).iterator( );   //키값 오름차순 정렬(기본)
             while ( iteratorKey.hasNext() ) {
-                String key = iteratorKey.next();
+                String     key      = iteratorKey.next();
                 JSONObject category = getCategoryWithCategoryId(key);
                 category.put("is1Depth", true);
-                ListViewDataObject obj = new ListViewDataObject(i, i, category.toString());
+                ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
                 mCategoryAdapter.addItem(obj);
-                i++;
+                loop++;
                 boolean isOpened = category.getBoolean("isOpened");
                 if ( isOpened == true ) {
                     String categoryId = category.getString("categoryId");
-                    i = add2Depth(i, categoryId);
+                    loop = add2Depth(loop, categoryId);
                 }
             }
             mCategoryAdapter.notifyDataSetChanged();
@@ -406,8 +409,10 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         int loop = start;
         try {
             for ( int i = 0; i < categorys.size(); i++ ) {
-                JSONObject category   = (JSONObject)categorys.get(i);
+                JSONObject category         = (JSONObject)categorys.get(i);
                 String     parentCategoryId = category.getString("parentCategoryId");
+                boolean    leaf             = category.getBoolean("leaf");
+                //if ( leaf == false && cid.equals(parentCategoryId) ) {
                 if ( cid.equals(parentCategoryId) ) {
                     category.put("is2Depth", true);
                     ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
@@ -430,8 +435,10 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         int loop = start;
         try {
             for ( int i = 0; i < categorys.size(); i++ ) {
-                JSONObject category   = (JSONObject)categorys.get(i);
+                JSONObject category         = (JSONObject)categorys.get(i);
                 String     parentCategoryId = category.getString("parentCategoryId");
+                boolean    leaf             = category.getBoolean("leaf");
+                //if ( leaf == false && cid.equals(parentCategoryId) ) {
                 if ( cid.equals(parentCategoryId) ) {
                     category.put("is3Depth", true);
                     ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
@@ -448,8 +455,8 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     private JSONObject getCategoryWithCategoryId(String cid) {
         try {
             for ( int i = 0; i < categorys.size(); i++ ) {
-                JSONObject category         = (JSONObject)categorys.get(i);
-                String     categoryId       = category.getString("categoryId");
+                JSONObject category   = (JSONObject)categorys.get(i);
+                String     categoryId = category.getString("categoryId");
                 if ( cid.equals(categoryId) ) {
                     return category;
                 }

@@ -323,6 +323,49 @@ public class JYSharedPreferences {
         }
     }
 
+    /**
+     * 테스트로 사용자 정보를 저장한다.
+     */
+    public void testWritePairingInfoToPhone() {
+        try {
+            String uuid  = "868c95ad-6e5d-4266-b11b-d26d90a9e8d1";
+            String tk    = "97CF2C2DC48840F7833EDA283F232357";
+            String pwd   = "1234";
+            String stb   = "PVR";
+            String adult = "I_AM_ADULT";
+
+            JSONObject root = new JSONObject();
+            root.put(UUID, uuid);
+            root.put(WEBHAS_PRIVATE_TERMINAL_KEY, tk);
+            root.put(PURCHASE_PASSWORD, pwd);
+            root.put(RUMPERS_SETOPBOX_KIND, stb);
+            root.put(I_AM_ADULT, adult);
+
+            String jstr = root.toString();
+
+            String androidId    = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+            String key          = makeKey(androidId);
+            AESCrypt crypt      = new AESCrypt(key);
+            String encryptedStr = crypt.encrypt(jstr);
+
+            File cnmdir = new File(Environment.getExternalStorageDirectory(), "/.cnm"); // /storage/emulated/0
+            if ( !cnmdir.exists() ) {
+                cnmdir.mkdir();
+            }
+            File file = new File(cnmdir, ".nscreen");
+            if ( !file.exists() ) {
+                file.createNewFile();
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, false /*append*/));
+            writer.write(encryptedStr);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 페어링 한적이 있기? 없기?

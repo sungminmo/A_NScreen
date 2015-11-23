@@ -95,6 +95,9 @@ public class LoadingActivity extends AppCompatActivity {
         mTextView.setText("초기화 중입니다.");
 
 
+        // test only
+        // mPref.testWritePairingInfoToPhone();
+
         if ( mPref.getValue(JYSharedPreferences.UUID, "").equals("") ) {
             // 앱을 설치하고 처음 실행했다면, 여디로 들어온다.
             try {
