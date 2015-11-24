@@ -2,6 +2,7 @@ package com.stvn.nscreen.pvr;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,26 +95,28 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             JSONObject jobj = new JSONObject(dobj.sJson);
 
             String RecordStartTime = jobj.getString("RecordStartTime");
-            String RecordEndTime = jobj.getString("RecordEndTime");
+            String RecordEndTime   = jobj.getString("RecordEndTime");
+            if ( ! "0".equals(RecordStartTime) ) {
+                Date dt11 = formatter.parse(RecordStartTime);
+                Date dt12 = formatter.parse(RecordEndTime);
+                String dt21 = formatter2.format(dt11).toString();
+                String dt22 = formatter2.format(dt12).toString();
+                String dt23 = formatter2.format(dt).toString();
 
-            Date dt11 = formatter.parse(RecordStartTime);
-            Date dt12 = formatter.parse(RecordEndTime);
-            String dt21 = formatter2.format(dt11).toString();
-            String dt22 = formatter2.format(dt12).toString();
-            String dt23 = formatter2.format(dt).toString();
+                Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3))); // 시작시간
+                Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3))); // 끝시간
+                Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3))); // 현재시간
 
-            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3))); // 시작시간
-            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3))); // 끝시간
-            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3))); // 현재시간
-
-            if (dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) { // 예약녹화 걸려있지 않은 방송.
-                return 0; // 녹화중지
-            } else if ( dt.compareTo(dt11) < 0 ) {
-                return 1; // 녹화 예약 취소
-            } else if ( dt.compareTo(dt12) > 0 ) {
-                return 2;
+                if (dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) { // 예약녹화 걸려있지 않은 방송.
+                    return 0; // 녹화중지
+                } else if ( dt.compareTo(dt11) < 0 ) {
+                    return 1; // 녹화 예약 취소
+                } else if ( dt.compareTo(dt12) > 0 ) {
+                    return 2;
+                }
+            } else {
+                return -1;
             }
-
         } catch ( JSONException e ) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -169,6 +172,33 @@ public class PvrMainListViewAdapter extends BaseAdapter {
                 pvr_main_textview_date.setVisibility(View.VISIBLE);
                 pvr_main_textview_time.setVisibility(View.VISIBLE);
                 progBar.setVisibility(View.VISIBLE);
+
+                Date               dt11                     = formatter.parse(RecordStartTime);
+                Date               dt12                     = formatter.parse(RecordEndTime);
+                String             dt21                     = formatter2.format(dt11).toString();
+                String             dt22                     = formatter2.format(dt12).toString();
+                String             dt23                     = formatter2.format(dt).toString();
+                String             dt31                     = formatter3.format(dt11).toString();
+
+                pvr_main_textview_time.setText(dt21);
+                pvr_main_textview_date.setText(dt31);
+
+                Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+                Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
+                Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+
+                if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
+                    float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                    progBar.setVisibility(View.VISIBLE);
+                    progBar.setProgress((int) (f1 * 100));
+                    pvr_main_pvr.setVisibility(View.VISIBLE);
+                } else if ( dt.compareTo(dt11) < 0 ) {
+                    progBar.setVisibility(View.VISIBLE);
+                    progBar.setProgress(0);
+                    pvr_main_pvr.setVisibility(View.INVISIBLE);
+                } else if ( dt.compareTo(dt12) > 0 || !("1".equals(jobj.getString("RecordingType"))) ){
+                    progBar.setVisibility(View.INVISIBLE);
+                }
             } else if ( "0".equals(RecordStartTime) ) {
                 pvr_main_imageview_series.setVisibility(View.VISIBLE);
                 pvr_main_textview_date.setVisibility(View.INVISIBLE);
@@ -176,35 +206,11 @@ public class PvrMainListViewAdapter extends BaseAdapter {
                 progBar.setVisibility(View.INVISIBLE);
             }
 
-            titleTextView.setText(jobj.getString("ProgramName"));
-            channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);
+            String ProgramName = jobj.getString("ProgramName");
+            String Channel_logo_img = jobj.getString("Channel_logo_img");
 
-            Date               dt11                     = formatter.parse(RecordStartTime);
-            Date               dt12                     = formatter.parse(RecordEndTime);
-            String             dt21                     = formatter2.format(dt11).toString();
-            String             dt22                     = formatter2.format(dt12).toString();
-            String             dt23                     = formatter2.format(dt).toString();
-            String             dt31                     = formatter3.format(dt11).toString();
-
-            pvr_main_textview_time.setText(dt21);
-            pvr_main_textview_date.setText(dt31);
-
-            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
-            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
-            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
-
-            if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
-                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
-                progBar.setVisibility(View.VISIBLE);
-                progBar.setProgress((int) (f1 * 100));
-                pvr_main_pvr.setVisibility(View.VISIBLE);
-            } else if ( dt.compareTo(dt11) < 0 ) {
-                progBar.setVisibility(View.VISIBLE);
-                progBar.setProgress(0);
-                pvr_main_pvr.setVisibility(View.INVISIBLE);
-            } else if ( dt.compareTo(dt12) > 0 || !("1".equals(jobj.getString("RecordingType"))) ){
-                progBar.setVisibility(View.INVISIBLE);
-            }
+            titleTextView.setText(ProgramName);
+            channelLogo.setImageUrl(Channel_logo_img, mImageLoader);
 
 //            if (i1 <= i3 && i3 <= i2 ) { // 예약녹화 걸려있지 않은 방송.
 //                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);

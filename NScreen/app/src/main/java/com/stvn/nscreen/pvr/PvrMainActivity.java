@@ -42,6 +42,7 @@ import com.stvn.nscreen.epg.EpgSubActivity;
 import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
@@ -80,18 +81,18 @@ public class PvrMainActivity extends AppCompatActivity {
     private              TextView               textView1, textView2;
 
     private String getSeriesJson(String str){
-        StringBuffer sb = new StringBuffer();
+        JSONArray arr = new JSONArray();
         try {
             for (int i = 0; i < mReservs.size(); i++) {
                 JSONObject jo = mReservs.get(i);
                 if (str.equals(jo.getString("SeriesId"))) {
-                    sb.append("[").append(jo.toString()).append("]");
+                    arr.put(jo);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return sb.toString();
+        return arr.toString();
     }
 
     @Override
@@ -139,7 +140,11 @@ public class PvrMainActivity extends AppCompatActivity {
                 String recordingtype = null;
                 try {
                     JSONObject jo = new JSONObject (item.sJson);
-                    sRecordId = jo.getString("RecordId");
+                    if ( jo.isNull("RecordId") ) {
+                        sRecordId = "";
+                    } else {
+                        sRecordId = jo.getString("RecordId");  // error RecordId 없음.
+                    }
                     sSeriesId = jo.getString("SeriesId");
                     sChannelId = jo.getString("ChannelId");
                     sProgramName = jo.getString("ProgramName");
@@ -284,6 +289,9 @@ public class PvrMainActivity extends AppCompatActivity {
         public void create(SwipeMenu menu) {
             // Create different menus depending on the view type
             switch (menu.getViewType()) {
+                case -1: {
+                    // nothing
+                } break;
                 case 0: {
                     createMenu0(menu);  // 녹화중지
                 } break;
@@ -332,7 +340,7 @@ public class PvrMainActivity extends AppCompatActivity {
     };
 
     private void requestGetRecordReservelist() {
-//        mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
@@ -340,7 +348,7 @@ public class PvrMainActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-//                mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
                 //String sResultCode = parseGetRecordReservelist(request.getUtf8Response()); // 파싱 결과를 리턴 받는다.
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) {
@@ -369,7 +377,7 @@ public class PvrMainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
@@ -817,7 +825,7 @@ public class PvrMainActivity extends AppCompatActivity {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }
         try {
-            starttime = URLEncoder.encode(starttime, "utf-8");
+            starttime = URLEncoder.encode(starttime, "utf-8"); // error
         } catch ( UnsupportedEncodingException e ) {
             e.printStackTrace();
         }
@@ -830,13 +838,14 @@ public class PvrMainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 parseSetRecordCancelReserve(response);
+                mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
+                requestGetRecordReservelist();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
-
                 if (error instanceof TimeoutError ) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
