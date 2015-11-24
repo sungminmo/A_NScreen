@@ -1,6 +1,7 @@
 package com.jjiya.android.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
 
 import org.json.JSONException;
@@ -28,6 +31,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
 
     private static       VodDetailActivity   mVodDetailActivity;
     private LayoutInflater   mLayoutInflater;
+    private JYSharedPreferences mPref;
 
     private ImageLoader      mImageLoader;
     private List<JSONObject> mVods;
@@ -38,6 +42,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
         super();
         mLayoutInflater = LayoutInflater.from(c);
         mVods = new ArrayList<JSONObject>();
+        mPref           = new JYSharedPreferences(c);
     }
 
     public void setFragment(Fragment f) {
@@ -49,6 +54,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
     }
 
     private void startActivityDetail(String assetId, String jstr) {
+
         Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
         intent.putExtra("assetId", assetId);
         intent.putExtra("jstr", jstr);
@@ -113,7 +119,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     assetId1 = jo1.getString("primaryAssetId");
                 }
                 final Boolean mobilePublicationRight1 = jo1.getBoolean("mobilePublicationRight");
-                String rating1 = jo1.getString("rating");
+                final String rating1 = jo1.getString("rating");
                 ImageView four_vod_poster_onlytv1 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv1);
                 if ( mobilePublicationRight1 == false ) {
                     four_vod_poster_onlytv1.setVisibility(View.VISIBLE);
@@ -134,7 +140,26 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivityDetail(assetId1, jo1.toString());
+                        if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
+                                    mVodDetailActivity.startActivity(intent);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                        } else {
+                            startActivityDetail(assetId1, jo1.toString());
+                        }
                     }
                 });
             } else {
@@ -150,7 +175,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     assetId2 = jo2.getString("primaryAssetId");
                 }
                 final Boolean mobilePublicationRight2 = jo2.getBoolean("mobilePublicationRight");
-                String rating2 = jo2.getString("rating");
+                final String rating2 = jo2.getString("rating");
                 ImageView four_vod_poster_onlytv2 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv2);
                 if ( mobilePublicationRight2 == false ) {
                     four_vod_poster_onlytv2.setVisibility(View.VISIBLE);
@@ -167,7 +192,26 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivityDetail(assetId2, jo2.toString());
+                        if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
+                                    mVodDetailActivity.startActivity(intent);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                        } else {
+                            startActivityDetail(assetId2, jo2.toString());
+                        }
                     }
                 });
             } else {
@@ -183,7 +227,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     assetId3 = jo3.getString("primaryAssetId");
                 }
                 final Boolean mobilePublicationRight3 = jo3.getBoolean("mobilePublicationRight");
-                String rating3 = jo3.getString("rating");
+                final String rating3 = jo3.getString("rating");
                 ImageView four_vod_poster_onlytv3 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv3);
                 if ( mobilePublicationRight3 == false ) {
                     four_vod_poster_onlytv3.setVisibility(View.VISIBLE);
@@ -200,7 +244,26 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivityDetail(assetId3, jo3.toString());
+                        if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
+                                    mVodDetailActivity.startActivity(intent);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                        } else {
+                            startActivityDetail(assetId3, jo3.toString());
+                        }
                     }
                 });
             } else {
@@ -216,7 +279,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     assetId4 = jo4.getString("primaryAssetId");
                 }
                 final Boolean mobilePublicationRight4 = jo4.getBoolean("mobilePublicationRight");
-                String rating4 = jo4.getString("rating");
+                final String rating4 = jo4.getString("rating");
                 ImageView four_vod_poster_onlytv4 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv4);
                 if ( mobilePublicationRight4 == false ) {
                     four_vod_poster_onlytv4.setVisibility(View.VISIBLE);
@@ -233,7 +296,26 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivityDetail(assetId4, jo4.toString());
+                        if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
+                            String alertTitle = "C&M NScreen";
+                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
+                            String alertMsg2 = "";
+                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
+                                    mVodDetailActivity.startActivity(intent);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                        } else {
+                            startActivityDetail(assetId4, jo4.toString());
+                        }
                     }
                 });
             } else {
