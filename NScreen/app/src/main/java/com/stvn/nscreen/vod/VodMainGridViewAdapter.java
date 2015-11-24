@@ -153,14 +153,20 @@ public class VodMainGridViewAdapter extends BaseAdapter {
                             try {
                                 Intent intent = new Intent(mContext, VodDetailActivity.class);
                                 String episodePeerExistence = jo.getString("episodePeerExistence");
-                                String contentGroupId = jo.getString("contentGroupId");
-                                String primaryAssetId = jo.getString("primaryAssetId");
-                                intent.putExtra("episodePeerExistence", episodePeerExistence);
-                                intent.putExtra("contentGroupId", contentGroupId);
-                                intent.putExtra("primaryAssetId", primaryAssetId);
-                                intent.putExtra("assetId", assetId1);
-                                intent.putExtra("jstr", jo.toString());
-                                mContext.startActivity(intent);
+                                if ( "1".equals(episodePeerExistence) ) {
+                                    String contentGroupId = jo.getString("contentGroupId");
+                                    String primaryAssetId = jo.getString("primaryAssetId");
+                                    intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                    intent.putExtra("contentGroupId", contentGroupId);
+                                    intent.putExtra("primaryAssetId", primaryAssetId);
+                                    intent.putExtra("assetId", assetId1);
+                                    intent.putExtra("jstr", jo.toString());
+                                    mContext.startActivity(intent);
+                                } else {
+                                    intent.putExtra("assetId", assetId1);
+                                    intent.putExtra("jstr", jo.toString());
+                                    mContext.startActivity(intent);
+                                }
                             } catch ( JSONException e ) {
                                 e.printStackTrace();
                             }
