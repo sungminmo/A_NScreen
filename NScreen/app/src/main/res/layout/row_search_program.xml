@@ -97,7 +97,7 @@
         <ImageView
             android:layout_width="@dimen/dimen_17"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_favorite_selector"
+            android:src="@drawable/btn_favorite_star_selector"
             android:id="@+id/favorite_img"
             android:layout_marginLeft="@dimen/dimen_12"
             android:layout_marginRight="@dimen/dimen_11"

@@ -89,9 +89,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.row_search_program, null);
@@ -143,10 +141,30 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
         } else                                                    // 둘다 아닐때
             holder.chhd.setVisibility(View.GONE);
 
-        if(mPref.isBookmarkChannelWithChannelId(item.getChannelId()))
+        if (mPref.isBookmarkChannelWithChannelId(item.getChannelId())) {
             holder.favoriteimg.setSelected(true);
-        else
+        }
+        else {
             holder.favoriteimg.setSelected(false);
+        }
+
+        holder.favoriteimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isSelected = !v.isSelected();
+                v.setSelected(isSelected);
+
+                SearchProgramDataObject programItem = getItem(position);
+                String channelID = programItem.getChannelId();
+                String channelNO = programItem.getChannelNumber();
+                String channelName = programItem.getChannelName();
+                if (isSelected) {
+                    mPref.addBookmarkChannel(channelID, channelNO, channelName); // 선호채널 추가.
+                } else {
+                    mPref.removeBookmarkChannelWithChannelId(channelID); // 선호채널 제거.
+                }
+            }
+        });
 
         // 연령제한
         if (!TextUtils.isEmpty(item.getChannelProgramGrade())) {
