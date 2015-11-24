@@ -48,6 +48,7 @@
 
     <!-- RUMPUS ERROR Respone -->
     <string name="RUMPUS_ERROR_MSG_Not_Found_authCode">인증번호가 일치하지 않습니다.</string>
+    <string name="RUMPUS_ERROR_MSG_Not_Found_authCode1">인증번호를 입력해주세요.</string>
 
     <!-- VOD -->
     <string name="title_activity_vod_detail">상세정보</string>
