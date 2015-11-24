@@ -127,6 +127,8 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 ImageView four_vod_poster_191 = (ImageView)v.findViewById(R.id.four_vod_poster_191);
                 if (rating1.startsWith("19")) {
                     four_vod_poster_191.setVisibility(View.VISIBLE);
+                } else {
+                    four_vod_poster_191.setVisibility(View.GONE);
                 }
 
                 TextView title1 =  (TextView)v.findViewById(R.id.eight_vod_poster_title_textview1);
