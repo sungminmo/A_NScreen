@@ -31,6 +31,7 @@ import com.stvn.nscreen.common.GsonRequest;
 import com.stvn.nscreen.common.KeyWordDataObject;
 import com.stvn.nscreen.common.VolleyHelper;
 import com.stvn.nscreen.setting.CMSettingData;
+import com.stvn.nscreen.util.CMLog;
 
 import java.util.ArrayList;
 
@@ -177,6 +178,7 @@ public class SearchMainActivity extends CMBaseActivity {
 
             if(s.length()>0)
             {
+                mSearchCount.setText("");
                 isFragmentVisible = false;
                 mKeyword = mKeywordView.getText().toString();
                 mKeywordHandler.removeMessages(GET_KEYWORD_REQ);
@@ -203,6 +205,7 @@ public class SearchMainActivity extends CMBaseActivity {
         mLockListView = true;
         mKeywordList.clear();
         String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/getSearchWord.json?version="+mVersion+"&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory=0&searchKeyword="+mKeywordView.getText().toString();
+        CMLog.d("ljh","url : "+url);
         final GsonRequest gsonRequest = new GsonRequest(url, KeyWordDataObject.class,null,new Response.Listener<KeyWordDataObject>(){
             @Override
             public void onResponse(KeyWordDataObject response) {
