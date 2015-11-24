@@ -171,6 +171,8 @@ public class VodDetailActivity extends Activity {
         }
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
         // assetId = "www.hchoice.co.kr|M4132449LFO281926301";
+        // 01회(HD)그녀는 예뻤다(15.09.16)
+        // assetId = "www.hchoice.co.kr|M4146149LFO280395301";
 //        try {
 //            JSONObject jo = new JSONObject(sJson);
 //            assetId = jo.getString("assetId");
@@ -510,6 +512,10 @@ public class VodDetailActivity extends Activity {
             boolean HDContent           = asset.getBoolean("HDContent");
             String genre                = asset.getString("genre");
             String runningTime          = asset.getString("runningTime");
+            String releaseDate          = "";
+            if ( ! asset.isNull("releaseDate") ) {
+                releaseDate = " / " + asset.getString("releaseDate");
+            }
             String director             = asset.getString("director");
             String starring             = asset.getString("starring");
             String synopsis             = asset.getString("synopsis");
@@ -669,7 +675,8 @@ public class VodDetailActivity extends Activity {
             if ( "FOD".equals(productType) || "0".equals(price) ) {
                 mPriceTextView.setText("무료시청");
             }
-            mGenreTextView.setText(genre+" / "+runningTime);
+
+            mGenreTextView.setText(genre+" / "+runningTime + releaseDate);
             mDirectorTextView.setText(director);
             mStarringTextView.setText(starring);
             mSynopsisTextView.setText(synopsis);
