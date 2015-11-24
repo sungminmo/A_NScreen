@@ -82,8 +82,11 @@ public class PvrSubActivity extends AppCompatActivity {
             JSONArray arr = new JSONArray(jstr);
             for ( int i = 0; i< arr.length(); i++ ) {
                 JSONObject jo = (JSONObject)arr.get(i);
-                ListViewDataObject obj = new ListViewDataObject(i, 0, jo.toString());
-                mAdapter.addItem(obj);
+                int RecordingType = jo.getInt("RecordingType");
+                if ( RecordingType != 1 ) {
+                    ListViewDataObject obj = new ListViewDataObject(i, 0, jo.toString());
+                    mAdapter.addItem(obj);
+                }
             }
         } catch ( JSONException e ) {
             e.printStackTrace();
@@ -105,11 +108,11 @@ public class PvrSubActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 ListViewDataObject item = (ListViewDataObject) mAdapter.getItem(position);
-                String sSeriesId=null;
-                String sChannelId=null;
-                String sProgramName=null;
-                String starttime=null;
-                String recordingtype=null;
+                String sSeriesId = null;
+                String sChannelId = null;
+                String sProgramName = null;
+                String starttime = null;
+                String recordingtype = null;
                 try {
                     JSONObject jo = new JSONObject(item.sJson);
                     sChannelId = jo.getString("ChannelId");
@@ -121,6 +124,7 @@ public class PvrSubActivity extends AppCompatActivity {
                 final String sChannelId2 = sChannelId;
                 final String starttime2 = starttime;
                 final String recordingtype2 = recordingtype;
+                final int position2 = position;
                 int iMenuType = mAdapter.getItemViewType(position);
                 switch (iMenuType) {
                     case 0: {
@@ -130,16 +134,16 @@ public class PvrSubActivity extends AppCompatActivity {
                         CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                final String ReserveCancel = "2";
-                                requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel);
+                                final String ReserveCancel = "2"; // 시리즈전체취소-1, 단편취소-2
+                                requestSetRecordCancelReserve(position2, sChannelId2, starttime2, ReserveCancel);
                             }
                         }, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final String ReserveCancel = "1";
-                                requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel);
+                                requestSetRecordCancelReserve(position2, sChannelId2, starttime2, ReserveCancel);
                             }
-                        }, new DialogInterface.OnClickListener() {
+                        }, new DialogInterface.OnClickListener() { // 시리즈전체취소-1, 단편취소-2
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -183,7 +187,9 @@ public class PvrSubActivity extends AppCompatActivity {
         }
     };
 
-    private void requestSetRecordCancelReserve(String channelId, String starttime, String recordingtype) {
+    private void requestSetRecordCancelReserve(int position, String channelId, String starttime, String ReserveCancel) {
+        final int position2 = position;
+        final String ReserveCancel2 = ReserveCancel;
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }
         try {
             starttime = URLEncoder.encode(starttime, "utf-8");
@@ -193,11 +199,17 @@ public class PvrSubActivity extends AppCompatActivity {
         String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url  = mPref.getRumpersServerUrl() + "/SetRecordCancelReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
-                + channelId + "&StartTime=" + starttime + "&ReserveCancel=" + recordingtype;
+                + channelId + "&StartTime=" + starttime + "&ReserveCancel=" + ReserveCancel;
+        // 시리즈전체취소-1, 단편취소-2
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 parseSetRecordCancelReserve(response);
+                if ( "2".equals(ReserveCancel2) ) {
+                    //
+                }
+                mAdapter.remove(position2);
+                mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
