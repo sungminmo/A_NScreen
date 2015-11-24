@@ -37,7 +37,8 @@
         android:layout_height="65dp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/frameLayout"
-        android:layout_toEndOf="@+id/frameLayout">
+        android:layout_toEndOf="@+id/frameLayout"
+        android:background="@color/white">
 
         <ImageButton
             android:id="@+id/epg_main_genre_choice_imageButton"
@@ -70,7 +71,8 @@
     <ListView
         android:id="@+id/epg_main_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/white" />
 
 
 </LinearLayout>
