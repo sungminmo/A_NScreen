@@ -1,9 +1,11 @@
 package com.stvn.nscreen.setting;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
-import android.widget.TextView;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,14 +36,31 @@ import java.util.Map;
  */
 public class CMSettingCustomerCenterActivity extends CMBaseActivity implements View.OnClickListener {
 
-    private TextView mContentTitle;
-    private TextView mContentText;
-
+    private WebView mWebView;
     private String mGuideID;
     // network
     private RequestQueue mRequestQueue;
-
     private JYSharedPreferences mPref;
+
+    public class mWebClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Uri pageURI = Uri.parse(url);
+
+            String strScheme = pageURI.getScheme();
+
+            if ("tel".equalsIgnoreCase(strScheme)) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, pageURI);
+                startActivity(intent);
+                return true;
+            } else if ("mailto".equalsIgnoreCase(strScheme)) {
+                Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
+                startActivity(i);
+                return true;
+            }
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +92,10 @@ public class CMSettingCustomerCenterActivity extends CMBaseActivity implements V
      * 설정 메인 화면 UI 설정
      * */
     private void initializeView() {
-        this.mContentTitle = (TextView)findViewById(R.id.setting_customer_center_title);
-        this.mContentText = (TextView)findViewById(R.id.setting_customer_center_content);
+        this.mWebView = (WebView)findViewById(R.id.setting_customer_webview);
+        this.mWebView.getSettings().setDefaultTextEncodingName("utf-8");
+        this.mWebView.getSettings().setJavaScriptEnabled(true);
+        this.mWebView.setWebViewClient(new mWebClient());
         findViewById(R.id.setting_customer_center_confirm).setOnClickListener(this);
     }
 
@@ -90,12 +111,8 @@ public class CMSettingCustomerCenterActivity extends CMBaseActivity implements V
 
                try {
                     JSONObject noticeData = new JSONObject(jString);
-
-                    //String title = noticeData.getString("guide_title");
-                    //mContentTitle.setText(title);
-
-                    String contents = noticeData.getString("guide_Content");
-                    mContentText.setText(Html.fromHtml(contents));
+                   String contents = noticeData.getString("guide_Content");
+                   mWebView.loadData(contents, "text/html; charset=utf-8", "utf-8");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
