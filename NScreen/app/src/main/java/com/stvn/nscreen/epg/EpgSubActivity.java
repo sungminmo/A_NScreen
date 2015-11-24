@@ -1305,7 +1305,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 parseSetRecord(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
                     String alertTitle = "녹화 불가";
                     String alertMessage1 = "Duplicated Recording Reserve Request";
