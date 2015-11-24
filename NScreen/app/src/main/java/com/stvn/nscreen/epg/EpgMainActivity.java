@@ -265,7 +265,7 @@ public class EpgMainActivity extends AppCompatActivity {
                 parseGetSetTopStatus(response);
 
                 String resultCode = (String) mStbStateMap.get("resultCode");
-                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) && "028".equals(resultCode) ) {
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
                     //
                     mStbState             = (String) mStbStateMap.get("state");
                     mStbRecordingchannel1 = (String) mStbStateMap.get("recordingchannel1");
@@ -281,6 +281,13 @@ public class EpgMainActivity extends AppCompatActivity {
                     mStbWatchingchannel   = "";
                     mStbPipchannel        = "";
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else if ( "SMART".equals(mPref.getSettopBoxKind()) ) { // SMART
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
                 } else {
                     String errorString = (String)mStbStateMap.get("errorString");
                     StringBuilder sb   = new StringBuilder();
