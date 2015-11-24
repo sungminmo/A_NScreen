@@ -196,7 +196,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 parseGetSetTopStatus(response);
 
                 String resultCode = (String) mStbStateMap.get("resultCode");
-                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) && "028".equals(resultCode) ) {
                     mStbState             = (String) mStbStateMap.get("state");
                     mStbRecordingchannel1 = (String) mStbStateMap.get("recordingchannel1");
                     mStbRecordingchannel2 = (String) mStbStateMap.get("recordingchannel2");

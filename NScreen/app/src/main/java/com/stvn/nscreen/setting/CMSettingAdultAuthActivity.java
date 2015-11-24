@@ -1,6 +1,7 @@
 package com.stvn.nscreen.setting;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
@@ -22,8 +23,8 @@ import com.stvn.nscreen.common.CMBaseActivity;
 
 public class CMSettingAdultAuthActivity extends CMBaseActivity {
 
-    private JYSharedPreferences mPref;
-    private WebView mWebview;
+    private JYSharedPreferences  mPref;
+    private WebView              mWebview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,8 @@ public class CMSettingAdultAuthActivity extends CMBaseActivity {
                             if ("y".equalsIgnoreCase(strResult)) {
                                 isSucess = true;
                                 mPref.setIAmAdult(); // 성인인증 받았을때 호출. 성인인증 받았는지 여부는 mPref.isAdultVerification()
+                                Intent intent = new Intent("I_AM_ADULT");
+                                sendBroadcast(intent);
                             }
                         }
 

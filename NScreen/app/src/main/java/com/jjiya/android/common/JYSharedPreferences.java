@@ -19,6 +19,7 @@ import com.stvn.nscreen.bean.MainCategoryObject;
 import com.stvn.nscreen.bean.WatchTvObject;
 import com.stvn.nscreen.bean.WatchVodObject;
 import com.stvn.nscreen.bean.WishObject;
+import com.stvn.nscreen.vod.VodMainBaseFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,16 +81,17 @@ public class JYSharedPreferences {
 
     // Public TerminalKey = 8A5D2E45D3874824FF23EC97F78D358
     // Private terminalKey = C5E6DBF75F13A2C1D5B2EFDB2BC940
-    public final static String WEBHAS_PUBLIC_TERMINAL_KEY = "A9D0D3B07231F38878AB0979D7C315A";
+    public final static String WEBHAS_PUBLIC_TERMINAL_KEY  = "A9D0D3B07231F38878AB0979D7C315A";
     public final static String WEBHAS_PRIVATE_TERMINAL_KEY = "WEBHAS_PRIVATE_TERMINAL_KEY"; // 폰마다 다른 키값.
-    public final static String PURCHASE_PASSWORD = "PURCHASE_PASSWORD"; // 구매비밀번호.
-    public final static String VOD_OTHER_TAB_CATEGORY_ID = "VOD_OTHER_TAB_CATEGORY_ID";
+    public final static String PURCHASE_PASSWORD           = "PURCHASE_PASSWORD"; // 구매비밀번호.
+    public final static String VOD_OTHER_TAB_CATEGORY_ID   = "VOD_OTHER_TAB_CATEGORY_ID";
+
 
     public JYSharedPreferences(Context c) {
         mContext = c;
         //RealmConfiguration config = new RealmConfiguration.Builder(mContext).build();
         //Realm.deleteRealm(config);
-        mRealm   = Realm.getInstance(c);
+        mRealm = Realm.getInstance(c);
     }
 
     public boolean isLogging() {
@@ -323,6 +325,49 @@ public class JYSharedPreferences {
         }
     }
 
+    /**
+     * 테스트로 사용자 정보를 저장한다.
+     */
+    public void testWritePairingInfoToPhone() {
+        try {
+            String uuid  = "868c95ad-6e5d-4266-b11b-d26d90a9e8d1";
+            String tk    = "97CF2C2DC48840F7833EDA283F232357";
+            String pwd   = "1234";
+            String stb   = "PVR";
+            String adult = "I_AM_ADULT";
+
+            JSONObject root = new JSONObject();
+            root.put(UUID, uuid);
+            root.put(WEBHAS_PRIVATE_TERMINAL_KEY, tk);
+            root.put(PURCHASE_PASSWORD, pwd);
+            root.put(RUMPERS_SETOPBOX_KIND, stb);
+            root.put(I_AM_ADULT, adult);
+
+            String jstr = root.toString();
+
+            String androidId    = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+            String key          = makeKey(androidId);
+            AESCrypt crypt      = new AESCrypt(key);
+            String encryptedStr = crypt.encrypt(jstr);
+
+            File cnmdir = new File(Environment.getExternalStorageDirectory(), "/.cnm"); // /storage/emulated/0
+            if ( !cnmdir.exists() ) {
+                cnmdir.mkdir();
+            }
+            File file = new File(cnmdir, ".nscreen");
+            if ( !file.exists() ) {
+                file.createNewFile();
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, false /*append*/));
+            writer.write(encryptedStr);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 페어링 한적이 있기? 없기?
@@ -420,11 +465,16 @@ public class JYSharedPreferences {
                 JSONObject jo      = arr.getJSONObject(i);
                 JSONObject asset   = jo.getJSONObject("asset");
                 String     assetId = asset.getString("assetId");
-                // 객체를 생성하거나 데이터를 수정하는 작업을 수행한다.
-                WishObject wish = realm.createObject(WishObject.class); // Create a new object
-                wish.setsAssetId(assetId);
-                wish.setsPhoneNumber(jo.getString("phoneNumber"));
-                wish.setsUserId(jo.getString("userId"));
+                RealmResults<WishObject> results = mRealm.where(WishObject.class).equalTo("sAssetId", assetId).findAll();
+                if ( results.size() > 0 ) {
+                    // skip
+                } else {
+                    // 객체를 생성하거나 데이터를 수정하는 작업을 수행한다.
+                    WishObject wish = realm.createObject(WishObject.class); // Create a new object
+                    wish.setsAssetId(assetId);
+                    wish.setsPhoneNumber(jo.getString("phoneNumber"));
+                    wish.setsUserId(jo.getString("userId"));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

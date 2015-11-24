@@ -19,6 +19,7 @@ import com.jjiya.android.common.ViewHolder;
 import com.jjiya.android.common.VolleySingleton;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -127,27 +128,49 @@ public class VodMainGridViewAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if ( rating.startsWith("19") && mPref.isAdultVerification() == false ) {
-                        AlertDialog.Builder ad = new AlertDialog.Builder(mContext);
-                        ad.setTitle("알림").setMessage(mContext.getResources().getString(R.string.adult_auth_message)).setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        String alertTitle = "성인인증 필요";
+                        String alertMsg1 = mContext.getResources().getString(R.string.error_not_adult1);
+                        String alertMsg2 = mContext.getResources().getString(R.string.error_not_adult2);
+                        CMAlertUtil.Alert1(mContext, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                                 Intent intent = new Intent(mContext, CMSettingMainActivity.class);
                                 mContext.startActivity(intent);
                             }
-                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        }, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {// 'No'
-                                dialog.dismiss();
+                            public void onClick(DialogInterface dialog, int which) {
+
                             }
                         });
-                        AlertDialog alert = ad.create();
-                        alert.show();
                     } else {
-                        Intent intent = new Intent(mContext, VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId1);
-                        intent.putExtra("jstr", jo.toString());
-                        mContext.startActivity(intent);
+                        if ( jo.isNull("episodePeerExistence") ) {
+                            Intent intent = new Intent(mContext, VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId1);
+                            intent.putExtra("jstr", jo.toString());
+                            mContext.startActivity(intent);
+                        } else {
+                            try {
+                                Intent intent = new Intent(mContext, VodDetailActivity.class);
+                                String episodePeerExistence = jo.getString("episodePeerExistence");
+                                if ( "1".equals(episodePeerExistence) ) {
+                                    String contentGroupId = jo.getString("contentGroupId");
+                                    String primaryAssetId = jo.getString("primaryAssetId");
+                                    intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                    intent.putExtra("contentGroupId", contentGroupId);
+                                    intent.putExtra("primaryAssetId", primaryAssetId);
+                                    intent.putExtra("assetId", assetId1);
+                                    intent.putExtra("jstr", jo.toString());
+                                    mContext.startActivity(intent);
+                                } else {
+                                    intent.putExtra("assetId", assetId1);
+                                    intent.putExtra("jstr", jo.toString());
+                                    mContext.startActivity(intent);
+                                }
+                            } catch ( JSONException e ) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             });

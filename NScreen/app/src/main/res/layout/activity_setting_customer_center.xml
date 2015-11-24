@@ -27,6 +27,7 @@
                 android:id="@+id/setting_customer_center_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text=""
                 android:textSize="15sp"
                 android:textColor="@color/black" />

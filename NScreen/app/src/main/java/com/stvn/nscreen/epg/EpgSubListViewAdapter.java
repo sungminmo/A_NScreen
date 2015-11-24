@@ -92,7 +92,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         // menu type count
-        return 7;
+        return 10;
     }
 
     @Override
@@ -126,69 +126,79 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             // case 3: { // 시청예약 / 녹화예약취소
             // case 4: { // 시청예약취소 / 녹화예약
             // case 5: { // 시청예약취소 / 녹화예약취소
+            // case 6: { // 미페어링
+            // case 7: { // TV로 시청
+            // case 8: { // 시청예약
+            // case 9: { // 시청예약취소
 
             if ( mPref.isPairingCompleted() == false ) {
                 return 6;
             }
 
-            if ( mCurrDateNo != 0 ) { // 오늘이 아니라면...
-                JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
-                if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
-                    if ( mPref.isWatchTvReserveWithProgramId(programId) == true ) { // 시청예약 걸려 있음.
-                        return 4; // 시청예약취소 / 녹화예약
-                    } else {  // 시청예약 없음.
-                        return 2; // 시청예약 / 녹화예약
-                    }
-                } else {      //  예약 녹화 걸린 방송.
-                    if ( mPref.isWatchTvReserveWithProgramId(programId) == true ) { // 시청예약 걸려 있음.
-                        return 5; // 시청예약취소 / 녹화예약취소
-                    } else {  // 시청예약 없음.
-                        return 3; // 시청예약 / 녹화예약취소
-                    }
-                }
-            } else {
-                if ( i2 < i1) {
-                    i2 += 1440;
-                    if ( i3 < i1 ) {
-                        i3 += 1440;
-                        if (i1 < i3 && i3 <= i2) {
-                            // 현재 방송 중.
-                            // menu: TV로 시청 / 즉시녹화 or 즉시녹화중지.
-                            if (mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2)) {
-                                return 1; // TV로 시청 / 녹화중지
-                            } else {
-                                return 0; // TV로 시청 / 즉시녹화
-                            }
-                        } else if (i3 <= i1) {
-                            // 미래 방송.
-                            JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
-                            if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
-                                return 2; // 시청예약 / 녹화예약
-                            } else {    //  예약 녹화 걸린 방송.
-                                return 3; // 시청예약 / 녹화예약취소
-                            }
+            if ( "PVR".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) ) {
+                if (mCurrDateNo != 0) { // 오늘이 아니라면...
+                    JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
+                    if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
+                        if (mPref.isWatchTvReserveWithProgramId(programId) == true) { // 시청예약 걸려 있음.
+                            return 4; // 시청예약취소 / 녹화예약
+                        } else {  // 시청예약 없음.
+                            return 2; // 시청예약 / 녹화예약
+                        }
+                    } else {      //  예약 녹화 걸린 방송.
+                        if (mPref.isWatchTvReserveWithProgramId(programId) == true) { // 시청예약 걸려 있음.
+                            return 5; // 시청예약취소 / 녹화예약취소
+                        } else {  // 시청예약 없음.
+                            return 3; // 시청예약 / 녹화예약취소
                         }
                     }
                 } else {
-                    if (i1 < i3 && i3 <= i2) {
+                    if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) <= 0 ) {
                         // 현재 방송 중.
-                        // menu: TV로 시청은 고정./ 즉시녹화or즉시녹화중지.
+                        // menu: TV로 시청 / 즉시녹화 or 즉시녹화중지.
                         if (mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2)) {
                             return 1; // TV로 시청 / 녹화중지
                         } else {
                             return 0; // TV로 시청 / 즉시녹화
                         }
-                    } else if ( i3 <= i1 ) {
-                        // 미래.
+                    } else if ( dt.compareTo(dt11) <= 0) {
+                        // 미래 방송.
                         JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
-                        if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
-                            return 2; // 시청예약 / 녹화예약
-                        } else {    //  예약 녹화 걸린 방송.
-                            return 3; // 시청예약 / 녹화예약취소
+                        if ( mPref.isWatchTvReserveWithProgramId(programId) == false ) {
+                            if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
+                                return 2; // 시청예약 / 녹화예약
+                            } else {    //  예약 녹화 걸린 방송.
+                                return 3; // 시청예약 / 녹화예약취소
+                            }
+                        } else {
+                            if ( reservItem == null) { // 예약녹화 걸려있지 않은 방송.
+                                return 4; // 시청예약취소 / 녹화예약
+                            } else { // 예약 녹화 걸린 방송
+                                return 5; // 시청예약취소 / 녹화에약취소
+                            }
                         }
-                    } else if ( i3 > i2 ) {
-                        // 과거.
-
+                    } else if (dt.compareTo(dt12) > 0) {
+                            // 과거.
+                    }
+                }
+            } else if ( "HD".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) || "SMART".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) ) {
+                if (mCurrDateNo != 0) { // 오늘이 아니라면...
+                        if (mPref.isWatchTvReserveWithProgramId(programId) == true) { // 시청예약 걸려 있음.
+                            return 9; // 시청예약취소
+                        } else {  // 시청예약 없음.
+                            return 8; // 시청예약
+                        }
+                } else {
+                    if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) <= 0 ) {
+                    // 현재 방송 중.
+                    // menu: TV로 시청
+                        return 7; // TV로 시청
+                    } else if ( dt12.compareTo(dt11) > 0 ) {
+                        // 미래 방송.
+                        if (mPref.isWatchTvReserveWithProgramId(programId) == true) {
+                            return 9; // 시청예약취소
+                        } else {
+                            return 8; // 시청예약
+                        }
                     }
                 }
             }

@@ -223,7 +223,7 @@ public class LeftMenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (mPref.isPairingCompleted() == false) {
-                    String alertTitle = "마이 C&M 미 지원 상품";
+                    String alertTitle = "마이 씨앤앰 미 지원 상품";
                     String alertMsg1 = getString(R.string.error_not_paring_compleated1);
                     String alertMsg2 = "";
                     CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {

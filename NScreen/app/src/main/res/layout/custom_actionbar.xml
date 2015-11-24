@@ -8,12 +8,13 @@
         android:id="@+id/actionbar_left"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:padding="@dimen/dimen_9">
+        android:padding="@dimen/dimen_9"
+        android:layout_marginLeft="10dp">
         <ImageView
             android:id="@+id/actionbar_image_l"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
     </RelativeLayout>
     <!-- 중앙 타이틀 영역 -->
     <LinearLayout

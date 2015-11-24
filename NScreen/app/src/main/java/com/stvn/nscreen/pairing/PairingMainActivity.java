@@ -25,15 +25,15 @@ import java.util.regex.Pattern;
 
 public class PairingMainActivity extends AppCompatActivity {
 
-    private static PairingMainActivity   mInstance;
-    private              JYSharedPreferences mPref;
+    private static PairingMainActivity mInstance;
+    private        JYSharedPreferences mPref;
 
 
-    private        EditText              mPurchasePassword1Edittext;
-    private        EditText              mPurchasePassword2Edittext;
-    private        Button                cancleButton, nextButton;
-    private ImageButton backBtn;
-    private LinearLayout pairing_main_non_title, pairing_main_ok_title, pairing_main_non_ment1, pairing_main_ok_ment1, pairing_main_non_ment2, pairing_main_ok_ment2;
+    private        EditText            mPurchasePassword1Edittext;
+    private        EditText            mPurchasePassword2Edittext;
+    private        Button              cancleButton, nextButton;
+    private        ImageButton         backBtn;
+    private        LinearLayout        pairing_main_non_title, pairing_main_ok_title, pairing_main_non_ment1, pairing_main_ok_ment1, pairing_main_non_ment2, pairing_main_ok_ment2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +77,16 @@ public class PairingMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if ( ! mPurchasePassword1Edittext.getText().toString().equals(mPurchasePassword2Edittext.getText().toString()) ) {
+                if ( ! mPurchasePassword2Edittext.getText().toString().equals(mPurchasePassword1Edittext.getText().toString()) ) {
                     String alertTitle = "비밀번호 오류";
                     String alertMsg1 = "비밀번호가 일치하지 않습니다.";
                     String alertMsg2 = "";
                     CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mPurchasePassword1Edittext.getText().clear();
                             mPurchasePassword2Edittext.getText().clear();
+                            mPurchasePassword1Edittext.getText().clear();
+                            mPurchasePassword1Edittext.requestFocus();
                         }
                     }, true);
                 } else {

@@ -14,23 +14,15 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".LoadingActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme" android:screenOrientation="portrait" >
+        <activity android:name=".LoadingActivity" android:label="@string/app_name" android:theme="@style/AppTheme" android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+        <activity android:name=".MainActivity" android:label="@string/app_name" android:screenOrientation="portrait" >
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
-
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
@@ -153,16 +145,22 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
-            android:name=".vod.VodDetailActivity"
-            android:label="@string/title_activity_vod_detail"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        </activity>
+        <activity android:name=".vod.VodDetailActivity" android:label="@string/title_activity_vod_detail" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".vod.VodDetailBundleActivity" android:label="@string/title_activity_vod_detail_bundle" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".vod.VodDetailBundle2Activity" android:label="@string/title_activity_vod_detail" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name=".vod.VodBuyActivity"
             android:label="@string/title_activity_vod_buy"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".vod.VodBuyDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_epg_choice"
+            android:screenOrientation="unspecified"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
 
         <!-- player -->
@@ -177,8 +175,8 @@
         <activity
             android:name="com.widevine.sampleplayer.VideoPlayerView"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>

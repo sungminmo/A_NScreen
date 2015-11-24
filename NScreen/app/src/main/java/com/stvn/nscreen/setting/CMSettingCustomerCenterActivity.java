@@ -91,8 +91,8 @@ public class CMSettingCustomerCenterActivity extends CMBaseActivity implements V
                try {
                     JSONObject noticeData = new JSONObject(jString);
 
-                    String title = noticeData.getString("guide_title");
-                    mContentTitle.setText(title);
+                    //String title = noticeData.getString("guide_title");
+                    //mContentTitle.setText(title);
 
                     String contents = noticeData.getString("guide_Content");
                     mContentText.setText(Html.fromHtml(contents));

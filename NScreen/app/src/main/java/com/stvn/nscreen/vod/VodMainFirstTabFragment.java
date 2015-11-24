@@ -1,9 +1,12 @@
 package com.stvn.nscreen.vod;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Parcelable;
@@ -72,6 +75,9 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     private              ProgressDialog         mProgressDialog;
     private              ImageLoader            mImageLoader;
 
+    private              BroadcastReceiver      mBroadcastReceiver;
+    private              boolean                isNeedReloadData; // 성인인증.
+
     // gui
     private              ViewPager              mBannerViewPager;
     private              List<JSONObject>       mBanners;
@@ -95,8 +101,44 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     public VodMainFirstTabFragment() {
         // Required empty public constructor
 
+
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                isNeedReloadData = true;
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("I_AM_ADULT");
+        getActivity().registerReceiver(mBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if ( mBroadcastReceiver != null ) {
+            getActivity().unregisterReceiver(mBroadcastReceiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ( isNeedReloadData == true ) {
+            isNeedReloadData = false;
+            mTab1TextView.performClick();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,10 +148,13 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         setMyContext(this.getActivity());
 
         mInstance     = this;
-        mPref         = new JYSharedPreferences(this.getActivity());
+        if ( mPref == null ) {
+            mPref = new JYSharedPreferences(this.getActivity());
+        }
         mRequestQueue = Volley.newRequestQueue(this.getActivity());
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
         mImageLoader  = new ImageLoader(mRequestQueue, imageCache);
+        isNeedReloadData = false;
 
         mBanners               = new ArrayList<JSONObject>();
         mPop20PagerAdapter     = new EightVodPosterPagerAdapter(this.getActivity());
@@ -346,18 +391,6 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     }
 
     // 배너 파싱
-    /*
-    <BannerList_Item>
-<vbId>1</vbId>
-<assetId>151006.20</assetId>
-<Banner_Version><![CDATA[ffefsfdfdsfasd]]></Banner_Version>
-<Banner_Title><![CDATA[ffefsfdfdsfasd]]></Banner_Title>
-<android_imgurl><![CDATA[http://58.141.255.80/data/vodbanner//1442457556268654.jpg]]></android_imgurl>
-<iphone_imgurl><![CDATA[http://58.141.255.80/data/vodbanner//1442457561612438.png]]></iphone_imgurl>
-<sortno>1</sortno>
-</BannerList_Item>
-
-     */
     private void parseGetServiceBannerList(String response) {
         StringBuilder sb = new StringBuilder();
         XmlPullParserFactory factory = null;
@@ -396,6 +429,8 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * PagerAdapter

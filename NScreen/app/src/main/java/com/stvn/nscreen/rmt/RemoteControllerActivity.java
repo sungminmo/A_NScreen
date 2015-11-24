@@ -364,38 +364,36 @@ public class RemoteControllerActivity extends AppCompatActivity{
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("셋탑박스가 꺼져있습니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "채널 변경";
+                    String alertMessage1 = "셋탑박스가 꺼져있습니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
+
                 } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("VOD 시청중엔 채널변경이 불가능합니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "채널 변경";
+                    String alertMessage1 = "VOD 시청중엔 채널변경이 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
-                    String errorString = (String)RemoteChannelControl.get("errorString");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("녹화물 재생중엔 채널변경이 불과능합니다.", new DialogInterface.OnClickListener() {
+                    String alertTitle = "채널 변경";
+                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불과능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
                         }
-                    });
-                    alert.setMessage(errorString);
-                    alert.show();
+                    }, true);
                 }
             }
         }, new Response.ErrorListener() {
