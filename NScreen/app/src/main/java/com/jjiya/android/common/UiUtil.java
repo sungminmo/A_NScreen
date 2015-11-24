@@ -389,7 +389,7 @@ public class UiUtil {
      * @param assetHot
      * @param PromotionSticker
      */
-    public static void setPromotionSticker(String promotionSticker, String isNew, String hot, String assetNew, String assetHot, ImageView PromotionSticker) {
+    public static void setPromotionSticker(String promotionSticker, Boolean isNew, Boolean hot, String assetNew, String assetHot, ImageView PromotionSticker) {
 
         // string < - > int
 //        String str = "1234";
@@ -397,8 +397,9 @@ public class UiUtil {
 //
 //        String str2 = String.valueOf(num);
 //        int    num2 = Integer.parseInt(str);
-
-        if ("0".equals(promotionSticker)) {
+        if ( isNew == true ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_01);
+        } else if ( assetNew != "0" ) {
             PromotionSticker.setImageResource(R.mipmap.vod_01);
         } else if ("11".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_09);
@@ -416,6 +417,10 @@ public class UiUtil {
             PromotionSticker.setImageResource(R.mipmap.vod_05);
         } else if ("18".equals(promotionSticker)) {
             PromotionSticker.setImageResource(R.mipmap.vod_06);
+        } else if ( hot == true ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_02);
+        } else if ( assetHot != "0" ) {
+            PromotionSticker.setImageResource(R.mipmap.vod_02);
         } else {
             PromotionSticker.setVisibility(View.GONE);
         }

@@ -133,6 +133,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating1 = jo1.getString("rating");
+                Boolean isNew1                = false; // 0:없음, 1:있음.
+                if ( ! jo1.isNull("isNew") ) {
+                    isNew1 = jo1.getBoolean("isNew");
+                }
+                String assetNew1             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo1.isNull("assetNew") ) {
+                    assetNew1 = jo1.getString("assetNew");
+                }
+                String assetHot1             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo1.isNull("assetHot") ) {
+                    assetHot1 = jo1.getString("assetHot");
+                }
+                Boolean hot1                  = false; // 0:없음, 1:있음.
+                if ( ! jo1.isNull("hot") ) {
+                    hot1 = jo1.getBoolean("hot");
+                }
                 niv11.setImageUrl(imageFileName1, mImageLoader);
                 niv11.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -162,7 +178,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker1, eight_vod_poster_promotionsticker_imageview1);
+                setPromotionSticker(promotionSticker1, isNew1, hot1, assetNew1, assetHot1, eight_vod_poster_promotionsticker_imageview1);
                 if ( isMobilePublicationRight == false ) {  // 모바일 판권이 없으니, TV전용 이미지를 보여라.
                     eight_vod_poster_tvonly_imageview1.setVisibility(View.VISIBLE);
                 }
@@ -206,6 +222,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating2 = jo2.getString("rating");
+                Boolean isNew2                = false; // 0:없음, 1:있음.
+                if ( ! jo2.isNull("isNew") ) {
+                    isNew2 = jo2.getBoolean("isNew");
+                }
+                String assetNew2             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo2.isNull("assetNew") ) {
+                    assetNew2 = jo2.getString("assetNew");
+                }
+                String assetHot2             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo2.isNull("assetHot") ) {
+                    assetHot2 = jo2.getString("assetHot");
+                }
+                Boolean hot2                  = false; // 0:없음, 1:있음.
+                if ( ! jo2.isNull("hot") ) {
+                    hot2 = jo2.getBoolean("hot");
+                }
                 niv21.setImageUrl(imageFileName2, mImageLoader);
                 niv21.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -235,7 +267,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker2, eight_vod_poster_promotionsticker_imageview2);
+                setPromotionSticker(promotionSticker2, isNew2, hot2, assetNew2, assetHot2, eight_vod_poster_promotionsticker_imageview2);
                 if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview2.setVisibility(View.VISIBLE);
                 }
@@ -279,6 +311,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating3 = jo3.getString("rating");
+                Boolean isNew3                = false; // 0:없음, 1:있음.
+                if ( ! jo3.isNull("isNew") ) {
+                    isNew3 = jo3.getBoolean("isNew");
+                }
+                String assetNew3             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo3.isNull("assetNew") ) {
+                    assetNew3 = jo3.getString("assetNew");
+                }
+                String assetHot3             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo3.isNull("assetHot") ) {
+                    assetHot3 = jo3.getString("assetHot");
+                }
+                Boolean hot3                  = false; // 0:없음, 1:있음.
+                if ( ! jo3.isNull("hot") ) {
+                    hot3 = jo3.getBoolean("hot");
+                }
                 niv31.setImageUrl(imageFileName3, mImageLoader);
                 niv31.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -308,7 +356,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker3, eight_vod_poster_promotionsticker_imageview3);
+                setPromotionSticker(promotionSticker3, isNew3, hot3, assetNew3, assetHot3, eight_vod_poster_promotionsticker_imageview3);
                 if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview3.setVisibility(View.VISIBLE);
                 }
@@ -352,6 +400,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating4 = jo4.getString("rating");
+                Boolean isNew4                = false; // 0:없음, 1:있음.
+                if ( ! jo4.isNull("isNew") ) {
+                    isNew4 = jo4.getBoolean("isNew");
+                }
+                String assetNew4             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo4.isNull("assetNew") ) {
+                    assetNew4 = jo4.getString("assetNew");
+                }
+                String assetHot4             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo4.isNull("assetHot") ) {
+                    assetHot4 = jo4.getString("assetHot");
+                }
+                Boolean hot4                  = false; // 0:없음, 1:있음.
+                if ( ! jo4.isNull("hot") ) {
+                    hot4 = jo4.getBoolean("hot");
+                }
                 niv41.setImageUrl(imageFileName4, mImageLoader);
                 niv41.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -381,7 +445,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker4, eight_vod_poster_promotionsticker_imageview4);
+                setPromotionSticker(promotionSticker4, isNew4, hot4, assetNew4, assetHot4, eight_vod_poster_promotionsticker_imageview4);
                 if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview4.setVisibility(View.VISIBLE);
                 }
@@ -425,6 +489,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating5 = jo5.getString("rating");
+                Boolean isNew5                = false; // 0:없음, 1:있음.
+                if ( ! jo5.isNull("isNew") ) {
+                    isNew5 = jo5.getBoolean("isNew");
+                }
+                String assetNew5             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo5.isNull("assetNew") ) {
+                    assetNew5 = jo5.getString("assetNew");
+                }
+                String assetHot5             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo5.isNull("assetHot") ) {
+                    assetHot5 = jo5.getString("assetHot");
+                }
+                Boolean hot5                  = false; // 0:없음, 1:있음.
+                if ( ! jo5.isNull("hot") ) {
+                    hot5 = jo5.getBoolean("hot");
+                }
                 niv51.setImageUrl(imageFileName5, mImageLoader);
                 niv51.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -454,7 +534,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker5, eight_vod_poster_promotionsticker_imageview5);
+                setPromotionSticker(promotionSticker5, isNew5, hot5, assetNew5, assetHot5, eight_vod_poster_promotionsticker_imageview5);
                 if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview5.setVisibility(View.VISIBLE);
                 }
@@ -498,6 +578,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating6 = jo6.getString("rating");
+                Boolean isNew6                = false; // 0:없음, 1:있음.
+                if ( ! jo6.isNull("isNew") ) {
+                    isNew6 = jo6.getBoolean("isNew");
+                }
+                String assetNew6             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo6.isNull("assetNew") ) {
+                    assetNew6 = jo6.getString("assetNew");
+                }
+                String assetHot6             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo6.isNull("assetHot") ) {
+                    assetHot6 = jo6.getString("assetHot");
+                }
+                Boolean hot6                  = false; // 0:없음, 1:있음.
+                if ( ! jo6.isNull("hot") ) {
+                    hot6 = jo6.getBoolean("hot");
+                }
                 niv61.setImageUrl(imageFileName6, mImageLoader);
                 niv61.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -527,7 +623,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker6, eight_vod_poster_promotionsticker_imageview6);
+                setPromotionSticker(promotionSticker6, isNew6, hot6, assetNew6, assetHot6, eight_vod_poster_promotionsticker_imageview6);
                 if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview6.setVisibility(View.VISIBLE);
                 }
@@ -571,6 +667,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating7 = jo7.getString("rating");
+                Boolean isNew7                = false; // 0:없음, 1:있음.
+                if ( ! jo7.isNull("isNew") ) {
+                    isNew7 = jo7.getBoolean("isNew");
+                }
+                String assetNew7             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo7.isNull("assetNew") ) {
+                    assetNew7 = jo7.getString("assetNew");
+                }
+                String assetHot7             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo7.isNull("assetHot") ) {
+                    assetHot7 = jo7.getString("assetHot");
+                }
+                Boolean hot7                  = false; // 0:없음, 1:있음.
+                if ( ! jo7.isNull("hot") ) {
+                    hot7 = jo7.getBoolean("hot");
+                }
                 niv71.setImageUrl(imageFileName7, mImageLoader);
                 niv71.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -600,7 +712,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker7, eight_vod_poster_promotionsticker_imageview7);
+                setPromotionSticker(promotionSticker7, isNew7, hot7, assetNew7, assetHot7, eight_vod_poster_promotionsticker_imageview7);
                 if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview7.setVisibility(View.VISIBLE);
                 }
@@ -644,6 +756,22 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 }
 
                 final String rating8 = jo8.getString("rating");
+                Boolean isNew8                = false; // 0:없음, 1:있음.
+                if ( ! jo8.isNull("isNew") ) {
+                    isNew8 = jo8.getBoolean("isNew");
+                }
+                String assetNew8             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo8.isNull("assetNew") ) {
+                    assetNew8 = jo8.getString("assetNew");
+                }
+                String assetHot8             = "0"; // 0:없음, 1:new일부만, 2:new단체
+                if ( ! jo8.isNull("assetHot") ) {
+                    assetHot8 = jo8.getString("assetHot");
+                }
+                Boolean hot8                  = false; // 0:없음, 1:있음.
+                if ( ! jo8.isNull("hot") ) {
+                    hot8 = jo8.getBoolean("hot");
+                }
                 niv81.setImageUrl(imageFileName8, mImageLoader);
                 niv81.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -673,7 +801,7 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     }
                 });
 
-                setPromotionSticker(promotionSticker8, eight_vod_poster_promotionsticker_imageview8);
+                setPromotionSticker(promotionSticker8, isNew8, hot8, assetNew8, assetHot8, eight_vod_poster_promotionsticker_imageview8);
                 if ( isMobilePublicationRight == false ) {
                     eight_vod_poster_tvonly_imageview8.setVisibility(View.VISIBLE);
                 }
