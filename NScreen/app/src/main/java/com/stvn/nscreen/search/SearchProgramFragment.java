@@ -728,6 +728,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 case R.id.set_reservation_watch: //예약시청설정
                     break;
                 case R.id.cancel_reservation_watch: //예약시청취소
+                    mPref.removeWatchTvReserveAlarm(mProgramlist.get(position).getChannelProgramID());
+                    mAdapter.notifyDataSetChanged();
                     break;
             }
         }

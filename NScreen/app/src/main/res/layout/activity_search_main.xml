@@ -101,13 +101,6 @@
             android:visibility="visible"
             />
 
-        <FrameLayout
-            android:id="@+id/searchFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/searchcount"
-            android:visibility="visible"
-            />
 
         <TextView
             android:layout_width="match_parent"
@@ -119,6 +112,14 @@
             android:text="@string/search_keyword_empty_msg"
             android:paddingTop="@dimen/dimen_119.5"
             android:id="@+id/keyword_emptyview"
+            />
+
+        <FrameLayout
+            android:id="@+id/searchFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchcount"
+            android:visibility="visible"
             />
 
         <ListView
