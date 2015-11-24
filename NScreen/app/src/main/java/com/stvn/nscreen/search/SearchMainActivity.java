@@ -30,6 +30,7 @@ import com.stvn.nscreen.common.CMBaseActivity;
 import com.stvn.nscreen.common.GsonRequest;
 import com.stvn.nscreen.common.KeyWordDataObject;
 import com.stvn.nscreen.common.VolleyHelper;
+import com.stvn.nscreen.setting.CMSettingData;
 
 import java.util.ArrayList;
 
@@ -92,6 +93,15 @@ public class SearchMainActivity extends CMBaseActivity {
         mKeywordEmptyView = (TextView)findViewById(R.id.keyword_emptyview);
         mKeywordEmptyView.setVisibility(View.VISIBLE);
         mKeywordEmptyView.setText("검색 창에 원하시는 검색어를\n입력해주세요.");
+
+        if (CMSettingData.getInstance().getAdultSearchRestriction(this) == true) {
+            mKeywordView.setHint("성인 콘텐츠를 검색하시려면 설정 > 성인검색 제한 설정을 해제 해주세요.");
+        } else {
+            mKeywordView.setHint("");
+        }
+        // 최초 힌트 텍스트 표출을 위한 EditText의 text size 변경 처리
+        changeSearchTextSize(mKeywordView.getText().toString().length());
+
         mKeywordListView.setVisibility(View.GONE);
         mClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +172,9 @@ public class SearchMainActivity extends CMBaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+
+            changeSearchTextSize(s.length());
+
             if(s.length()>0)
             {
                 isFragmentVisible = false;
@@ -213,7 +226,7 @@ public class SearchMainActivity extends CMBaseActivity {
                     mKeywordEmptyView.setText("검색 창에 원하시는 검색어를\n입력해주세요.");
                     mKeywordEmptyView.setVisibility(View.VISIBLE);
                 }
-                mAdapter.notifyDataSetChanged();;
+                mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener(){
             @Override
@@ -331,5 +344,17 @@ public class SearchMainActivity extends CMBaseActivity {
     @Override
     public void onBackEventPressed() {
         finish();
+    }
+
+    /**
+     * 성인인증 검색제한 여부에 따른 힌트 텍스트와 일반 텍스트의 크기 변경처리를 한다.
+     * */
+    private void changeSearchTextSize(int textCount) {
+
+        if (CMSettingData.getInstance().getAdultSearchRestriction(this) == true && textCount == 0) {
+            mKeywordView.setTextSize(8);
+        } else {
+            mKeywordView.setTextSize(16);
+        }
     }
 }
