@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +49,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.BatchUpdateException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -60,13 +63,14 @@ public class LoadingActivity extends AppCompatActivity {
     // network
     private              RequestQueue        mRequestQueue;
     private              Map<String, Object> mGetAppInitialize;
-    private              MainCategoryObject mMainCategoryObject1;
-    private              MainCategoryObject mMainCategoryObject2;
-    private              MainCategoryObject mMainCategoryObject3;
+    private              MainCategoryObject  mMainCategoryObject1;
+    private              MainCategoryObject  mMainCategoryObject2;
+    private              MainCategoryObject  mMainCategoryObject3;
 
     // ui
     private              ProgressBar         mProgressBar;
     private              TextView            mTextView;
+    private              Button              mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,16 +88,26 @@ public class LoadingActivity extends AppCompatActivity {
 
         mProgressBar  = (ProgressBar)findViewById(R.id.loading_progressbar);
         mTextView     = (TextView)findViewById(R.id.loading_textview);
+        mButton       = (Button)findViewById(R.id.loading_button);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mButton.setVisibility(View.INVISIBLE);
+                mProgressBar.setProgress(0);
+                mProgressBar.setProgress(10);
+                mTextView.setText("초기화 중입니다.");
+                requestGetAppInitialize();
+            }
+        });
 
+        mProgressBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
-        //mProgressBar.getProgressDrawable().setColorFilter(Color.MAGENTA, PorterDuff.Mode.SRC_IN);
-        //mProgressBar.getProgressDrawable().setColorFilter(0xFFFF0000, PorterDuff.Mode.SRC_IN);
-        mProgressBar.getProgressDrawable().setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN);
-
+        // 10~20 : file io
+        // 21~60 : requestGetAppInitialize
+        // 61~100 : requestGetCategoryTreeForVodMain
 
         mProgressBar.setProgress(10);
         mTextView.setText("초기화 중입니다.");
-
 
         // test only
         // mPref.testWritePairingInfoToPhone();
@@ -112,44 +126,34 @@ public class LoadingActivity extends AppCompatActivity {
             }
         }
 
-
-
-
-        // requestGetAppInitialize() 50%
-        // requestGetWishList()      50%
-
-        //requestGetAppInitialize();
-
         //mPref.writePairingInfoToPhone();
         //mPref.readPairingInfoFromPhone();
-        requestGetCategoryTreeForVodMain();
+        requestGetAppInitialize();
     }
 
-    private String makeKey(String DeviceId){
-        String etc = "ilovejiyoonjiwoonyounghee!!!!!!!";
-        StringBuffer sb = new StringBuffer();
-        sb.append(DeviceId);
-        int posi = 0;
-        while ( sb.length() < 32 ) {
-            sb.append(etc.charAt(posi));
-            posi++;
-        }
-        return sb.toString();
+    private void setUIFail(String msg) {
+        mProgressBar.setProgress(0);
+        mTextView.setText(msg);
+        mButton.setVisibility(View.VISIBLE);
     }
+
 
     /**
-     *
+     * // 10~20 : file io
+     // 21~60 : requestGetAppInitialize
+     // 61~100 : requestGetCategoryTreeForVodMain
      */
     private void requestGetAppInitialize() {
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetAppInitialize()"); }
         String url  = mPref.getRumpersServerUrl() + "/GetAppInitialize.asp?appType=A&appId="+mPref.getValue(JYSharedPreferences.UUID, "");
         mTextView.setText("AppInitialize...(R)");
+        mProgressBar.setProgress(21);
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mProgressBar.setProgress(30);
                 parseGetAppInitialize(response);
-                mProgressBar.setProgress(40);
+                mProgressBar.setProgress(50);
                 if ( Constants.CODE_RUMPUS_OK.equals(mGetAppInitialize.get("resultCode")) ) {
                     // ok
                     String SetTopBoxKind = (String)mGetAppInitialize.get("SetTopBoxKind");
@@ -165,16 +169,7 @@ public class LoadingActivity extends AppCompatActivity {
                     String appversion = (String)mGetAppInitialize.get("appversion");
                     mPref.setAppVersionForServer(appversion);
 
-                    if ( mPref.isPairingCompleted() ) {
-                        mProgressBar.setProgress(50);
-                        requestGetWishList();
-                    } else {
-                        mTextView.setText("초기화를 완료 했습니다.");
-                        mProgressBar.setProgress(100);
-                        Intent intent = new Intent(mInstance, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
+                    requestGetCategoryTreeForVodMain();
                 } else {
                     String errorString = (String)mGetAppInitialize.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
@@ -192,13 +187,13 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof TimeoutError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_timeout));
                 } else if (error instanceof NoConnectionError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_noconnectionerror));
                 } else if (error instanceof ServerError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_servererror));
                 } else if (error instanceof NetworkError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_networkerrorr));
                 }
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
@@ -213,7 +208,6 @@ public class LoadingActivity extends AppCompatActivity {
             }
         };
         mRequestQueue.add(request);
-        mProgressBar.setProgress(20);
     }
 
     private void parseGetAppInitialize(String response) {
@@ -292,9 +286,13 @@ public class LoadingActivity extends AppCompatActivity {
     /**
      * VOD 메인 탭 5개 중에, 4개 받아오기.
      * http://58.141.255.79:8080/HApplicationServer/getCategoryTree.json?version=1&terminalKey=D049DBBA897611A7F6B6454471B5B6&categoryProfile=1&categoryId=0&depth=2&traverseType=DFS
+     * /**
+     * // 10~20 : file io
+     // 21~60 : requestGetAppInitialize
+     // 61~100 : requestGetCategoryTreeForVodMain
      */
     private void requestGetCategoryTreeForVodMain() {
-        //mProgressBar.setProgress(70);
+        mProgressBar.setProgress(61);
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetCategoryTreeForVodMain()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
         String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+terminalKey+"&&categoryProfile=1&categoryId=0&depth=2&traverseType=DFS";
@@ -302,7 +300,7 @@ public class LoadingActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //mProgressBar.setProgress(80);
+                mProgressBar.setProgress(70);
                 try {
                     JSONObject root    = new JSONObject(response);
                     String resultCode  = root.getString("resultCode");
@@ -324,81 +322,11 @@ public class LoadingActivity extends AppCompatActivity {
                     } else {
                         //
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                requestGetAppInitialize();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
-                if (error instanceof TimeoutError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
-                } else if (error instanceof NoConnectionError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
-                } else if (error instanceof ServerError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
-                } else if (error instanceof NetworkError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
-                }
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("version", String.valueOf(1));
-                params.put("areaCode", String.valueOf(0));
-                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
-                return params;
-            }
-        };
-        mRequestQueue.add(request);
-        //mProgressBar.setProgress(60);
-    }
-
-    /**
-     * 찜하기 리스트 받기
-     * http://58.141.255.79:8080/HApplicationServer/getWishList.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1
-     */
-    private void requestGetWishList() {
-        mProgressBar.setProgress(70);
-        if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
-        String terminalKey = mPref.getWebhasTerminalKey();
-        String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
-        mTextView.setText("WishList...(H)");
-        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                mProgressBar.setProgress(80);
-                try {
-                    JSONObject jo      = new JSONObject(response);
-                    String resultCode  = jo.getString("resultCode");
-
-                    if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
-                        JSONArray arr  = jo.getJSONArray("wishItemList");
-                        mPref.setAllWishList(arr);
-                    } else {
-                        String errorString = jo.getString("errorString");
-                        StringBuilder sb   = new StringBuilder();
-                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alert.setMessage(sb.toString());
-                        alert.show();
-                    }
-
                     mTextView.setText("초기화를 완료 했습니다.");
                     mProgressBar.setProgress(100);
                     Intent intent = new Intent(mInstance, MainActivity.class);
                     startActivity(intent);
                     finish();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -408,13 +336,13 @@ public class LoadingActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
                 if (error instanceof TimeoutError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_timeout));
                 } else if (error instanceof NoConnectionError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_noconnectionerror));
                 } else if (error instanceof ServerError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_servererror));
                 } else if (error instanceof NetworkError) {
-                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                    setUIFail(mInstance.getString(R.string.error_network_networkerrorr));
                 }
             }
         }) {
@@ -428,8 +356,5 @@ public class LoadingActivity extends AppCompatActivity {
             }
         };
         mRequestQueue.add(request);
-        mProgressBar.setProgress(60);
     }
-
-
 }
