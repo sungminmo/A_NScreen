@@ -74,11 +74,7 @@ public class VodDetailActivity extends Activity {
     // UI
     private TextView mTitleTextView;
     private ImageView mRatingImageView;
-    private ImageView mReviewStar1ImageView;
-    private ImageView mReviewStar2ImageView;
-    private ImageView mReviewStar3ImageView;
-    private ImageView mReviewStar4ImageView;
-    private ImageView mReviewStar5ImageView;
+    private ImageView mReviewStar1ImageView, mReviewStar2ImageView, mReviewStar3ImageView, mReviewStar4ImageView, mReviewStar5ImageView;
     private ImageView mPromotionSticker;
     private ImageView mHdSdImageView;
     private NetworkImageView mMovieImageImageView;
@@ -89,6 +85,8 @@ public class VodDetailActivity extends Activity {
     private TextView mViewableTextView;
     private ImageView mMobileImageView;
     private LinearLayout mSeriesLinearLayout;
+    private ImageView mSeriesLeftImage;
+    private ImageView mSeriesRightImage;
     private TextView mSynopsisTextView;
     private LinearLayout mPurchaseLinearLayout;
     private LinearLayout mPurchaseLinearLayout2;
@@ -118,6 +116,8 @@ public class VodDetailActivity extends Activity {
     private String seriesCurIndex;        // getAssetListByEpisodePeerId
     private String seriesEndIndex;        // getAssetListByEpisodePeerId
     private String seriesTotalAssetCount; // getAssetListByEpisodePeerId
+    private String mSeriesReleaseDate;    // getEpisodePeerListByContentGroupId
+
 
     private List<JSONObject> relationVods;
     //private List<JSONObject> series;
@@ -206,6 +206,8 @@ public class VodDetailActivity extends Activity {
         mStarringTextView     = (TextView)findViewById(R.id.vod_detail_starring_textview);
         mViewableTextView     = (TextView)findViewById(R.id.vod_detail_viewable_textview);
         mSeriesLinearLayout   = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout);    // 시리즈 회차 버튼
+        mSeriesLeftImage      = (ImageView)findViewById(R.id.vod_detail_series_left_image);
+        mSeriesRightImage      = (ImageView)findViewById(R.id.vod_detail_series_right_image);
         mSynopsisTextView     = (TextView)findViewById(R.id.vod_detail_synopsis_textview);
         mPurchaseLinearLayout = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout);  // 미리보기/구매하기/찜하기
         mPurchaseLinearLayout2 = (LinearLayout)findViewById(R.id.vod_detail_purchase_linearlayout2);  // 구매하기/찜하기
@@ -225,11 +227,17 @@ public class VodDetailActivity extends Activity {
                         int x = mSeriesScrollView.getScrollX();
                         int barsize = mSeriesScrollView.getScrollBarSize();
                         int width = mSeriesScrollView.getWidth();
-                        if ( (width-barsize) <= x ) {
-                            Log.d(tag, "왼쪽에 화살표 찍어라");
-                        }
-                        if ( barsize >= x ) {
-                            Log.d(tag, "오른쪽에 화살표 찍어라");
+                        if ( (width-10) <= x ) {
+                            //Log.d(tag, "왼쪽에 화살표 찍어라");
+                            mSeriesLeftImage.setImageResource(R.mipmap.series_arrow_01);
+                            mSeriesRightImage.setImageResource(R.mipmap.series_arrow_02_dim);
+                        } else if ( 10 >= x ) {
+                            //Log.d(tag, "오른쪽에 화살표 찍어라");
+                            mSeriesLeftImage.setImageResource(R.mipmap.series_arrow_01_dim);
+                            mSeriesRightImage.setImageResource(R.mipmap.series_arrow_02);
+                        } else {
+                            mSeriesLeftImage.setImageResource(R.mipmap.series_arrow_01);
+                            mSeriesRightImage.setImageResource(R.mipmap.series_arrow_02);
                         }
                         Log.d(tag, "x: " + x + ", width: " + width);
                     }
@@ -377,7 +385,7 @@ public class VodDetailActivity extends Activity {
                         mJimButton.setCompoundDrawables(null, null, img, null);
                         mJimButton.setText("찜해제");
 
-                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 씨앤앰 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     // 찜 한 VOD
@@ -415,7 +423,7 @@ public class VodDetailActivity extends Activity {
                             mJimButton2.setCompoundDrawables(null, null, img, null);
                             mJimButton2.setText("찜해제");
 
-                            Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 C&M > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 씨앤앰 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
                         }
                 } else {
                     // 찜 한 VOD
@@ -442,12 +450,20 @@ public class VodDetailActivity extends Activity {
 
         if ( mPref.isWishAsset(assetId) == false ) {
             // 찜 안한 VOD
+            Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
+            img.setBounds(0, 0, 35, 35);
+            mJimButton.setCompoundDrawables(null, null, img, null);
+            mJimButton.setText("찜하기");
+            mJimButton2.setCompoundDrawables(null, null, img, null);
+            mJimButton2.setText("찜하기");
         } else {
             // 찜 한 VOD
             Drawable img = getResources().getDrawable(R.mipmap.v_pick);
             img.setBounds( 0, 0, 35, 35 );
             mJimButton.setCompoundDrawables( null, null, img, null );
             mJimButton.setText("찜해제");
+            mJimButton2.setCompoundDrawables( null, null, img, null );
+            mJimButton2.setText("찜해제");
         }
 
 
@@ -479,7 +495,7 @@ public class VodDetailActivity extends Activity {
      */
     public void refreshAll(String aid){
         assetId = aid;
-
+        mSeriesReleaseDate = null;
         isPrePlay = true;
         relationVods.clear();
         mPagerAdapter.clear();
@@ -487,6 +503,13 @@ public class VodDetailActivity extends Activity {
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
         ll.removeAllViewsInLayout();
+
+        Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
+        img.setBounds(0, 0, 35, 35);
+        mJimButton.setCompoundDrawables(null, null, img, null);
+        mJimButton.setText("찜하기");
+        mJimButton2.setCompoundDrawables(null, null, img, null);
+        mJimButton2.setText("찜하기");
 
         /**
          * VOD 상세정보 요청
@@ -537,8 +560,8 @@ public class VodDetailActivity extends Activity {
             String genre                = asset.getString("genre");
             String runningTime          = asset.getString("runningTime");
             String releaseDate          = "";
-            if ( ! asset.isNull("releaseDate") ) {
-                releaseDate = " / " + asset.getString("releaseDate");
+            if ( mSeriesReleaseDate != null && mSeriesReleaseDate.length() > 0) {
+                releaseDate = " / " + mSeriesReleaseDate + " 방영";
             }
             String director             = asset.getString("director");
             String starring             = asset.getString("starring");
@@ -769,7 +792,7 @@ public class VodDetailActivity extends Activity {
 
                 LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(dp2px(16),0,0,0);
+                lp.setMargins(dp2px(8),0,dp2px(8),0);
                 ll.addView(seriesButton, lp);
                 seriesButton.getLayoutParams().width  = dp2px(42);
                 seriesButton.getLayoutParams().height = dp2px(28);
@@ -935,7 +958,8 @@ public class VodDetailActivity extends Activity {
                         JSONObject episodePeer = episodePeerList.getJSONObject(i);
                         String loopPrimaryAssetId  = episodePeer.getString("primaryAssetId");
                         if ( primaryAssetId.equals(loopPrimaryAssetId) ) {
-                            episodePeerId = episodePeer.getString("episodePeerId");
+                            mSeriesReleaseDate = episodePeer.getString("releaseDate");
+                            episodePeerId      = episodePeer.getString("episodePeerId");
                             requestGetAssetListByEpisodePeerId();
                         }
                     }
