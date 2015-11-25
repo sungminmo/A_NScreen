@@ -8,6 +8,7 @@
 	<color name="transparent">#00000000</color>
 	<color name="search_programtext_violet">#7b5aa3</color>
 	<color name="search_programtext_grape">#c5c5c5</color>
+	<color name="search_hint">#555555</color>
 
 	<!-- 설정 화면 내 사용 색상 -->
 	<color name="text_area_color">#9932cc</color> <!-- 지역명 색상 -->
