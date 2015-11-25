@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -213,6 +215,27 @@ public class VodDetailActivity extends Activity {
         mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
         mSeriesScrollView     = (HorizontalScrollView)findViewById(R.id.mSeriesScrollView);
+        mSeriesScrollView.post(new Runnable(){
+            @Override
+            public void run() {
+                ViewTreeObserver observer = mSeriesScrollView.getViewTreeObserver();
+                observer.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener(){
+                    @Override
+                    public void onScrollChanged() {
+                        int x = mSeriesScrollView.getScrollX();
+                        int barsize = mSeriesScrollView.getScrollBarSize();
+                        int width = mSeriesScrollView.getWidth();
+                        if ( (width-barsize) <= x ) {
+                            Log.d(tag, "왼쪽에 화살표 찍어라");
+                        }
+                        if ( barsize >= x ) {
+                            Log.d(tag, "오른쪽에 화살표 찍어라");
+                        }
+                        Log.d(tag, "x: " + x + ", width: " + width);
+                    }
+                });
+            }
+        });
 
         ImageButton backButton = (ImageButton)findViewById(R.id.vod_detail_topmenu_left_imagebutton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -459,8 +482,8 @@ public class VodDetailActivity extends Activity {
 
         isPrePlay = true;
         relationVods.clear();
-//        series.clear();
         mPagerAdapter.clear();
+        mPagerAdapter.notifyDataSetChanged();
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
         ll.removeAllViewsInLayout();
@@ -469,19 +492,10 @@ public class VodDetailActivity extends Activity {
          * VOD 상세정보 요청
          */
         if ( "1".equals(episodePeerExistence) ) {
-            // TODO
-            //episodePeerExistence = getIntent().getExtras().getString("episodePeerExistence");
-            //contentGroupId       = getIntent().getExtras().getString("contentGroupId");
-            //primaryAssetId       = getIntent().getExtras().getString("primaryAssetId");
             requestGetEpisodePeerListByContentGroupId();
         } else {
             requestGetAssetInfo();
         }
-
-        /**
-         * 화면 하단의 연관 VOD 요청
-         */
-        requestRecommendContentGroupByAssetId();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -505,6 +519,10 @@ public class VodDetailActivity extends Activity {
                 }
             } break;
         }
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private void setUIAsset(JSONObject asset) {
@@ -740,7 +758,6 @@ public class VodDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         if ( isSeriesLink.equals("YES") ) {
-
                             refreshAll(thisAssetId);
                         } else {
                             Intent intent = new Intent(mInstance, VodDetailActivity.class);
@@ -752,7 +769,10 @@ public class VodDetailActivity extends Activity {
 
                 LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(dp2px(16),0,0,0);
                 ll.addView(seriesButton, lp);
+                seriesButton.getLayoutParams().width  = dp2px(42);
+                seriesButton.getLayoutParams().height = dp2px(28);
 
                 if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
                     iLoop--;
@@ -794,9 +814,13 @@ public class VodDetailActivity extends Activity {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
                 try {
-                    JSONObject jo            = new JSONObject(response);
+                    JSONObject jo         = new JSONObject(response);
                     // asset
-                    JSONObject asset            = jo.getJSONObject("asset");
+                    JSONObject asset      = jo.getJSONObject("asset");
+
+                    seriesCurIndex        = asset.getString("seriesCurIndex");
+                    seriesEndIndex        = asset.getString("seriesEndIndex");
+                    seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
 
                     setUIAsset(asset);
                 } catch (JSONException e) {
@@ -860,7 +884,9 @@ public class VodDetailActivity extends Activity {
                         relationVods.add(content);
                         mPagerAdapter.addVod(content);
                     }
-                    mViewPager.setAdapter(mPagerAdapter);
+                    if ( mViewPager.getAdapter() == null ) {
+                        mViewPager.setAdapter(mPagerAdapter);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1139,8 +1165,8 @@ public class VodDetailActivity extends Activity {
                         String resultMessages = header.getString("resultMessages");
 
                         String alertTitle = "VOD 시청 안내";
-                        String alertMsg1  = getString(R.string.error_not_play_vod);
-                        String alertMsg2  = "";
+                        String alertMsg1 = getString(R.string.error_not_play_vod);
+                        String alertMsg2 = "";
                         CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

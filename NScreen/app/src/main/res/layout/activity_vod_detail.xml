@@ -2,10 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@color/white">
 
-<ScrollView
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="49.75dp"
+        android:background="@color/violet">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:id="@+id/vod_detail_topmenu_left_imagebutton"
+            android:src="@mipmap/btn_back"
+            android:background="@color/transparent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/vod_detail_title"
+            android:id="@+id/textView"
+            android:textSize="16.25sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:id="@+id/vod_fragment_topmenu_right_imagebutton"
+            android:layout_gravity="right"
+            android:background="@color/transparent"
+            android:visibility="invisible" />
+
+
+    </FrameLayout>
+
+    <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,40 +49,7 @@
         android:orientation="vertical">
 
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="49.75dp"
-            android:background="@color/violet">
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:id="@+id/vod_detail_topmenu_left_imagebutton"
-                android:src="@mipmap/btn_back"
-                android:background="@color/transparent" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/vod_detail_title"
-                android:id="@+id/textView"
-                android:textSize="16.25sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:gravity="center_vertical|center_horizontal" />
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:id="@+id/vod_fragment_topmenu_right_imagebutton"
-                android:layout_gravity="right"
-                android:background="@color/transparent"
-                android:visibility="invisible" />
-
-
-        </FrameLayout>
-
-    <LinearLayout
+        <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="185.25dp">
@@ -398,20 +398,6 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:id="@+id/vod_detail_series_linearlayout2">
-
-
- <!--
-                <Button
-                    android:layout_width="41.25dp"
-                    android:layout_height="27.75dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:text="1회"
-                    android:id="@+id/vod_detail_series_1_button"
-                    android:textSize="14.5sp"
-                    android:textColor="@color/violet"
-                    android:background="@drawable/series_selector" />
-                    -->
-
 
             </LinearLayout>
 
