@@ -101,9 +101,21 @@ public class PairingSubActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if ( mAuthCodeEditText.length() == 0 ) {
+                    String alertTitle = "인증 번호";
+                    String alertMessage1 = getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode1);
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if (mAuthCodeEditText.length() > 0 ) {
                     mCancleButton.setEnabled(false);
                     mNextButton.setEnabled(false);
                     requestClientSetTopBoxRegist();
+                }
             }
         });
     }

@@ -181,9 +181,9 @@ public class VodDetailBundle2Activity extends Activity {
                     Integer viewablePeriodState = product.getInt("viewablePeriodState");
                     String viewablePeriod       = product.getString("viewablePeriod");
 
-                    String isNew                = ""; // 0:없음, 1:있음.
+                    Boolean isNew                = false; // 0:없음, 1:있음.
                     Object isNewObj             = asset.get("isNew");
-                    if ( isNewObj != null ) { isNew = asset.getString("isNew"); }
+                    if ( isNewObj != null ) { isNew = asset.getBoolean("isNew"); }
                     String assetNew             = "0"; // 0:없음, 1:new일부만, 2:new단체
                     if ( ! asset.isNull("assetNew") ) {
                         assetNew = asset.getString("assetNew");
@@ -192,9 +192,9 @@ public class VodDetailBundle2Activity extends Activity {
                     if ( ! asset.isNull("assetHot") ) {
                         assetHot = asset.getString("assetHot");
                     }
-                    String hot                  = ""; // 0:없음, 1:있음.
+                    Boolean hot                  = false; // 0:없음, 1:있음.
                     if ( ! asset.isNull("hot") ) {
-                        hot = asset.getString("hot");
+                        hot = asset.getBoolean("hot");
                     }
 
                     String runningTimeMinute    = String.valueOf((Integer.parseInt(runningTime.substring(0, 2)) * 60) + Integer.parseInt(runningTime.substring(3))) + "분";

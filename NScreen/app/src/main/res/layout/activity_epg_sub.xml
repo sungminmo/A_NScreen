@@ -72,7 +72,7 @@
                 android:layout_width="48dp"
                 android:layout_height="19.25dp"
                 android:id="@+id/epg_sub_imageview_channel_logo"
-                android:background="#d1d1d1"
+                android:background="#bcbcbc"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="23dp" />
         </LinearLayout>
@@ -105,13 +105,12 @@
                         android:layout_marginLeft="14dp"
                         android:background="@mipmap/ch_date_select"
                         android:layout_marginTop="8.5dp"
-                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginBottom="5dp"
                         android:visibility="visible" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" "
                         android:id="@+id/epg_sub_date1"
                         android:layout_marginRight="26.5dp"
                         android:textSize="14.5sp"
@@ -143,7 +142,7 @@
                         android:id="@+id/imageView22"
                         android:background="@mipmap/ch_date_select"
                         android:layout_marginLeft="14dp"
-                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="8.5dp"
                         android:visibility="invisible" />
 
@@ -180,7 +179,7 @@
                         android:background="@mipmap/ch_date_select"
                         android:layout_marginLeft="14dp"
                         android:layout_marginTop="8.5dp"
-                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginBottom="5dp"
                         android:visibility="invisible" />
 
                     <TextView
@@ -215,7 +214,7 @@
                         android:id="@+id/imageView24"
                         android:background="@mipmap/ch_date_select"
                         android:layout_marginLeft="14dp"
-                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="8.5dp"
                         android:visibility="invisible" />
 
@@ -252,7 +251,7 @@
                         android:background="@mipmap/ch_date_select"
                         android:layout_marginLeft="14dp"
                         android:layout_marginTop="8.5dp"
-                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginBottom="5dp"
                         android:visibility="invisible" />
 
                     <TextView
@@ -288,7 +287,7 @@
                         android:background="@mipmap/ch_date_select"
                         android:layout_marginLeft="14dp"
                         android:layout_marginTop="8.5dp"
-                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginBottom="5dp"
                         android:visibility="invisible" />
 
                     <TextView
@@ -325,7 +324,7 @@
                         android:background="@mipmap/ch_date_select"
                         android:layout_marginLeft="14dp"
                         android:layout_marginTop="8.5dp"
-                        android:layout_marginBottom="9.5dp"
+                        android:layout_marginBottom="5dp"
                         android:visibility="invisible" />
 
                     <TextView
@@ -376,6 +375,7 @@
         android:id="@+id/epg_sub_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:background="@color/white" />
 
 </LinearLayout>

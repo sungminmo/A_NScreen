@@ -337,7 +337,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
     @Override
     public void onBackPressedCallback() {
-        String alertTitle = "C&M NScreen";
+        String alertTitle = "씨앤앰 모바일TV 종료";
         String alertMsg1 = getString(R.string.app_name)+"를 종료하시겠습니까?";
         String alertMsg2 = "";
         CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {

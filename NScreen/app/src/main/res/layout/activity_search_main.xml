@@ -67,6 +67,7 @@
                 android:imeOptions="actionSearch"
                 android:id="@+id/search_edit"
                 android:textColor="@color/black"
+                android:textColorHint="@color/search_hint"
                 />
             <ImageView
                 android:layout_width="wrap_content"
