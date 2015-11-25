@@ -145,9 +145,17 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         assetId = jsonObj.getString("primaryAssetId");
                     }
 
-                    primaryAssetId = jsonObj.getString("primaryAssetId");
-                    episodePeerExistence = jsonObj.getString("episodePeerExistence");
-                    contentGroupId = jsonObj.getString("contentGroupId");
+                    if (jsonObj.isNull("primaryAssetId") == false) {
+                        primaryAssetId = jsonObj.getString("primaryAssetId");
+                    }
+
+                    if (jsonObj.isNull("episodePeerExistence") == false) {
+                        episodePeerExistence = jsonObj.getString("episodePeerExistence");
+                    }
+
+                    if (jsonObj.isNull("contentGroupId") == false) {
+                        contentGroupId = jsonObj.getString("contentGroupId");
+                    }
 
                     if (TextUtils.isEmpty(assetId) == false) {
                         Intent intent = new Intent(getActivity(), VodDetailActivity.class);
@@ -187,6 +195,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 for (int position : reverseSortedPositions) {
                     mList.remove(position);
                 }
+                mAdapter.notifyDataSetChanged();
                 int count = mList.size();
                 setPurchaseListCountText(count);
             }
@@ -299,7 +308,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
 
-        String url = mPref.getWebhasServerUrl() + "/getValidPurchaseLogList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2";
+        String url = mPref.getWebhasServerUrl() + "/getValidPurchaseLogList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2&sortType=remainingTimeAscend";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -313,11 +322,15 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         JSONObject jsonObj = puchaseArray.getJSONObject(i);
                         ListViewDataObject obj = new ListViewDataObject(i, 0, jsonObj.toString());
 
-                        String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
-                        if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType)) {
-                            mList.add(obj);
-                        } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType) == false) {
-                            mList.add(obj);
+
+                        String paymentType = jsonObj.getString("paymentType");
+                        if ("normal".equals(paymentType) || "coupon".equals(paymentType) || "point".equals(paymentType) || "complex".equals(paymentType)) {
+                            String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
+                            if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType) == false) {
+                                mList.add(obj);
+                            } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType)) {
+                                mList.add(obj);
+                            }
                         }
                     }
 

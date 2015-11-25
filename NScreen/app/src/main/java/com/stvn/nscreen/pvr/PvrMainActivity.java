@@ -683,7 +683,7 @@ public class PvrMainActivity extends AppCompatActivity {
                 parseSetRecordDele(response);
                 mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
-                textView2.setText("총 개의 녹화 콘텐츠가 있습니다.");
+                textView2.setText("목록 재 요청 중입니다.");
                 requestGetRecordlist();
             }
         }, new Response.ErrorListener() {
@@ -761,7 +761,10 @@ public class PvrMainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 parseSetRecordSeriesDele(response);
+                mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
+                textView2.setText("목록 재 요청 중입니다.");
+                requestGetRecordlist();
             }
         }, new Response.ErrorListener() {
             @Override
