@@ -121,21 +121,42 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             public void onClickFrontView(int position) {
                 ListViewDataObject obj = mList.get(position);
 
+
+
+
+//                String licenseEnd = assetObj.getString("licenseEnd");
+//                vodTitle = assetObj.getString("title");
+//                if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd))) {
+//                    isExpired = true;
+//                }
+//                assetId = assetObj.getString("assetId");
+
+
+
                 String assetId = "";
                 String primaryAssetId = "";
                 String episodePeerExistence = "";
                 String contentGroupId = "";
                 try {
                     JSONObject jsonObj = new JSONObject(obj.sJson);
-                    if (jsonObj.isNull("assetId") == false) {
-                        assetId = jsonObj.getString("assetId");
+                    JSONObject assetObj = jsonObj.getJSONObject("asset");
+                    if (assetObj.isNull("assetId") == false) {
+                        assetId = assetObj.getString("assetId");
                     } else if (jsonObj.isNull("primaryAssetId") == false) {
                         assetId = jsonObj.getString("primaryAssetId");
                     }
 
-                    primaryAssetId = jsonObj.getString("primaryAssetId");
-                    episodePeerExistence = jsonObj.getString("episodePeerExistence");
-                    contentGroupId = jsonObj.getString("contentGroupId");
+                    if (jsonObj.isNull("primaryAssetId") == false) {
+                        primaryAssetId = jsonObj.getString("primaryAssetId");
+                    }
+
+                    if (jsonObj.isNull("episodePeerExistence") == false) {
+                        episodePeerExistence = jsonObj.getString("episodePeerExistence");
+                    }
+
+                    if (jsonObj.isNull("contentGroupId") == false) {
+                        contentGroupId = jsonObj.getString("contentGroupId");
+                    }
 
                     if (TextUtils.isEmpty(assetId) == false) {
                         Intent intent = new Intent(getActivity(), VodDetailActivity.class);
@@ -175,9 +196,11 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             public void onDismiss(int[] reverseSortedPositions) {
                 for (int position : reverseSortedPositions) {
                     mList.remove(position);
-                    int count = mList.size();
-                    setDibListCountText(count);
                 }
+                mAdapter.notifyDataSetChanged();
+
+                int count = mList.size();
+                setDibListCountText(count);
             }
 
             @Override
