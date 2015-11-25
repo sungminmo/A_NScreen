@@ -189,6 +189,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
 //        else {
         JSONObject jo = mList.get(itemIndex);
         try {
+            final int iSeq = jo.getInt("iSeq");
             String programTitle = jo.getString("sTitle");
             String alertTitle = "VOD 시청목록 삭제";
             String alertMessage = "선택하신 VOD를\n시청목록에서 삭제하시겠습니까?";
@@ -198,7 +199,7 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             JYSharedPreferences pref = new JYSharedPreferences(getActivity());
-                            pref.removeWatchVod(itemIndex);
+                            pref.removeWatchVod(iSeq);
                             mListView.dismiss(itemIndex);
                         }
                     }, new DialogInterface.OnClickListener() {

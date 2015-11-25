@@ -687,10 +687,9 @@ public class JYSharedPreferences {
         // Realm Database **********************************************************************
         // Obtain a Realm instance
         Realm realm = Realm.getInstance(mContext);
-        RealmResults<WatchVodObject> result = mRealm.where(WatchVodObject.class).findAll();
-        int iSeq = result.size();
+        long iSeq = realm.where(WatchVodObject.class).maximumInt("iSeq") + 1;
         WatchVodObject obj = new WatchVodObject();
-        obj.setiSeq(iSeq);
+        obj.setiSeq((int)iSeq);
         obj.setdDate(watchDate);
         obj.setsAssetId(assetId);
         obj.setsTitle(title);
@@ -722,9 +721,10 @@ public class JYSharedPreferences {
         ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
         RealmResults<WatchVodObject> results = mRealm.where(WatchVodObject.class).findAll();
         try {
+            int loop = results.size()-1;
             SimpleDateFormat sd    = new SimpleDateFormat("MM.dd (E),HH:mm");
             for (int i = 0; i < results.size(); i++) {
-                WatchVodObject  obj    = results.get(i);
+                WatchVodObject  obj    = results.get(loop);
                 JSONObject       jo    = new JSONObject();
 
                 String           sDate = sd.format(obj.getdDate()).toString();
@@ -733,6 +733,7 @@ public class JYSharedPreferences {
                 jo.put("sAssetId", obj.getsAssetId());
                 jo.put("sTitle", obj.getsTitle());
                 arr.add(jo);
+                loop--;
             }
         }catch(JSONException e){
             e.printStackTrace();
