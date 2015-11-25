@@ -322,11 +322,15 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         JSONObject jsonObj = puchaseArray.getJSONObject(i);
                         ListViewDataObject obj = new ListViewDataObject(i, 0, jsonObj.toString());
 
-                        String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
-                        if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType) == false) {
-                            mList.add(obj);
-                        } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType)) {
-                            mList.add(obj);
+
+                        String paymentType = jsonObj.getString("paymentType");
+                        if ("normal".equals(paymentType) || "coupon".equals(paymentType) || "point".equals(paymentType) || "complex".equals(paymentType)) {
+                            String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
+                            if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType) == false) {
+                                mList.add(obj);
+                            } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType)) {
+                                mList.add(obj);
+                            }
                         }
                     }
 

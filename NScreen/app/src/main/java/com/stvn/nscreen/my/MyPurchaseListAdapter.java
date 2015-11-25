@@ -97,7 +97,6 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 				holder.coupontype.setImageResource(R.mipmap.icon_point); // TV포인트결제
 			} else if ("complex".equals(paymentType)) {
 				holder.coupontype.setImageResource(R.mipmap.icon_complex); // 복합결제
-//				R.mipmap.icon_monthly
 			}
 
 		} catch (Exception e) {
