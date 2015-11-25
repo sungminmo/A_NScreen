@@ -38,7 +38,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
     private Context mContext;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private View.OnClickListener clickListener;
+    private View.OnClickListener mSwipeClickListener;
     private JYSharedPreferences mPref;
 
     private String mStbState;             // GetSetTopStatus API로 가져오는 값.
@@ -74,6 +74,10 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                 return mCache.get(url);
             }
         });
+    }
+
+    public void setSwipeClickListener(View.OnClickListener l) {
+        this.mSwipeClickListener = l;
     }
 
     public void setStbState(String state, String recCh1, String recCh2, String watchCh, String pipCh) {
@@ -112,13 +116,13 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
             holder.cancelreservationrec = (Button) convertView.findViewById(R.id.cancel_reservation_rec);
             holder.setreservationwatch = (Button) convertView.findViewById(R.id.set_reservation_watch);
             holder.cancelreservationwatch = (Button) convertView.findViewById(R.id.cancel_reservation_watch);
-            holder.recstart.setOnClickListener(clickListener);
-            holder.recstop.setOnClickListener(clickListener);
-            holder.watchtv.setOnClickListener(clickListener);
-            holder.setreservationrec.setOnClickListener(clickListener);
-            holder.cancelreservationrec.setOnClickListener(clickListener);
-            holder.setreservationwatch.setOnClickListener(clickListener);
-            holder.cancelreservationwatch.setOnClickListener(clickListener);
+            holder.recstart.setOnClickListener(this.mSwipeClickListener);
+            holder.recstop.setOnClickListener(this.mSwipeClickListener);
+            holder.watchtv.setOnClickListener(this.mSwipeClickListener);
+            holder.setreservationrec.setOnClickListener(this.mSwipeClickListener);
+            holder.cancelreservationrec.setOnClickListener(this.mSwipeClickListener);
+            holder.setreservationwatch.setOnClickListener(this.mSwipeClickListener);
+            holder.cancelreservationwatch.setOnClickListener(this.mSwipeClickListener);
 
             holder.notPairing.setBackground(new ColorDrawable(Color.rgb(0x00, 0x00, 0x00)));
             holder.recstart.setBackground(new ColorDrawable(Color.rgb(0xC4, 0x5C, 0xC2)));

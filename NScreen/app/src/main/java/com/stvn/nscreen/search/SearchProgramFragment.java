@@ -1,5 +1,6 @@
 package com.stvn.nscreen.search;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -100,6 +101,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     {
         mListView = (SwipeListView)getView().findViewById(R.id.programlistview);
         mAdapter = new SearchProgramAdapter(getActivity(),mProgramlist);
+        mAdapter.setSwipeClickListener(mSwipeButtonClickListener);
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(this);
         mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
@@ -705,9 +707,11 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 case R.id.set_reservation_rec: //예약녹화설정
                     try {
                         JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
-                        String starttime = null;
-                        starttime = reservjo.getString("RecordStartTime");
-                        requestSetRecordReserve(mProgramlist.get(position).getChannelId(), starttime);
+                        if (reservjo != null) {
+                            String starttime = null;
+                            starttime = reservjo.getString("RecordStartTime");
+                            requestSetRecordReserve(mProgramlist.get(position).getChannelId(), starttime);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -716,11 +720,12 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 case R.id.cancel_reservation_rec: // 예약녹화취소
                     try {
                         JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
-                        String starttime = null;
-                        starttime = reservjo.getString("RecordStartTime");
-                        String seriesid = reservjo.getString("SeriesId");
-                        requestSetRecordCancelReserve(mProgramlist.get(position).getChannelId(), starttime, seriesid);
-
+                        if (reservjo != null) {
+                            String starttime = null;
+                            starttime = reservjo.getString("RecordStartTime");
+                            String seriesid = reservjo.getString("SeriesId");
+                            requestSetRecordCancelReserve(mProgramlist.get(position).getChannelId(), starttime, seriesid);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -731,6 +736,15 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     mPref.removeWatchTvReserveAlarm(mProgramlist.get(position).getChannelProgramID());
                     mAdapter.notifyDataSetChanged();
                     break;
+                case R.id.not_pairing: { // 미 페어링
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMessage1 = getString(R.string.error_not_paring_compleated3);
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    }, true);
+                }
             }
         }
     };
