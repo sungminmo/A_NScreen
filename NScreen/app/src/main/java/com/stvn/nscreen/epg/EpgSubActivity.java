@@ -437,7 +437,7 @@ public class EpgSubActivity extends AppCompatActivity {
                                 } else if ( !"".equals(sSeriesId) ) {
                                     String alertTitle = "녹화예약확인";
                                     String alertMsg1 = programTitle;
-                                    String alertMsg2 = getString(R.string.error_not_paring_compleated6);
+                                    String alertMsg2 = getString(R.string.error_not_paring_compleated8);
                                     CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -507,9 +507,9 @@ public class EpgSubActivity extends AppCompatActivity {
                                 if ( "".equals(sSeriesId) ) {
                                     requestSetRecordReserve(sChannelId, programBroadcastingStartTime);
                                 } else if ( !"".equals(sSeriesId) ) {
-                                    String alertTitle = "녹화예약취소확인";
+                                    String alertTitle = "녹화예약확인";
                                     String alertMsg1 = programTitle;
-                                    String alertMsg2 = getString(R.string.error_not_paring_compleated6);
+                                    String alertMsg2 = getString(R.string.error_not_paring_compleated8);
                                     CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
