@@ -666,6 +666,8 @@ public class VodDetailActivity extends Activity {
             sListPrice = listPrice;
             if ( "".equals(purchasedTime) ) {
                 mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
+                String strColor = "#000000";
+                mPriceTextView.setTextColor(Color.parseColor(strColor));
             } else {
                 mPriceTextView.setText("이미 구매하셨습니다.");
                 String strColor = "#7b5aa3";
@@ -1119,18 +1121,15 @@ public class VodDetailActivity extends Activity {
                     if ( resultCode != 0 ) {
                         String showMessage = header.getString("showMessage");
                         String resultMessages = header.getString("resultMessages");
-                        AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
-                        ad.setTitle("알림")
-                                .setMessage(showMessage+"\n"+resultMessages)
-                                .setCancelable(false)
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        AlertDialog alert = ad.create();
-                        alert.show();
+
+                        String alertTitle = "VOD 시청 안내";
+                        String alertMsg1  = getString(R.string.error_not_play_vod);
+                        String alertMsg2  = "";
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
                     } else {
                         JSONObject drm    = jo.getJSONObject("drm");
                         contentUri        = drm.getString("contentUri");
