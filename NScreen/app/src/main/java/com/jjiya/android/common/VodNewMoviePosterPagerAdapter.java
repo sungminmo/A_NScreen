@@ -154,9 +154,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -243,9 +243,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -332,9 +332,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -421,9 +421,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -510,9 +510,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating5.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -599,9 +599,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating6.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -688,9 +688,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if (rating7.startsWith("19") && mPref.isAdultVerification() == false) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -777,9 +777,9 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating8.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
-                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mFragment.getActivity().getResources().getString(R.string.error_not_adult1);
+                            String alertMsg2 = mFragment.getActivity().getResources().getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mFragment.getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
