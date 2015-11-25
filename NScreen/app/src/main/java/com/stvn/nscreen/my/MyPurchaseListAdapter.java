@@ -87,6 +87,19 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 			String remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd);
 			holder.rowterm.setText(remainLicense);
 
+
+			String paymentType = jsonObj.getString("paymentType");
+			if ("normal".equals(paymentType)) {
+				holder.coupontype.setImageResource(R.mipmap.icon_nor); // 일반결제
+			} else if ("coupon".equals(paymentType)) {
+				holder.coupontype.setImageResource(R.mipmap.icon_coupon); // 쿠폰결제
+			} else if ("point".equals(paymentType)) {
+				holder.coupontype.setImageResource(R.mipmap.icon_point); // TV포인트결제
+			} else if ("complex".equals(paymentType)) {
+				holder.coupontype.setImageResource(R.mipmap.icon_complex); // 복합결제
+//				R.mipmap.icon_monthly
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

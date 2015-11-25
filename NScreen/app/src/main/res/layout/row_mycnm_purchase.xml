@@ -70,8 +70,7 @@
                 android:id="@+id/row_coupontype"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|bottom"
-                android:src="@mipmap/icon_monthly" />
+                android:layout_gravity="left|bottom" />
 
             <TextView
                 android:id="@+id/row_name"
