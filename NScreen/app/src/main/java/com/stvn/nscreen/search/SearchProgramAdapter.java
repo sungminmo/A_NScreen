@@ -2,6 +2,8 @@ package com.stvn.nscreen.search;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.LruCache;
 import android.view.LayoutInflater;
@@ -118,6 +120,15 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
             holder.setreservationwatch.setOnClickListener(clickListener);
             holder.cancelreservationwatch.setOnClickListener(clickListener);
 
+            holder.notPairing.setBackground(new ColorDrawable(Color.rgb(0x00, 0x00, 0x00)));
+            holder.recstart.setBackground(new ColorDrawable(Color.rgb(0xC4, 0x5C, 0xC2)));
+            holder.recstop.setBackground(new ColorDrawable(Color.rgb(0xEA, 0x55, 0x55)));
+            holder.watchtv.setBackground(new ColorDrawable(Color.rgb(0xF7, 0xBD, 0x33)));
+            holder.setreservationrec.setBackground(new ColorDrawable(Color.rgb(0xED, 0x72, 0x33)));
+            holder.cancelreservationrec.setBackground(new ColorDrawable(Color.rgb(0xC1, 0x4F, 0x28)));
+            holder.setreservationwatch.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
+            holder.cancelreservationwatch.setBackground(new ColorDrawable(Color.rgb(0x7F, 0x94, 0x24)));
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -134,12 +145,14 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
         holder.chtimetext.setText(CMUtil.getConverDateString(datetime, "yyyy-MM-ddHH:mm:ss", "HH:mm"));
         holder.channeltext2.setText(CMUtil.getConverDateString(datetime, "yyyy-MM-ddHH:mm:ss", "yyyy.MM.dd") + " 방송예정");
         holder.chhd.setVisibility(View.VISIBLE);
-        if ("HD".equals(item.getChannelProgramHD())) {            // HD방송
-            holder.chhd.setImageResource(R.mipmap.btn_size_hd);
-        } else if ("SD".equals(item.getChannelProgramHD())) {        // SD방송
+
+        if ("SD".equals(item.getChannelInfo())) {        // SD방송
             holder.chhd.setImageResource(R.mipmap.btn_size_sd);
-        } else                                                    // 둘다 아닐때
+        } else if ("HD".equals(item.getChannelInfo()) || "SD,HD".equals(item.getChannelInfo())) {            // HD방송
+            holder.chhd.setImageResource(R.mipmap.btn_size_hd);
+        } else { // 둘다 아닐때
             holder.chhd.setVisibility(View.GONE);
+        }
 
         if (mPref.isBookmarkChannelWithChannelId(item.getChannelId())) {
             holder.favoriteimg.setSelected(true);
@@ -168,8 +181,10 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
 
         // 연령제한
         if (!TextUtils.isEmpty(item.getChannelProgramGrade())) {
-            if (item.getChannelProgramGrade().indexOf("12") > -1) {
-                holder.chage.setImageResource(R.mipmap.btn_age_all);
+            if (item.getChannelProgramGrade().indexOf("7") > -1) {
+                holder.chage.setImageResource(R.mipmap.btn_age_7);
+            } else if (item.getChannelProgramGrade().indexOf("12") > -1) {
+                holder.chage.setImageResource(R.mipmap.btn_age_12);
             } else if (item.getChannelProgramGrade().indexOf("15") > -1) {
                 holder.chage.setImageResource(R.mipmap.btn_age_15);
             } else if (item.getChannelProgramGrade().indexOf("19") > -1) {
@@ -182,12 +197,6 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
 //        if (mPref.isPairingCompleted()) {
 //            getSwipeLayout(null, position, holder);
 //        }
-
-
-
-
-
-
 
         return convertView;
     }
