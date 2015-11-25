@@ -27,6 +27,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.CMConstants;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
@@ -170,7 +171,7 @@ public class EpgMainActivity extends AppCompatActivity {
         if ( "".equals(sGenreCode) ) {
             sGenreCode = "";
         }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=0" + sGenreCode;
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_NAME_KEY, "17") + sGenreCode;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
