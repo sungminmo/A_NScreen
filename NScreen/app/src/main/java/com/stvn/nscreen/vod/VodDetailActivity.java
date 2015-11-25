@@ -118,7 +118,7 @@ public class VodDetailActivity extends Activity {
     private String seriesTotalAssetCount; // getAssetListByEpisodePeerId
 
     private List<JSONObject> relationVods;
-    private List<JSONObject> series;
+    //private List<JSONObject> series;
     private FourVodPosterPagerAdapter mPagerAdapter;
     private String isSeriesLink; //시리즈인지 연부. true/false
     private String mTitle;
@@ -183,7 +183,7 @@ public class VodDetailActivity extends Activity {
 //            e.printStackTrace();
 //        }
         relationVods = new ArrayList<JSONObject>();
-        series = new ArrayList<JSONObject>();
+//        series = new ArrayList<JSONObject>();
         mPagerAdapter = new FourVodPosterPagerAdapter(this);
         mPagerAdapter.setImageLoader(mImageLoader);
         mPagerAdapter.setVodDetailActivity(this);
@@ -435,7 +435,7 @@ public class VodDetailActivity extends Activity {
          * VOD 상세정보 요청
          * episodePeerExistence
          */
-        if ( episodePeerExistence.length() > 0 ) {
+        if ( "1".equals(episodePeerExistence) ) {
             // episodePeerExistence
             // contentGroupId
             requestGetEpisodePeerListByContentGroupId();
@@ -453,24 +453,30 @@ public class VodDetailActivity extends Activity {
 
     /**
      * 화면 전체 새로 고침.
-     * @param assetId
      */
     public void refreshAll(String aid){
         assetId = aid;
 
         isPrePlay = true;
         relationVods.clear();
-        series.clear();
+//        series.clear();
         mPagerAdapter.clear();
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
         ll.removeAllViewsInLayout();
 
-
         /**
          * VOD 상세정보 요청
          */
-        requestGetAssetInfo();
+        if ( "1".equals(episodePeerExistence) ) {
+            // TODO
+            //episodePeerExistence = getIntent().getExtras().getString("episodePeerExistence");
+            //contentGroupId       = getIntent().getExtras().getString("contentGroupId");
+            //primaryAssetId       = getIntent().getExtras().getString("primaryAssetId");
+            requestGetEpisodePeerListByContentGroupId();
+        } else {
+            requestGetAssetInfo();
+        }
 
         /**
          * 화면 하단의 연관 VOD 요청
@@ -666,6 +672,8 @@ public class VodDetailActivity extends Activity {
             sListPrice = listPrice;
             if ( "".equals(purchasedTime) ) {
                 mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
+                String strColor = "#000000";
+                mPriceTextView.setTextColor(Color.parseColor(strColor));
             } else {
                 mPriceTextView.setText("이미 구매하셨습니다.");
                 String strColor = "#7b5aa3";
@@ -690,24 +698,29 @@ public class VodDetailActivity extends Activity {
 
     private void setUISeriesButton(JSONArray assetList) {
         try {
+            int iLoop;
+            if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
+                iLoop = assetList.length()-1;
+            } else { // 종료되지 않은 시리즈.
+                iLoop = 0;
+            }
             for ( int i = 0; i < assetList.length(); i++ ) {
-                JSONObject asset = (JSONObject) assetList.get(i);
+                JSONObject asset = (JSONObject) assetList.get(iLoop);
 
-                series.add(asset);
+                //series.add(asset);
 
-                String thisAssetId = "";
+                final String thisAssetId;
                 int thisSeriesIndex = 0;
                 if ( asset.isNull("assetId") ) {
-                    thisAssetId = asset.getString("primaryAssetId");
+                    thisAssetId     = asset.getString("primaryAssetId");
                     thisSeriesIndex = asset.getInt("seriesIndex");
                 } else {
                     thisAssetId           = asset.getString("assetId");
-                    //seriesCurIndex        = asset.getString("seriesCurIndex");
                     thisSeriesIndex       = asset.getInt("seriesCurIndex");
                     seriesEndIndex        = asset.getString("seriesEndIndex");
                     seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
                 }
-                final String buttonAssetId = thisAssetId;
+                //final String buttonAssetId = thisAssetId;
 
 
                 // Button seriesButton = new Button(mInstance);
@@ -718,7 +731,7 @@ public class VodDetailActivity extends Activity {
                 Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
                 seriesButton.setText(thisSeriesIndex + "회");
 
-                if ( assetId.equals(buttonAssetId) ) {
+                if ( assetId.equals(thisAssetId) ) {
                     seriesButton.setSelected(true);
                     seriesButton.setFocusable(true);
                 }
@@ -727,10 +740,11 @@ public class VodDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         if ( isSeriesLink.equals("YES") ) {
-                            refreshAll(buttonAssetId);
+
+                            refreshAll(thisAssetId);
                         } else {
                             Intent intent = new Intent(mInstance, VodDetailActivity.class);
-                            intent.putExtra("assetId", buttonAssetId);
+                            intent.putExtra("assetId", thisAssetId);
                             startActivity(intent);
                         }
                     }
@@ -741,17 +755,19 @@ public class VodDetailActivity extends Activity {
                 ll.addView(seriesButton, lp);
 
                 if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
+                    iLoop--;
                     mSeriesScrollView.post(new Runnable() {
                         @Override
                         public void run() {
-                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_RIGHT); // 1회를 표시한다.
+                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_LEFT); // 1회를 표시한다.
                         }
                     });
                 } else { // 종료되지 않은 시리즈.
+                    iLoop++;
                     mSeriesScrollView.post(new Runnable() {
                         @Override
                         public void run() {
-                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_LEFT); // 가장 최근 회를 표시한다.
+                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_RIGHT); // 가장 최근 회를 표시한다.
                         }
                     });
                 }
@@ -868,6 +884,9 @@ public class VodDetailActivity extends Activity {
         mRequestQueue.add(request);
     }
 
+    /**
+     * 1. getEpisodePeerListByContentGroupId
+     */
     private void requestGetEpisodePeerListByContentGroupId() {
         //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetEpisodePeerListByContentGroupId()"); }
@@ -884,8 +903,7 @@ public class VodDetailActivity extends Activity {
                 //Log.d(tag, response);
                 //mProgressDialog.dismiss();
                 try {
-                    JSONObject jo            = new JSONObject(response);
-                    // episodePeerList
+                    JSONObject jo = new JSONObject(response);
                     episodePeerList = jo.getJSONArray("episodePeerList");
                     for ( int i = 0; i < episodePeerList.length(); i++ ) {
                         JSONObject episodePeer = episodePeerList.getJSONObject(i);
@@ -944,7 +962,7 @@ public class VodDetailActivity extends Activity {
 
                     setUIAsset(asset);
 
-                    setUISeriesButton(episodePeerList);
+                    setUISeriesButton(episodePeerList); // requestGetAssetListByEpisodePeerId
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1119,18 +1137,15 @@ public class VodDetailActivity extends Activity {
                     if ( resultCode != 0 ) {
                         String showMessage = header.getString("showMessage");
                         String resultMessages = header.getString("resultMessages");
-                        AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
-                        ad.setTitle("알림")
-                                .setMessage(showMessage+"\n"+resultMessages)
-                                .setCancelable(false)
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        AlertDialog alert = ad.create();
-                        alert.show();
+
+                        String alertTitle = "VOD 시청 안내";
+                        String alertMsg1  = getString(R.string.error_not_play_vod);
+                        String alertMsg2  = "";
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
                     } else {
                         JSONObject drm    = jo.getJSONObject("drm");
                         contentUri        = drm.getString("contentUri");
@@ -1201,6 +1216,7 @@ public class VodDetailActivity extends Activity {
         mRequestQueue.add(request);
     }
 
+    // 기존의 getAssetInfo를 통해서 시리즈 표시하는 방법.
     private void requestGetSeriesAssetList(String seriesId, String categoryId) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetSeriesAssetList()"); }
