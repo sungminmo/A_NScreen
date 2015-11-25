@@ -16,19 +16,34 @@
         android:layout_height="1px"
         android:background="@color/colorc5c5c5" />
 
-    <com.stvn.nscreen.common.SwipeListView xmlns:swipe="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/purchaselistview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:cacheColorHint="@color/transparent"
-        android:divider="@color/colorc5c5c5"
-        android:dividerHeight="1px"
-        android:listSelector="@color/colore4d8f2"
-        swipe:swipeBackView="@+id/back"
-        swipe:swipeCloseAllItemsWhenMoveList="true"
-        swipe:swipeOpenOnLongPress="false"
-        swipe:swipeFrontView="@+id/front"
-        swipe:swipeMode="left"
-        swipe:swipeOffsetLeft="@dimen/dimen_250" />
+        android:layout_weight="1">
+
+        <com.stvn.nscreen.common.SwipeListView xmlns:swipe="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/purchaselistview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@color/transparent"
+            android:divider="@color/colorc5c5c5"
+            android:dividerHeight="1px"
+            android:listSelector="@color/colore4d8f2"
+            swipe:swipeBackView="@+id/back"
+            swipe:swipeCloseAllItemsWhenMoveList="true"
+            swipe:swipeOpenOnLongPress="false"
+            swipe:swipeFrontView="@+id/front"
+            swipe:swipeMode="left"
+            swipe:swipeOffsetLeft="@dimen/dimen_250" />
+
+        <TextView
+            android:id="@+id/purchase_empty_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="찜 한 VOD가 없습니다."
+            android:textSize="16.25sp"
+            android:textColor="@color/color7b5aa3"
+            android:visibility="gone" />
+    </RelativeLayout>
 </LinearLayout>

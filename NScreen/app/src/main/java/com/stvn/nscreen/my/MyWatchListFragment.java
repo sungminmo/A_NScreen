@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by leejunghoon on 15. 10. 31..
@@ -32,6 +31,7 @@ import java.util.List;
 public class MyWatchListFragment extends Fragment implements View.OnClickListener,AbsListView.OnScrollListener{
     LayoutInflater                mInflater;
     private TextView              mPurchasecount;
+    private TextView              mPurchaseEmptyMsg;
     private SwipeListView         mListView;
     private MyWatchListAdapter    mAdapter;
     private ArrayList<JSONObject> mList;
@@ -54,9 +54,9 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
 
     private void initView()
     {
-
-
         mPurchasecount = (TextView)getView().findViewById(R.id.purchasecount);
+        mPurchaseEmptyMsg = (TextView)getView().findViewById(R.id.purchase_empty_msg);
+        mPurchaseEmptyMsg.setVisibility(View.GONE);
 
         mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
         mAdapter = new MyWatchListAdapter(getActivity(), mList);
@@ -161,6 +161,11 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
      * */
     private void setWatchListCountText(int count) {
         mPurchasecount.setText(count + "개의 VOD 시청목록이 있습니다.");
+        if (count == 0) {
+            this.mPurchaseEmptyMsg.setVisibility(View.VISIBLE);
+        } else {
+            this.mPurchaseEmptyMsg.setVisibility(View.GONE);
+        }
     }
 
     /**

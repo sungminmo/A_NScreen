@@ -54,6 +54,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     private View mPurchasetab1;
     private View mPurchasetab2;
     private TextView mPurchasecount;
+    private TextView mPurchaseEmptyMsg;
     private SwipeListView mListView;
     private MyPurchaseListAdapter mAdapter;
     private ArrayList<ListViewDataObject> mList = new ArrayList<>();
@@ -82,6 +83,9 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         mPurchasetab1 = (View)getView().findViewById(R.id.purchasetab1);
         mPurchasetab2 = (View)getView().findViewById(R.id.purchasetab2);
         mPurchasecount = (TextView)getView().findViewById(R.id.purchasecount);
+
+        mPurchaseEmptyMsg = (TextView)getView().findViewById(R.id.purchase_empty_msg);
+        mPurchaseEmptyMsg.setVisibility(View.GONE);
 
         mPurchasetab1.setOnClickListener(this);
         mPurchasetab2.setOnClickListener(this);
@@ -130,17 +134,34 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 ListViewDataObject obj = mList.get(position);
 
                 String assetId = "";
+                String primaryAssetId = "";
+                String episodePeerExistence = "";
+                String contentGroupId = "";
                 try {
                     JSONObject jsonObj = new JSONObject(obj.sJson);
-                    assetId = jsonObj.getString("assetId");
+                    if (jsonObj.isNull("assetId") == false) {
+                        assetId = jsonObj.getString("assetId");
+                    } else if (jsonObj.isNull("primaryAssetId") == false) {
+                        assetId = jsonObj.getString("primaryAssetId");
+                    }
+
+                    primaryAssetId = jsonObj.getString("primaryAssetId");
+                    episodePeerExistence = jsonObj.getString("episodePeerExistence");
+                    contentGroupId = jsonObj.getString("contentGroupId");
+
+                    if (TextUtils.isEmpty(assetId) == false) {
+                        Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId);
+
+                        if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
+                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                            intent.putExtra("contentGroupId", contentGroupId);
+                            intent.putExtra("primaryAssetId", primaryAssetId);
+                        }
+                        startActivity(intent);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-
-                if (TextUtils.isEmpty(assetId) == false) {
-                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                    intent.putExtra("assetId", assetId);
-                    startActivity(intent);
                 }
             }
 
@@ -186,11 +207,15 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
      * */
     private void setPurchaseListCountText(int count) {
         mPurchasecount.setText(count + "개의 VOD 구매목록이 있습니다.");
+        if (count == 0) {
+            this.mPurchaseEmptyMsg.setVisibility(View.VISIBLE);
+        } else {
+            this.mPurchaseEmptyMsg.setVisibility(View.GONE);
+        }
     }
 
     /**
      * 구매목록 삭제 처리
-     * TODO:해당 구매목록정보에서 유효기간 확인 후 해당 내용에 대한 처리를 한다.
      * */
     private void deletePurchaseItem(final int itemIndex) {
 

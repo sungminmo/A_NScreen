@@ -46,6 +46,7 @@ import java.util.Map;
 public class MyDibListFragment extends Fragment implements View.OnClickListener,AbsListView.OnScrollListener{
     LayoutInflater mInflater;
     private TextView mPurchasecount;
+    private TextView mPurchaseEmptyMsg;
     private SwipeListView mListView;
     private MyDibListAdapter mAdapter;
     private ArrayList<ListViewDataObject> mList = new ArrayList<>();
@@ -53,6 +54,8 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
 
     private RequestQueue mRequestQueue;
     private JYSharedPreferences mPref;
+
+    private final int REQUEST_CODE_VOD_DETAIL = 1100;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,7 +75,8 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
 
     private void initView() {
         mPurchasecount = (TextView)getView().findViewById(R.id.purchasecount);
-
+        mPurchaseEmptyMsg = (TextView)getView().findViewById(R.id.purchase_empty_msg);
+        mPurchaseEmptyMsg.setVisibility(View.GONE);
         mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
         mAdapter = new MyDibListAdapter(getActivity(),mList);
         mAdapter.setmClicklitener(this);
@@ -118,20 +122,34 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                 ListViewDataObject obj = mList.get(position);
 
                 String assetId = "";
+                String primaryAssetId = "";
+                String episodePeerExistence = "";
+                String contentGroupId = "";
                 try {
                     JSONObject jsonObj = new JSONObject(obj.sJson);
-                    JSONObject assetObj = jsonObj.getJSONObject("asset");
+                    if (jsonObj.isNull("assetId") == false) {
+                        assetId = jsonObj.getString("assetId");
+                    } else if (jsonObj.isNull("primaryAssetId") == false) {
+                        assetId = jsonObj.getString("primaryAssetId");
+                    }
 
-                    assetId = assetObj.getString("assetId");
+                    primaryAssetId = jsonObj.getString("primaryAssetId");
+                    episodePeerExistence = jsonObj.getString("episodePeerExistence");
+                    contentGroupId = jsonObj.getString("contentGroupId");
 
+                    if (TextUtils.isEmpty(assetId) == false) {
+                        Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId);
+
+                        if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
+                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                            intent.putExtra("contentGroupId", contentGroupId);
+                            intent.putExtra("primaryAssetId", primaryAssetId);
+                        }
+                        startActivityForResult(intent, REQUEST_CODE_VOD_DETAIL);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-
-                if (TextUtils.isEmpty(assetId) == false) {
-                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                    intent.putExtra("assetId", assetId);
-                    startActivity(intent);
                 }
             }
 
@@ -168,18 +186,23 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                 mListView.closeOpenedItems();
             }
         });
+        setDibListCountText(this.mList.size());
     }
 
     /**
      * 조회 개수 문구 설정
      * */
     private void setDibListCountText(int count) {
-        mPurchasecount.setText(count + "개의 VOD 찜목록이 있습니다.");
+        this.mPurchasecount.setText(count + "개의 VOD 찜목록이 있습니다.");
+        if (count == 0) {
+            this.mPurchaseEmptyMsg.setVisibility(View.VISIBLE);
+        } else {
+            this.mPurchaseEmptyMsg.setVisibility(View.GONE);
+        }
     }
 
     /**
      * 찜목록 삭제 처리
-     * TODO:해당 찜목록정보에서 유효기간 확인 후 해당 내용에 대한 처리를 한다.
      * */
     private void deleteDibItem(final int itemIndex) {
         ListViewDataObject obj = mList.get(itemIndex);
@@ -261,7 +284,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
         String terminalKey = mPref.getWebhasTerminalKey();
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey+"&userId="+uuid+"&assetProfile=1";
-
+        this.mLockListView = true;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -279,10 +302,6 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                             ListViewDataObject obj = new ListViewDataObject(i, 0, jsonObj.toString());
                             mList.add(obj);
                         }
-                        setDibListCountText(mList.size());
-                        mAdapter.notifyDataSetChanged();
-
-
                     } else {
                         String errorString = responseObj.getString("errorString");
                         StringBuilder sb = new StringBuilder();
@@ -291,6 +310,9 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                         CMAlertUtil.Alert(getActivity(), "알림", sb.toString());
                     }
 
+                    setDibListCountText(mList.size());
+                    mAdapter.notifyDataSetChanged();
+                    mLockListView = false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -359,5 +381,16 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             }
         };
         mRequestQueue.add(request);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_VOD_DETAIL) {
+            this.mList.clear();
+            setDibListCountText(this.mList.size());
+            this.mAdapter.notifyDataSetChanged();
+            requestGetWishList();
+        }
     }
 }

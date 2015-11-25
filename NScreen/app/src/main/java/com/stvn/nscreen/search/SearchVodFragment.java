@@ -151,7 +151,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
             Intent intent = new Intent(getActivity(), VodDetailActivity.class);
             intent.putExtra("assetId", assetId);
             // episodePeerExistence 값이 있으면서 1인 경우에는 아래 3가지 데이터를 추가로 VOD 상세 화면에 전달 한다.
-            if (TextUtils.isEmpty(episodePeerExistence) == false || "1".equalsIgnoreCase(episodePeerExistence) == true) {
+            if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
                 intent.putExtra("episodePeerExistence", episodePeerExistence);
                 intent.putExtra("contentGroupId", contentGroupId);
                 intent.putExtra("primaryAssetId", assetId);
