@@ -370,7 +370,8 @@
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
         android:layout_marginTop="3dp"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:background="#f2eef6">
 
         <View
             android:layout_width="match_parent"
@@ -384,7 +385,9 @@
             android:id="@+id/mSeriesScrollView"
             android:background="#f2eef6"
             android:layout_marginTop="0.25dp"
-            android:layout_marginBottom="0.25dp">
+            android:layout_marginBottom="0.25dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="14dp">
 
             <LinearLayout
                 android:orientation="horizontal"

@@ -67,7 +67,7 @@ public class EpgChoiceActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mInstance, EpgMainActivity.class);
-                intent.putExtra("sGenreCode", "");
+                intent.putExtra("sGenreCode", "&genreCode=0");  // 0은 원래 없는 코드. 그래서 0일 경우는 선호라고 로컬디비 사용.
                 intent.putExtra("sGenreName", "선호채널");
                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

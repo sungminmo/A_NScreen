@@ -626,6 +626,26 @@ public class JYSharedPreferences {
         }
     }
 
+    public ArrayList<JSONObject> getAllBookmarkChannelObject() {
+        ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
+        RealmResults<BookmarkChannelObject> results = mRealm.where(BookmarkChannelObject.class).findAll();
+        try {
+            for (int i = 0; i < results.size(); i++) {
+                BookmarkChannelObject obj = results.get(i);
+                JSONObject            jo  = new JSONObject();
+
+                jo.put("sChannelId",     obj.getsChannelId());
+                jo.put("sChannelNam",    obj.getsChannelName());
+                jo.put("sChannelNumber", obj.getsChannelNumber());
+
+                arr.add(jo);
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        return arr;
+    }
+
     /**
      * 카테고리(메인)
      */
