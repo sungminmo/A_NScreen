@@ -28,6 +28,7 @@ import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
 
@@ -36,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -121,18 +123,6 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             public void onClickFrontView(int position) {
                 ListViewDataObject obj = mList.get(position);
 
-
-
-
-//                String licenseEnd = assetObj.getString("licenseEnd");
-//                vodTitle = assetObj.getString("title");
-//                if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd))) {
-//                    isExpired = true;
-//                }
-//                assetId = assetObj.getString("assetId");
-
-
-
                 String assetId = "";
                 String primaryAssetId = "";
                 String episodePeerExistence = "";
@@ -140,35 +130,55 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                 try {
                     JSONObject jsonObj = new JSONObject(obj.sJson);
                     JSONObject assetObj = jsonObj.getJSONObject("asset");
-                    if (assetObj.isNull("assetId") == false) {
-                        assetId = assetObj.getString("assetId");
-                    } else if (jsonObj.isNull("primaryAssetId") == false) {
-                        assetId = jsonObj.getString("primaryAssetId");
-                    }
 
-                    if (jsonObj.isNull("primaryAssetId") == false) {
-                        primaryAssetId = jsonObj.getString("primaryAssetId");
-                    }
-
-                    if (jsonObj.isNull("episodePeerExistence") == false) {
-                        episodePeerExistence = jsonObj.getString("episodePeerExistence");
-                    }
-
-                    if (jsonObj.isNull("contentGroupId") == false) {
-                        contentGroupId = jsonObj.getString("contentGroupId");
-                    }
-
-                    if (TextUtils.isEmpty(assetId) == false) {
-                        Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId);
-
-                        if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
-                            intent.putExtra("episodePeerExistence", episodePeerExistence);
-                            intent.putExtra("contentGroupId", contentGroupId);
-                            intent.putExtra("primaryAssetId", primaryAssetId);
+                    String rating = assetObj.getString("rating");
+                    if (rating.startsWith("19") && mPref.isAdultVerification() == false) {
+                        String alertTitle = "C&M NScreen";
+                        String alertMsg1 = getActivity().getResources().getString(R.string.adult_auth_message);
+                        String alertMsg2 = "";
+                        CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getActivity(), CMSettingMainActivity.class);
+                                startActivity(intent);
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {}
+                        });
+                    } else {
+                        if (assetObj.isNull("assetId") == false) {
+                            assetId = assetObj.getString("assetId");
+                        } else if (jsonObj.isNull("primaryAssetId") == false) {
+                            assetId = jsonObj.getString("primaryAssetId");
                         }
-                        startActivityForResult(intent, REQUEST_CODE_VOD_DETAIL);
+
+                        if (jsonObj.isNull("primaryAssetId") == false) {
+                            primaryAssetId = jsonObj.getString("primaryAssetId");
+                        }
+
+                        if (jsonObj.isNull("episodePeerExistence") == false) {
+                            episodePeerExistence = jsonObj.getString("episodePeerExistence");
+                        }
+
+                        if (jsonObj.isNull("contentGroupId") == false) {
+                            contentGroupId = jsonObj.getString("contentGroupId");
+                        }
+
+                        if (TextUtils.isEmpty(assetId) == false) {
+                            Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId);
+
+                            if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
+                                intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                intent.putExtra("contentGroupId", contentGroupId);
+                                intent.putExtra("primaryAssetId", primaryAssetId);
+                            }
+                            startActivityForResult(intent, REQUEST_CODE_VOD_DETAIL);
+                        }
                     }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -237,7 +247,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
             JSONObject assetObj = jsonObj.getJSONObject("asset");
             String licenseEnd = assetObj.getString("licenseEnd");
             vodTitle = assetObj.getString("title");
-            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd))) {
+            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
                 isExpired = true;
             }
             assetId = assetObj.getString("assetId");

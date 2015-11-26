@@ -10,13 +10,56 @@ import java.util.Locale;
  * Created by kimwoodam on 2015. 11. 16..
  */
 public class CMDateUtil {
+    /**
+     * 라이센스 남은 일자를 분으로 변환하여 반환한다.
+     * */
+    public static long getLicenseRemainMinute(String licenseDate, Date compareDate) {
+        licenseDate = licenseDate.replace(" ", "").replace("-", "").replace(":", "").replace("/", "").replace(".", "");
+
+        Locale currentLocale = new Locale("KOREAN", "KOREA");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", currentLocale);
+
+        long diffMinutes = 0;
+
+        try {
+            Date beginDate = formatter.parse(formatter.format(compareDate));
+            Date endDate = formatter.parse(licenseDate);
+
+            long diff = (endDate.getTime() - beginDate.getTime()) / 1000; // 초단위로 변환
+            diffMinutes = diff / (60); // 분
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return diffMinutes;
+    }
+
+    /**
+     * 입력받은 날짜를 분으로 변환하여 반환한다.
+     * */
+    public static long changeSecondToDate(String strDate) {
+        strDate = strDate.replace(" ", "").replace("-", "").replace(":", "").replace("/", "").replace(".", "");
+        Locale currentLocale = new Locale("KOREAN", "KOREA");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", currentLocale);
+
+        long second = 0;
+
+        try {
+            Date date = formatter.parse(strDate);
+            second = date.getTime() / 1000; // 초단위로 변환
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return second;
+    }
+
 
     /**
      * 라이센스 남은 일자를 반환한다.
      * */
-    public static String getLicenseRemainDate(String licenseDate) {
+    public static String getLicenseRemainDate(String licenseDate, Date compareDate) {
         licenseDate = licenseDate.replace(" ", "").replace("-", "").replace(":", "").replace("/", "").replace(".", "");
-        Date today = new Date();
 
         Locale currentLocale = new Locale("KOREAN", "KOREA");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", currentLocale);
@@ -24,7 +67,7 @@ public class CMDateUtil {
         String returnValue = "";
 
         try {
-            Date beginDate = formatter.parse(formatter.format(today));
+            Date beginDate = formatter.parse(formatter.format(compareDate));
             Date endDate = formatter.parse(licenseDate);
 
             long diff = (endDate.getTime() - beginDate.getTime()) / 1000; // 초단위로 변환

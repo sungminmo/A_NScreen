@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchVodDataObject;
 
@@ -25,7 +26,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 	private Context mContext;
 	private RequestQueue mRequestQueue;
 	private ImageLoader mImageLoader;
-
+	private JYSharedPreferences mPref;
 
 	public SearchVodAdapter(Context context, List<SearchVodDataObject> items)
 	{
@@ -45,6 +46,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 				return mCache.get(url);
 			}
 		});
+		mPref = new JYSharedPreferences(context);
 	}
 
 	@Override
@@ -67,6 +69,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 			holder.programname = (TextView)convertView.findViewById(R.id.programname);
 			holder.poster = (NetworkImageView)convertView.findViewById(R.id.poster);
 			holder.event = (ImageView)convertView.findViewById(R.id.event_icon);
+			holder.adultDim = (ImageView)convertView.findViewById(R.id.adult_dim);
 			convertView.setTag(holder);
 		}
 		else
@@ -103,6 +106,13 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 
 		holder.programname.setText(item.title);
 
+
+		if (item.rating.startsWith("19") && mPref.isAdultVerification() == false) {
+			holder.adultDim.setVisibility(View.VISIBLE);
+		} else {
+			holder.adultDim.setVisibility(View.GONE);
+		}
+
 		return convertView;
 	}
 	
@@ -110,6 +120,7 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 		TextView programname;
 		NetworkImageView poster;
 		ImageView event;
+		ImageView adultDim;
 	}
 	
 }

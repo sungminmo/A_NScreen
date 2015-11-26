@@ -1,5 +1,6 @@
 package com.stvn.nscreen.search;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchVodDataObject;
 import com.stvn.nscreen.common.VolleyHelper;
 import com.stvn.nscreen.setting.CMSettingData;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
@@ -143,21 +145,41 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        String assetId = mProgramlist.get(position).primaryAssetId;
-        String episodePeerExistence = mProgramlist.get(position).episodePeerExistence;
-        String contentGroupId = mProgramlist.get(position).contentGroupId;
+        String rating = mProgramlist.get(position).rating;
 
-        if(TextUtils.isEmpty(assetId) == false) {
-            Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-            intent.putExtra("assetId", assetId);
-            // episodePeerExistence 값이 있으면서 1인 경우에는 아래 3가지 데이터를 추가로 VOD 상세 화면에 전달 한다.
-            if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
-                intent.putExtra("episodePeerExistence", episodePeerExistence);
-                intent.putExtra("contentGroupId", contentGroupId);
-                intent.putExtra("primaryAssetId", assetId);
+        if (rating.startsWith("19") && mPref.isAdultVerification() == false) {
+            String alertTitle = "C&M NScreen";
+            String alertMsg1 = getActivity().getResources().getString(R.string.adult_auth_message);
+            String alertMsg2 = "";
+            CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), CMSettingMainActivity.class);
+                    startActivity(intent);
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            });
+
+        } else {
+            String assetId = mProgramlist.get(position).primaryAssetId;
+            String episodePeerExistence = mProgramlist.get(position).episodePeerExistence;
+            String contentGroupId = mProgramlist.get(position).contentGroupId;
+
+            if(TextUtils.isEmpty(assetId) == false) {
+                Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                intent.putExtra("assetId", assetId);
+                // episodePeerExistence 값이 있으면서 1인 경우에는 아래 3가지 데이터를 추가로 VOD 상세 화면에 전달 한다.
+                if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
+                    intent.putExtra("episodePeerExistence", episodePeerExistence);
+                    intent.putExtra("contentGroupId", contentGroupId);
+                    intent.putExtra("primaryAssetId", assetId);
+                }
+                startActivity(intent);
             }
-            startActivity(intent);
         }
+
     }
 
 }

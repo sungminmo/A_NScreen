@@ -18,13 +18,14 @@ import com.stvn.nscreen.common.SwipeListView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 
 	LayoutInflater mInflater;
 	private Context mContext;
+	private Date mCompareDate;
 	private View.OnClickListener mClicklitener;
-
 	public View.OnClickListener getmClicklitener() {
 		return mClicklitener;
 	}
@@ -37,6 +38,7 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 		super(context, 0, items);
 		this.mContext = context;
 		this.mInflater = LayoutInflater.from(context);
+		this.mCompareDate = new Date();
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 			holder.rowtime.setText(pTime);
 
 			String licenseEnd = jsonObj.getString("licenseEnd");
-			String remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd);
+			String remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd, this.mCompareDate);
 			holder.rowterm.setText(remainLicense);
 
 

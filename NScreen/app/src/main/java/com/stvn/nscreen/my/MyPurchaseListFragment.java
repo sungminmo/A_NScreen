@@ -30,6 +30,7 @@ import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
 
@@ -38,6 +39,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -139,35 +143,54 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 String contentGroupId = "";
                 try {
                     JSONObject jsonObj = new JSONObject(obj.sJson);
-                    if (jsonObj.isNull("assetId") == false) {
-                        assetId = jsonObj.getString("assetId");
-                    } else if (jsonObj.isNull("primaryAssetId") == false) {
-                        assetId = jsonObj.getString("primaryAssetId");
-                    }
-
-                    if (jsonObj.isNull("primaryAssetId") == false) {
-                        primaryAssetId = jsonObj.getString("primaryAssetId");
-                    }
-
-                    if (jsonObj.isNull("episodePeerExistence") == false) {
-                        episodePeerExistence = jsonObj.getString("episodePeerExistence");
-                    }
-
-                    if (jsonObj.isNull("contentGroupId") == false) {
-                        contentGroupId = jsonObj.getString("contentGroupId");
-                    }
-
-                    if (TextUtils.isEmpty(assetId) == false) {
-                        Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                        intent.putExtra("assetId", assetId);
-
-                        if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
-                            intent.putExtra("episodePeerExistence", episodePeerExistence);
-                            intent.putExtra("contentGroupId", contentGroupId);
-                            intent.putExtra("primaryAssetId", primaryAssetId);
+                    String rating = jsonObj.getString("rating");
+                    if (rating.startsWith("19") && mPref.isAdultVerification() == false) {
+                        String alertTitle = "C&M NScreen";
+                        String alertMsg1 = getActivity().getResources().getString(R.string.adult_auth_message);
+                        String alertMsg2 = "";
+                        CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getActivity(), CMSettingMainActivity.class);
+                                startActivity(intent);
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {}
+                        });
+                    } else {
+                        if (jsonObj.isNull("assetId") == false) {
+                            assetId = jsonObj.getString("assetId");
+                        } else if (jsonObj.isNull("primaryAssetId") == false) {
+                            assetId = jsonObj.getString("primaryAssetId");
                         }
-                        startActivity(intent);
+
+                        if (jsonObj.isNull("primaryAssetId") == false) {
+                            primaryAssetId = jsonObj.getString("primaryAssetId");
+                        }
+
+                        if (jsonObj.isNull("episodePeerExistence") == false) {
+                            episodePeerExistence = jsonObj.getString("episodePeerExistence");
+                        }
+
+                        if (jsonObj.isNull("contentGroupId") == false) {
+                            contentGroupId = jsonObj.getString("contentGroupId");
+                        }
+
+                        if (TextUtils.isEmpty(assetId) == false) {
+                            Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                            intent.putExtra("assetId", assetId);
+
+                            if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
+                                intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                intent.putExtra("contentGroupId", contentGroupId);
+                                intent.putExtra("primaryAssetId", primaryAssetId);
+                            }
+                            startActivity(intent);
+                        }
                     }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -236,7 +259,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             JSONObject jsonObj = new JSONObject(obj.sJson);
             String licenseEnd = jsonObj.getString("licenseEnd");
             vodTitle = jsonObj.getString("productName");
-            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd))) {
+            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
                 isExpired = true;
             }
             purchasedId = jsonObj.getString("purchasedId");
@@ -315,8 +338,8 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 ((MyMainActivity) getActivity()).hideProgressDialog();
 
                 try {
+                    Date compareDate = new Date();
                     JSONObject responseObject = new JSONObject(response);
-
                     JSONArray puchaseArray = responseObject.getJSONArray("purchaseLogList");
                     for (int i = 0; i < puchaseArray.length(); i++) {
                         JSONObject jsonObj = puchaseArray.getJSONObject(i);
@@ -326,6 +349,12 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         String paymentType = jsonObj.getString("paymentType");
                         if ("normal".equals(paymentType) || "coupon".equals(paymentType) || "point".equals(paymentType) || "complex".equals(paymentType)) {
                             String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
+
+                            String licenseEnd = jsonObj.getString("licenseEnd");
+                            String purchasedTime = jsonObj.getString("purchasedTime");
+                            obj.remainMinute = CMDateUtil.getLicenseRemainMinute(licenseEnd, compareDate);
+                            obj.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
+
                             if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType) == false) {
                                 mList.add(obj);
                             } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType)) {
@@ -333,6 +362,33 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             }
                         }
                     }
+
+                    Collections.sort(mList, new Comparator<ListViewDataObject>() {
+                        public int compare(ListViewDataObject left, ListViewDataObject right) {
+
+                            if (left.remainMinute == right.remainMinute) {
+                                if (left.puchaseSecond > right.puchaseSecond) {
+                                    return -1;
+                                } else {
+                                    if (left.puchaseSecond > right.puchaseSecond) {
+                                        return 1;
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                            } else {
+                                if (left.remainMinute > right.remainMinute) {
+                                    return -1;
+                                } else {
+                                    if (left.remainMinute > right.remainMinute) {
+                                        return 1;
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                            }
+                        }
+                    });
 
                     setPurchaseListCountText(mList.size());
                     mAdapter.notifyDataSetChanged();

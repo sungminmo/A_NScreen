@@ -23,6 +23,13 @@
             android:layout_marginRight="@dimen/dimen_2.25"
             android:id="@+id/event_icon"
             />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_120.25"
+            android:id="@+id/adult_dim"
+            android:src="@mipmap/icon_19"
+            android:visibility="gone"
+            />
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
