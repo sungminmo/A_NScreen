@@ -331,7 +331,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
 
-        String url = mPref.getWebhasServerUrl() + "/getPurchasedProductList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2";
+        String url = mPref.getWebhasServerUrl() + "/getPurchasedProductList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=4";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -354,7 +354,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             String purchasedTime = jsonObj.getString("purchasedTime");
                             obj.remainMinute = CMDateUtil.getLicenseRemainMinute(licenseEnd, compareDate);
                             obj.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
-
+                            obj.viewablePeriodState = jsonObj.getString("viewablePeriodState");
                             if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType) == false) {
                                 mList.add(obj);
                             } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType)) {
@@ -366,6 +366,23 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     Collections.sort(mList, new Comparator<ListViewDataObject>() {
                         public int compare(ListViewDataObject left, ListViewDataObject right) {
 
+                            if ("1".equals(left.viewablePeriodState)) {
+                                if ("1".equals(right.viewablePeriodState)) {
+                                    if (left.puchaseSecond > right.puchaseSecond) {
+                                        return -1;
+                                    } else {
+                                        if (left.puchaseSecond > right.puchaseSecond) {
+                                            return 1;
+                                        } else {
+                                            return 0;
+                                        }
+                                    }
+                                } else {
+                                    return 1;
+                                }
+                            } else if ("1".equals(right.viewablePeriodState)) {
+                                return 1;
+                            } else
                             if (left.remainMinute == right.remainMinute) {
                                 if (left.puchaseSecond > right.puchaseSecond) {
                                     return -1;
