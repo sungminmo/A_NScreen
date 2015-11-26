@@ -201,7 +201,7 @@ public class EpgMainActivity extends AppCompatActivity {
 
         // -----------------------------------------------------------------------------------------
         // 선호채널이 아니면 통신 태우기.
-        String sGenreCode2 = "";
+        String sGenreCode2 = sGenreCode;
         if ( "&genreCode=0".equals(sGenreCode) ) {
             sGenreCode2 = "&genreCode=1";
         }

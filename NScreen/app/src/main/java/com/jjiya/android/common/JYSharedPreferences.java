@@ -635,7 +635,7 @@ public class JYSharedPreferences {
                 JSONObject            jo  = new JSONObject();
 
                 jo.put("sChannelId",     obj.getsChannelId());
-                jo.put("sChannelNam",    obj.getsChannelName());
+                jo.put("sChannelName",    obj.getsChannelName());
                 jo.put("sChannelNumber", obj.getsChannelNumber());
 
                 arr.add(jo);

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="false"
-        android:textColor="@color/colore5e5e5"
-        android:drawable="@mipmap/purchase_dimmed" />
-
+    <!-- non focus -->
     <item android:state_selected="false"
         android:state_pressed="false"
-        android:drawable="@mipmap/purchase_normal" />
-
+        android:color="@color/violet" />
+    <!-- select -->
     <item android:state_selected="true"
         android:state_pressed="false"
-        android:drawable="@mipmap/purchase_select" />
-
+        android:color="@color/white" />
+    <!-- press -->
     <item android:state_pressed="true"
-        android:drawable="@mipmap/btn_tab_press" />
+        android:color="@color/violet" />
 </selector>

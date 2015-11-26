@@ -352,7 +352,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton3"
+            android:id="@+id/epg_sub_left_arrow"
             android:background="@mipmap/date_arrow_before"
             android:layout_marginLeft="87.5dp"
             android:layout_gravity="center_vertical" />
@@ -360,7 +360,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton4"
+            android:id="@+id/epg_sub_right_arrow"
             android:background="@mipmap/date_arrow_next"
             android:layout_gravity="center_vertical|right"
             android:layout_marginRight="6dp" />
