@@ -367,7 +367,6 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance.getActivity(), mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
@@ -733,35 +732,6 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         mRequestQueue.add(request);
     }
 
-    private void requestGetChannelList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(),"",getString(R.string.wait_a_moment));
-        if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
-        String url = mPref.getWebhasServerUrl() + "/getChannelList.xml?version=1&areaCode=0";
-        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Log.d(tag, response);
-                //parseGetChannelList(response);
-                //mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
-                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("version", String.valueOf(1));
-                params.put("areaCode", String.valueOf(0));
-                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
-                return params;
-            }
-        };
-        mRequestQueue.add(request);
-    }
+
 
 }

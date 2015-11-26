@@ -160,7 +160,7 @@ public class EpgMainActivity extends AppCompatActivity {
     }
 
     private void requestGetChannelList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
         String sGenreCode = "";
         try {
@@ -171,19 +171,19 @@ public class EpgMainActivity extends AppCompatActivity {
         if ( "".equals(sGenreCode) ) {
             sGenreCode = "";
         }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_NAME_KEY, "17") + sGenreCode;
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 parseGetChannelList(response);
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {

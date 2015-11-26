@@ -625,8 +625,19 @@ public class EpgSubActivity extends AppCompatActivity {
     }
 
     private void reloadAll() {
+        mAdapter.clear();
+        mAdapter.notifyDataSetChanged();
         mNetworkError.clear();
         mStbRecordReservelist.clear();
+        mDatasAll.clear();
+        mDatas0.clear();
+        mDatas1.clear();
+        mDatas2.clear();
+        mDatas3.clear();
+        mDatas4.clear();
+        mDatas5.clear();
+        mDatas6.clear();
+
         requestGetSetTopStatus();
     }
 

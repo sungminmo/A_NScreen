@@ -227,7 +227,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     public void set(int position, ListViewDataObject obj) { mDatas.set(position, obj); }
     public void addItem(ListViewDataObject obj) { mDatas.add(obj); }
     public void remove(int position) { mDatas.remove(position); }
-    public void clear() { mDatas.clear(); }
+    public void clear() { mDatas.clear(); mStbRecordReservelist.clear(); }
 
     public JSONObject getStbRecordReserveWithChunnelId(String channelId, ListViewDataObject epgitem) {
         try {
