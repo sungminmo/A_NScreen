@@ -120,7 +120,14 @@ public class CMDateUtil {
         Locale currentLocale = new Locale("KOREAN", "KOREA");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", currentLocale);
         try {
-            Date date = formatter.parse(findDate);
+            // swlim. findDate가 "2015-11-26 13:16:26"일 경우에 처리를 추가 했음.
+            SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", currentLocale);
+            Date date = null;
+            if ( findDate.contains("-") || findDate.contains(":") ) {
+                date = formatter2.parse(findDate);
+            } else {
+                date = formatter.parse(findDate);
+            }
             calendar.setTime(date);
         } catch (ParseException e) {
             e.printStackTrace();
