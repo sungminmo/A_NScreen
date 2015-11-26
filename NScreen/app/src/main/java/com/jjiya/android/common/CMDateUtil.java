@@ -83,9 +83,13 @@ public class CMDateUtil {
             } else if (diffTimes > 0) {
                 returnValue = diffTimes+"시간 남음";
             } else if (diffMinutes > 0) {
-                returnValue = diffMinutes+"분 남음";
+//                returnValue = diffMinutes+"분 남음";
+                returnValue = "1시간 남음";
             } else if (diff > 0) {
-                returnValue = diff+"초 남음";
+//                returnValue = diff+"초 남음";
+                returnValue = "1시간 남음";
+            } else if (diff < 0) {
+                returnValue = "기간만료";
             }
 
         } catch (ParseException e) {

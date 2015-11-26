@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.CMDateUtil;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchProgramDataObject;
@@ -147,7 +148,14 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
 //		2015-10-28 04:30:00
 
         holder.chtimetext.setText(CMUtil.getConverDateString(datetime, "yyyy-MM-ddHH:mm:ss", "HH:mm"));
-        holder.channeltext2.setText(CMUtil.getConverDateString(datetime, "yyyy-MM-ddHH:mm:ss", "yyyy.MM.dd") + " 방송예정");
+
+        long remainTime = CMDateUtil.getLicenseRemainMinute(datetime, new Date());
+        if (remainTime > 0) {
+            holder.channeltext2.setText(CMUtil.getConverDateString(datetime, "yyyy-MM-ddHH:mm:ss", "yyyy.MM.dd") + " 방송예정");
+        } else {
+            holder.channeltext2.setText("현재 방송 중");
+        }
+
         holder.chhd.setVisibility(View.VISIBLE);
 
         if ("SD".equals(item.getChannelInfo())) {        // SD방송

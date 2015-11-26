@@ -331,7 +331,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
 
-        String url = mPref.getWebhasServerUrl() + "/getValidPurchaseLogList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2";
+        String url = mPref.getWebhasServerUrl() + "/getPurchasedProductList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

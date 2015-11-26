@@ -87,6 +87,11 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 
 			String licenseEnd = jsonObj.getString("licenseEnd");
 			String remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd, this.mCompareDate);
+
+			//TODO:평생소장 확인 데이터가 없어 임시로 타이틀에서 확인해 비교함
+			if (productName.indexOf("(평생소장)") > -1) {
+				remainLicense = "무제한 시청";
+			}
 			holder.rowterm.setText(remainLicense);
 
 
