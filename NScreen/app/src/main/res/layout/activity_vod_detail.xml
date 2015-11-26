@@ -2,10 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@color/white">
 
-<ScrollView
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="49.75dp"
+        android:background="@color/violet">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:id="@+id/vod_detail_topmenu_left_imagebutton"
+            android:src="@mipmap/btn_back"
+            android:background="@color/transparent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/vod_detail_title"
+            android:id="@+id/textView"
+            android:textSize="16.25sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:id="@+id/vod_fragment_topmenu_right_imagebutton"
+            android:layout_gravity="right"
+            android:background="@color/transparent"
+            android:visibility="invisible" />
+
+
+    </FrameLayout>
+
+    <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,40 +49,7 @@
         android:orientation="vertical">
 
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="49.75dp"
-            android:background="@color/violet">
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:id="@+id/vod_detail_topmenu_left_imagebutton"
-                android:src="@mipmap/btn_back"
-                android:background="@color/transparent" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/vod_detail_title"
-                android:id="@+id/textView"
-                android:textSize="16.25sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:gravity="center_vertical|center_horizontal" />
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:id="@+id/vod_fragment_topmenu_right_imagebutton"
-                android:layout_gravity="right"
-                android:background="@color/transparent"
-                android:visibility="invisible" />
-
-
-        </FrameLayout>
-
-    <LinearLayout
+        <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="185.25dp">
@@ -99,7 +99,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="title"
                     android:id="@+id/vod_detail_title"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -194,7 +193,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="원 [부가세 별도]"
                     android:id="@+id/vod_detail_price_textview"
                     android:textSize="11sp"
                     android:textColor="@color/black"
@@ -224,7 +222,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="genre / time"
                     android:id="@+id/vod_detail_genre_textview"
                     android:textSize="11sp"
                     android:textColor="@color/black"
@@ -254,7 +251,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="director"
                     android:id="@+id/vod_detail_director_textview"
                     android:textSize="11sp"
                     android:textColor="@color/black"
@@ -284,7 +280,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="starring"
                     android:id="@+id/vod_detail_starring_textview"
                     android:textSize="11sp"
                     android:textColor="@color/black"
@@ -314,7 +309,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="viewable"
                     android:id="@+id/vod_detail_viewable_textview"
                     android:textSize="11sp"
                     android:textColor="@color/black"
@@ -399,26 +393,9 @@
                 android:gravity="center_vertical"
                 android:id="@+id/vod_detail_series_linearlayout2">
 
-
- <!--
-                <Button
-                    android:layout_width="41.25dp"
-                    android:layout_height="27.75dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:text="1회"
-                    android:id="@+id/vod_detail_series_1_button"
-                    android:textSize="14.5sp"
-                    android:textColor="@color/violet"
-                    android:background="@drawable/series_selector" />
-                    -->
-
-
             </LinearLayout>
 
         </HorizontalScrollView>
-
-
-
 
 
         <View
@@ -427,11 +404,27 @@
             android:background="@color/violet"
             />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/vod_detail_series_left_image"
+            android:src="@mipmap/series_arrow_01_dim"
+            android:layout_marginTop="-22dp"
+            android:layout_marginLeft="4dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/vod_detail_series_right_image"
+            android:src="@mipmap/series_arrow_02_dim"
+            android:layout_marginTop="-10dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="4dp" />
 
 
     </LinearLayout>
 
-    <ScrollView
+        <ScrollView
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:id="@+id/vod_detail_synopsis_scrollView"
@@ -442,7 +435,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="synopsis"
             android:id="@+id/vod_detail_synopsis_textview"
             android:textSize="11.75sp"
             android:textColor="@color/black" />

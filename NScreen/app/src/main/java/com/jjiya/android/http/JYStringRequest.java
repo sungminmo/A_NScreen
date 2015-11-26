@@ -7,6 +7,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.jjiya.android.common.JYSharedPreferences;
@@ -75,6 +76,7 @@ public class JYStringRequest extends StringRequest {
 //        return super.parseNetworkResponse(responseUtf8);
     }
     */
+
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         String utf8String;
@@ -84,5 +86,16 @@ public class JYStringRequest extends StringRequest {
             utf8String = new String(response.data);
         }
         return Response.success(utf8String, HttpHeaderParser.parseCacheHeaders(response));
+    }
+
+    @Override
+    protected VolleyError parseNetworkError(VolleyError volleyError) {
+        //return super.parseNetworkError(volleyError);
+        if ( volleyError.networkResponse != null && volleyError.networkResponse.data != null ) {
+            VolleyError error = new VolleyError(new String(volleyError.networkResponse.data));
+            volleyError = error;
+        }
+
+        return volleyError;
     }
 }

@@ -143,7 +143,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
+                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
                             String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
                             String alertMsg2 = "";
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
@@ -197,7 +197,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
+                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
                             String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
                             String alertMsg2 = "";
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
@@ -251,7 +251,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
+                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
                             String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
                             String alertMsg2 = "";
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
@@ -305,7 +305,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "C&M NScreen";
+                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
                             String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
                             String alertMsg2 = "";
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {

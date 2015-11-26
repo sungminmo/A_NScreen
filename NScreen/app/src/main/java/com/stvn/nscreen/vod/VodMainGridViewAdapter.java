@@ -106,7 +106,24 @@ public class VodMainGridViewAdapter extends BaseAdapter {
             String promotionSticker = jo.getString("promotionSticker");
             final String rating = jo.getString("rating");
 
-            setPromotionSticker(promotionSticker, gridview_vod_main_promotionsticker_imageview);
+            Boolean isNew                = false; // 0:없음, 1:있음.
+            if ( ! jo.isNull("isNew") ) {
+                isNew = jo.getBoolean("isNew");
+            }
+            String assetNew             = "0"; // 0:없음, 1:new일부만, 2:new단체
+            if ( ! jo.isNull("assetNew") ) {
+                assetNew = jo.getString("assetNew");
+            }
+            String assetHot             = "0"; // 0:없음, 1:new일부만, 2:new단체
+            if ( ! jo.isNull("assetHot") ) {
+                assetHot = jo.getString("assetHot");
+            }
+            Boolean hot                  = false; // 0:없음, 1:있음.
+            if ( ! jo.isNull("hot") ) {
+                hot = jo.getBoolean("hot");
+            }
+
+            setPromotionSticker(promotionSticker, isNew, hot, assetNew, assetHot, gridview_vod_main_promotionsticker_imageview);
             if ( "1".equals(publicationRight1) || "false".equals(publicationRight1) ) {
                 gridview_vod_main_tvonly_imageview.setVisibility(View.VISIBLE);
             }else {
@@ -174,8 +191,6 @@ public class VodMainGridViewAdapter extends BaseAdapter {
                     }
                 }
             });
-
-
             String imageFileName = jo.getString("imageFileName");
             vodImageView.setImageUrl(imageFileName, mImageLoader);
 
@@ -184,7 +199,6 @@ public class VodMainGridViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
-
     // 지정된 범위의 정수 1개를 램덤하게 반환하는 메서드
     // n1 은 "하한값", n2 는 상한값
     public static int randomRange(int n1, int n2) {

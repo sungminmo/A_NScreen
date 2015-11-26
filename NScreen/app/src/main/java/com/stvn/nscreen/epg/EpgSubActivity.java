@@ -98,7 +98,7 @@ public class EpgSubActivity extends AppCompatActivity {
     private              EpgSubListViewAdapter mAdapter;
     private              SwipeMenuListView     mListView;
 
-    private              String                sChannelNumber, sChannelId, sChannelName, sChannelLogoImg;
+    private              String                sChannelNumber, sChannelId, sChannelName, sChannelLogoImg, programTitle;
 
     private              NetworkImageView      epg_sub_channelLogoImg;
 
@@ -420,7 +420,7 @@ public class EpgSubActivity extends AppCompatActivity {
                                 JSONObject jo = new JSONObject(item.sJson);
                                 String programId = jo.getString("programId");
                                 String seriesId = jo.getString("seriesId");
-                                String programTitle = jo.getString("programTitle");
+                                programTitle = jo.getString("programTitle");
                                 String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
                                 mPref.addWatchTvReserveAlarm(programId, seriesId, programTitle, programBroadcastingStartTime);
                                 mAdapter.notifyDataSetChanged();
@@ -430,8 +430,32 @@ public class EpgSubActivity extends AppCompatActivity {
                         } else { // right button
                             try {
                                 JSONObject jo = new JSONObject(item.sJson);
-                                String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
-                                requestSetRecordReserve(sChannelId, programBroadcastingStartTime);
+                                final String sSeriesId = jo.getString("seriesId");
+                                final String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
+                                if ( "".equals(sSeriesId) ) {
+                                    requestSetRecordReserve(sChannelId, programBroadcastingStartTime);
+                                } else if ( !"".equals(sSeriesId) ) {
+                                    String alertTitle = "녹화예약확인";
+                                    String alertMsg1 = programTitle;
+                                    String alertMsg2 = getString(R.string.error_not_paring_compleated8);
+                                    CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            requestSetRecordSeriesReserve(sChannelId, sSeriesId, programBroadcastingStartTime);
+                                        }
+                                    }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            requestSetRecordReserve(sChannelId, programBroadcastingStartTime);
+                                        }
+                                    }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    });
+
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -477,13 +501,44 @@ public class EpgSubActivity extends AppCompatActivity {
                             }
                         } else { // right button
                             try {
-                                JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
-                                String starttime = null;
-                                starttime = reservjo.getString("RecordStartTime");
-                                requestSetRecordReserve(sChannelId, starttime);
+                                JSONObject jo = new JSONObject(item.sJson);
+                                final String sSeriesId = jo.getString("seriesId");
+                                final String programBroadcastingStartTime = jo.getString("programBroadcastingStartTime");
+                                if ( "".equals(sSeriesId) ) {
+                                    requestSetRecordReserve(sChannelId, programBroadcastingStartTime);
+                                } else if ( !"".equals(sSeriesId) ) {
+                                    String alertTitle = "녹화예약확인";
+                                    String alertMsg1 = programTitle;
+                                    String alertMsg2 = getString(R.string.error_not_paring_compleated8);
+                                    CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            requestSetRecordSeriesReserve(sChannelId, sSeriesId, programBroadcastingStartTime);
+                                        }
+                                    }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            requestSetRecordReserve(sChannelId, programBroadcastingStartTime);
+                                        }
+                                    }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    });
+
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+//                            try {
+//                                JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
+//                                String starttime = null;
+//                                starttime = reservjo.getString("RecordStartTime");
+//                                requestSetRecordReserve(sChannelId, starttime);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
                         }
                     }
                     break;
@@ -499,6 +554,16 @@ public class EpgSubActivity extends AppCompatActivity {
                             }
                         } else { // right button
                             // requestSetRecordCancelReserve(sChannelId);
+                            try {
+                                JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(sChannelId, item);
+                                String starttime = null;
+                                starttime = reservjo.getString("RecordStartTime");
+                                String seriesid = reservjo.getString("SeriesId");
+                                requestSetRecordCancelReserve(sChannelId, starttime, seriesid);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     break;
@@ -1031,7 +1096,7 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 채널 편성 정보 호출 */
     private void requestGetChannelSchedule() {
-        mProgressDialog = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
         String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=" + sChannelId + "&dateIndex=7&areaCode=0";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
@@ -1526,6 +1591,94 @@ public class EpgSubActivity extends AppCompatActivity {
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url  = mPref.getRumpersServerUrl() + "/SetRecordReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
                 + channelId + "&StartTime=" + starttime;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecordReserve(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "Duplicated Recording Reserve Request";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화예약 불가";
+                    String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void requestSetRecordSeriesReserve(String channelId, String series, String starttime) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordReserve()"); }
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8");
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordSeriesReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime + "&SeriesId=" + series;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

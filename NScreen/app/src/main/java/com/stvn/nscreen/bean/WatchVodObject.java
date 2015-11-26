@@ -12,6 +12,7 @@ public class WatchVodObject extends RealmObject {
 
     @PrimaryKey
     private int    iSeq;
+
     private Date   dDate;
     private String sAssetId;
     private String sTitle;

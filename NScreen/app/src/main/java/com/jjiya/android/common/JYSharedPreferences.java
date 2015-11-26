@@ -687,13 +687,14 @@ public class JYSharedPreferences {
         // Realm Database **********************************************************************
         // Obtain a Realm instance
         Realm realm = Realm.getInstance(mContext);
-        RealmResults<WatchVodObject> result = mRealm.where(WatchVodObject.class).findAll();
-        realm.beginTransaction();
-        WatchVodObject obj = realm.createObject(WatchVodObject.class); // Create a new object
-        obj.setiSeq(result.size());
+        long iSeq = realm.where(WatchVodObject.class).maximumInt("iSeq") + 1;
+        WatchVodObject obj = new WatchVodObject();
+        obj.setiSeq((int)iSeq);
         obj.setdDate(watchDate);
         obj.setsAssetId(assetId);
         obj.setsTitle(title);
+        realm.beginTransaction();
+        WatchVodObject obj2 = realm.copyToRealm(obj);
         realm.commitTransaction();
         // Realm Database **********************************************************************
     }
@@ -704,6 +705,7 @@ public class JYSharedPreferences {
         Realm realm = Realm.getInstance(mContext);
         realm.beginTransaction();
         RealmResults<WatchVodObject> results = mRealm.where(WatchVodObject.class).equalTo("iSeq", iSeq).findAll();
+        //RealmResults<WatchVodObject> results = mRealm.where(WatchVodObject.class).findAll();
         if ( results.size() > 0 ) {
             WatchVodObject obj = results.get(0);
             obj.removeFromRealm();
@@ -719,9 +721,10 @@ public class JYSharedPreferences {
         ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
         RealmResults<WatchVodObject> results = mRealm.where(WatchVodObject.class).findAll();
         try {
+            int loop = results.size()-1;
             SimpleDateFormat sd    = new SimpleDateFormat("MM.dd (E),HH:mm");
             for (int i = 0; i < results.size(); i++) {
-                WatchVodObject  obj    = results.get(i);
+                WatchVodObject  obj    = results.get(loop);
                 JSONObject       jo    = new JSONObject();
 
                 String           sDate = sd.format(obj.getdDate()).toString();
@@ -730,6 +733,7 @@ public class JYSharedPreferences {
                 jo.put("sAssetId", obj.getsAssetId());
                 jo.put("sTitle", obj.getsTitle());
                 arr.add(jo);
+                loop--;
             }
         }catch(JSONException e){
             e.printStackTrace();
