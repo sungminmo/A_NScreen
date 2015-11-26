@@ -44,12 +44,10 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView9"
+        android:id="@+id/epg_sub_imageview_program_state"
         android:layout_gravity="left|top"
         android:layout_marginTop="27.75dp"
-        android:layout_marginLeft="151.5dp"
-        android:background="@mipmap/icon_record"
-        android:visibility="gone" />
+        android:layout_marginLeft="151.5dp" />
 
     <ProgressBar
         android:layout_width="fill_parent"
