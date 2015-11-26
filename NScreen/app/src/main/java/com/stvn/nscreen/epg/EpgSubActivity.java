@@ -447,7 +447,7 @@ public class EpgSubActivity extends AppCompatActivity {
                                     String alertTitle = "녹화예약확인";
                                     String alertMsg1 = programTitle;
                                     String alertMsg2 = getString(R.string.error_not_paring_compleated8);
-                                    CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                    CMAlertUtil.Alert_series_reserve(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             requestSetRecordSeriesReserve(sChannelId, sSeriesId, programBroadcastingStartTime);

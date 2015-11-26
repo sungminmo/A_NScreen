@@ -229,4 +229,16 @@ public class CMAlertUtil {
         mDialog.setNegativeButton("취소", canclelistener);
         mDialog.show();
     }
+
+    public static void Alert_series_reserve(Context ctx, String title, String msg1, String msg2, boolean isbold1, boolean isbold2, DialogInterface.OnClickListener serieslistener, DialogInterface.OnClickListener listener, DialogInterface.OnClickListener canclelistener) {
+
+        //CMAlertDialog mDialog = new CMAlertDialog(ctx);
+        CMAlertDialog mDialog = new CMAlertDialog(ctx, CMAlertDialog.CMDialogType.DialogType5);
+        mDialog.setTitle(title);
+        mDialog.setMessage(msg1, msg2, isbold1, isbold2);
+        mDialog.setNeutralButton("시리즈예약", serieslistener);
+        mDialog.setPositiveButton("단편예약", listener);
+        mDialog.setNegativeButton("취소", canclelistener);
+        mDialog.show();
+    }
 }
