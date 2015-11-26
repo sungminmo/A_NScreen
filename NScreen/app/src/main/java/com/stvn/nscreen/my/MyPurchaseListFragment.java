@@ -331,7 +331,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
 
-        String url = mPref.getWebhasServerUrl() + "/getValidPurchaseLogList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2&sortType=remainingTimeAscend";
+        String url = mPref.getWebhasServerUrl() + "/getValidPurchaseLogList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=2";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -345,9 +345,9 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         JSONObject jsonObj = puchaseArray.getJSONObject(i);
                         ListViewDataObject obj = new ListViewDataObject(i, 0, jsonObj.toString());
 
-
-                        String paymentType = jsonObj.getString("paymentType");
-                        if ("normal".equals(paymentType) || "coupon".equals(paymentType) || "point".equals(paymentType) || "complex".equals(paymentType)) {
+                        String productType = jsonObj.getString("productType").toLowerCase();
+                        String paymentType = jsonObj.getString("paymentType").toLowerCase();
+                        if (checkAddListWithPaymentType(paymentType) && checkAddListWithProductType(productType)) {
                             String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
 
                             String licenseEnd = jsonObj.getString("licenseEnd");
@@ -413,6 +413,26 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             }
         };
         mRequestQueue.add(request);
+    }
+
+    /**
+     * payment type에 따른 리스트 추가 여부 반환
+     * */
+    private boolean checkAddListWithPaymentType(String paymentType) {
+        if ("normal".equals(paymentType) || "coupon".equals(paymentType) || "point".equals(paymentType) || "complex".equals(paymentType)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * product type에 따른 리스트 추가 여부 반환
+     * */
+    private boolean checkAddListWithProductType(String productType) {
+        if("rvod".equals(productType) || "package".equals(productType) || "bundle".equals(productType)) {
+            return true;
+        }
+        return false;
     }
 
     /**
