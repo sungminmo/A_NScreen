@@ -656,11 +656,12 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
         }
     }
 
-    // http://192.168.40.5:8080/HApplicationServer/getContentGroupList.json?version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&contentGroupProfile=2&categoryId=723049
+
     // 금주의 신작영화
     private void requestGetContentGroupList() {
         MainCategoryObject cate = mPref.getMainCategoryObject(2);
-        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&&categoryId="+cate.getsCategoryId();
+        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&sortType=notSet"
+                + "&categoryId="+cate.getsCategoryId();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -697,7 +698,8 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     // 이달의 추천 VOD
     private void requestGetContentGroupList2() {
         MainCategoryObject cate = mPref.getMainCategoryObject(3);
-        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&&categoryId="+cate.getsCategoryId();
+        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&sortType=notSet"
+            + "&categoryId="+cate.getsCategoryId();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
