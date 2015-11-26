@@ -1,9 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/dimen_10.5"
-    android:orientation="vertical">
+    android:paddingTop="@dimen/dimen_10.5">
     <com.stvn.nscreen.common.SwipeListView
         xmlns:swipe="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -19,5 +18,13 @@
         swipe:swipeMode="left"
         swipe:swipeCloseAllItemsWhenMoveList="true"
         />
-
-</LinearLayout>
+    <TextView
+        android:id="@+id/search_empty_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="검색결과가 없습니다.다른 검색어를 입력해주세요"
+        android:textSize="16.25sp"
+        android:textColor="@color/color7b5aa3"
+        android:visibility="gone" />
+</RelativeLayout>

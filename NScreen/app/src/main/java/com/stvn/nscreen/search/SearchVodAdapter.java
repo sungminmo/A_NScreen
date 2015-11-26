@@ -15,6 +15,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.common.UiUtil;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchVodDataObject;
 
@@ -78,34 +79,13 @@ public class SearchVodAdapter extends ArrayAdapter<SearchVodDataObject> {
 		}
 		SearchVodDataObject item = getItem(position);
 		holder.poster.setImageUrl(item.smallImageFileName, mImageLoader);
-
 		holder.event.setVisibility(View.VISIBLE);
-		int imgresource = R.mipmap.vod_01;
-		if ("0".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_01;
-		} else if ("11".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_09;
-		} else if ("12".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_07;
-		} else if ("13".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_03;
-		} else if ("14".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_08;
-		} else if ("15".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_04;
-		} else if ("16".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_02;
-		} else if ("17".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_05;
-		} else if ("18".equals(item.promotionSticker)) {
-			imgresource = R.mipmap.vod_06;
-		} else {
-			holder.event.setVisibility(View.INVISIBLE);
-		}
-		holder.event.setImageResource(imgresource);
+
+		boolean isNew = Boolean.getBoolean(item.isNew);
+		boolean hot = Boolean.getBoolean(item.hot);
+		UiUtil.setPromotionSticker(item.promotionSticker, isNew, hot, item.assetNew, item.assetHot, holder.event);
 
 		holder.programname.setText(item.title);
-
 
 		if (item.rating.startsWith("19") && mPref.isAdultVerification() == false) {
 			holder.adultDim.setVisibility(View.VISIBLE);

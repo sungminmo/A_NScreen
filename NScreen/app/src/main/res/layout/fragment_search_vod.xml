@@ -1,9 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/dimen_21.5"
-    android:orientation="vertical">
+    android:paddingTop="@dimen/dimen_21.5">
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,4 +16,13 @@
         android:columnWidth="@dimen/dimen_82.5"
         />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/search_empty_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="검색결과가 없습니다.다른 검색어를 입력해주세요"
+        android:textSize="16.25sp"
+        android:textColor="@color/color7b5aa3"
+        android:visibility="gone" />
+</RelativeLayout>

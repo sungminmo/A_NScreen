@@ -36,39 +36,44 @@ public class SearchVodDataObject {
     public String title;
     public String eventTargetId;
     public String eventTargetType;
-
+    public String isNew;
+    public String hot;
 
     @Override
     public String toString() {
         return "SearchVodDataObject{" +
-                "HDAssetCount=" + HDAssetCount +
-                ", SDAssetCount=" + SDAssetCount +
-                ", UHDAssetCount=" + UHDAssetCount +
-                ", assetBundle=" + assetBundle +
-                ", assetFree=" + assetFree +
-                ", assetHot=" + assetHot +
-                ", assetNew=" + assetNew +
-                ", assetSeriesLink=" + assetSeriesLink +
+                "HDAssetCount='" + HDAssetCount + '\'' +
+                ", SDAssetCount='" + SDAssetCount + '\'' +
+                ", UHDAssetCount='" + UHDAssetCount + '\'' +
+                ", assetBundle='" + assetBundle + '\'' +
+                ", assetFree='" + assetFree + '\'' +
+                ", assetHot='" + assetHot + '\'' +
+                ", assetNew='" + assetNew + '\'' +
+                ", assetSeriesLink='" + assetSeriesLink + '\'' +
                 ", categoryId='" + categoryId + '\'' +
                 ", contentGroupId='" + contentGroupId + '\'' +
                 ", director='" + director + '\'' +
                 ", episodePeerExistence='" + episodePeerExistence + '\'' +
                 ", genre='" + genre + '\'' +
                 ", imageFileName='" + imageFileName + '\'' +
-                ", isFavorite=" + isFavorite +
-                ", isLiked=" + isLiked +
-                ", likedCount=" + likedCount +
-                ", mobilePublicationRight=" + mobilePublicationRight +
+                ", isFavorite='" + isFavorite + '\'' +
+                ", isLiked='" + isLiked + '\'' +
+                ", likedCount='" + likedCount + '\'' +
+                ", mobilePublicationRight='" + mobilePublicationRight + '\'' +
                 ", primaryAssetId='" + primaryAssetId + '\'' +
                 ", production='" + production + '\'' +
-                ", promotionSticker=" + promotionSticker +
+                ", promotionSticker='" + promotionSticker + '\'' +
                 ", rating='" + rating + '\'' +
-                ", reviewRating=" + reviewRating +
+                ", reviewRating='" + reviewRating + '\'' +
                 ", runningTime='" + runningTime + '\'' +
                 ", smallImageFileName='" + smallImageFileName + '\'' +
                 ", starring='" + starring + '\'' +
                 ", synopsis='" + synopsis + '\'' +
                 ", title='" + title + '\'' +
+                ", eventTargetId='" + eventTargetId + '\'' +
+                ", eventTargetType='" + eventTargetType + '\'' +
+                ", isNew='" + isNew + '\'' +
+                ", hot='" + hot + '\'' +
                 '}';
     }
 }

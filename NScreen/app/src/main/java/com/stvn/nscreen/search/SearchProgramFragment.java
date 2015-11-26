@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.TextView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -51,6 +52,7 @@ import java.util.Map;
 public class SearchProgramFragment extends SearchBaseFragment implements AbsListView.OnScrollListener{
 
     private LayoutInflater mInflater;
+    private TextView mEmptyMessage;
     private SwipeListView mListView;
     private ArrayList<SearchProgramDataObject> mProgramlist = new ArrayList<SearchProgramDataObject>();
     private SearchProgramAdapter mAdapter;
@@ -99,6 +101,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
     private void initView()
     {
+        mEmptyMessage = (TextView)getView().findViewById(R.id.search_empty_msg);
         mListView = (SwipeListView)getView().findViewById(R.id.programlistview);
         mAdapter = new SearchProgramAdapter(getActivity(),mProgramlist);
         mAdapter.setSwipeClickListener(mSwipeButtonClickListener);
@@ -535,6 +538,11 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             mAdapter.notifyDataSetChanged();
             ((SearchMainActivity)getActivity()).setSearchCountText(mTotCnt);
 
+            if (mProgramlist.size() == 0) {
+                mEmptyMessage.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyMessage.setVisibility(View.GONE);
+            }
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {

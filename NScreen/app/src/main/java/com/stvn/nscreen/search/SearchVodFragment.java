@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 public class SearchVodFragment extends SearchBaseFragment implements AdapterView.OnItemClickListener{
 
     private LayoutInflater mInflater;
+    private TextView mEmptyMessage;
     private GridView mGridView;
     private ArrayList<SearchVodDataObject> mProgramlist = new ArrayList<SearchVodDataObject>();
     private SearchVodAdapter mAdapter;
@@ -73,6 +75,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
 
     private void initView()
     {
+        mEmptyMessage = (TextView)getView().findViewById(R.id.search_empty_msg);
         mGridView = (GridView)getView().findViewById(R.id.programgridview);
         mAdapter = new SearchVodAdapter(getActivity(),mProgramlist);
         mGridView.setAdapter(mAdapter);
@@ -129,7 +132,11 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
                         } catch (JSONException e) {
                             CMAlertUtil.Alert(getActivity(), "Json", ""+e.getMessage());
                         }
-
+                        if (mProgramlist.size() == 0) {
+                            mEmptyMessage.setVisibility(View.VISIBLE);
+                        } else {
+                            mEmptyMessage.setVisibility(View.GONE);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
