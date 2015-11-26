@@ -644,9 +644,10 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     }
 
 
-    // http://192.168.40.5:8080/HApplicationServer/getContentGroupList.json?version=1&terminalKey=C5E6DBF75F13A2C1D5B2EFDB2BC940&contentGroupProfile=2&categoryId=723049
+    //
     private void requestGetContentGroupList() {
-        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&categoryId="+mCurrCategoryObject.getsCategoryId();
+        String url = mPref.getWebhasServerUrl() + "/getContentGroupList.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&contentGroupProfile=2&sortType=notSet"
+            + "&categoryId="+mCurrCategoryObject.getsCategoryId();
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
