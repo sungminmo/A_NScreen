@@ -123,6 +123,24 @@ public class EpgMainActivity extends AppCompatActivity {
         requestGetSetTopStatus();
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        reloadAll();
+    }
+
+    private void reloadAll() {
+        mAdapter.clear();
+        mAdapter.notifyDataSetChanged();
+        mStbStateMap.clear();
+        mStbState = "";             // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel1 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel2 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbWatchingchannel = "";   // GetSetTopStatus API로 가져오는 값.
+        mStbPipchannel = "";        // GetSetTopStatus API로 가져오는 값.
+
+        requestGetSetTopStatus();
+    }
+
     private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -149,15 +167,6 @@ public class EpgMainActivity extends AppCompatActivity {
         }
     };
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-
-        switch(requestCode){
-            case 1: {    //
-                mAdapter.notifyDataSetChanged();
-            } break;
-        }
-    }
 
     private void requestGetChannelList() {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));

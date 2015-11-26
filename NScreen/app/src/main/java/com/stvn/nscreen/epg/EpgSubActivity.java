@@ -112,6 +112,14 @@ public class EpgSubActivity extends AppCompatActivity {
     private              ImageButton           backBtn, bookmarkImageButton;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epg_sub);
@@ -205,6 +213,7 @@ public class EpgSubActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 finish();
             }
         });

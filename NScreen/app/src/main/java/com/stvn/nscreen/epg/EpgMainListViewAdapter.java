@@ -93,7 +93,14 @@ public class EpgMainListViewAdapter extends BaseAdapter {
     public void set(int position, ListViewDataObject obj) { mDatas.set(position, obj); }
     public void addItem(ListViewDataObject obj) { mDatas.add(obj); }
     public void remove(int position) { mDatas.remove(position); }
-    public void clear() { mDatas.clear(); }
+    public void clear() {
+        mDatas.clear();
+        mStbState = "";             // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel1 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel2 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbWatchingchannel = "";   // GetSetTopStatus API로 가져오는 값.
+        mStbPipchannel = "";        // GetSetTopStatus API로 가져오는 값.
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
