@@ -102,7 +102,7 @@
     <string name="setting_help_purchase_auth_title">구매인증 비밀번호 관리 란?</string>
     <string name="setting_help_purchase_auth_message">고객 님께서 셋탑박스 연동과 함께 설정 하신 인증번호를 변경하는 서비스 입니다. 개인정보 보호와 콘텐트 이용관련 보안유지를 위해 주기 별로 간단한 인증 후 기존 인증번호를 변경해주세요.</string>
     <string name="setting_help_adult_search_title">성인검색 제한 설정이란?</string>
-    <string name="setting_help_adult_search_message">설정해제를 선택하실 경우 성인 컨텐츠를 포함한 모든 컨텐츠가 검색 결과에 보여집니다.</string>
+    <string name="setting_help_adult_search_message">성인 검색 제한 설정을 해제하시면 콘텐트 검색 시 검색 결과에 성인 콘텐트가 보여지지 않습니다.\n\n설정해제를 선택하실 경우 성인 컨텐츠를 포함한 모든 컨텐츠가 검색 결과에 보여집니다.</string>
     <string name="setting_help_adult_auth_title">성인인증 이란?</string>
     <string name="setting_help_adult_auth_message">성인 콘텐트를 시청하거나 성인 콘텐트 검색 제한을 해제하기 위해서는 성인인증이 필요합니다.\n\n간단한 절차를 통해 최초 1회 성인인증을 하시면, 이후부터는 성인인증 없이 성인 콘텐트를 보실 수 있습니다.</string>
     <string name="adult_auth_message">성인인증이 되지 않았습니다. 성인인증 이후 이용해 주세요.</string>
