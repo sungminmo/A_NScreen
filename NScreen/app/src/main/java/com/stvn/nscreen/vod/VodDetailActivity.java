@@ -465,10 +465,10 @@ public class VodDetailActivity extends Activity {
             mJimButton2.setCompoundDrawables( null, null, img, null );
             mJimButton2.setText("찜해제");
         }
-        
+
 
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
-        // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301&transactionId=200
+        // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301
         /**
          * VOD 상세정보 요청
          * episodePeerExistence
@@ -829,7 +829,7 @@ public class VodDetailActivity extends Activity {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = mPref.getWebhasServerUrl() + "/getAssetInfo.json?version=1&terminalKey="+terminalKey+"&assetProfile=9&assetId="+encAssetId+"&transactionId=200";
+        String url = mPref.getWebhasServerUrl() + "/getAssetInfo.json?version=1&terminalKey="+terminalKey+"&assetProfile=9&assetId="+encAssetId;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -887,7 +887,7 @@ public class VodDetailActivity extends Activity {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = mPref.getWebhasServerUrl() + "/recommendContentGroupByAssetId.json?version=1&terminalKey="+terminalKey+"&&assetId="+encAssetId+"&contentGroupProfile=2";
+        String url = mPref.getWebhasServerUrl() + "/recommendContentGroupByAssetId.json?version=1&terminalKey="+terminalKey+"&assetId="+encAssetId+"&contentGroupProfile=2";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1270,6 +1270,11 @@ public class VodDetailActivity extends Activity {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetSeriesAssetList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
+        try {
+            seriesId = URLDecoder.decode(seriesId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String url = mPref.getWebhasServerUrl() + "/getSeriesAssetList.json?version=1&terminalKey="+terminalKey+"&seriesId="+seriesId+"&categoryId="+categoryId+"&assetProfile=3";
 
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
