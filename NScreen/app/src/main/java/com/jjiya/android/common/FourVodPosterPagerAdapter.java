@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class FourVodPosterPagerAdapter extends PagerAdapter {
 
-    private static       VodDetailActivity   mVodDetailActivity;
+    private VodDetailActivity   mVodDetailActivity;
     private LayoutInflater   mLayoutInflater;
     private JYSharedPreferences mPref;
 
