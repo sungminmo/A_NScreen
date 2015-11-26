@@ -687,7 +687,18 @@ public class JYSharedPreferences {
         // Realm Database **********************************************************************
         // Obtain a Realm instance
         Realm realm = Realm.getInstance(mContext);
-        long iSeq = realm.where(WatchVodObject.class).maximumInt("iSeq") + 1;
+        RealmResults<WatchVodObject> results = realm.where(WatchVodObject.class).findAll();
+        long iSeq = 0;
+        if ( results == null ) {
+            //
+        } else {
+            if ( results.size() == 0 ) {
+                iSeq = 0;
+            } else {
+                iSeq = realm.where(WatchVodObject.class).maximumInt("iSeq") + 1;
+            }
+        }
+
         WatchVodObject obj = new WatchVodObject();
         obj.setiSeq((int)iSeq);
         obj.setdDate(watchDate);
