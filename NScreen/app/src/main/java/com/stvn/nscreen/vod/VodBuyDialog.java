@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -33,6 +35,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,13 +52,16 @@ public class VodBuyDialog extends Activity {
     private              ProgressDialog      mProgressDialog;
     private              EditText            mPwd;
     private              TextView            mPaymethod, mPrice, mTime, mInfo, mMinus;
+    private              TextView            dialog_buy_original_price_textview;
     private              Button              backBtn, purchaseBtn;
     private              FrameLayout         mCouponFrame;
     private              String              assetId, productId, goodId, categoryId, mTitle;
     private              String              viewable, listPrice, sPayMethod, pointBalance, totalMoneyBalance;
     //private              String              pointPrice;  // 복합결제시 사용할 TV포인트 금액.
-    private              long                couponPrice; // 복합결제시 사용할 Coupon 포인트 금액.
+    private              long                couponPrice;            // 복합결제시 사용할 Coupon 포인트 금액.
     private              long                lpriceCouponDiscounted; // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
+    private              long                ldiscountAmount;        // 할인을 적용할 경우, 할인금액.
+    private              String              sdiscountCouponId;      // 할인을 적용할 경우, 사용할 쿠폰의 ID.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,23 +87,35 @@ public class VodBuyDialog extends Activity {
         pointBalance      = getIntent().getExtras().getString("pointBalance");      // TV포인트
         totalMoneyBalance = getIntent().getExtras().getString("totalMoneyBalance"); // 금액형 쿠폰의 총 잔액
         lpriceCouponDiscounted = getIntent().getExtras().getLong("lpriceCouponDiscounted"); // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
+        ldiscountAmount        = getIntent().getExtras().getLong("ldiscountAmount");        // 할인을 적용할 경우, 할인금액.
+        sdiscountCouponId      = getIntent().getExtras().getString("sdiscountCouponId");    // 할인을 적용할 경우, 사용할 쿠폰의 ID.
 
-        mPaymethod   = (TextView)findViewById(R.id.dialog_buy_paymethod);
-        mPrice       = (TextView)findViewById(R.id.dialog_buy_price);
-        mTime        = (TextView)findViewById(R.id.dialog_buy_time);
-        mInfo        = (TextView)findViewById(R.id.dialog_buy_info);
-        mPwd         = (EditText)findViewById(R.id.dialog_buy_pwd_edittext);
-        backBtn      = (Button) findViewById(R.id.backBtn);
-        purchaseBtn  = (Button) findViewById(R.id.purchaseBtn);
-        mCouponFrame = (FrameLayout)findViewById(R.id.dailog_buy_cupon_frame);
-        mMinus       = (TextView)findViewById(R.id.dailog_buy_minus);
+        mPaymethod                         = (TextView)findViewById(R.id.dialog_buy_paymethod);
+        dialog_buy_original_price_textview = (TextView)findViewById(R.id.dialog_buy_original_price_textview);
+        mPrice                             = (TextView)findViewById(R.id.dialog_buy_price);
+        mTime                              = (TextView)findViewById(R.id.dialog_buy_time);
+        mInfo                              = (TextView)findViewById(R.id.dialog_buy_info);
+        mPwd                               = (EditText)findViewById(R.id.dialog_buy_pwd_edittext);
+        backBtn                            = (Button) findViewById(R.id.backBtn);
+        purchaseBtn                        = (Button) findViewById(R.id.purchaseBtn);
+        mCouponFrame                       = (FrameLayout)findViewById(R.id.dailog_buy_cupon_frame);
+        mMinus                             = (TextView)findViewById(R.id.dailog_buy_minus);
+
+        if ( lpriceCouponDiscounted > 0 ) {
+            dialog_buy_original_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(listPrice))+"원");
+            dialog_buy_original_price_textview.setPaintFlags(dialog_buy_original_price_textview.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
 
         // pointBalance; // TV포인트. getPointBalance 통해서 받아옴.
         // totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
         // 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
         if ( "0".equals(sPayMethod) ) {                 // 일반 ------------------------------------
             mPaymethod.setText("일반결제 [부가세 별도]");
-            mPrice.setText(UiUtil.toNumFormat(Integer.valueOf(listPrice))+"원");
+            if ( lpriceCouponDiscounted > 0 ) {
+                mPrice.setText("→ "+UiUtil.toNumFormat((int)lpriceCouponDiscounted)+"원");
+            } else {
+                mPrice.setText(UiUtil.toNumFormat(Integer.valueOf(listPrice))+"원");
+            }
         } else if ( "1".equals(sPayMethod) ) {          // 복합 할인 --------------------------------
             mPaymethod.setText("일반결제 [부가세 별도]");
             long total = 0;
@@ -182,37 +200,58 @@ public class VodBuyDialog extends Activity {
         mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
         String url         = mPref.getWebhasServerUrl() + "/purchaseAssetEx2.json?version=2&terminalKey="+terminalKey
-                +"&productId="+productId +"&goodId="+goodId+"&uiComponentDomain=0&uiComponentId=0";
+                +"&uiComponentDomain=0"
+                +"&uiComponentId=0"
+                +"&domainId=CnM"
+                +"&productId="+productId
+                +"&goodId="+goodId;
+        if ( lpriceCouponDiscounted > 0 ) {
+            String encAssetId = null;
+            try {
+                encAssetId = URLEncoder.encode(assetId, "utf-8");
+            } catch ( UnsupportedEncodingException e ) {
+                e.printStackTrace();
+            }
+            url += "&discountCouponId=" + sdiscountCouponId + "&discountAmount=" + ldiscountAmount +"&price=" + listPrice + "&assetId=" + encAssetId;
+        }
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 int   resultCode  = 0;
-                final String jstr = "";
-                // {"resultCode":100,"discountCouponPaymentList":[],"transactionId":null,"errorString":"","version":"2","enrolledEventIdList":[]}
                 try {
                     JSONObject jo = new JSONObject(response);
                     resultCode    = jo.getInt("resultCode");
-
-                    // jstr = jo.toString();
-
+                    if ( resultCode == 100 ) {
+                        String alertTitle = "구매완료";
+                        String alertMsg1  = mTitle;
+                        String alertMsg2  = getString(R.string.success_purchase);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent();
+                                intent.putExtra("jstr", "");
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
+                        }, true);
+                    } else {
+                        String errorString = jo.getString("errorString");
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        });
+                        alert.setMessage(errorString);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                String alertTitle = "구매완료";
-                String alertMsg1  = mTitle;
-                String alertMsg2  = getString(R.string.success_purchase);
-                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Intent intent = new Intent();
-                        intent.putExtra("jstr", jstr);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                }, true);
             }
         }, new Response.ErrorListener() {
             @Override

@@ -410,7 +410,7 @@
                     android:layout_marginBottom="3dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/vod_buy_step2_normal_dis_linearlayout">
 
                     <LinearLayout

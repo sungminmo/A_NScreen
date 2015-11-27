@@ -73,6 +73,8 @@ public class VodBuyActivity extends Activity {
     private              String               sListPrice; // 정가
     private              String               sPrice; // 할인적용가
     private              long                 lpriceCouponDiscounted; // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
+    private              String               sdiscountCouponId;      // 할인을 적용할 경우, 할인 적용할 쿠폰 아이디.
+    private              long                 ldiscountAmount;        // 할인을 적용할 경우, 할인금액.
     private              TextView             vod_buy_title_textview, vod_buy_step1_one_price, vod_buy_step2_normal_price;
     private              long                 pointBalance; // TV포인트. getPointBalance 통해서 받아옴.
     private              long                 totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
@@ -147,6 +149,23 @@ public class VodBuyActivity extends Activity {
             e.printStackTrace();
         }
         return discountAmount;
+    }
+
+    // 사용가능한 쿠폰의 ID를 알아낸다.
+    private String getDiscountCouponId(String discountCouponMasterId){
+        String couponId = "";
+        try {
+            for (int i = 0; i < couponList.length(); i++) {
+                JSONObject jo = (JSONObject) couponList.get(i);
+                if ( discountCouponMasterId.equals(jo.getString("discountCouponMasterId")) ) {
+                    couponId = jo.getString("couponId");
+                    break;
+                }
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        return couponId;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -360,7 +379,9 @@ public class VodBuyActivity extends Activity {
                 vod_buy_step2_normal_linearlayout.setSelected(true);
                 vod_buy_step2_normal_dis_linearlayout.setSelected(false);
             } else {
-                long discount   = getDiscountAmountBydiscountCouponMasterId(couponId);
+                long discount     = getDiscountAmountBydiscountCouponMasterId(couponId);
+                ldiscountAmount   = discount;
+                sdiscountCouponId = getDiscountCouponId(couponId);
                 lpriceCouponDiscounted  = Integer.valueOf(sListPrice) - (int)discount;
                 vod_buy_step2_original_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원");
                 vod_buy_step2_original_price_textview.setPaintFlags(vod_buy_step2_original_price_textview.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -423,15 +444,15 @@ public class VodBuyActivity extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        productType   = getIntent().getExtras().getString("productType");
-        assetId       = getIntent().getExtras().getString("assetId");
-        viewable       = getIntent().getExtras().getString("viewable");
-        isSeriesLink  = getIntent().getExtras().getString("isSeriesLink");
-        mTitle        = getIntent().getExtras().getString("mTitle");
-        sListPrice    = getIntent().getExtras().getString("sListPrice");
-        sPrice        = getIntent().getExtras().getString("sPrice");
-        productId     = getIntent().getExtras().getString("productId");
-        goodId        = getIntent().getExtras().getString("goodId");
+        productType       = getIntent().getExtras().getString("productType");
+        assetId           = getIntent().getExtras().getString("assetId");
+        viewable          = getIntent().getExtras().getString("viewable");
+        isSeriesLink      = getIntent().getExtras().getString("isSeriesLink");
+        mTitle            = getIntent().getExtras().getString("mTitle");
+        sListPrice        = getIntent().getExtras().getString("sListPrice");
+        sPrice            = getIntent().getExtras().getString("sPrice");
+        productId         = getIntent().getExtras().getString("productId");
+        goodId            = getIntent().getExtras().getString("goodId");
         categoryId        = getIntent().getExtras().getString("categoryId");
         pointBalance      = 0l;
         totalMoneyBalance = 0l;
@@ -569,17 +590,19 @@ public class VodBuyActivity extends Activity {
                     }
 
                     Intent intent = new Intent(mInstance, VodBuyDialog.class);
-                    intent.putExtra("assetId", assetId);
-                    intent.putExtra("productId", productId);
-                    intent.putExtra("goodId", goodId);
-                    intent.putExtra("categoryId", categoryId);
-                    intent.putExtra("mTitle", mTitle);
-                    intent.putExtra("viewable", viewable);
-                    intent.putExtra("listPrice", String.valueOf(listPrice));       // 상품의 금액(할인가)
-                    intent.putExtra("sPayMethod", sPayMethod);     // 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
-                    intent.putExtra("pointBalance", String.valueOf(pointBalance)); // TV포인트
-                    intent.putExtra("totalMoneyBalance", String.valueOf(totalMoneyBalance)); // 금액형 쿠폰의 총 잔액
-                    intent.putExtra("lpriceCouponDiscounted", String.valueOf(lpriceCouponDiscounted)); // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
+                    intent.putExtra("assetId",                assetId);
+                    intent.putExtra("productId",              productId);
+                    intent.putExtra("goodId",                 goodId);
+                    intent.putExtra("categoryId",             categoryId);
+                    intent.putExtra("mTitle",                 mTitle);
+                    intent.putExtra("viewable",               viewable);
+                    intent.putExtra("listPrice",              String.valueOf(listPrice));              // 상품의 금액(할인가)
+                    intent.putExtra("sPayMethod",             sPayMethod);                             // 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
+                    intent.putExtra("pointBalance",           String.valueOf(pointBalance));           // TV포인트
+                    intent.putExtra("totalMoneyBalance",      String.valueOf(totalMoneyBalance));      // 금액형 쿠폰의 총 잔액
+                    intent.putExtra("lpriceCouponDiscounted", lpriceCouponDiscounted);                 // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
+                    intent.putExtra("sdiscountCouponId",      sdiscountCouponId);                      // 할인을 적용할 경우, 사용할 쿠폰의 ID.
+                    intent.putExtra("ldiscountAmount",        ldiscountAmount);                        // 할인을 적용할 경우, 할인 금액.
 
 
                     startActivityForResult(intent, 4000);
