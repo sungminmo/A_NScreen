@@ -120,10 +120,6 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 }
                 final Boolean mobilePublicationRight1 = jo1.getBoolean("mobilePublicationRight");
                 final String rating1 = jo1.getString("rating");
-                ImageView four_vod_poster_onlytv1 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv1);
-                if ( mobilePublicationRight1 == false ) {
-                    four_vod_poster_onlytv1.setVisibility(View.VISIBLE);
-                }
                 ImageView four_vod_poster_191 = (ImageView)v.findViewById(R.id.four_vod_poster_191);
                 if (rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
                     four_vod_poster_191.setVisibility(View.VISIBLE);
@@ -143,9 +139,9 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
-                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
+                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -178,10 +174,6 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 }
                 final Boolean mobilePublicationRight2 = jo2.getBoolean("mobilePublicationRight");
                 final String rating2 = jo2.getString("rating");
-                ImageView four_vod_poster_onlytv2 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv2);
-                if ( mobilePublicationRight2 == false ) {
-                    four_vod_poster_onlytv2.setVisibility(View.VISIBLE);
-                }
                 ImageView four_vod_poster_192 = (ImageView)v.findViewById(R.id.four_vod_poster_192);
                 if (rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
                     four_vod_poster_192.setVisibility(View.VISIBLE);
@@ -197,9 +189,9 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
-                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
+                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -232,10 +224,6 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 }
                 final Boolean mobilePublicationRight3 = jo3.getBoolean("mobilePublicationRight");
                 final String rating3 = jo3.getString("rating");
-                ImageView four_vod_poster_onlytv3 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv3);
-                if ( mobilePublicationRight3 == false ) {
-                    four_vod_poster_onlytv3.setVisibility(View.VISIBLE);
-                }
                 ImageView four_vod_poster_193 = (ImageView)v.findViewById(R.id.four_vod_poster_193);
                 if (rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
                     four_vod_poster_193.setVisibility(View.VISIBLE);
@@ -251,9 +239,9 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
-                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
+                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -286,10 +274,6 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 }
                 final Boolean mobilePublicationRight4 = jo4.getBoolean("mobilePublicationRight");
                 final String rating4 = jo4.getString("rating");
-                ImageView four_vod_poster_onlytv4 = (ImageView)v.findViewById(R.id.four_vod_poster_onlytv4);
-                if ( mobilePublicationRight4 == false ) {
-                    four_vod_poster_onlytv4.setVisibility(View.VISIBLE);
-                }
                 ImageView four_vod_poster_194 = (ImageView)v.findViewById(R.id.four_vod_poster_194);
                 if (rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
                     four_vod_poster_194.setVisibility(View.VISIBLE);
@@ -305,9 +289,9 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = mVodDetailActivity.getString(R.string.app_name);
-                            String alertMsg1 = mVodDetailActivity.getResources().getString(R.string.adult_auth_message);
-                            String alertMsg2 = "";
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
+                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
                             CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
