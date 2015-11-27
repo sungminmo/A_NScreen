@@ -557,9 +557,6 @@ public class VodDetailActivity extends Activity {
         //mTvOnlyTextView.setText("[] 은 (는)");
         //mTvOnlyLiearLayout.setVisibility(View.GONE);
 
-        LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
-        ll.removeAllViewsInLayout();
-
         Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
         img.setBounds(0, 0, 35, 35);
         mJimButton.setCompoundDrawables(null, null, img, null);
@@ -807,6 +804,8 @@ public class VodDetailActivity extends Activity {
     }
 
     private void setUISeriesButton(JSONArray assetList) {
+        LinearLayout lll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
+        lll.removeAllViewsInLayout();
         try {
 //            int iLoop;
 //            if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
@@ -1019,7 +1018,7 @@ public class VodDetailActivity extends Activity {
                 try {
                     JSONObject jo = new JSONObject(response);
                     episodePeerList = jo.getJSONArray("episodePeerList");
-                    setUISeriesButton(episodePeerList);
+                    //setUISeriesButton(episodePeerList);
                     for ( int i = 0; i < episodePeerList.length(); i++ ) {
                         JSONObject episodePeer = episodePeerList.getJSONObject(i);
                         String loopPrimaryAssetId  = episodePeer.getString("primaryAssetId");
