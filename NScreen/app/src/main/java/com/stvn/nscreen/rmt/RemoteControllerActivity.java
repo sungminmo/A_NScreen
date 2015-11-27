@@ -375,6 +375,17 @@ public class RemoteControllerActivity extends AppCompatActivity{
                         }
                     }, true);
 
+                } else if ( "020".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
+                    String alertTitle = "채널 변경";
+                    String alertMessage1 = "데이터 방송 시청중엔 채널변경이 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+
                 } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
                     String alertTitle = "채널 변경";
                     String alertMessage1 = "VOD 시청중엔 채널변경이 불가능합니다.";
@@ -387,7 +398,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     }, true);
                 } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
                     String alertTitle = "채널 변경";
-                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불과능합니다.";
+                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불가능합니다.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override

@@ -1341,7 +1341,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     }, true);
                 } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
                     String alertTitle = "채널 변경";
-                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불과능합니다.";
+                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불가능합니다.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
@@ -1932,7 +1932,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     }, true);
                 } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
                     String alertTitle = "녹화예약취소 불가";
-                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불과능합니다.";
+                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불가능합니다.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
