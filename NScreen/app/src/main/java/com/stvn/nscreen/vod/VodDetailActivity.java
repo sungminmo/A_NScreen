@@ -679,13 +679,8 @@ public class VodDetailActivity extends Activity {
                     mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
                     mPurchaseLinearLayout.setVisibility(View.GONE);
                 } else {
-                    if ("0".equals(previewPeriod)) { // 미리보기 없음.
-                        mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
-                        mPurchaseLinearLayout.setVisibility(View.GONE);
-                    } else {
-                        mPurchaseLinearLayout.setVisibility(View.VISIBLE);
-                        mPurchaseLinearLayout2.setVisibility(View.GONE);
-                    }
+                    mPurchaseLinearLayout.setVisibility(View.VISIBLE);
+                    mPurchaseLinearLayout2.setVisibility(View.GONE);
                 }
                 // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
                 if ( "FOD".equals(productType) ) {
