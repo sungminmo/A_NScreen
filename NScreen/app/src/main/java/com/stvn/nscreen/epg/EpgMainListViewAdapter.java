@@ -38,7 +38,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
     private              Context                       mContext         = null;
     private              JYSharedPreferences           mPref;
     private              View.OnClickListener          mOnClickListener = null;
-    private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
+    public               ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
     private              RequestQueue                  mRequestQueue;
     private              ImageLoader                   mImageLoader;

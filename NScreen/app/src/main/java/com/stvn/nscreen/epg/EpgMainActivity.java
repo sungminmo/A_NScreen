@@ -244,6 +244,9 @@ public class EpgMainActivity extends AppCompatActivity {
             xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
 
             String channelId = "";
+            String channelNumber = "";
+            String channelName = "";
+            String channelProgramOnAirTitle = "";
             int eventType = xpp.getEventType();
             while ( eventType != XmlPullParser.END_DOCUMENT ) {
                 if (eventType == XmlPullParser.START_TAG) {
@@ -251,11 +254,14 @@ public class EpgMainActivity extends AppCompatActivity {
                         channelId = xpp.nextText();
                         sb.append("{\"channelId\":\"").append(channelId).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
-                        sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
+                        channelNumber = xpp.nextText();
+                        sb.append(",\"channelNumber\":\"").append(channelNumber).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelName")) {
-                        sb.append(",\"channelName\":\"").append(xpp.nextText()).append("\"");
+                        channelName = xpp.nextText();
+                        sb.append(",\"channelName\":\"").append(channelName).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelProgramOnAirTitle")) {
-                        sb.append(",\"channelProgramOnAirTitle\":\"").append(xpp.nextText()).append("\"");
+                        channelProgramOnAirTitle = xpp.nextText();
+                        sb.append(",\"channelProgramOnAirTitle\":\"").append(channelProgramOnAirTitle).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelInfo")) {
                         sb.append(",\"channelInfo\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelOnAirHD")) {
@@ -272,18 +278,9 @@ public class EpgMainActivity extends AppCompatActivity {
                         sb.append(",\"channelProgramGrade\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelView")) {
                         sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
-
-                        if ( "&genreCode=0".equals(sGenreCode) ) {
-                            if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
-                                ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
-                                mAdapter.addItem(obj);
-                                sb.setLength(0);
-                            }
-                        } else {
-                            ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
-                            mAdapter.addItem(obj);
-                            sb.setLength(0);
-                        }
+                        ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
+                        mAdapter.addItem(obj);
+                        sb.setLength(0);
                     }
                 }
                 eventType = xpp.next();
@@ -294,6 +291,33 @@ public class EpgMainActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if ( "&genreCode=0".equals(sGenreCode) ) {
+            ArrayList<String> bookmarks = new ArrayList<String>();
+            for ( int i = 0; i < mAdapter.getCount(); i++ ) {
+                ListViewDataObject obj = (ListViewDataObject)mAdapter.getItem(i);
+                try {
+                    JSONObject jo = new JSONObject(obj.sJson);
+                    String channelId                = jo.getString("channelId");
+                    String channelNumber            = jo.getString("channelNumber");
+                    String channelName              = jo.getString("channelName");
+                    String channelProgramOnAirTitle = jo.getString("channelProgramOnAirTitle");
+                    //Log.d(tag, "channelId: "+channelId+", channelNumber:"+channelNumber+", channelName:"+channelName+ ", channelProgramOnAirTitle:"+channelProgramOnAirTitle+", bookmark:"+mPref.isBookmarkChannelWithChannelId(channelId));
+                    if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+                        bookmarks.add(obj.sJson);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            mAdapter.mDatas.clear();
+            for ( int i = 0; i < bookmarks.size(); i++ ) {
+                //Log.d(tag, "bookmarks :"+bookmarks.get(i));
+                ListViewDataObject obj = new ListViewDataObject(i, i, bookmarks.get(i));
+                mAdapter.addItem(obj);
+            }
+
         }
     }
 
