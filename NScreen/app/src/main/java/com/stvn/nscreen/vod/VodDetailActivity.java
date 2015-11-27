@@ -693,6 +693,7 @@ public class VodDetailActivity extends Activity {
             }
             if ( "".equals(getPurchasedTime()) ) { // 구매하기 보여랴
                 mPlayLinearLayout.setVisibility(View.GONE);
+                mTvOnlyLiearLayout.setVisibility(View.GONE);
                 if ( ! "2".equals(publicationRight) ) {
                     mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
                     mPurchaseLinearLayout.setVisibility(View.GONE);
