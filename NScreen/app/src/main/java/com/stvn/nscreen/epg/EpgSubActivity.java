@@ -1909,7 +1909,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 parseSetRecordCancelReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
                     String alertTitle = "녹화예약취소 불가";
                     String alertMessage1 = "셋탑박스가 꺼져있습니다.";
