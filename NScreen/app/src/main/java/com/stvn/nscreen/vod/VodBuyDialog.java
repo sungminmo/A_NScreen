@@ -165,12 +165,15 @@ public class VodBuyDialog extends Activity {
             } else if ( "2".equals(sPayMethod) ) {
                 requestPurchaseByComplexMethods();  // complex
             } else if ( "3".equals(sPayMethod) ) {
-                requestPurchaseByCoupon();            // coupon
+                requestPurchaseByCoupon();          // coupon
             } else if ( "4".equals(sPayMethod)) {
                 requestPurchaseByPoint();           // tv
             }
         }
     }
+
+    // 번들
+    // requestPurchaseProduct.    ver 2
 
     // 일반결제
     private void requestPurchaseAssetEx2() {
@@ -227,9 +230,7 @@ public class VodBuyDialog extends Activity {
         mRequestQueue.add(request);
     }
 
-
-
-    // 쿠폰전용 결제
+    // TV포인트 결제
     private void requestPurchaseByPoint() {
         mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
@@ -296,7 +297,7 @@ public class VodBuyDialog extends Activity {
         mRequestQueue.add(request);
     }
 
-    // TV포인트 결제
+    // 쿠폰전용 결제
     private void requestPurchaseByCoupon() {
         mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
@@ -364,7 +365,7 @@ public class VodBuyDialog extends Activity {
         mRequestQueue.add(request);
     }
 
-    // TV포인트 결제
+    // 복합 결제
     private void requestPurchaseByComplexMethods() {
         mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();

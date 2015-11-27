@@ -12,6 +12,8 @@ import android.util.Log;
 import android.util.LruCache;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -109,7 +111,17 @@ public class EpgSubActivity extends AppCompatActivity {
     private              LinearLayout          epg_sub_date_linearlayout1, epg_sub_date_linearlayout2, epg_sub_date_linearlayout3, epg_sub_date_linearlayout4, epg_sub_date_linearlayout5, epg_sub_date_linearlayout6, epg_sub_date_linearlayout7;
     private              ImageView             imageView21, imageView22, imageView23, imageView24, imageView25, imageView26, imageView27;
 
-    private              ImageButton           backBtn, bookmarkImageButton;
+    private              ImageButton           backBtn, bookmarkImageButton, epg_sub_left_arrow, epg_sub_right_arrow;
+
+    private              HorizontalScrollView  mChannelScrollView;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        setResult(RESULT_OK);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,9 +194,40 @@ public class EpgSubActivity extends AppCompatActivity {
         imageView25                = (ImageView) findViewById(R.id.imageView25);
         imageView26                = (ImageView) findViewById(R.id.imageView26);
         imageView27                = (ImageView) findViewById(R.id.imageView27);
+        epg_sub_left_arrow         = (ImageButton) findViewById(R.id.epg_sub_left_arrow);
+        epg_sub_right_arrow        = (ImageButton) findViewById(R.id.epg_sub_right_arrow);
         epg_sub_channelLogoImg     = (NetworkImageView) findViewById(R.id.epg_sub_imageview_channel_logo);
         backBtn                    = (ImageButton) findViewById(R.id.backBtn);
         bookmarkImageButton        = (ImageButton)findViewById(R.id.epg_sub_bookmark_imagebutton);
+        mChannelScrollView         = (HorizontalScrollView) findViewById(R.id.scrollView3);
+
+        mChannelScrollView.post(new Runnable(){
+            @Override
+            public void run() {
+                ViewTreeObserver observer = mChannelScrollView.getViewTreeObserver();
+                observer.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener(){
+                    @Override
+                    public void onScrollChanged() {
+                        int x = mChannelScrollView.getScrollX();
+                        int barsize = mChannelScrollView.getScrollBarSize();
+                        int width = mChannelScrollView.getWidth();
+                        if ( (width-10) <= x ) {
+                            //Log.d(tag, "왼쪽에 화살표 찍어라");
+                            epg_sub_left_arrow.setImageResource(R.mipmap.series_arrow_01);
+                            epg_sub_right_arrow.setImageResource(R.mipmap.series_arrow_02_dim);
+                        } else if ( 10 >= x ) {
+                            //Log.d(tag, "오른쪽에 화살표 찍어라");
+                            epg_sub_left_arrow.setImageResource(R.mipmap.series_arrow_01_dim);
+                            epg_sub_right_arrow.setImageResource(R.mipmap.series_arrow_02);
+                        } else {
+                            epg_sub_left_arrow.setImageResource(R.mipmap.series_arrow_01);
+                            epg_sub_right_arrow.setImageResource(R.mipmap.series_arrow_02);
+                        }
+                        Log.d(tag, "x: " + x + ", width: " + width);
+                    }
+                });
+            }
+        });
 
         epg_sub_channelNumber.setText("CH." + sChannelNumber);
         epg_sub_channelName.setText(sChannelName);
@@ -205,6 +248,7 @@ public class EpgSubActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -438,7 +482,7 @@ public class EpgSubActivity extends AppCompatActivity {
                                     String alertTitle = "녹화예약확인";
                                     String alertMsg1 = programTitle;
                                     String alertMsg2 = getString(R.string.error_not_paring_compleated8);
-                                    CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                    CMAlertUtil.Alert_series_reserve(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             requestSetRecordSeriesReserve(sChannelId, sSeriesId, programBroadcastingStartTime);
@@ -625,8 +669,19 @@ public class EpgSubActivity extends AppCompatActivity {
     }
 
     private void reloadAll() {
+        mAdapter.clear();
+        mAdapter.notifyDataSetChanged();
         mNetworkError.clear();
         mStbRecordReservelist.clear();
+        mDatasAll.clear();
+        mDatas0.clear();
+        mDatas1.clear();
+        mDatas2.clear();
+        mDatas3.clear();
+        mDatas4.clear();
+        mDatas5.clear();
+        mDatas6.clear();
+
         requestGetSetTopStatus();
     }
 

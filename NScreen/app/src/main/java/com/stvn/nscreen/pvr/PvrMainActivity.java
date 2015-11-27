@@ -40,6 +40,7 @@ import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.epg.EpgSubActivity;
 import com.stvn.nscreen.pairing.PairingMainActivity;
+import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONArray;
@@ -79,6 +80,8 @@ public class PvrMainActivity extends AppCompatActivity {
     private              ImageButton            pvr_main_backBtn;
     private              Button                 button1, button2;
     private              TextView               textView1, textView2;
+
+    private              String sRecordId, sSeriesId, sChannelId, sProgramName, starttime, recordingtype;
 
     private String getSeriesJson(String str){
         JSONArray arr = new JSONArray();
@@ -132,12 +135,12 @@ public class PvrMainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 ListViewDataObject item = (ListViewDataObject) mAdapter.getItem(position);
-                String sRecordId     = null;
-                String sSeriesId     = null;
-                String sChannelId    = null;
-                String sProgramName  = null;
-                String starttime     = null;
-                String recordingtype = null;
+                sRecordId     = null;
+                sSeriesId     = null;
+                sChannelId    = null;
+                sProgramName  = null;
+                starttime     = null;
+                recordingtype = null;
                 try {
                     JSONObject jo = new JSONObject (item.sJson);
                     if ( jo.isNull("RecordId") ) {
@@ -166,9 +169,22 @@ public class PvrMainActivity extends AppCompatActivity {
                     break;
                     case 1: {
                         if ( "NULL".equals(sSeriesId) ) { // 단편
-                            String ReserveCancel = "2";
-                            requestSetRecordCancelReserve(sChannelId, starttime, ReserveCancel);
-                        } else if ( !"NULL".equals(sSeriesId) ) { // 시리즈
+                            final String ReserveCancel = "2";
+                            String alertTitle = "녹화예약취소확인";
+                            String alertMsg1 = sProgramName;
+                            String alertMsg2 = getString(R.string.error_not_paring_compleated6);
+                            CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestSetRecordCancelReserve(sChannelId, starttime, ReserveCancel);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                        } else if (!"NULL".equals(sSeriesId) ) { // 시리즈
                             String alertTitle = "녹화예약취소확인";
                             String alertMsg1 = sProgramName;
                             String alertMsg2 = getString(R.string.error_not_paring_compleated6);
@@ -196,13 +212,26 @@ public class PvrMainActivity extends AppCompatActivity {
                     break;
                     case 2: {
                         if ( "NULL".equals(sSeriesId) ) { // 단편
-                            String ReserveCancel = "2";
-                            requestSetRecordDele(sChannelId, starttime, sRecordId);
-                        } else if ( !"NULL".equals(sSeriesId) ) { // 시리즈
-                            String alertTitle = "녹화예약취소확인";
+                            final String ReserveCancel = "2";
+                            String alertTitle = "녹화삭제확인";
                             String alertMsg1 = sProgramName;
-                            String alertMsg2 = getString(R.string.error_not_paring_compleated6);
-                            CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                            String alertMsg2 = getString(R.string.error_not_paring_compleated9);
+                            CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestSetRecordDele(sChannelId, starttime, sRecordId);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                        } else if ( !"NULL".equals(sSeriesId) ) { // 시리즈
+                            String alertTitle = "녹화삭제확인";
+                            String alertMsg1 = sProgramName;
+                            String alertMsg2 = getString(R.string.error_not_paring_compleated9);
+                            CMAlertUtil.Alert_series_delete2(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     final String ReserveCancel = "1";

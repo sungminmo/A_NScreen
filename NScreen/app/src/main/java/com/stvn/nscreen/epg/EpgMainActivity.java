@@ -33,6 +33,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.bean.BookmarkChannelObject;
 
 
 import org.json.JSONException;
@@ -59,6 +60,9 @@ public class EpgMainActivity extends AppCompatActivity {
     private              RequestQueue           mRequestQueue;
     private              ProgressDialog         mProgressDialog;
 
+    private              ArrayList<JSONObject>  mBookmarkChannels;
+    private              String                 sGenreCode; // "&genreCode=0";  // 0은 원래 없는 코드. 그래서 0일 경우는 선호라고 로컬디비 사용.
+    private              String                 sGenreName;
 
     // gui
     private              EpgMainListViewAdapter mAdapter;
@@ -73,19 +77,32 @@ public class EpgMainActivity extends AppCompatActivity {
 
     private              ImageButton            epg_main_genre_choice_imageButton, epg_main_backBtn;
 
-    private              TextView               epg_main_genre_name;
+    private              TextView epg_main_genre_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epg_main);
 
+        if ( getIntent().getExtras() == null ) {
+            sGenreName = "전체채널";
+            sGenreCode = "";
+        } else {
+            sGenreName = getIntent().getExtras().getString("sGenreName");
+            sGenreCode = getIntent().getExtras().getString("sGenreCode");
+        }
+
+
         mInstance     = this;
         mPref         = new JYSharedPreferences(this);
         mRequestQueue = Volley.newRequestQueue(this);
         mStbStateMap  = new HashMap<String, Object>();
+        mBookmarkChannels = new ArrayList<JSONObject>();
 
         if ( mPref.isLogging() ) { Log.d(tag, "onCreate()"); }
+
+        epg_main_genre_name = (TextView) findViewById(R.id.epg_main_genre_name);
+        epg_main_genre_name.setText(sGenreName);
 
         mAdapter      = new EpgMainListViewAdapter(this, null);
 
@@ -97,13 +114,7 @@ public class EpgMainActivity extends AppCompatActivity {
         epg_main_genre_choice_imageButton = (ImageButton) findViewById(R.id.epg_main_genre_choice_imageButton);
         epg_main_backBtn                  = (ImageButton) findViewById(R.id.epg_main_backBtn);
 
-        epg_main_genre_name               = (TextView) findViewById(R.id.epg_main_genre_name);
 
-        try {
-            epg_main_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
-        } catch (NullPointerException e) {
-            epg_main_genre_name.setText("전체채널");
-        }
 
         epg_main_genre_choice_imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +130,26 @@ public class EpgMainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        requestGetSetTopStatus();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        reloadAll();
+    }
+
+    private void reloadAll() {
+        mAdapter.clear();
+        mAdapter.notifyDataSetChanged();
+        mStbStateMap.clear();
+        mStbState = "";             // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel1 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel2 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbWatchingchannel = "";   // GetSetTopStatus API로 가져오는 값.
+        mStbPipchannel = "";        // GetSetTopStatus API로 가져오는 값.
+
+
 
         requestGetSetTopStatus();
     }
@@ -149,41 +180,44 @@ public class EpgMainActivity extends AppCompatActivity {
         }
     };
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-
-        switch(requestCode){
-            case 1: {    //
-                mAdapter.notifyDataSetChanged();
-            } break;
-        }
-    }
 
     private void requestGetChannelList() {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
-        String sGenreCode = "";
-        try {
-            sGenreCode = getIntent().getExtras().getString("sGenreCode");
-        } catch (NullPointerException e) {
-            sGenreCode = "";
+        // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+
+        // -----------------------------------------------------------------------------------------
+        // 선호채널의 경우는 내부 디비 처리. sGenreCode; // "&genreCode=0"
+//        if ( "&genreCode=0".equals(sGenreCode) ) {
+//            mBookmarkChannels.clear();
+//            mBookmarkChannels = mPref.getAllBookmarkChannelObject();
+//            for ( int i = 0; i< mBookmarkChannels.size(); i++ ) {
+//                JSONObject jo = mBookmarkChannels.get(i);
+//                ListViewDataObject obj = new ListViewDataObject(i, i, jo.toString());
+//                mAdapter.addItem(obj);
+//            }
+//            mAdapter.notifyDataSetChanged();
+//            return;
+//        }
+
+        // -----------------------------------------------------------------------------------------
+        // 선호채널이 아니면 통신 태우기.
+        String sGenreCode2 = sGenreCode;
+        if ( "&genreCode=0".equals(sGenreCode) ) {
+            sGenreCode2 = "&genreCode=1";
         }
-        if ( "".equals(sGenreCode) ) {
-            sGenreCode = "";
-        }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_NAME_KEY, "17") + sGenreCode;
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode2;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 parseGetChannelList(response);
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
         }) {
@@ -209,11 +243,13 @@ public class EpgMainActivity extends AppCompatActivity {
             XmlPullParser xpp = factory.newPullParser();
             xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
 
+            String channelId = "";
             int eventType = xpp.getEventType();
             while ( eventType != XmlPullParser.END_DOCUMENT ) {
                 if (eventType == XmlPullParser.START_TAG) {
                     if (xpp.getName().equalsIgnoreCase("channelId")) {
-                        sb.append("{\"channelId\":\"").append(xpp.nextText()).append("\"");
+                        channelId = xpp.nextText();
+                        sb.append("{\"channelId\":\"").append(channelId).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelNumber")) {
                         sb.append(",\"channelNumber\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelName")) {
@@ -236,9 +272,18 @@ public class EpgMainActivity extends AppCompatActivity {
                         sb.append(",\"channelProgramGrade\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("channelView")) {
                         sb.append(",\"channelView\":\"").append(xpp.nextText()).append("\"}");
-                        ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
-                        mAdapter.addItem(obj);
-                        sb.setLength(0);
+
+                        if ( "&genreCode=0".equals(sGenreCode) ) {
+                            if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+                                ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
+                                mAdapter.addItem(obj);
+                                sb.setLength(0);
+                            }
+                        } else {
+                            ListViewDataObject obj = new ListViewDataObject(mAdapter.getCount(), 0, sb.toString());
+                            mAdapter.addItem(obj);
+                            sb.setLength(0);
+                        }
                     }
                 }
                 eventType = xpp.next();

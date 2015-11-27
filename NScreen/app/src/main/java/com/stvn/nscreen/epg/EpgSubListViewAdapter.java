@@ -47,6 +47,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     private              String                          mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
     private              String                          mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+    private              String                          programId;
     private              ArrayList<JSONObject>           mStbRecordReservelist;
 
     private NetworkImageView epg_sub_imageview_program_age;
@@ -106,7 +107,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             ListViewDataObject dobj                         = (ListViewDataObject)getItem(position);
             JSONObject         jobj                         = new JSONObject(dobj.sJson);
 
-            String             programId                    = jobj.getString("programId");
+            programId                    = jobj.getString("programId");
             String             ProgramBroadcastingStartTime = jobj.getString("programBroadcastingStartTime");
             String             ProgramBroadcastingEndTime   = jobj.getString("programBroadcastingEndTime");
 
@@ -136,6 +137,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             }
 
             if ( "PVR".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) ) {
+
                 if (mCurrDateNo != 0) { // 오늘이 아니라면...
                     JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
                     if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
@@ -180,6 +182,8 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                             // 과거.
                     }
                 }
+
+
             } else if ( "HD".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) || "SMART".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) ) {
                 if (mCurrDateNo != 0) { // 오늘이 아니라면...
                         if (mPref.isWatchTvReserveWithProgramId(programId) == true) { // 시청예약 걸려 있음.
@@ -227,7 +231,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     public void set(int position, ListViewDataObject obj) { mDatas.set(position, obj); }
     public void addItem(ListViewDataObject obj) { mDatas.add(obj); }
     public void remove(int position) { mDatas.remove(position); }
-    public void clear() { mDatas.clear(); }
+    public void clear() { mDatas.clear(); mStbRecordReservelist.clear(); }
 
     public JSONObject getStbRecordReserveWithChunnelId(String channelId, ListViewDataObject epgitem) {
         try {
@@ -270,6 +274,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
 
             ImageView          programAge                   = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_age);
             ImageView          Info                         = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_hdsd);
+            ImageView          State                        = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_state);
             TextView           titleTextView                = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
             TextView           channelProgramOnAirTime      = ViewHolder.get(convertView, R.id.epg_sub_textview_program_time);
             ProgressBar        progBar                      = ViewHolder.get(convertView, R.id.progressBar);
@@ -346,6 +351,15 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                 Info.setImageResource(R.mipmap.btn_size_sd);
             } else if ("YES".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_hd);
+            }
+            JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
+
+            if ( mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2) ) {
+                State.setImageResource(R.mipmap.icon_record);
+            } else if ( reservItem != null ) {
+                    State.setImageResource(R.mipmap.icon_rec_book);
+            } else if ( mPref.isWatchTvReserveWithProgramId(programId) == true ) {
+                State.setImageResource(R.mipmap.icon_book);
             }
 
         } catch (JSONException e) {

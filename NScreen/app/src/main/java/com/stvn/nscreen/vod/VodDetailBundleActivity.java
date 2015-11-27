@@ -123,10 +123,10 @@ public class VodDetailBundleActivity extends Activity {
         mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_bundle_device_mobile_imageview);
 
         mPoster1 = (NetworkImageView)findViewById(R.id.poster1_netwokr_imageview);
-        mPoster2 = (NetworkImageView)findViewById(R.id.poster1_netwokr_imageview);
-        mPoster3 = (NetworkImageView)findViewById(R.id.poster1_netwokr_imageview);
-        mPoster4 = (NetworkImageView)findViewById(R.id.poster1_netwokr_imageview);
-        mPoster5 = (NetworkImageView)findViewById(R.id.poster1_netwokr_imageview);
+        mPoster2 = (NetworkImageView)findViewById(R.id.poster2_netwokr_imageview);
+        mPoster3 = (NetworkImageView)findViewById(R.id.poster3_netwokr_imageview);
+        mPoster4 = (NetworkImageView)findViewById(R.id.poster4_netwokr_imageview);
+        mPoster5 = (NetworkImageView)findViewById(R.id.poster5_netwokr_imageview);
 
         mTitle1 = (TextView)findViewById(R.id.poster1_title_textview);
         mTitle2 = (TextView)findViewById(R.id.poster2_title_textview);
@@ -228,7 +228,7 @@ public class VodDetailBundleActivity extends Activity {
                     String joPrice = bundleProduct.getString("price"); // 가격
                     String joRentalDuration = bundleProduct.getString("rentalDuration"); // 유효기간
                     String joRentalDurationUnit = bundleProduct.getString("rentalDurationUnit"); // 유효기간 단위 0: hour, 1: day, 2: week, 3: month, 4: year
-                    String joMobilePublicationRight = bundleProduct.getString("mobilePublicationRight"); // 모바일 유무
+                    Boolean joMobilePublicationRight = bundleProduct.getBoolean("mobilePublicationRight"); // 모바일 유무
 
                     mTitleTextView.setText(joProductName);
                     mMovieImageImageView.setImageUrl(joImageFileName, mImageLoader);
@@ -265,9 +265,9 @@ public class VodDetailBundleActivity extends Activity {
 
                     mTimeTextView.setText(joRentalDuration + joRentalDurationUnit);
 
-                    if ( "0".equals(joMobilePublicationRight) ) {
+                    if ( joMobilePublicationRight == false ) {
                         mMobileImageView.setVisibility(View.GONE);
-                    } else if ( "1".equals(joMobilePublicationRight) ) {
+                    } else if ( joMobilePublicationRight == true ) {
                         mMobileImageView.setVisibility(View.VISIBLE);
                     }
 
@@ -299,7 +299,7 @@ public class VodDetailBundleActivity extends Activity {
                             mPoster2.setImageUrl(imageFileName, mImageLoader);
                             mTitle2.setText(displayName);
                             mPrice2.setText(UiUtil.toNumFormat((int)suggestedPrice));
-                            mPoster1.setOnClickListener(new View.OnClickListener(){
+                            mPoster2.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
                                     Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
