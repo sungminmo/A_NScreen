@@ -501,12 +501,15 @@ public class VodDetailActivity extends Activity {
      * @param aid assetId (getAssetInfo case)
      * @param cgid contentGroupId (getEpisodePeerListByContentGroupId case)
      */
-    public void refreshAll(String aid, String cgid){
+    public void refreshAll(String aid, String cgid, String epid){
         assetId = aid;
         if ( cgid == null ) {
             contentGroupId = "";
         } else {
             contentGroupId = cgid;
+        }
+        if ( epid != null ) {
+            episodePeerId = epid;
         }
         mSeriesReleaseDate = null;
         isPrePlay = true;
@@ -530,7 +533,7 @@ public class VodDetailActivity extends Activity {
         if ( "1".equals(episodePeerExistence) ) {
             isSeriesLink = "YES";
             mSeriesLinearLayout.setVisibility(View.VISIBLE);
-            requestGetEpisodePeerListByContentGroupId();
+            requestGetAssetListByEpisodePeerId();
         } else {
             isSeriesLink = "NO";
             mSeriesLinearLayout.setVisibility(View.GONE);
@@ -576,7 +579,7 @@ public class VodDetailActivity extends Activity {
                     // 결제가 완료됐으니, 전부 새로 고침.
                     String oldAssetId = assetId;
                     String oldContentGroupId = contentGroupId;
-                    refreshAll(oldAssetId, contentGroupId);
+                    refreshAll(oldAssetId, contentGroupId, episodePeerId);
                 } else if ( resultCode == RESULT_CANCELED ) {
                     // nothing
                 }
