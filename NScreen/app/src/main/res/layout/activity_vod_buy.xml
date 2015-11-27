@@ -410,7 +410,7 @@
                     android:layout_marginBottom="3dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/btn_purchase_selector"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/vod_buy_step2_normal_dis_linearlayout">
 
                     <LinearLayout
@@ -466,12 +466,19 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingLeft="35dp"
                         android:gravity="center_vertical"
                         android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/vod_buy_step2_original_price_textview"
+                            android:textColor="@drawable/btn_purchase_textcolor"
+                            android:textSize="12.75sp" />
 
                         <TextView
                             android:layout_width="wrap_content"

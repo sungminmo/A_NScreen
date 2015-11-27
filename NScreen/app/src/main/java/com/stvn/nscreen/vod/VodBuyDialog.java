@@ -55,6 +55,7 @@ public class VodBuyDialog extends Activity {
     private              String              viewable, listPrice, sPayMethod, pointBalance, totalMoneyBalance;
     //private              String              pointPrice;  // 복합결제시 사용할 TV포인트 금액.
     private              long                couponPrice; // 복합결제시 사용할 Coupon 포인트 금액.
+    private              long                lpriceCouponDiscounted; // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class VodBuyDialog extends Activity {
         sPayMethod        = getIntent().getExtras().getString("sPayMethod");        // 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
         pointBalance      = getIntent().getExtras().getString("pointBalance");      // TV포인트
         totalMoneyBalance = getIntent().getExtras().getString("totalMoneyBalance"); // 금액형 쿠폰의 총 잔액
+        lpriceCouponDiscounted = getIntent().getExtras().getLong("lpriceCouponDiscounted"); // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
 
         mPaymethod   = (TextView)findViewById(R.id.dialog_buy_paymethod);
         mPrice       = (TextView)findViewById(R.id.dialog_buy_price);
