@@ -1446,6 +1446,16 @@ public class EpgSubActivity extends AppCompatActivity {
 
                         }
                     }, true);
+                } else if ( "005".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "선택 하신 채널은 녹화하실 수 없습니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
                 } else if ( "009".equals(RemoteChannelControl.get("resultCode")) ) {
                     String alertTitle = "녹화 불가";
                     String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
@@ -1489,6 +1499,16 @@ public class EpgSubActivity extends AppCompatActivity {
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
                     String alertTitle = "녹화 불가";
                     String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "023".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
@@ -1671,6 +1691,16 @@ public class EpgSubActivity extends AppCompatActivity {
 
                         }
                     }, true);
+                } else if ( "005".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "선택 하신 채널은 녹화하실 수 없습니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
                     String alertTitle = "녹화예약 불가";
                     String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
@@ -1684,6 +1714,16 @@ public class EpgSubActivity extends AppCompatActivity {
                 } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
                     String alertTitle = "녹화예약 불가";
                     String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "023".equals(RemoteChannelControl.get("resultCode")) ) {
+                    String alertTitle = "녹화 불가";
+                    String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
