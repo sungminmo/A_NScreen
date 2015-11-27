@@ -234,6 +234,8 @@ public class VodBuyActivity extends Activity {
             // Step.2 는 무조건 디폴트로 1번 일반결제를 선택해준다.
             vod_buy_step2_normal_linearlayout.setSelected(true);
             vod_buy_step2_normal_dis_linearlayout.setSelected(true);
+            vod_buy_step2_coupon_linearlayout.setSelected(false);
+            vod_buy_step2_point_linearlayout.setSelected(false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
