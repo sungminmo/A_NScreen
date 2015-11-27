@@ -1672,7 +1672,10 @@ public class EpgSubActivity extends AppCompatActivity {
                 mProgressDialog.dismiss();
                 parseSetRecordReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
+                    // ok
+                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
+                    String alertTitle = "녹화 불가";
                     String alertMessage1 = "Duplicated Recording Reserve Request";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -1732,6 +1735,7 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
+                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1780,7 +1784,10 @@ public class EpgSubActivity extends AppCompatActivity {
                 mProgressDialog.dismiss();
                 parseSetRecordReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
+                    // ok
+                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
+                    String alertTitle = "녹화 불가";
                     String alertMessage1 = "Duplicated Recording Reserve Request";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -1820,6 +1827,7 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
+                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1933,6 +1941,7 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
+                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override

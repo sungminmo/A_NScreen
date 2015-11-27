@@ -35,7 +35,7 @@
         android:layout_marginLeft="39dp"
         android:layout_marginBottom="8.75dp"
         android:layout_gravity="bottom"
-        android:background="#bcbcbc" />
+        android:background="@color/color28183d" />
 
     <TextView
         android:id="@+id/epg_main_textview_program_title"

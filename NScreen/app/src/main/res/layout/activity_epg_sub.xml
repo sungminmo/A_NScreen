@@ -66,13 +66,12 @@
         <LinearLayout
             android:layout_width="81.5dp"
             android:layout_height="65dp"
-            android:background="@color/white">
+            android:background="@color/color28183d">
 
             <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="48dp"
                 android:layout_height="19.25dp"
                 android:id="@+id/epg_sub_imageview_channel_logo"
-                android:background="#bcbcbc"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="23dp" />
         </LinearLayout>
@@ -81,8 +80,9 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:id="@+id/scrollView3"
-            android:layout_marginLeft="81.5dp"
-            android:scrollbars="none">
+            android:layout_marginLeft="96.5dp"
+            android:scrollbars="none"
+            android:layout_marginRight="15dp">
 
             <LinearLayout
                 android:orientation="horizontal"

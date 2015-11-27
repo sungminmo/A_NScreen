@@ -34,7 +34,7 @@
         android:layout_marginLeft="39dp"
         android:layout_marginBottom="8.75dp"
         android:layout_gravity="bottom"
-        android:background="#d1d1d1" />
+        android:background="@color/color28183d" />
 
     <TextView
         android:id="@+id/remote_textview_program_title"
