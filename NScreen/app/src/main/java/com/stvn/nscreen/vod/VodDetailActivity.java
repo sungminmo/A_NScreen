@@ -538,9 +538,10 @@ public class VodDetailActivity extends Activity {
      * 시리즈 회차 변경(점프)
      * @param newAssetId
      */
-    public void changeSeries(String newAssetId) {
+    public void changeSeries(String newAssetId, String newepisodePeerId) {
         assetId = newAssetId;
-        contentGroupId = "";
+        episodePeerId = newepisodePeerId;
+        //contentGroupId = "";
         mSeriesReleaseDate = null;
         isPrePlay = true;
         relationVods.clear();
@@ -559,7 +560,8 @@ public class VodDetailActivity extends Activity {
         mJimButton2.setCompoundDrawables(null, null, img, null);
         mJimButton2.setText("찜하기");
 
-        requestGetAssetInfo();
+        //requestGetAssetInfo();
+        requestGetAssetListByEpisodePeerId(true);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -831,6 +833,7 @@ public class VodDetailActivity extends Activity {
                 }
 
                 final String finalThisContentGroupId = thisContentGroupId;
+                final String episodePeerId = asset.getString("episodePeerId");
                 seriesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -841,7 +844,7 @@ public class VodDetailActivity extends Activity {
 //                            intent.putExtra("assetId", thisAssetId);
 //                            startActivity(intent);
 //                        }
-                        changeSeries(thisAssetId);
+                        changeSeries(thisAssetId,episodePeerId);
                     }
                 });
 
@@ -1017,7 +1020,7 @@ public class VodDetailActivity extends Activity {
                         if ( primaryAssetId.equals(loopPrimaryAssetId) ) {
                             mSeriesReleaseDate = episodePeer.getString("releaseDate");
                             episodePeerId      = episodePeer.getString("episodePeerId");
-                            requestGetAssetListByEpisodePeerId();
+                            requestGetAssetListByEpisodePeerId(false);
                         }
                     }
                 } catch (JSONException e) {
@@ -1068,7 +1071,8 @@ public class VodDetailActivity extends Activity {
         return rtn;
     }
 
-    private void requestGetAssetListByEpisodePeerId() {
+    private void requestGetAssetListByEpisodePeerId(boolean needRemakeSerise) {
+        final boolean needRemakeSerise2 = needRemakeSerise;
         //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetAssetListByEpisodePeerId()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
@@ -1094,6 +1098,10 @@ public class VodDetailActivity extends Activity {
                     seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
 
                     setUIAsset(asset);
+
+                    if ( needRemakeSerise2 == true ) {
+                        setUISeriesButton(episodePeerList);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
