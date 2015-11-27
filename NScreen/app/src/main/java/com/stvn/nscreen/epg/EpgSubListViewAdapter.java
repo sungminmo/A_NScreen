@@ -347,10 +347,10 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                 programAge.setImageResource(R.mipmap.btn_age_19);
             }
 
-            if ( "NO".equals(sChannelInfo) ) {
-                Info.setImageResource(R.mipmap.btn_size_sd);
-            } else if ("YES".equals(sChannelInfo) ) {
+            if ( "YES".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_hd);
+            } else if ("NO".equals(sChannelInfo) ) {
+                Info.setImageResource(R.mipmap.btn_size_sd);
             }
             JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
 
