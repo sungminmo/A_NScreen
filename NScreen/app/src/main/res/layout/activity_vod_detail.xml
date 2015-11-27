@@ -370,7 +370,7 @@
         android:layout_marginLeft="12.75dp"
         android:layout_marginRight="12.75dp"
         android:layout_marginTop="3dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:background="#f2eef6">
 
         <View

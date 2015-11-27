@@ -476,8 +476,12 @@ public class VodDetailActivity extends Activity {
         if ( "1".equals(episodePeerExistence) ) {
             // episodePeerExistence
             // contentGroupId
+            isSeriesLink = "YES";
+            mSeriesLinearLayout.setVisibility(View.VISIBLE);
             requestGetEpisodePeerListByContentGroupId();
         } else {
+            isSeriesLink = "NO";
+            mSeriesLinearLayout.setVisibility(View.GONE);
             requestGetAssetInfo();
         }
 
@@ -524,9 +528,9 @@ public class VodDetailActivity extends Activity {
          * VOD 상세정보 요청
          */
         if ( "1".equals(episodePeerExistence) ) {
-            requestGetEpisodePeerListByContentGroupId();
             isSeriesLink = "YES";
             mSeriesLinearLayout.setVisibility(View.VISIBLE);
+            requestGetEpisodePeerListByContentGroupId();
         } else {
             isSeriesLink = "NO";
             mSeriesLinearLayout.setVisibility(View.GONE);
@@ -560,8 +564,7 @@ public class VodDetailActivity extends Activity {
         mJimButton2.setCompoundDrawables(null, null, img, null);
         mJimButton2.setText("찜하기");
 
-        //requestGetAssetInfo();
-        requestGetAssetListByEpisodePeerId(true);
+        requestGetAssetListByEpisodePeerId();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -1020,7 +1023,7 @@ public class VodDetailActivity extends Activity {
                         if ( primaryAssetId.equals(loopPrimaryAssetId) ) {
                             mSeriesReleaseDate = episodePeer.getString("releaseDate");
                             episodePeerId      = episodePeer.getString("episodePeerId");
-                            requestGetAssetListByEpisodePeerId(false);
+                            requestGetAssetListByEpisodePeerId();
                         }
                     }
                 } catch (JSONException e) {
@@ -1071,8 +1074,7 @@ public class VodDetailActivity extends Activity {
         return rtn;
     }
 
-    private void requestGetAssetListByEpisodePeerId(boolean needRemakeSerise) {
-        final boolean needRemakeSerise2 = needRemakeSerise;
+    private void requestGetAssetListByEpisodePeerId() {
         //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetAssetListByEpisodePeerId()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
@@ -1098,10 +1100,7 @@ public class VodDetailActivity extends Activity {
                     seriesTotalAssetCount = asset.getString("seriesTotalAssetCount");
 
                     setUIAsset(asset);
-
-                    if ( needRemakeSerise2 == true ) {
-                        setUISeriesButton(episodePeerList);
-                    }
+                    setUISeriesButton(episodePeerList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
