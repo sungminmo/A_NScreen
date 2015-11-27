@@ -218,39 +218,39 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     if ( "1".equals(mStbState) ) { // VOD 시청중.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel2_linearlayout.setVisibility(View.VISIBLE);
-                        String alertTitle = "채널 변경";
-                        String alertMsg1  = getString(R.string.error_not_remote_control_case1);
-                        String alertMsg2  = "";
-                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }, true);
+//                        String alertTitle = "채널 변경";
+//                        String alertMsg1  = getString(R.string.error_not_remote_control_case1);
+//                        String alertMsg2  = "";
+//                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        }, true);
                     } else if ( "2".equals(mStbState) ) { // 독립형.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel3_linearlayout.setVisibility(View.VISIBLE);
-                        String alertTitle = "채널 변경";
-                        String alertMsg1  = getString(R.string.error_not_remote_control_case2);
-                        String alertMsg2  = "";
-                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }, true);
+//                        String alertTitle = "채널 변경";
+//                        String alertMsg1  = getString(R.string.error_not_remote_control_case2);
+//                        String alertMsg2  = "";
+//                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        }, true);
                     } else if ( "4".equals(mStbState) ) { // 셋탑박스 대기모드.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel4_linearlayout.setVisibility(View.VISIBLE);
-                    } else if ( "5".equals(mStbState) ) { // 개인 미디어 시청중.
+                    } else if ( "6".equals(mStbState) ) { // 개인 미디어 시청중.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel5_linearlayout.setVisibility(View.VISIBLE);
-                        String alertTitle = "채널 변경";
-                        String alertMsg1  = getString(R.string.error_not_remote_control_case2);
-                        String alertMsg2  = "";
-                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }, true);
+//                        String alertTitle = "채널 변경";
+//                        String alertMsg1  = getString(R.string.error_not_remote_control_case2);
+//                        String alertMsg2  = "";
+//                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        }, true);
                     }
 
 //                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found_authCode.equals(resultCode) ) {
