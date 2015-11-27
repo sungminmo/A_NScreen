@@ -47,7 +47,7 @@
     <string name="error_not_remote_control_case2">데이터 방송 시청 중에는 채널이 변경되지 않습니다.</string>
     <string name="error_not_remote_control_case3">선택 하신 채널은 녹화 하실 수 없습니다.</string>
     <string name="success_purchase">구매가 완료되었습니다. [VOD 구매목록] 메뉴에서 구매내역을 확인하실 수 있습니다.</string>
-    <string name="whatSetTop">C&amp;M 방송 서비스를 이용하고 계시는 고객님의 셋탑박스와 모바일 앱을 연동 하여 VOD 구매, 방송 시청 예약 등 다양한 서비스를 이용하실 수 있습니다.</string>
+    <string name="whatSetTop">씨앤앰 방송 서비스를 이용하고 계시는 고객님의 셋탑박스와 모바일 앱을 연동 하여 VOD 구매, 방송 시청 예약 등 다양한 서비스를 이용하실 수 있습니다.</string>
 
     <!-- RUMPUS ERROR Respone -->
     <string name="RUMPUS_ERROR_MSG_Not_Found_authCode">인증번호가 일치하지 않습니다.</string>
