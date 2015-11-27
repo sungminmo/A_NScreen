@@ -236,6 +236,7 @@ public class VodBuyActivity extends Activity {
             vod_buy_step2_normal_dis_linearlayout.setSelected(true);
             vod_buy_step2_coupon_linearlayout.setSelected(false);
             vod_buy_step2_point_linearlayout.setSelected(false);
+            iSeletedPayMethod = 0;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -263,6 +264,9 @@ public class VodBuyActivity extends Activity {
             for ( int i = 0; i< productList.length(); i++ ) {
                 final int  iLoopOfSVODFinal = iLoopOfSVOD;
                 JSONObject jo               = (JSONObject)productList.get(i);
+                if ( mPref.isLogging() ) {
+                    Log.d(tag, "productList"+i+":" + jo.toString());
+                }
                 int        price            = jo.getInt("price"); // 정가
                 int        listPrice        = jo.getInt("listPrice"); //할인적용가
                 String     productType      = jo.getString("productType");
@@ -456,13 +460,13 @@ public class VodBuyActivity extends Activity {
         productId         = getIntent().getExtras().getString("productId");
         goodId            = getIntent().getExtras().getString("goodId");
         categoryId        = getIntent().getExtras().getString("categoryId");
-        pointBalance      = 0l;
-        totalMoneyBalance = 0l;
+        pointBalance              = 0l;
+        totalMoneyBalance         = 0l;
         isJoinedTvPointMembership = true;
-        iSeletedProductList = 0;
-        iSeletedPayMethod = 0;
-        step1Buttons = new ArrayList<LinearLayout>();
-        step2Buttons = new ArrayList<LinearLayout>();
+        iSeletedProductList       = 0;
+        iSeletedPayMethod         = 0;
+        step1Buttons              = new ArrayList<LinearLayout>();
+        step2Buttons              = new ArrayList<LinearLayout>();
 
         vod_buy_step1_one_serise_linearlayout    = (LinearLayout)findViewById(R.id.vod_buy_step1_one_serise_linearlayout);  // 단일 회차 구매
         vod_buy_step1_one_serise_price_textview  = (TextView)findViewById(R.id.vod_buy_step1_one_serise_price_textview);    // 단일 회차 구매
@@ -569,17 +573,27 @@ public class VodBuyActivity extends Activity {
                 // iSeletedPayMethod 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
 
                 try {
+                    Intent intent = new Intent(mInstance, VodBuyDialog.class);
+
                     // pointBalance; // TV포인트. getPointBalance 통해서 받아옴.
                     // totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
                     // 상품의 금액(할인가) 알아내기.
                     JSONObject jo = (JSONObject)productList.get(iSeletedProductList);
                     String listPrice = jo.getString("listPrice");
+                    String selectedProductType = jo.getString("productType");
+                    String selectedProductName = jo.getString("productName");
+                    String selectedProductId   = jo.getString("productId");
+                    String selectedGoodId      = jo.getString("goodId");
+
                     // Step.2의 결제방식을 알아내기.
                     String sPayMethod = "";
                     if ( iSeletedPayMethod == 0 ) {        // 일반
                         sPayMethod = "0";
                     } else if ( iSeletedPayMethod == 1 ) { // 일반(할인)
                         sPayMethod = "1";
+                        intent.putExtra("lpriceCouponDiscounted", lpriceCouponDiscounted);                 // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
+                        intent.putExtra("sdiscountCouponId",      sdiscountCouponId);                      // 할인을 적용할 경우, 사용할 쿠폰의 ID.
+                        intent.putExtra("ldiscountAmount",        ldiscountAmount);                        // 할인을 적용할 경우, 할인 금액.
                     } else if ( iSeletedPayMethod == 2 ) { // 쿠폰
                         long lListPrice = jo.getLong("listPrice");
                         if ( totalMoneyBalance >= lListPrice ) { // 쿠폰결제
@@ -590,22 +604,18 @@ public class VodBuyActivity extends Activity {
                     } else if ( iSeletedPayMethod == 3 ) { // TV포인트
                         sPayMethod = "4";
                     }
-
-                    Intent intent = new Intent(mInstance, VodBuyDialog.class);
-                    intent.putExtra("assetId",                assetId);
-                    intent.putExtra("productId",              productId);
-                    intent.putExtra("goodId",                 goodId);
-                    intent.putExtra("categoryId",             categoryId);
-                    intent.putExtra("mTitle",                 mTitle);
-                    intent.putExtra("viewable",               viewable);
-                    intent.putExtra("listPrice",              String.valueOf(listPrice));              // 상품의 금액(할인가)
-                    intent.putExtra("sPayMethod",             sPayMethod);                             // 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
-                    intent.putExtra("pointBalance",           String.valueOf(pointBalance));           // TV포인트
-                    intent.putExtra("totalMoneyBalance",      String.valueOf(totalMoneyBalance));      // 금액형 쿠폰의 총 잔액
-                    intent.putExtra("lpriceCouponDiscounted", lpriceCouponDiscounted);                 // 할인을 적용할 경우, 할인 적용후 결제한 금액가.
-                    intent.putExtra("sdiscountCouponId",      sdiscountCouponId);                      // 할인을 적용할 경우, 사용할 쿠폰의 ID.
-                    intent.putExtra("ldiscountAmount",        ldiscountAmount);                        // 할인을 적용할 경우, 할인 금액.
-
+                    intent.putExtra("assetId",           assetId);
+                    intent.putExtra("productId",         selectedProductId);
+                    intent.putExtra("productType",       selectedProductType);
+                    intent.putExtra("productName",       selectedProductName);
+                    intent.putExtra("goodId",            selectedGoodId);
+                    intent.putExtra("categoryId",        categoryId);
+                    intent.putExtra("mTitle",            mTitle);
+                    intent.putExtra("viewable",          viewable);
+                    intent.putExtra("listPrice",         String.valueOf(listPrice));              // 상품의 금액(할인가)
+                    intent.putExtra("sPayMethod",        sPayMethod);                             // 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
+                    intent.putExtra("pointBalance",      String.valueOf(pointBalance));           // TV포인트
+                    intent.putExtra("totalMoneyBalance", String.valueOf(totalMoneyBalance));      // 금액형 쿠폰의 총 잔액
 
                     startActivityForResult(intent, 4000);
                 } catch ( JSONException e ) {
