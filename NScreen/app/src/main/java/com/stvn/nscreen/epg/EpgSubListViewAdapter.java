@@ -354,14 +354,17 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             }
             JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
 
-            if ( mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2) ) {
-                State.setImageResource(R.mipmap.icon_record);
-            } else if ( reservItem != null ) {
+            if ( ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) <= 0 ) ) {
+                if (mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2)) {
+                    State.setImageResource(R.mipmap.icon_record);
+                }
+            } else {
+                if (reservItem != null) {
                     State.setImageResource(R.mipmap.icon_rec_book);
-            } else if ( mPref.isWatchTvReserveWithProgramId(programId) == true ) {
-                State.setImageResource(R.mipmap.icon_book);
+                } else if (mPref.isWatchTvReserveWithProgramId(programId) == true) {
+                    State.setImageResource(R.mipmap.icon_book);
+                }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {
