@@ -146,16 +146,20 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
             Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
 
-            if ( i1 < 360 ) {
-                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
-                progBar.setProgress((int)(f1 * 100));
-            } else if ( i2 < 360 ) {
+            if ( i1 > i2 ) {
                 i2 += 1440;
-                if ( i3 < 360 ) {
+                if ( i1 > i3 ) {
                     i3 += 1440;
-                    float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
-                    progBar.setProgress((int)(f1 * 100));
                 }
+            }
+
+            if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) <= 0 ) {
+                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                progBar.setProgress((int) (f1 * 100));
+            } else if ( dt.compareTo(dt11) < 0 ) {
+                progBar.setProgress(0);
+            } else if ( dt.compareTo(dt12) > 0 ) {
+                progBar.setProgress(100);
             }
 
             if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {

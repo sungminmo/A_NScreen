@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -112,6 +113,8 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_remote_controller, parent, false);
         }
 
+        Date dt = new Date();
+
         SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
 
@@ -133,16 +136,38 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             TextView           titleTextView         = ViewHolder.get(convertView, R.id.remote_textview_program_title);
             TextView           programTimeTextView   = ViewHolder.get(convertView, R.id.remote_textview_program_time);
             final ImageButton        bookmarkImageButton   = ViewHolder.get(convertView, R.id.remote_imagebutton_favorite);
+            ProgressBar progBar = ViewHolder.get(convertView, R.id.progressBar);
 
-            Date               dt1                     = formatter.parse(ProgramOnAirStartTime);
-            Date               dt2                     = formatter.parse(ProgramOnAirEndTime);
-            String             str1                    = formatter2.format(dt1).toString();
-            String             str2                    = formatter2.format(dt2).toString();
+            Date               dt11                     = formatter.parse(ProgramOnAirStartTime);
+            Date               dt12                     = formatter.parse(ProgramOnAirEndTime);
+            String             dt21                     = formatter2.format(dt11).toString();
+            String             dt22                     = formatter2.format(dt12).toString();
+            String             dt23                     = formatter2.format(dt).toString();
+
+            Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+            Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
+            Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+
+            if ( i1 > i2 ) {
+                i2 += 1440;
+                if ( i1 > i3 ) {
+                    i3 += 1440;
+                }
+            }
+
+            if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) <= 0 ) {
+                float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                progBar.setProgress((int) (f1 * 100));
+            } else if ( dt.compareTo(dt11) < 0 ) {
+                progBar.setProgress(0);
+            } else if ( dt.compareTo(dt12) > 0 ) {
+                progBar.setProgress(100);
+            }
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
             channelLogo.setImageUrl(jobj.getString("channelLogoImg"), mImageLoader);
-            programTimeTextView.setText(str1 + "~" + str2);
+            programTimeTextView.setText(dt21 + "~" + dt22);
 
             final String channelId = jobj.getString("channelId");
             final String channelNumber = jobj.getString("channelNumber");
