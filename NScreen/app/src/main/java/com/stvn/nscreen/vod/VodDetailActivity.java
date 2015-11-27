@@ -586,6 +586,25 @@ public class VodDetailActivity extends Activity {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
+    /**
+     * productList중에 결재한적이 있는 결제시간 가져오기.
+     * @return
+     */
+    private String getPurchasedTime(){
+        try {
+            for (int i = 0; i < productList.length(); i++) {
+                JSONObject product = (JSONObject) productList.get(i);
+                String purchasedTime = product.getString("purchasedTime");
+                if ( purchasedTime.length() > 0 ) {
+                    return purchasedTime;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     private void setUIAsset(JSONObject asset) {
         try {
             fileName                    = asset.getString("fileName");
@@ -650,7 +669,6 @@ public class VodDetailActivity extends Activity {
             String price             = product.getString("price");
             String listPrice         = product.getString("listPrice");
             String purchasedId       = product.getString("purchasedId");
-            String purchasedTime     = product.getString("purchasedTime");
 
             // LinearLayout 감추기/보이기 -----------------------------------------------------
             // mSeriesLinearLayout   // 시리즈 회차 버튼
@@ -673,7 +691,7 @@ public class VodDetailActivity extends Activity {
                 isSeriesLink = "NO";
                 mSeriesLinearLayout.setVisibility(View.GONE);
             }
-            if ( "".equals(purchasedTime) ) { // 구매하기 보여랴
+            if ( "".equals(getPurchasedTime()) ) { // 구매하기 보여랴
                 mPlayLinearLayout.setVisibility(View.GONE);
                 if ( ! "2".equals(publicationRight) ) {
                     mPurchaseLinearLayout2.setVisibility(View.VISIBLE);
@@ -747,7 +765,7 @@ public class VodDetailActivity extends Activity {
             }
             sPrice = price;
             sListPrice = listPrice;
-            if ( "".equals(purchasedTime) ) {
+            if ( "".equals(getPurchasedTime()) ) {
                 mPriceTextView.setText(UiUtil.stringParserCommafy(price) + "원 [부가세 별도]");
                 String strColor = "#000000";
                 mPriceTextView.setTextColor(Color.parseColor(strColor));
