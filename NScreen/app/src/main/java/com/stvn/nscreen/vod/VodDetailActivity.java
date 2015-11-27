@@ -525,7 +525,11 @@ public class VodDetailActivity extends Activity {
          */
         if ( "1".equals(episodePeerExistence) ) {
             requestGetEpisodePeerListByContentGroupId();
+            isSeriesLink = "YES";
+            mSeriesLinearLayout.setVisibility(View.VISIBLE);
         } else {
+            isSeriesLink = "NO";
+            mSeriesLinearLayout.setVisibility(View.GONE);
             requestGetAssetInfo();
         }
     }
@@ -675,6 +679,7 @@ public class VodDetailActivity extends Activity {
             // mPurchaseLinearLayout // 미리비기/구매하기/찜하기
             // mPlayLinearLayout     // 시청하기
             // mTvOnlyLiearLayout    // TV에서 시청가능합니다.
+            /***************************************************************************************
             if ( seriesLink == true ) {      // 시리즈 보여라
                 isSeriesLink = "YES";
                 mSeriesLinearLayout.setVisibility(View.VISIBLE);
@@ -691,6 +696,7 @@ public class VodDetailActivity extends Activity {
                 isSeriesLink = "NO";
                 mSeriesLinearLayout.setVisibility(View.GONE);
             }
+             **************************************************************************************/
             if ( "".equals(getPurchasedTime()) ) { // 구매하기 보여랴
                 mPlayLinearLayout.setVisibility(View.GONE);
                 mTvOnlyLiearLayout.setVisibility(View.GONE);
@@ -1004,6 +1010,7 @@ public class VodDetailActivity extends Activity {
                 try {
                     JSONObject jo = new JSONObject(response);
                     episodePeerList = jo.getJSONArray("episodePeerList");
+                    setUISeriesButton(episodePeerList);
                     for ( int i = 0; i < episodePeerList.length(); i++ ) {
                         JSONObject episodePeer = episodePeerList.getJSONObject(i);
                         String loopPrimaryAssetId  = episodePeer.getString("primaryAssetId");
@@ -1036,6 +1043,31 @@ public class VodDetailActivity extends Activity {
         mRequestQueue.add(request);
     }
 
+    /**
+     * getAssetListByEpisodePeerId으로 받아온 assetList중에 HD어셋을 뽑아낸다.
+     * 만약 HD가 없으면, SD
+     * @param assetList
+     * @return
+     */
+    private JSONObject getHDAsset(JSONArray assetList) {
+        JSONObject rtn = null;
+        try {
+            for (int i = 0; i < assetList.length(); i++) {
+                JSONObject jo = (JSONObject)assetList.get(i);
+                if ( jo.getBoolean("HDContent") == true ) {
+                    rtn = jo;
+                    break;
+                }
+            }
+            if ( rtn == null ) { // HD 못찾았으면 그냥 처음꺼 쓰자.
+                rtn = (JSONObject)assetList.get(0);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return rtn;
+    }
+
     private void requestGetAssetListByEpisodePeerId() {
         //mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetAssetListByEpisodePeerId()"); }
@@ -1055,7 +1087,7 @@ public class VodDetailActivity extends Activity {
                 try {
                     JSONObject jo        = new JSONObject(response);
                     JSONArray  assetList = jo.getJSONArray("assetList");
-                    JSONObject asset     = (JSONObject)assetList.get(0);
+                    JSONObject asset     = getHDAsset(assetList);
 
                     seriesCurIndex        = asset.getString("seriesCurIndex");
                     seriesEndIndex        = asset.getString("seriesEndIndex");
@@ -1315,6 +1347,7 @@ public class VodDetailActivity extends Activity {
         mRequestQueue.add(request);
     }
 
+    /***********************************************************************************************
     // 기존의 getAssetInfo를 통해서 시리즈 표시하는 방법.
     private void requestGetSeriesAssetList(String seriesId, String categoryId) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
@@ -1363,4 +1396,5 @@ public class VodDetailActivity extends Activity {
         };
         mRequestQueue.add(request);
     }
+     **********************************************************************************************/
 }
