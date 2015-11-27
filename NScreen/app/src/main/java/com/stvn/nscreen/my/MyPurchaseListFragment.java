@@ -3,7 +3,6 @@ package com.stvn.nscreen.my;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -61,7 +60,8 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     private TextView mPurchaseEmptyMsg;
     private SwipeListView mListView;
     private MyPurchaseListAdapter mAdapter;
-    private ArrayList<ListViewDataObject> mList = new ArrayList<>();
+    private ArrayList<ListViewDataObject> mMoblieList = new ArrayList<>();
+    private ArrayList<ListViewDataObject> mTVList = new ArrayList<>();
     private boolean mLockListView = true;
     private int mTabIndex;
 
@@ -80,6 +80,10 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
 
         initView();
+
+        this.mMoblieList.clear();
+        this.mTVList.clear();
+        requestGetPurchasedProductList();
     }
 
     private void initView()
@@ -95,7 +99,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         mPurchasetab2.setOnClickListener(this);
 
         mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
-        mAdapter = new MyPurchaseListAdapter(getActivity(), mList);
+        mAdapter = new MyPurchaseListAdapter(getActivity());
         mAdapter.setmClicklitener(this);
 
         mListView.setAdapter(mAdapter);
@@ -135,7 +139,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
             @Override
             public void onClickFrontView(int position) {
-                ListViewDataObject obj = mList.get(position);
+                ListViewDataObject obj = getCurrentTabObjectWithIndex(position);
 
                 String assetId = "";
                 String primaryAssetId = "";
@@ -156,7 +160,8 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             }
                         }, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {}
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
                         });
                     } else {
                         if (jsonObj.isNull("assetId") == false) {
@@ -216,11 +221,9 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
              * */
             public void onDismiss(int[] reverseSortedPositions) {
                 for (int position : reverseSortedPositions) {
-                    mList.remove(position);
+                    removeCurrentTabObjectWithIndex(position);
                 }
-                mAdapter.notifyDataSetChanged();
-                int count = mList.size();
-                setPurchaseListCountText(count);
+                changeListData();
             }
 
             @Override
@@ -254,17 +257,17 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         boolean isExpired = false;
         String vodTitle = "";
         final String purchasedId;
-        ListViewDataObject obj = mList.get(itemIndex);
+        ListViewDataObject obj = getCurrentTabObjectWithIndex(itemIndex);
         try {
             JSONObject jsonObj = new JSONObject(obj.sJson);
-            String licenseEnd = jsonObj.getString("licenseEnd");
             vodTitle = jsonObj.getString("productName");
-            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
-                isExpired = true;
-            }
             purchasedId = jsonObj.getString("purchasedId");
+//            String licenseEnd = jsonObj.getString("licenseEnd");
+//            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
+//                isExpired = true;
+//            }
 
-            if (isExpired == true) {
+            if (obj.remainDay < 0 && "0".equals(obj.viewablePeriodState)) {
                 String alertTitle = getString(R.string.my_cnm_alert_title_expired);
                 String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
                 String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
@@ -314,20 +317,31 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
         mListView.closeOpenedItems();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mList.clear();
-                setPurchaseListCountText(mList.size());
-                requestGetValidPurchaseLogList();
-            }
-        }, 300);
+        changeListData();
+    }
+
+    private ListViewDataObject getCurrentTabObjectWithIndex(int itemIndex) {
+        ListViewDataObject returnObj = null;
+        if (this.mTabIndex == TAB_MOBILE) {
+            returnObj = this.mMoblieList.get(itemIndex);
+        } else if (this.mTabIndex == TAB_TV) {
+            returnObj = this.mTVList.get(itemIndex);
+        }
+        return returnObj;
+    }
+
+    private void removeCurrentTabObjectWithIndex(int itemIndex) {
+        if (this.mTabIndex == TAB_MOBILE) {
+            this.mMoblieList.remove(itemIndex);
+        } else if (this.mTabIndex == TAB_TV) {
+            this.mTVList.remove(itemIndex);
+        }
     }
 
     /**
      * VOD 구매목록 조회
      * */
-    private void requestGetValidPurchaseLogList() {
+    private void requestGetPurchasedProductList() {
         ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
 
@@ -352,63 +366,27 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 
                             String licenseEnd = jsonObj.getString("licenseEnd");
                             String purchasedTime = jsonObj.getString("purchasedTime");
-                            obj.remainMinute = CMDateUtil.getLicenseRemainMinute(licenseEnd, compareDate);
+                            String viewablePeriod = jsonObj.getString("viewablePeriod");
+//                            obj.remainMinute = CMDateUtil.getLicenseRemainMinute(licenseEnd, compareDate);
+
                             obj.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
                             obj.viewablePeriodState = jsonObj.getString("viewablePeriodState");
+                            if ("1".equals(obj.viewablePeriodState) == false) {
+                                obj.remainDay = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, compareDate);
+                            }
+
                             if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType) == false) {
-                                mList.add(obj);
+                                mMoblieList.add(obj);
                             } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType)) {
-                                mList.add(obj);
+                                mTVList.add(obj);
                             }
                         }
                     }
 
-                    Collections.sort(mList, new Comparator<ListViewDataObject>() {
-                        public int compare(ListViewDataObject left, ListViewDataObject right) {
+                    sortPurchaseList(mMoblieList);
+                    sortPurchaseList(mTVList);
 
-                            if ("1".equals(left.viewablePeriodState)) {
-                                if ("1".equals(right.viewablePeriodState)) {
-                                    if (left.puchaseSecond > right.puchaseSecond) {
-                                        return -1;
-                                    } else {
-                                        if (left.puchaseSecond > right.puchaseSecond) {
-                                            return 1;
-                                        } else {
-                                            return 0;
-                                        }
-                                    }
-                                } else {
-                                    return 1;
-                                }
-                            } else if ("1".equals(right.viewablePeriodState)) {
-                                return 1;
-                            } else
-                            if (left.remainMinute == right.remainMinute) {
-                                if (left.puchaseSecond > right.puchaseSecond) {
-                                    return -1;
-                                } else {
-                                    if (left.puchaseSecond > right.puchaseSecond) {
-                                        return 1;
-                                    } else {
-                                        return 0;
-                                    }
-                                }
-                            } else {
-                                if (left.remainMinute > right.remainMinute) {
-                                    return -1;
-                                } else {
-                                    if (left.remainMinute > right.remainMinute) {
-                                        return 1;
-                                    } else {
-                                        return 0;
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    setPurchaseListCountText(mList.size());
-                    mAdapter.notifyDataSetChanged();
+                    changeListData();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -432,6 +410,63 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         mRequestQueue.add(request);
     }
 
+    private void changeListData() {
+        this.mAdapter.clear();
+        if (mTabIndex == TAB_MOBILE) {
+            this.mAdapter.addAll(this.mMoblieList);
+            setPurchaseListCountText(this.mMoblieList.size());
+        } else if (mTabIndex == TAB_TV) {
+            this.mAdapter.addAll(this.mTVList);
+            setPurchaseListCountText(this.mTVList.size());
+        }
+        this.mAdapter.notifyDataSetChanged();
+    }
+
+    private void sortPurchaseList(ArrayList<ListViewDataObject> list) {
+        Collections.sort(list, new Comparator<ListViewDataObject>() {
+            public int compare(ListViewDataObject left, ListViewDataObject right) {
+
+                if ("1".equals(left.viewablePeriodState)) {
+                    if ("1".equals(right.viewablePeriodState)) {
+                        if (left.puchaseSecond > right.puchaseSecond) {
+                            return -1;
+                        } else {
+                            if (left.puchaseSecond > right.puchaseSecond) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        }
+                    } else {
+                        return 1;
+                    }
+                } else if ("1".equals(right.viewablePeriodState)) {
+                    return 1;
+                } else
+                if (left.remainDay == right.remainDay) {
+                    if (left.puchaseSecond > right.puchaseSecond) {
+                        return -1;
+                    } else {
+                        if (left.puchaseSecond > right.puchaseSecond) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    }
+                } else {
+                    if (left.remainDay > right.remainDay) {
+                        return -1;
+                    } else {
+                        if (left.remainDay > right.remainDay) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    }
+                }
+            }
+        });
+    }
     /**
      * payment type에 따른 리스트 추가 여부 반환
      * */

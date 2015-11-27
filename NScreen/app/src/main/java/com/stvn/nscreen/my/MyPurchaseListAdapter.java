@@ -17,7 +17,6 @@ import com.stvn.nscreen.common.SwipeListView;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
@@ -34,8 +33,8 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 		this.mClicklitener = mClicklitener;
 	}
 
-	public MyPurchaseListAdapter(Context context, ArrayList<ListViewDataObject> items) {
-		super(context, 0, items);
+	public MyPurchaseListAdapter(Context context) {
+		super(context, 0);
 		this.mContext = context;
 		this.mInflater = LayoutInflater.from(context);
 		this.mCompareDate = new Date();
@@ -92,7 +91,12 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 				remainLicense = "무제한 시청";
 			} else {
 				String licenseEnd = jsonObj.getString("licenseEnd");
-				remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd, this.mCompareDate);
+//				remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd, this.mCompareDate);
+				if (info.remainDay < 0) {
+					remainLicense = "기간 만료";
+				} else {
+					remainLicense = info.remainDay+"일 남음";
+				}
 			}
 
 			holder.rowterm.setText(remainLicense);

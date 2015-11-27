@@ -10,6 +10,27 @@ import java.util.Locale;
  * Created by kimwoodam on 2015. 11. 16..
  */
 public class CMDateUtil {
+    public static long getRemainWatchingTime(String viewablePeriod, String purchaseDate, Date compareDate) {
+        purchaseDate = purchaseDate.replace(" ", "").replace("-", "").replace(":", "").replace("/", "").replace(".", "");
+        Locale currentLocale = new Locale("KOREAN", "KOREA");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", currentLocale);
+
+        String viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10)));
+        long diffDay = 0;
+
+        try {
+            Date endDate = formatter.parse(purchaseDate);
+
+            long diff = (compareDate.getTime()-endDate.getTime()) / 1000; // 초단위로 변환
+            diffDay = diff / (24 * 60 * 60);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return Long.valueOf(viewable) - diffDay;
+    }
+
     /**
      * 라이센스 남은 일자를 분으로 변환하여 반환한다.
      * */
