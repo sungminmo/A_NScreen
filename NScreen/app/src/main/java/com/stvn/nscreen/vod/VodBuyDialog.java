@@ -223,15 +223,31 @@ public class VodBuyDialog extends Activity {
             mPwd.requestFocus();
         } else {
             if ( "0".equals(sPayMethod) ) {
-                requestPurchaseAssetEx2();          // 일반결재
+                if ( "Bundle".equals(productType) ) {
+                    requestPurchaseProduct();           // 묶음(일반결제)
+                } else {
+                    requestPurchaseAssetEx2();          // 일반결재
+                }
             } else if ( "1".equals(sPayMethod)) {
-                requestPurchaseAssetEx2();          // 일반결재(할인)
+                requestPurchaseAssetEx2();              // 일반결재(할인)
             } else if ( "2".equals(sPayMethod) ) {
-                requestPurchaseByComplexMethods();  // complex
+                if ( "Bundle".equals(productType) ) {
+                    requestPurchaseProductByComplexMethods();   // 묶음(복합)
+                } else {
+                    requestPurchaseByComplexMethods();          // complex
+                }
             } else if ( "3".equals(sPayMethod) ) {
-                requestPurchaseByCoupon();          // coupon
+                if ( "Bundle".equals(productType) ) {
+                    requestPurchaseProductByCoupon2();  // 묶음(쿠폰결제)
+                } else {
+                    requestPurchaseByCoupon();          // coupon
+                }
             } else if ( "4".equals(sPayMethod)) {
-                requestPurchaseByPoint();           // tv
+                if ( "Bundle".equals(productType) ) {
+                    requestPurchaseProductByPoint();    // 묶음(TV포인트)
+                } else {
+                    requestPurchaseByPoint();           // tv
+                }
             }
         }
     }
@@ -532,4 +548,282 @@ public class VodBuyDialog extends Activity {
         };
         mRequestQueue.add(request);
     }
+
+    // if ( "Bundle".equals(productType) ) { // 묶음 할인상품 구매
+    // 묶음(일반결제)
+    // http://58.141.255.79:8080/HApplicationServer/purchaseProduct.json?version=2
+    // &terminalKey=198F5099BEAFE13A8188F6F020323
+    // &productId=a31f8565-9b83-4646-8f52-85f4b7ce18bb
+    // &uiComponentDomain=0
+    // &uiComponentId=0
+    private void requestPurchaseProduct() {
+        mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String url         = mPref.getWebhasServerUrl() + "/purchaseProduct.json?version=2&terminalKey="+terminalKey
+                +"&uiComponentDomain=0"
+                +"&uiComponentId=0"
+                +"&productId="+productId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                int   resultCode  = 0;
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    resultCode    = jo.getInt("resultCode");
+                    if ( resultCode == 100 ) {
+                        String alertTitle = "구매완료";
+                        String alertMsg1  = mTitle;
+                        String alertMsg2  = getString(R.string.success_purchase);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent();
+                                intent.putExtra("jstr", "");
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
+                        }, true);
+                    } else {
+                        String errorString = jo.getString("errorString");
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        });
+                        alert.setMessage(errorString);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    // 묶음(TV포인트)
+    // http://58.141.255.79:8080/HApplicationServer/purchaseProductByPoint.json?version=2
+    // &terminalKey=198F5099BEAFE13A8188F6F020323
+    // &domainId=CnM
+    // &productId=a31f8565-9b83-4646-8f52-85f4b7ce18bb
+    // &price=7500
+    // &uiComponentDomain=0
+    // &uiComponentId=0
+    private void requestPurchaseProductByPoint() {
+        mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String url         = mPref.getWebhasServerUrl()
+                + "/purchaseProductByPoint.json?version=2"
+                + "&uiComponentDomain=0"
+                + "&uiComponentId=0"
+                + "&domainId=CnM"
+                + "&terminalKey="+terminalKey
+                + "&productId="+productId
+                + "&price="+listPrice;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                int   resultCode  = 0;
+                final String jstr = "";
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    resultCode    = jo.getInt("resultCode");
+                    // jstr = jo.toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String alertTitle = "구매완료";
+                String alertMsg1  = mTitle;
+                String alertMsg2  = getString(R.string.success_purchase);
+                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent();
+                        intent.putExtra("jstr", jstr);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                }, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    // 묶음(쿠폰결제)
+    // http://58.141.255.79:8080/HApplicationServer/purchaseProductByCoupon2.json?version=2
+    // &terminalKey=198F5099BEAFE13A8188F6F020323
+    // &domainId=CnM
+    // &productId=a31f8565-9b83-4646-8f52-85f4b7ce18bb
+    // &price=7500
+    // &uiComponentDomain=0
+    // &uiComponentId=0
+    private void requestPurchaseProductByCoupon2() {
+        mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String url         = mPref.getWebhasServerUrl()
+                + "/purchaseProductByCoupon2.json?version=2&domainId=CnM&uiComponentDomain=0&uiComponentId=0"
+                + "&terminalKey="+terminalKey
+                + "&productId="+productId
+                + "&price="+listPrice;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                int   resultCode  = 0;
+                final String jstr = "";
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    resultCode    = jo.getInt("resultCode");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String alertTitle = "구매완료";
+                String alertMsg1  = mTitle;
+                String alertMsg2  = getString(R.string.success_purchase);
+                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent();
+                        intent.putExtra("jstr", jstr);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                }, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    // 묶음(복합)
+    // http://58.141.255.79:8080/HApplicationServer/purchaseProductByComplexMethods.json?version=2
+    // &terminalKey=198F5099BEAFE13A8188F6F020323
+    // &domainId=CnM
+    // &productId=a31f8565-9b83-4646-8f52-85f4b7ce18bb
+    // &price=7500
+    // &pointPrice=0
+    // &couponPrice=5000
+    // &normalPrice=2500
+    // &uiComponentDomain=0
+    // &uiComponentId=0
+    private void requestPurchaseProductByComplexMethods() {
+        mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String encAssetId  = "";
+        try {
+            encAssetId  = URLDecoder.decode(assetId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        // http://58.141.255.79:8080/HApplicationServer/purchaseByComplexMethods.json?version=2&uiComponentDomain=0&uiComponentId=0&domainId=CnM&terminalKey=97CF2C2DC48840F7833EDA283F232357&assetId=www.hchoice.co.kr%7CM4172288LSG357693401&productId=108&goodId=1593110
+        // &price=4500
+        // &categoryId=304547&
+        // pointPrice=0&couponPrice=1275&normalPrice=3225
+        // price = pointPrice + couponPrice + normalPrice;
+        long normalPrice = Long.valueOf(listPrice) - Long.valueOf(totalMoneyBalance);
+        String url         = mPref.getWebhasServerUrl()
+                + "/purchaseProductByComplexMethods.json?version=2&uiComponentDomain=0&uiComponentId=0&domainId=CnM"
+                + "&terminalKey="+terminalKey
+                + "&productId="+productId
+                + "&price="+listPrice
+                + "&pointPrice=0"
+                + "&couponPrice="+totalMoneyBalance
+                + "&normalPrice="+String.valueOf(normalPrice);
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                int   resultCode  = 0;
+                final String jstr = "";
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    resultCode    = jo.getInt("resultCode");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String alertTitle = "구매완료";
+                String alertMsg1  = mTitle;
+                String alertMsg2  = getString(R.string.success_purchase);
+                CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent();
+                        intent.putExtra("jstr", jstr);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                }, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
 }
