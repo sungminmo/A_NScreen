@@ -829,7 +829,9 @@ public class VodDetailActivity extends Activity {
                 seriesButton.setText(thisSeriesIndex + "회");
 
 //                if ( assetId.equals(thisAssetId) ) {
-                if ( i == 0 ) {
+//                if ( i == 0 ) {
+                String loopEpisodePeerId = asset.getString("episodePeerId");
+                if ( loopEpisodePeerId.equals(episodePeerId) ) {
                     seriesButton.setSelected(true);
                     seriesButton.setFocusable(true);
                 }
