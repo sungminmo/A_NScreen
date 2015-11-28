@@ -61,7 +61,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     private SwipeListView mListView;
     private MyPurchaseListAdapter mAdapter;
     private ArrayList<ListViewDataObject> mMoblieList = new ArrayList<>();
-    private ArrayList<ListViewDataObject> mTVList = new ArrayList<>();
+    private ArrayList<ListViewDataObject> mTVList     = new ArrayList<>();
     private boolean mLockListView = true;
     private int mTabIndex;
 
@@ -362,7 +362,13 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         String productType = jsonObj.getString("productType").toLowerCase();
                         String paymentType = jsonObj.getString("paymentType").toLowerCase();
                         if (checkAddListWithPaymentType(paymentType) && checkAddListWithProductType(productType)) {
-                            String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");
+                            String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");   // 1:TV, 2:MOBILE
+                            //Log.d("mycnm", "purchaseDeviceType:"+purchaseDeviceType);
+                            if ( "1".equals(purchaseDeviceType) ) {
+                                mTVList.add(obj);
+                            } else if ( "2".equals(purchaseDeviceType) ) {
+                                mMoblieList.add(obj);
+                            }
 
                             String licenseEnd = jsonObj.getString("licenseEnd");
                             String purchasedTime = jsonObj.getString("purchasedTime");
@@ -373,12 +379,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             obj.viewablePeriodState = jsonObj.getString("viewablePeriodState");
                             if ("1".equals(obj.viewablePeriodState) == false) {
                                 obj.remainDay = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, compareDate);
-                            }
-
-                            if (TAB_MOBILE == mTabIndex && "1".equals(purchaseDeviceType) == false) {
-                                mMoblieList.add(obj);
-                            } else if (TAB_TV == mTabIndex && "1".equals(purchaseDeviceType)) {
-                                mTVList.add(obj);
                             }
                         }
                     }
