@@ -18,7 +18,8 @@ public class WatchTvAlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        String programName = intent.getExtras().getString("programName");
+        String programTitle = intent.getExtras().getString("programTitle");
+        int iSeq = intent.getExtras().getInt("iSeq");
 
         //Toast.makeText(context, "Alarm Received!", Toast.LENGTH_LONG).show();
 
@@ -26,14 +27,26 @@ public class WatchTvAlarmBroadcastReceiver extends BroadcastReceiver {
         Notification notify = new Notification(R.mipmap.ic_launcher, "text", System.currentTimeMillis());
 
         Intent intent2 = new Intent(context, LoadingActivity.class);
+        intent2.putExtra("iSeqNoti",iSeq);
         PendingIntent pender = PendingIntent.getActivity(context, 0, intent2, 0);
 
-        notify.setLatestEventInfo(context, "TV시청예약 알림", programName, pender);
-        notify.flags |= Notification.FLAG_AUTO_CANCEL;
-        notify.vibrate = new long[] { 200, 200, 500, 300 };
+        notify.setLatestEventInfo(context, "TV시청예약 알림", programTitle, pender);
+//        notify.flags |= Notification.FLAG_AUTO_CANCEL;
+//        notify.vibrate = new long[] { 200, 200, 500, 300 };
         // notify.sound=Uri.parse("file:/");
-        notify.number++;
+//        notify.number++;
+        notify.flags = Notification.FLAG_AUTO_CANCEL;
+        notify.defaults = Notification.DEFAULT_VIBRATE | Notification.FLAG_AUTO_CANCEL ;
 
         notifier.notify(1, notify);
+
+
+
+        Notification notification = new Notification(R.mipmap.ic_launcher, "text", System.currentTimeMillis());
+        notification.setLatestEventInfo(context, "TV시청예약 알림", programTitle, pender);
+
+        // Cancel the notification after its selected
+        notify.defaults = Notification.DEFAULT_VIBRATE;
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
     }
 }

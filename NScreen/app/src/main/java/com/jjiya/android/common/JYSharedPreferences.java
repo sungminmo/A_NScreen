@@ -545,11 +545,15 @@ public class JYSharedPreferences {
         intent.putExtra("seriesId",                     seriesId);
         intent.putExtra("programTitle",                 programTitle);
         intent.putExtra("programBroadcastingStartTime", programBroadcastingStartTime);
+        intent.putExtra("iSeq", iSeq);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int)iSeq, intent, PendingIntent.FLAG_NO_CREATE);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int)iSeq, intent, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int)iSeq, intent, PendingIntent.FLAG_ONE_SHOT);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int)iSeq, intent, PendingIntent.FLAG_UPDATE_CURRENT );
 
         AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+//        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     public void removeWatchTvReserveAlarm(String programId) {

@@ -77,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack("VodMainOtherTabFragment");
         fragmentTransaction.commit();
 
-
+        //mPref.addWatchTvAlarm("S321387639", "", "국악무대5000", "2015-11-10 20:50:00");
+        //mPref.addWatchTvReserveAlarm("S321387639", "", "05:52", "2015-11-29 05:52:00");
+        //mPref.addWatchTvReserveAlarm("S321387639", "", "05:53", "2015-11-29 05:53:00");
+        //mPref.addWatchTvReserveAlarm("S321387639", "", "05:54", "2015-11-29 05:54:00");
     }
 
     @Override

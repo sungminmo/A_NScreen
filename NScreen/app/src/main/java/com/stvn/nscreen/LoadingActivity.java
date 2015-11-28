@@ -1,5 +1,7 @@
 package com.stvn.nscreen;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -101,6 +103,18 @@ public class LoadingActivity extends AppCompatActivity {
         });
 
         mProgressBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+
+        if ( getIntent().getExtras() != null ) {
+            int iSeqNoti = getIntent().getExtras().getInt("iSeqNoti");
+            //NotificationManager notifier = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            //notifier.cancel(iSeqNoti);
+
+            NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            // Create a new intent which will be fired if you click on the notification
+            //Intent intent = new Intent(this, ApplicationClass.class);
+            // Attach the intent to a pending intent
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, iSeqNoti, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
         // 10~20 : file io
         // 21~60 : requestGetAppInitialize
