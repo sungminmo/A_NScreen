@@ -75,6 +75,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                 return mCache.get(url);
             }
         });
+        mStbRecordReservelist = new ArrayList<JSONObject>();
     }
 
     public void setSwipeClickListener(View.OnClickListener l) {

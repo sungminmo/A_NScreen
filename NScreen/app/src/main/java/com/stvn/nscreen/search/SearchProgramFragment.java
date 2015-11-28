@@ -208,6 +208,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     mStbWatchingchannel   = (String) mStbStateMap.get("watchingchannel");
                     mStbPipchannel        = (String) mStbStateMap.get("pipchannel");
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+
+                    requestGetRecordReservelist();
                 } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
                     //
                     mStbState             = "";
@@ -216,6 +218,40 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     mStbWatchingchannel   = "";
                     mStbPipchannel        = "";
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    String alertTitle = "씨앤앰";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    String alertTitle = "씨앤앰";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
                 } else {
                     String errorString = (String)mStbStateMap.get("errorString");
                     StringBuilder sb   = new StringBuilder();
@@ -223,8 +259,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
                     CMAlertUtil.Alert(getActivity(), "알림", sb.toString());
                 }
-//                reqProgramList();
-                requestGetRecordReservelist();
+                reqProgramList();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -311,9 +346,9 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 ((SearchMainActivity)getActivity()).hideProgressDialog();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
-                    reqProgramList();
+                    // reqProgramList();
                 } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
-                    reqProgramList();
+                    // reqProgramList();
                 } else { // 그외는 error
                     String msg = "getRecordReservelist("+sResultCode+":"+mStbStateMap.get("errorString")+")";
                     CMAlertUtil.Alert(getActivity(), "알림", msg);
@@ -433,7 +468,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     public void reqProgramList()
     {
         mLockListView = true;
-        ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+        // ((SearchMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
         // swlim. "아빠를 부탁해" 처럼 공백이 있으면 검색 결과가 안나와서 아래의 URLEncoder 적용.
         String searchWord = mKeyword;
         try {
@@ -450,12 +485,12 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 //Log.d(tag, response);
                 parseGetSearchList(response);
                 mAdapter.notifyDataSetChanged();
-                ((SearchMainActivity)getActivity()).hideProgressDialog();
+                // ((SearchMainActivity)getActivity()).hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ((SearchMainActivity)getActivity()).hideProgressDialog();
+                // ((SearchMainActivity)getActivity()).hideProgressDialog();
                 CMLog.e("CM", error.getMessage());
             }
         }) {
