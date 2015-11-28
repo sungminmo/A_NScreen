@@ -807,12 +807,8 @@ public class VodDetailActivity extends Activity {
         LinearLayout lll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
         lll.removeAllViewsInLayout();
         try {
-//            int iLoop;
-//            if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
-//                iLoop = assetList.length()-1;
-//            } else { // 종료되지 않은 시리즈.
-//                iLoop = 0;
-//            }
+            // 종료된 시리즈인지 아닌지 구분하는 로직은 없애기로 했음.
+            // 시리즈 버튼중 디폴트 선택 버튼은 무조건 0번째 버튼으로 처리하기로 했음.
             for ( int i = 0; i < assetList.length(); i++ ) {
                 JSONObject asset = (JSONObject)assetList.get(i);
                 final String thisAssetId;
@@ -832,7 +828,8 @@ public class VodDetailActivity extends Activity {
                 Button seriesButton = (Button) getLayoutInflater().inflate(R.layout.series_button_style, null);
                 seriesButton.setText(thisSeriesIndex + "회");
 
-                if ( assetId.equals(thisAssetId) ) {
+//                if ( assetId.equals(thisAssetId) ) {
+                if ( i == 0 ) {
                     seriesButton.setSelected(true);
                     seriesButton.setFocusable(true);
                 }
@@ -842,13 +839,6 @@ public class VodDetailActivity extends Activity {
                 seriesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        if ( isSeriesLink.equals("YES") ) {
-//                            refreshAll(thisAssetId, finalThisContentGroupId);
-//                        } else {
-//                            Intent intent = new Intent(mInstance, VodDetailActivity.class);
-//                            intent.putExtra("assetId", thisAssetId);
-//                            startActivity(intent);
-//                        }
                         changeSeries(thisAssetId,episodePeerId);
                     }
                 });
@@ -859,24 +849,6 @@ public class VodDetailActivity extends Activity {
                 ll.addView(seriesButton, lp);
                 seriesButton.getLayoutParams().width  = dp2px(42);
                 seriesButton.getLayoutParams().height = dp2px(28);
-
-//                if ( seriesTotalAssetCount.equals(seriesEndIndex) ) { // 종료된 시리즈.
-//                    iLoop--;
-//                    mSeriesScrollView.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_LEFT); // 1회를 표시한다.
-//                        }
-//                    });
-//                } else { // 종료되지 않은 시리즈.
-//                    iLoop++;
-//                    mSeriesScrollView.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            mSeriesScrollView.fullScroll(ScrollView.FOCUS_RIGHT); // 가장 최근 회를 표시한다.
-//                        }
-//                    });
-//                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1018,16 +990,19 @@ public class VodDetailActivity extends Activity {
                 try {
                     JSONObject jo = new JSONObject(response);
                     episodePeerList = jo.getJSONArray("episodePeerList");
-                    //setUISeriesButton(episodePeerList);
-                    for ( int i = 0; i < episodePeerList.length(); i++ ) {
-                        JSONObject episodePeer = episodePeerList.getJSONObject(i);
-                        String loopPrimaryAssetId  = episodePeer.getString("primaryAssetId");
-                        if ( primaryAssetId.equals(loopPrimaryAssetId) ) {
-                            mSeriesReleaseDate = episodePeer.getString("releaseDate");
-                            episodePeerId      = episodePeer.getString("episodePeerId");
-                            requestGetAssetListByEpisodePeerId();
-                        }
-                    }
+//                    for ( int i = 0; i < episodePeerList.length(); i++ ) {
+//                        JSONObject episodePeer = episodePeerList.getJSONObject(i);
+//                        String loopPrimaryAssetId  = episodePeer.getString("primaryAssetId");
+//                        if ( primaryAssetId.equals(loopPrimaryAssetId) ) {
+//                            mSeriesReleaseDate = episodePeer.getString("releaseDate");
+//                            episodePeerId      = episodePeer.getString("episodePeerId");
+//                            requestGetAssetListByEpisodePeerId();
+//                        }
+//                    }
+                    JSONObject episodePeer = episodePeerList.getJSONObject(0);
+                    mSeriesReleaseDate = episodePeer.getString("releaseDate");
+                    episodePeerId      = episodePeer.getString("episodePeerId");
+                    requestGetAssetListByEpisodePeerId();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
