@@ -33,8 +33,13 @@ import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -308,7 +313,7 @@ public class VodBuyActivity extends Activity {
                         }
                     });
                 }
-                if ( "Package".equals(productType) ) {
+                if ( "Package".equals(productType) ) {  // 시리즈 전체회차 구매
                     vod_buy_step1_serise_linearlayout.setVisibility(View.VISIBLE);
                     addButton(vod_buy_step1_serise_linearlayout);
                     vod_buy_step1_serise_textview.setText(UiUtil.toNumFormat(listPrice)+"원 [부가세 별도]");
@@ -585,6 +590,17 @@ public class VodBuyActivity extends Activity {
                     String selectedProductId   = jo.getString("productId");
                     String selectedGoodId      = jo.getString("goodId");
 
+                    // 0000-00-30 00:00:00
+                    // 0000-00-00 24:00:00
+                    String           viewablePeriod = jo.getString("viewablePeriod");
+                    Calendar         cal            = Calendar.getInstance();
+                    Locale           currentLocale  = new Locale("KOREAN", "KOREA");
+                    SimpleDateFormat formatter      = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", currentLocale);
+                    Date             dayofday       = formatter.parse(viewablePeriod);
+                    cal.setTime(dayofday);
+                    int selectedViewablePeriod      = cal.get(Calendar.DATE);
+                    viewable                        = selectedViewablePeriod + "일";
+
                     // Step.2의 결제방식을 알아내기.
                     String sPayMethod = "";
                     if ( iSeletedPayMethod == 0 ) {        // 일반
@@ -620,6 +636,8 @@ public class VodBuyActivity extends Activity {
                     startActivityForResult(intent, 4000);
                 } catch ( JSONException e ) {
                     e.printStackTrace();
+                } catch (ParseException pe) {
+                    pe.printStackTrace();
                 }
 
             }

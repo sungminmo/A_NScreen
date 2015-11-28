@@ -48,10 +48,14 @@ import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import io.realm.Realm;
@@ -748,7 +752,15 @@ public class VodDetailActivity extends Activity {
                 mViewableTextView.setText("무제한시청");
                 viewable = "무제한시청";
             } else {
-                viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10))) + "일";
+                //viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10))) + "일";
+                // 0000-00-30 00:00:00
+                // 0000-00-00 24:00:00
+                Calendar cal               = Calendar.getInstance();
+                Locale currentLocale       = new Locale("KOREAN", "KOREA");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", currentLocale);
+                Date             dayofday  = formatter.parse(viewablePeriod);
+                cal.setTime(dayofday);
+                viewable                   = cal.get(Calendar.DATE) + "일";
                 viewablePeriod = viewable;
                 mViewableTextView.setText(viewablePeriod);
             }
@@ -807,6 +819,8 @@ public class VodDetailActivity extends Activity {
             }
         } catch ( JSONException e ) {
             e.printStackTrace();
+        } catch (ParseException pe) {
+            pe.printStackTrace();
         }
     }
 
