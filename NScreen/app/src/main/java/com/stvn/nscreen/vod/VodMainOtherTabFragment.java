@@ -193,7 +193,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mAdapter  = new VodMainGridViewAdapter(mInstance.getActivity(), null);
         mGridView = (GridView)view.findViewById(R.id.vod_main_gridview);
         mGridView.setAdapter(mAdapter);
-        mGridView.setOnItemClickListener(assetItemClickListener);
+        //mGridView.setOnItemClickListener(assetItemClickListener);
 
         mCategoryBgFramelayout = (FrameLayout)view.findViewById(R.id.vod_main_other_category_bg_framelayout);
         mCategoryBgFramelayout.setOnClickListener(new View.OnClickListener() {
@@ -254,22 +254,22 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         }
     }
 
-    private AdapterView.OnItemClickListener assetItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ListViewDataObject item = (ListViewDataObject)mAdapter.getItem(position);
-            String assetId = "";
-            try {
-                JSONObject jo = new JSONObject(item.sJson);
-                assetId = jo.getString("assetId");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Intent intent = new Intent(mInstance.getActivity(), com.stvn.nscreen.vod.VodDetailActivity.class);
-            intent.putExtra("assetId", assetId);
-            startActivity(intent);
-        }
-    };
+//    private AdapterView.OnItemClickListener assetItemClickListener = new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            ListViewDataObject item = (ListViewDataObject)mAdapter.getItem(position);
+//            String assetId = "";
+//            try {
+//                JSONObject jo = new JSONObject(item.sJson);
+//                assetId = jo.getString("assetId");
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            Intent intent = new Intent(mInstance.getActivity(), com.stvn.nscreen.vod.VodDetailActivity.class);
+//            intent.putExtra("assetId", assetId);
+//            startActivity(intent);
+//        }
+//    };
 
 
     // 카테고리 요청.
