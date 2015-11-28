@@ -387,6 +387,16 @@ public class PvrMainActivity extends AppCompatActivity {
                     textView1.setText("총 0개의 녹화예약 콘텐츠가 있습니다.");
                     mAdapter.setTabNumber(1);
                     mAdapter.notifyDataSetChanged();
+                } else if ( "206".equals(sResultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    String alertTitle = "씨앤앰";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
                 } else if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
                     String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
                     AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);

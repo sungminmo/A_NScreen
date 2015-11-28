@@ -263,6 +263,48 @@ public class RemoteControllerActivity extends AppCompatActivity{
 //                    });
 //                    alert.setMessage(getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode));
 //                    alert.show();
+                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    String alertTitle = "씨앤앰";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    String alertTitle = "씨앤앰";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
                 } else {
                     String errorString = (String)mNetworkError.get("errorString");
                     StringBuilder sb   = new StringBuilder();

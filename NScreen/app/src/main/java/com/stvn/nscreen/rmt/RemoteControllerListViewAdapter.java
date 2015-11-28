@@ -48,6 +48,12 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
     private              RequestQueue                  mRequestQueue;
     private              ImageLoader                   mImageLoader;
 
+    private              String                 mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+
     private              int                           mSelectedIndex   = -1;
 
     public RemoteControllerListViewAdapter(Context c, View.OnClickListener onClickListener) {
@@ -66,6 +72,14 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             }
         });
         this.mPref            = new JYSharedPreferences(c);
+    }
+
+    public void setStbState(String state, String recCh1, String recCh2, String watchCh, String pipCh) {
+        this.mStbState             = state;
+        this.mStbRecordingchannel1 = recCh1; // ID
+        this.mStbRecordingchannel2 = recCh2; // ID
+        this.mStbWatchingchannel   = watchCh;
+        this.mStbPipchannel        = pipCh;
     }
 
     public String getChannelNumberWithChannelId(String cid) {
