@@ -119,7 +119,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             JSONObject         jobj                    = new JSONObject(dobj.sJson);
 
             String             sProgramAge             = jobj.getString("channelProgramGrade");
-            String             sChannelInfo            = jobj.getString("channelInfo");
+            String             sChannelOnAirHD         = jobj.getString("channelOnAirHD");
             String             ProgramOnAirStartTime   = jobj.getString("channelProgramOnAirStartTime");
             String             ProgramOnAirEndTime     = jobj.getString("channelProgramOnAirEndTime");
             String             channelId               = jobj.getString("channelId");
@@ -185,9 +185,9 @@ public class EpgMainListViewAdapter extends BaseAdapter {
                 programAge.setImageResource(R.mipmap.btn_age_19);
             }
 
-            if ( "SD".equals(sChannelInfo) ) {
+            if ( "NO".equals(sChannelOnAirHD) ) {
                 Info.setImageResource(R.mipmap.btn_size_sd);
-            } else if ("HD".equals(sChannelInfo) || "SD,HD".equals(sChannelInfo) ) {
+            } else if ("YES".equals(sChannelOnAirHD) ) {
                 Info.setImageResource(R.mipmap.btn_size_hd);
             }
 

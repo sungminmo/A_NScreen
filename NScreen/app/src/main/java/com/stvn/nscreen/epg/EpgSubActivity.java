@@ -1033,7 +1033,7 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 녹화 예약 목록 호출 */
     private void requestGetRecordReservelist() {
-        mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        // mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
@@ -1044,7 +1044,7 @@ public class EpgSubActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
                     // requestGetChannelSchedule();
@@ -1084,7 +1084,7 @@ public class EpgSubActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                // mProgressDialog.dismiss();
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
@@ -1210,6 +1210,7 @@ public class EpgSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                mProgressDialog.dismiss();
                 //Log.d(tag, response);
                 parseGetChannelList(response);
 
@@ -1280,7 +1281,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 }
                 mAdapter.setDatas(mDatas0, 0);
                 mAdapter.notifyDataSetChanged();
-                mProgressDialog.dismiss();
+
 
             }
         }, new Response.ErrorListener() {
