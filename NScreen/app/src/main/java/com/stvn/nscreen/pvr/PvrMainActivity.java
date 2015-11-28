@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -532,6 +534,20 @@ public class PvrMainActivity extends AppCompatActivity {
         return sResultCode;
     }
 
+    Handler delayHandlerForGetRecordList = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            mProgressDialog.dismiss();
+            requestGetRecordlist();
+        }
+    };
+
+    private void requestGetRecordListWithDelay(){
+        mProgressDialog	= ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        delayHandlerForGetRecordList.sendEmptyMessageDelayed(0, 5000);
+    }
+
     /**
      * 녹화물 리스트 요청
      */
@@ -713,7 +729,8 @@ public class PvrMainActivity extends AppCompatActivity {
                 mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
                 textView2.setText("목록 재 요청 중입니다.");
-                requestGetRecordlist();
+                // requestGetRecordlist();
+                requestGetRecordListWithDelay();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -793,7 +810,8 @@ public class PvrMainActivity extends AppCompatActivity {
                 mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
                 textView2.setText("목록 재 요청 중입니다.");
-                requestGetRecordlist();
+                //requestGetRecordlist();
+                requestGetRecordListWithDelay();
             }
         }, new Response.ErrorListener() {
             @Override
