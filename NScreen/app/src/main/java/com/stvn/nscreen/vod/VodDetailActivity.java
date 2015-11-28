@@ -514,8 +514,8 @@ public class VodDetailActivity extends Activity {
         mSeriesReleaseDate = null;
         isPrePlay = true;
         relationVods.clear();
-        mPagerAdapter.clear();
-        mPagerAdapter.notifyDataSetChanged();
+        //mPagerAdapter.clear();
+        //mPagerAdapter.notifyDataSetChanged();
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
         ll.removeAllViewsInLayout();
@@ -704,24 +704,7 @@ public class VodDetailActivity extends Activity {
             // mPurchaseLinearLayout // 미리비기/구매하기/찜하기
             // mPlayLinearLayout     // 시청하기
             // mTvOnlyLiearLayout    // TV에서 시청가능합니다.
-            /***************************************************************************************
-            if ( seriesLink == true ) {      // 시리즈 보여라
-                isSeriesLink = "YES";
-                mSeriesLinearLayout.setVisibility(View.VISIBLE);
 
-                //if ( episodePeerExistence.length() > 0 ) {
-                    //
-                //} else {
-                    // 기존의 getAssetInfo를 통해서 시리즈 표시하는 방법.
-                    String sCategoryId = asset.getString("categoryId");
-                    String sSeriesId   = asset.getString("seriesId");
-                    requestGetSeriesAssetList(sSeriesId, sCategoryId);
-                //}
-            } else {                         // 시리즈 감춰라.
-                isSeriesLink = "NO";
-                mSeriesLinearLayout.setVisibility(View.GONE);
-            }
-             **************************************************************************************/
             if ( "".equals(getPurchasedTime()) ) { // 구매하기 보여랴
                 mPlayLinearLayout.setVisibility(View.GONE);
                 mTvOnlyLiearLayout.setVisibility(View.GONE);
