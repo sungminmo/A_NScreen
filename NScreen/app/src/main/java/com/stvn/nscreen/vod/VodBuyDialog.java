@@ -271,6 +271,7 @@ public class VodBuyDialog extends Activity {
                         String alertMsg1  = mTitle;
                         String alertMsg2  = getString(R.string.success_purchase);
                         if ( "SVOD".equals(productType) ) {
+                            alertTitle = "가입완료";
                             alertMsg1  = productName;
                             alertMsg2  = getString(R.string.success_purchase_svod);
                         }
