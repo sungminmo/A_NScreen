@@ -30,18 +30,18 @@ import java.util.List;
 public class FourVodPosterPagerAdapter extends PagerAdapter {
 
     private VodDetailActivity   mVodDetailActivity;
-    private LayoutInflater   mLayoutInflater;
+    private LayoutInflater      mLayoutInflater;
     private JYSharedPreferences mPref;
 
-    private ImageLoader      mImageLoader;
-    private List<JSONObject> mVods;
+    private ImageLoader         mImageLoader;
+    private List<JSONObject>    mVods;
 
-    private Fragment         mFragment;
+    private Fragment            mFragment;
 
     public FourVodPosterPagerAdapter(Context c){
         super();
         mLayoutInflater = LayoutInflater.from(c);
-        mVods = new ArrayList<JSONObject>();
+        mVods           = new ArrayList<JSONObject>();
         mPref           = new JYSharedPreferences(c);
     }
 
@@ -53,13 +53,13 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
         mVodDetailActivity = a;
     }
 
-    private void startActivityDetail(String assetId, String jstr) {
-
-        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
-        intent.putExtra("assetId", assetId);
-        intent.putExtra("jstr", jstr);
-        mVodDetailActivity.startActivity(intent);
-    }
+//    private void startActivityDetail(String assetId, String jstr) {
+//
+//        Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
+//        intent.putExtra("assetId", assetId);
+//        intent.putExtra("jstr", jstr);
+//        mVodDetailActivity.startActivity(intent);
+//    }
 
     public void clear(){
         mVods.clear();
@@ -94,6 +94,51 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
 
     public void addVod(JSONObject jo){
         mVods.add(jo);
+    }
+
+    private void startVodDetailActivity(JSONObject jo) {
+        String rating               = "";
+        String assetId              = "";
+        String contentGroupId       = "";
+        String episodePeerExistence = "";
+        try {
+            rating               = jo.getString("rating");
+            if ( jo.isNull("assetId") ) {
+                assetId          = jo.getString("primaryAssetId");
+            } else {
+                assetId          = jo.getString("assetId");
+            }
+            contentGroupId       = jo.getString("contentGroupId");
+            episodePeerExistence = jo.getString("episodePeerExistence");
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        if ( rating.startsWith("19") && mPref.isAdultVerification() == false ) {
+            String alertTitle = "성인인증 필요";
+            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
+            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
+            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
+                    mVodDetailActivity.startActivity(intent);
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        } else {
+            Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
+            if ( "1".equals(episodePeerExistence) ) {
+                intent.putExtra("episodePeerExistence", episodePeerExistence);
+                intent.putExtra("contentGroupId", contentGroupId);
+            }
+            intent.putExtra("assetId", assetId);
+            //intent.putExtra("jstr",    jo.getString());
+            mVodDetailActivity.startActivity(intent);
+        }
     }
 
     /**
@@ -138,26 +183,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ( rating1.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "성인인증 필요";
-                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
-                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
-                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
-                                    mVodDetailActivity.startActivity(intent);
-                                }
-                            }, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-
-                        } else {
-                            startActivityDetail(assetId1, jo1.toString());
-                        }
+                        startVodDetailActivity(jo1);
                     }
                 });
             } else {
@@ -188,26 +214,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ( rating2.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "성인인증 필요";
-                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
-                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
-                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
-                                    mVodDetailActivity.startActivity(intent);
-                                }
-                            }, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-
-                        } else {
-                            startActivityDetail(assetId2, jo2.toString());
-                        }
+                        startVodDetailActivity(jo2);
                     }
                 });
             } else {
@@ -238,26 +245,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ( rating3.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "성인인증 필요";
-                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
-                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
-                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
-                                    mVodDetailActivity.startActivity(intent);
-                                }
-                            }, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-
-                        } else {
-                            startActivityDetail(assetId3, jo3.toString());
-                        }
+                        startVodDetailActivity(jo3);
                     }
                 });
             } else {
@@ -288,26 +276,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 niv4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ( rating4.startsWith("19") && mPref.isAdultVerification() == false ) {
-                            String alertTitle = "성인인증 필요";
-                            String alertMsg1 = mVodDetailActivity.getString(R.string.error_not_adult1);
-                            String alertMsg2 = mVodDetailActivity.getString(R.string.error_not_adult2);
-                            CMAlertUtil.Alert1(mVodDetailActivity, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(mVodDetailActivity, CMSettingMainActivity.class);
-                                    mVodDetailActivity.startActivity(intent);
-                                }
-                            }, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-
-                        } else {
-                            startActivityDetail(assetId4, jo4.toString());
-                        }
+                        startVodDetailActivity(jo4);
                     }
                 });
             } else {
