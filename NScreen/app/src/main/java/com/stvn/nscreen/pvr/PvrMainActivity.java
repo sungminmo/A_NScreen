@@ -811,7 +811,7 @@ public class PvrMainActivity extends AppCompatActivity {
         String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url  = mPref.getRumpersServerUrl() + "/SetRecordSeriesDele.asp?version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
-                + channelId + "&StartTime=" + starttime + "&deleteType=0&RecordId=" + sRecordId + "SeriesId=" + sSeriesId;
+                + channelId + "&StartTime=" + starttime + "&deleteType=0&RecordId=" + sRecordId + "&SeriesId=" + sSeriesId;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
