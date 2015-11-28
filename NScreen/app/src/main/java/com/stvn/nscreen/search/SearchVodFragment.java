@@ -155,20 +155,21 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
         String rating = mProgramlist.get(position).rating;
 
         if (rating.startsWith("19") && mPref.isAdultVerification() == false) {
-            String alertTitle = "C&M NScreen";
-            String alertMsg1 = getActivity().getResources().getString(R.string.adult_auth_message);
-            String alertMsg2 = "";
+            String alertTitle = "성인인증 필요";
+            String alertMsg1 = getActivity().getString(R.string.error_not_adult1);
+            String alertMsg2 = getActivity().getString(R.string.error_not_adult2);
             CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(getActivity(), CMSettingMainActivity.class);
-                    startActivity(intent);
+                    getActivity().startActivity(intent);
                 }
             }, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {}
-            });
+                public void onClick(DialogInterface dialog, int which) {
 
+                }
+            });
         } else {
             String assetId = mProgramlist.get(position).primaryAssetId;
             String episodePeerExistence = mProgramlist.get(position).episodePeerExistence;
