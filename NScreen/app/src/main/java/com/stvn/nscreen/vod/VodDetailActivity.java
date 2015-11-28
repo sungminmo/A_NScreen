@@ -614,6 +614,26 @@ public class VodDetailActivity extends Activity {
         return "";
     }
 
+    /**
+     * productList중에 결재한적이 있는 결제시간 가져오기.
+     * @return
+     */
+    private String getProductType(){
+        try {
+            for (int i = 0; i < productList.length(); i++) {
+                JSONObject product = (JSONObject) productList.get(i);
+                String purchasedTime = product.getString("purchasedTime");
+                if ( purchasedTime.length() > 0 ) {
+                    String productType = product.getString("productType");
+                    return productType;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     private void setUIAsset(JSONObject asset) {
         try {
             fileName                    = asset.getString("fileName");
@@ -782,7 +802,11 @@ public class VodDetailActivity extends Activity {
                 String strColor = "#000000";
                 mPriceTextView.setTextColor(Color.parseColor(strColor));
             } else {
-                mPriceTextView.setText("이미 구매하셨습니다.");
+                if ( "SVOD".equals(getProductType()) ) {
+                    mPriceTextView.setText("해당 월정액에 가입 하셨습니다.");
+                } else {
+                    mPriceTextView.setText("이미 구매하셨습니다.");
+                }
                 String strColor = "#7b5aa3";
                 mPriceTextView.setTextColor(Color.parseColor(strColor));
             }
