@@ -122,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="쿠폰사용"
-                android:id="@+id/dailog_buy_use_coupon"
+                android:id="@+id/dailog_buy_coupon_use"
                 android:layout_marginLeft="5.5dp"
                 android:layout_marginTop="8.5dp"
                 android:textSize="12.75sp"
@@ -133,7 +133,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/dailog_buy_minus"
+                android:id="@+id/dailog_buy_coupon_minus"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="3dp"
                 android:layout_gravity="right|top"
