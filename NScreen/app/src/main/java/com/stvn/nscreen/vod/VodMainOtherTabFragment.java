@@ -282,8 +282,8 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
     private void requestGetCategoryTree() {
-        String thisCategoryId = "";
-        if ( this.)
+        //String thisCategoryId = "";
+        //if ( this.)
         mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
         String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()
                 +"&categoryProfile=4&categoryId="
