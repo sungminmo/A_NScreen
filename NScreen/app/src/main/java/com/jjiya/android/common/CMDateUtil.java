@@ -16,19 +16,20 @@ public class CMDateUtil {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", currentLocale);
 
         String viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10)));
-        long diffDay = 0;
+        long diffTime = 0;
+        long viewableTime = Long.valueOf(viewable)*24;
 
         try {
             Date endDate = formatter.parse(purchaseDate);
 
             long diff = (compareDate.getTime()-endDate.getTime()) / 1000; // 초단위로 변환
-            diffDay = diff / (24 * 60 * 60);
+            diffTime = diff / (60 * 60);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return Long.valueOf(viewable) - diffDay;
+        return viewableTime - diffTime;
     }
 
     /**
@@ -176,5 +177,27 @@ public class CMDateUtil {
             returnValue = "토";
         }
         return returnValue;
+    }
+
+    /**
+     * 오늘 날짜 기준으로 gap 이전 또는 이후 날짜 가져오기
+     * - 사용 예
+     * 1일 전 날짜 조회 : getBeforeTodayInt(-1), 2일 후 날짜 조회 : getBeforeTodayInt(2)
+     */
+    public static String getBeforeTodayWithFormat(int gap, String dateFormat) {
+        Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.add(Calendar.DATE, gap);
+
+        Date date = currentCalendar.getTime();
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+        return format.format(date);
+    }
+
+    /**
+     * 입력받은 날짜를 해당 포맷으로 변환한다.
+     * */
+    public static String getDateWithFormat(Date date, String dateFormat) {
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+        return format.format(date);
     }
 }

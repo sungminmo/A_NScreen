@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -268,7 +269,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
 //                isExpired = true;
 //            }
 
-            if (obj.remainDay < 0 && "0".equals(obj.viewablePeriodState)) {
+            if (obj.remainTime < 0 && "0".equals(obj.viewablePeriodState)) {
                 String alertTitle = getString(R.string.my_cnm_alert_title_expired);
                 String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
                 String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
@@ -346,11 +347,24 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
         String terminalKey = mPref.getWebhasTerminalKey();
 
+        String logStartDate = null;
+        String logEndDate = null;
+        try {
+            logStartDate = URLEncoder.encode(CMDateUtil.getBeforeTodayWithFormat(-60, "yyyy-MM-dd HH:mm:ss"), "utf-8");
+            logEndDate = URLEncoder.encode(CMDateUtil.getDateWithFormat(new Date(), "yyyy-MM-dd HH:mm:ss"), "utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         String url = mPref.getWebhasServerUrl() + "/getPurchasedProductList.json?version=1&terminalKey="+terminalKey+"&purchaseLogProfile=4";
+
+        if (TextUtils.isEmpty(logStartDate) == false && TextUtils.isEmpty(logEndDate) == false) {
+            url += "&expiredLogStartTime=" + logStartDate + "&expiredLogEndTime=" + logEndDate;
+        }
+
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                ((MyMainActivity) getActivity()).hideProgressDialog();
 
                 try {
                     Date compareDate = new Date();
@@ -379,16 +393,17 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             obj.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
                             obj.viewablePeriodState = jsonObj.getString("viewablePeriodState");
                             if ("1".equals(obj.viewablePeriodState) == false) {
-                                obj.remainDay = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, compareDate);
+                                obj.remainTime = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, compareDate);
                             }
                         }
                     }
+
+                    ((MyMainActivity) getActivity()).hideProgressDialog();
 
                     sortPurchaseList(mMoblieList);
                     sortPurchaseList(mTVList);
 
                     changeListData();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -444,7 +459,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 } else if ("1".equals(right.viewablePeriodState)) {
                     return 1;
                 } else
-                if (left.remainDay == right.remainDay) {
+                if (left.remainTime == right.remainTime) {
                     if (left.puchaseSecond > right.puchaseSecond) {
                         return -1;
                     } else {
@@ -455,10 +470,10 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         }
                     }
                 } else {
-                    if (left.remainDay > right.remainDay) {
+                    if (left.remainTime > right.remainTime) {
                         return -1;
                     } else {
-                        if (left.remainDay > right.remainDay) {
+                        if (left.remainTime > right.remainTime) {
                             return 1;
                         } else {
                             return 0;
