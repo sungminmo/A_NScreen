@@ -92,10 +92,18 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 			} else {
 				String licenseEnd = jsonObj.getString("licenseEnd");
 //				remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd, this.mCompareDate);
-				if (info.remainDay < 0) {
+				if (info.remainTime < 0) {
 					remainLicense = "기간 만료";
 				} else {
-					remainLicense = info.remainDay+"일 남음";
+
+					int day = (int)(info.remainTime/24);
+					int time = (int)(info.remainTime%24);
+
+					if (day == 0) {
+						remainLicense = time + "시간 남음";
+					} else {
+						remainLicense = day +"일 남음";
+					}
 				}
 			}
 
