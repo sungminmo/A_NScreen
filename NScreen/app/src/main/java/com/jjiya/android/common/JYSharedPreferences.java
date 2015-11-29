@@ -545,7 +545,7 @@ public class JYSharedPreferences {
         intent.putExtra("seriesId",                     seriesId);
         intent.putExtra("programTitle",                 programTitle);
         intent.putExtra("programBroadcastingStartTime", programBroadcastingStartTime);
-        intent.putExtra("iSeq", iSeq);
+        intent.putExtra("iSeq", String.valueOf(iSeq));
 
 //        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int)iSeq, intent, PendingIntent.FLAG_NO_CREATE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int)iSeq, intent, PendingIntent.FLAG_ONE_SHOT);

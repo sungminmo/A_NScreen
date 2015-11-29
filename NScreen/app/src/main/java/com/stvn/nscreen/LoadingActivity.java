@@ -105,15 +105,20 @@ public class LoadingActivity extends AppCompatActivity {
         mProgressBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
         if ( getIntent().getExtras() != null ) {
-            int iSeqNoti = getIntent().getExtras().getInt("iSeqNoti");
+            String striSeq = getIntent().getExtras().getString("iSeq");
+            int iSeqNoti = Integer.valueOf(striSeq);
             //NotificationManager notifier = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
             //notifier.cancel(iSeqNoti);
 
-            NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            //NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
             // Create a new intent which will be fired if you click on the notification
             //Intent intent = new Intent(this, ApplicationClass.class);
             // Attach the intent to a pending intent
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, iSeqNoti, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+            //PendingIntent pendingIntent = PendingIntent.getActivity(this, iSeqNoti, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+
+            String ns = Context.NOTIFICATION_SERVICE;
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(ns);
+            notificationManager.cancel(iSeqNoti);
         }
 
         // 10~20 : file io
