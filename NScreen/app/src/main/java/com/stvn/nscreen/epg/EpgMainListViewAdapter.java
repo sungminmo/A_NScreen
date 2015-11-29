@@ -116,31 +116,33 @@ public class EpgMainListViewAdapter extends BaseAdapter {
 
         try {
             ListViewDataObject dobj                    = (ListViewDataObject)getItem(position);
-            JSONObject         jobj                    = new JSONObject(dobj.sJson);
+            final JSONObject         jobj                    = new JSONObject(dobj.sJson);
 
             String             sProgramAge             = jobj.getString("channelProgramGrade");
             String             sChannelOnAirHD         = jobj.getString("channelOnAirHD");
             String             ProgramOnAirStartTime   = jobj.getString("channelProgramOnAirStartTime");
             String             ProgramOnAirEndTime     = jobj.getString("channelProgramOnAirEndTime");
-            String             channelId               = jobj.getString("channelId");
+            final String       channelId               = jobj.getString("channelId");
+            final String       channelNumber           = jobj.getString("channelNumber");
+            final String       channelName             = jobj.getString("channelName");
 
             NetworkImageView   channelLogo             = (NetworkImageView) ViewHolder.get(convertView, R.id.epg_main_imageview_channel_logo);
 
-            ImageView          bookmarkImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
+            final ImageView    bookmarkImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             ImageView          programAge              = ViewHolder.get(convertView, R.id.epg_main_imageview_program_age);
             ImageView          Info                    = ViewHolder.get(convertView, R.id.epg_main_imageview_program_hdsd);
             ImageView          favoriteImageView       = ViewHolder.get(convertView, R.id.epg_main_imagebutton_favorite);
             TextView           channelNumberTextView   = ViewHolder.get(convertView, R.id.epg_main_textview_channel_number);
             TextView           titleTextView           = ViewHolder.get(convertView, R.id.epg_main_textview_program_title);
             TextView           channelProgramOnAirTime = ViewHolder.get(convertView, R.id.epg_main_textview_program_time);
-            ImageView           recImageView           = ViewHolder.get(convertView, R.id.epg_main_rec_imageview);
-            ProgressBar        progBar = ViewHolder.get(convertView, R.id.progressBar);
+            ImageView          recImageView            = ViewHolder.get(convertView, R.id.epg_main_rec_imageview);
+            ProgressBar        progBar                 = ViewHolder.get(convertView, R.id.progressBar);
 
-            Date               dt11                     = formatter.parse(ProgramOnAirStartTime);
-            Date               dt12                     = formatter.parse(ProgramOnAirEndTime);
-            String             dt21                     = formatter2.format(dt11).toString();
-            String             dt22                     = formatter2.format(dt12).toString();
-            String             dt23                     = formatter2.format(dt).toString();
+            Date               dt11                    = formatter.parse(ProgramOnAirStartTime);
+            Date               dt12                    = formatter.parse(ProgramOnAirEndTime);
+            String             dt21                    = formatter2.format(dt11).toString();
+            String             dt22                    = formatter2.format(dt12).toString();
+            String             dt23                    = formatter2.format(dt).toString();
 
             Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
             Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
@@ -167,6 +169,18 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             } else {
                 bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_unselect);
             }
+            bookmarkImageView.setOnClickListener(new View.OnClickListener (){
+                @Override
+                public void onClick(View v) {
+                    if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+                        mPref.removeBookmarkChannelWithChannelId(channelId);
+                        bookmarkImageView.setImageResource(R.mipmap.icon_favorite_unselect);
+                    } else {
+                        mPref.addBookmarkChannel(channelId, channelNumber, channelName);
+                        bookmarkImageView.setImageResource(R.mipmap.icon_favorite_select);
+                    }
+                }
+            });
 
             channelNumberTextView.setText(jobj.getString("channelNumber"));
             titleTextView.setText(jobj.getString("channelProgramOnAirTitle"));
