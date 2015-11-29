@@ -526,7 +526,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
         if ( "".equals(sGenreCode) ) {
             sGenreCode = "";
         }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode;
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode + "&noCache=";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

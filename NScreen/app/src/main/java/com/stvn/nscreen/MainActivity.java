@@ -78,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
         //mPref.addWatchTvAlarm("S321387639", "", "국악무대5000", "2015-11-10 20:50:00");
-        //mPref.addWatchTvReserveAlarm("S321387639", "", "05:52", "2015-11-29 05:52:00");
-        //mPref.addWatchTvReserveAlarm("S321387639", "", "05:53", "2015-11-29 05:53:00");
-        //mPref.addWatchTvReserveAlarm("S321387639", "", "05:54", "2015-11-29 05:54:00");
+        //mPref.addWatchTvReserveAlarm("S321387639", "", "1 42", "2015-11-29 17:42:00");
+        //mPref.addWatchTvReserveAlarm("S321387639", "", "2 44", "2015-11-29 17:44:00");
+        //mPref.addWatchTvReserveAlarm("S321387639", "", "3 46", "2015-11-29 17:46:00");
+        //mPref.addWatchTvReserveAlarm("S321387639", "", "밥먹자", "2015-11-29 17:50:00");
     }
 
     @Override

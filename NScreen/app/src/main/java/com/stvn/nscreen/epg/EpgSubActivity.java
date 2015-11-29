@@ -1206,7 +1206,7 @@ public class EpgSubActivity extends AppCompatActivity {
     private void requestGetChannelSchedule() {
         mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
-        String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=" + sChannelId + "&dateIndex=7&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17");
+        String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=" + sChannelId + "&dateIndex=7&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + "&noCache=";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1730,7 +1730,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
                     String alertTitle = "녹화 불가";
-                    String alertMessage1 = "Duplicated Recording Reserve Request";
+                    String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
@@ -1842,7 +1842,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
                     String alertTitle = "녹화 불가";
-                    String alertMessage1 = "Duplicated Recording Reserve Request";
+                    String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override

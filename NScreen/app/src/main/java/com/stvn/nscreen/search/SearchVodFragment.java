@@ -97,7 +97,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
             e.printStackTrace();
         }
         // String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+mKeyword+"&contentGroupProfile=2";
-        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+searchWord+"&contentGroupProfile=2";
+        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+searchWord+"&contentGroupProfile=2&noCache=";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {

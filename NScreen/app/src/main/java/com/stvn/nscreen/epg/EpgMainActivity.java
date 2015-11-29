@@ -206,7 +206,7 @@ public class EpgMainActivity extends AppCompatActivity {
         if ( "&genreCode=0".equals(sGenreCode) ) {
             sGenreCode2 = "&genreCode=1";
         }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode2;
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode2 + "&noCache=";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
