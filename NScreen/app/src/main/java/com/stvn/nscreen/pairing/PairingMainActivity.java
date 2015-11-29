@@ -55,8 +55,8 @@ public class PairingMainActivity extends AppCompatActivity {
         pairing_main_ok_ment1 = (LinearLayout) findViewById(R.id.pairing_main_ok_ment1);
         pairing_main_ok_ment2 = (LinearLayout) findViewById(R.id.pairing_main_ok_ment2);
 
-        mPurchasePassword1Edittext.setFilters(new InputFilter[] {filterAlpha});
-        mPurchasePassword2Edittext.setFilters(new InputFilter[]{filterAlpha});
+        mPurchasePassword1Edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20), filterAlpha});
+        mPurchasePassword2Edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20), filterAlpha});
 
 
         cancleButton.setOnClickListener(new View.OnClickListener() {

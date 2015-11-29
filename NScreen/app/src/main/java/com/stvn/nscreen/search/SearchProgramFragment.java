@@ -346,8 +346,10 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 ((SearchMainActivity)getActivity()).hideProgressDialog();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
-                    // reqProgramList();
+                    // reqProgramList();7
                 } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
+                    // reqProgramList();
+                } else if ( "241".equals(sResultCode) ) { // 미 페어링 상태에도 정상응답 받은 거임.
                     // reqProgramList();
                 } else { // 그외는 error
                     String msg = "getRecordReservelist("+sResultCode+":"+mStbStateMap.get("errorString")+")";
