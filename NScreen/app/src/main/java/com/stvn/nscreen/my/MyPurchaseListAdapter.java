@@ -97,9 +97,12 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 				} else {
 
 					int day = (int)(info.remainTime/24);
-					int time = (int)(info.remainTime%24);
+					int time = (int)(info.remainTime%24)-1;
 
 					if (day == 0) {
+						if (time <= 0) {
+							time = 1;
+						}
 						remainLicense = time + "시간 남음";
 					} else {
 						remainLicense = day +"일 남음";
