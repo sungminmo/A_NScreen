@@ -184,11 +184,26 @@ public class VodBuyActivity extends Activity {
                 } else if ( resultCode == RESULT_CANCELED ) {
                     vod_buy_step1_one_product_linearlayout.setSelected(true);
                     vod_buy_step1_packeage_linearlayout.setSelected(false);
+                    vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원 [부가세 별도]");
+                    vod_buy_step2_dis_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원 [부가세 별도]");
                 }
             } break;
             case 4000: {    // 결제 다이얼로그.
                 if ( resultCode == RESULT_OK ) {
-                    setResult(RESULT_OK);
+                    Intent newIntent = new Intent();
+                    if ( intent.getExtras().get("purchasedProductType") != null ) {
+                        String purchasedProductType = intent.getExtras().getString("purchasedProductType");
+                        String productId = null;
+                        try {
+                            JSONObject jo = (JSONObject)productList.get(iSeletedProductList);
+                            productId     = jo.getString("productId");
+                        } catch ( JSONException e ) {
+                            e.printStackTrace();
+                        }
+                        newIntent.putExtra("purchasedProductType", purchasedProductType); // 묶음구매했다고 알려줘라.
+                        newIntent.putExtra("productId", productId); // 묶음구매했다고 알려줘라.
+                    }
+                    setResult(RESULT_OK, newIntent);
                     finish();
                 } else if ( resultCode == RESULT_CANCELED ) {
 
@@ -273,7 +288,7 @@ public class VodBuyActivity extends Activity {
                     Log.d(tag, "productList"+i+":" + jo.toString());
                 }
                 int        price            = jo.getInt("price"); // 정가
-                int        listPrice        = jo.getInt("listPrice"); //할인적용가
+                final int        listPrice        = jo.getInt("listPrice"); //할인적용가
                 String     productType      = jo.getString("productType");
                 final String productId2     = jo.getString("productId");
                 Log.d(tag, "setUI ---------------------------------------------------------------");
@@ -332,6 +347,9 @@ public class VodBuyActivity extends Activity {
                         @Override
                         public void onClick(View v) {
                             setSeletedButton(vod_buy_step1_packeage_linearlayout);
+                            String thisPrice = String.valueOf(listPrice);
+                            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.valueOf(thisPrice)) + "원 [부가세 별도]");
+                            vod_buy_step2_dis_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(thisPrice)) + "원 [부가세 별도]");
                             Intent intent = new Intent(mInstance, VodDetailBundleActivity.class);
                             intent.putExtra("assetId",   assetId);
                             intent.putExtra("productId", productId2);
