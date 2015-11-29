@@ -174,10 +174,10 @@ public class EpgMainListViewAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
                         mPref.removeBookmarkChannelWithChannelId(channelId);
-                        bookmarkImageView.setImageResource(R.mipmap.icon_favorite_unselect);
+                        bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_unselect);
                     } else {
                         mPref.addBookmarkChannel(channelId, channelNumber, channelName);
-                        bookmarkImageView.setImageResource(R.mipmap.icon_favorite_select);
+                        bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_select);
                     }
                 }
             });
