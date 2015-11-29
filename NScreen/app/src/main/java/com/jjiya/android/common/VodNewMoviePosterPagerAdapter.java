@@ -18,6 +18,7 @@ import com.stvn.nscreen.R;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
+import com.stvn.nscreen.vod.VodMainFirstTabFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -170,10 +171,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId1);
-                            intent.putExtra("jstr", jo1.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo1.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId1);
+                                intent.putExtra("jstr", jo1.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo1.getInt("assetBundle");
+                                    String  episodePeerExistence = jo1.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId1);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo1.getString("contentGroupId");
+                                            String primaryAssetId = jo1.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId1);
+                                            intent.putExtra("jstr", jo1.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId1);
+                                            intent.putExtra("jstr", jo1.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
@@ -259,10 +288,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId2);
-                            intent.putExtra("jstr", jo2.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo2.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId2);
+                                intent.putExtra("jstr", jo2.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo2.getInt("assetBundle");
+                                    String  episodePeerExistence = jo2.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId2);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo2.getString("contentGroupId");
+                                            String primaryAssetId = jo2.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId2);
+                                            intent.putExtra("jstr", jo2.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId2);
+                                            intent.putExtra("jstr", jo2.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
@@ -348,10 +405,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId3);
-                            intent.putExtra("jstr", jo3.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo3.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId3);
+                                intent.putExtra("jstr", jo3.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo3.getInt("assetBundle");
+                                    String  episodePeerExistence = jo3.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId3);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo3.getString("contentGroupId");
+                                            String primaryAssetId = jo3.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId3);
+                                            intent.putExtra("jstr", jo3.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId3);
+                                            intent.putExtra("jstr", jo3.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
@@ -437,10 +522,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId4);
-                            intent.putExtra("jstr", jo4.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo4.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId4);
+                                intent.putExtra("jstr", jo4.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo4.getInt("assetBundle");
+                                    String  episodePeerExistence = jo4.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId4);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo4.getString("contentGroupId");
+                                            String primaryAssetId = jo4.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId4);
+                                            intent.putExtra("jstr", jo4.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId4);
+                                            intent.putExtra("jstr", jo4.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
@@ -526,10 +639,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId5);
-                            intent.putExtra("jstr", jo5.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo5.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId5);
+                                intent.putExtra("jstr", jo5.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo5.getInt("assetBundle");
+                                    String  episodePeerExistence = jo5.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId5);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo5.getString("contentGroupId");
+                                            String primaryAssetId = jo5.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId5);
+                                            intent.putExtra("jstr", jo5.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId5);
+                                            intent.putExtra("jstr", jo5.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
@@ -615,10 +756,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId6);
-                            intent.putExtra("jstr", jo6.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo6.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId6);
+                                intent.putExtra("jstr", jo6.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo6.getInt("assetBundle");
+                                    String  episodePeerExistence = jo6.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId6);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo6.getString("contentGroupId");
+                                            String primaryAssetId = jo6.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId6);
+                                            intent.putExtra("jstr", jo6.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId6);
+                                            intent.putExtra("jstr", jo6.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
@@ -704,10 +873,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId7);
-                            intent.putExtra("jstr", jo7.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo7.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId7);
+                                intent.putExtra("jstr", jo7.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo7.getInt("assetBundle");
+                                    String  episodePeerExistence = jo7.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId7);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo7.getString("contentGroupId");
+                                            String primaryAssetId = jo7.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId7);
+                                            intent.putExtra("jstr", jo7.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId7);
+                                            intent.putExtra("jstr", jo7.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
@@ -793,10 +990,38 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                                 }
                             });
                         } else {
-                            Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId8);
-                            intent.putExtra("jstr", jo8.toString());
-                            mFragment.getActivity().startActivity(intent);
+                            if ( jo8.isNull("episodePeerExistence") ) {
+                                Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId8);
+                                intent.putExtra("jstr", jo8.toString());
+                                mFragment.getActivity().startActivity(intent);
+                            } else {
+                                try {
+                                    int     assetBundle          = jo8.getInt("assetBundle");
+                                    String  episodePeerExistence = jo8.getString("episodePeerExistence");
+                                    if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                        ((VodMainFirstTabFragment)mFragment).onClickBundulPoster(assetId8);
+                                    } else {  // 이외는 번들(묶음상품)이 아니다.
+                                        Intent intent = new Intent(mFragment.getActivity(), VodDetailActivity.class);
+                                        if ( "1".equals(episodePeerExistence) ) {
+                                            String contentGroupId = jo8.getString("contentGroupId");
+                                            String primaryAssetId = jo8.getString("primaryAssetId");
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                            intent.putExtra("assetId", assetId8);
+                                            intent.putExtra("jstr", jo8.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        } else {
+                                            intent.putExtra("assetId", assetId8);
+                                            intent.putExtra("jstr", jo8.toString());
+                                            mFragment.getActivity().startActivity(intent);
+                                        }
+                                    }
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                 });
