@@ -60,7 +60,7 @@ public class WatchTvAlarmBroadcastReceiver extends BroadcastReceiver {
 //        mPref.put(JYSharedPreferences.PUSH_AUTH_BONIN, sKey);
         long[] patten = {500,500,500,500};
         //Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        String title = context.getString(R.string.app_name) + " TV시청예약 알림";
+        String title = context.getString(R.string.app_name) + " 시청예약 알림";
         NotificationManager nm = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent2, 0);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.ic_launcher).
