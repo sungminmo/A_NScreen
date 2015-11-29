@@ -545,7 +545,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
          */
         mTabbar.setVisibility(View.GONE);
 
-        Toast.makeText(mInstance.getActivity(), "ViewerType: " + mCurrCategoryObject.getsViewerType(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(mInstance.getActivity(), "ViewerType: " + mCurrCategoryObject.getsViewerType(), Toast.LENGTH_LONG).show();
 
         if ("200".equals(mCurrCategoryObject.getsViewerType())) {
             mTabbar.setVisibility(View.VISIBLE);
