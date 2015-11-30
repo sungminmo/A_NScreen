@@ -621,6 +621,11 @@ public class VodBuyActivity extends Activity {
 
                     // Step.2의 결제방식을 알아내기.
                     String sPayMethod = "";
+                    // 일반이 숨김상태이고 할인이 선택된 상태라면, 할인을 선택한거다.
+                    if ( vod_buy_step2_normal_linearlayout.getVisibility() == View.GONE && vod_buy_step2_normal_dis_linearlayout.isSelected() ) {
+                        iSeletedPayMethod = 1;
+                    }
+
                     if ( iSeletedPayMethod == 0 ) {        // 일반
                         sPayMethod = "0";
                     } else if ( iSeletedPayMethod == 1 ) { // 일반(할인)
@@ -638,6 +643,7 @@ public class VodBuyActivity extends Activity {
                     } else if ( iSeletedPayMethod == 3 ) { // TV포인트
                         sPayMethod = "4";
                     }
+                    //
                     intent.putExtra("assetId",           assetId);
                     intent.putExtra("productId",         selectedProductId);
                     intent.putExtra("productType",       selectedProductType);
