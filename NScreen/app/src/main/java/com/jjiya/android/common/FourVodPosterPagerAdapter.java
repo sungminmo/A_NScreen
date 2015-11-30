@@ -130,14 +130,23 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 }
             });
         } else {
-            Intent intent = new Intent(mVodDetailActivity, VodDetailActivity.class);
-            if ( "1".equals(episodePeerExistence) ) {
-                intent.putExtra("episodePeerExistence", episodePeerExistence);
-                intent.putExtra("contentGroupId", contentGroupId);
+            try {
+                int    assetBundle   = jo.getInt("assetBundle");
+                if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                    mVodDetailActivity.onClickBundulPoster(assetId);
+                } else {  // 이외는 번들(묶음상품)이 아니다.
+                    episodePeerExistence = jo.getString("episodePeerExistence");
+                    Intent intent        = new Intent(mVodDetailActivity, VodDetailActivity.class);
+                    if ( "1".equals(episodePeerExistence) ) {
+                        intent.putExtra("episodePeerExistence", episodePeerExistence);
+                        intent.putExtra("contentGroupId", contentGroupId);
+                    }
+                    intent.putExtra("assetId", assetId);
+                    mVodDetailActivity.startActivity(intent);
+                }
+            } catch ( JSONException e ) {
+                e.printStackTrace();
             }
-            intent.putExtra("assetId", assetId);
-            //intent.putExtra("jstr",    jo.getString());
-            mVodDetailActivity.startActivity(intent);
         }
     }
 

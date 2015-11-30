@@ -194,13 +194,13 @@ public class PvrMainActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     final String ReserveCancel = "2";
-                                    requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel);
+                                    requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel, sSeriesId);
                                 }
                             }, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     final String ReserveCancel = "1";
-                                    requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel);
+                                    requestSetRecordCancelReserve(sChannelId2, starttime2, ReserveCancel, sSeriesId);
                                 }
                             }, new DialogInterface.OnClickListener() {
                                 @Override
@@ -893,6 +893,55 @@ public class PvrMainActivity extends AppCompatActivity {
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url  = mPref.getRumpersServerUrl() + "/SetRecordCancelReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
                 + channelId + "&StartTime=" + starttime + "&ReserveCancel=" + recordingtype;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                parseSetRecordCancelReserve(response);
+                mAdapter.clear();
+                mAdapter.notifyDataSetChanged();
+                requestGetRecordReservelist();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if (error instanceof TimeoutError ) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void requestSetRecordCancelReserve(String channelId, String starttime, String recordingtype, String seriesId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }
+        try {
+            starttime = URLEncoder.encode(starttime, "utf-8"); // error
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+        String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url  = mPref.getRumpersServerUrl() + "/SetRecordCancelReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
+                + channelId + "&StartTime=" + starttime + "&ReserveCancel=" + recordingtype + "&seriesId = " + seriesId;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

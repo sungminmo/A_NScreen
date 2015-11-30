@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by limdavid on 15. 9. 15..
@@ -93,12 +94,29 @@ public class PvrSubListViewAdapter extends BaseAdapter {
             JSONObject         jobj           = new JSONObject(dobj.sJson);
 
             TextView           ProgramNameTextView = ViewHolder.get(convertView, R.id.pvr_sub_textview_program_title);
+            TextView           ProgramDateTextView = ViewHolder.get(convertView, R.id.pvr_sub_textview_date);
+            TextView           ProgramTimeTextView = ViewHolder.get(convertView, R.id.pvr_sub_textview_time);
             // NetworkImageView   channelLogo         = (NetworkImageView) ViewHolder.get(convertView, R.id.pvr_sub_imagebutton_channel_logo);
 
+            SimpleDateFormat       formatter              = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat       formatter2             = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat       formatter3             = new SimpleDateFormat("MM.dd (E)");
+
+            String RecordStartTime = jobj.getString("RecordStartTime");
+
+            Date   dt11 = formatter.parse(RecordStartTime);
+            String dt21 = formatter2.format(dt11).toString();
+            String dt31 = formatter3.format(dt11).toString();
+
             ProgramNameTextView.setText(jobj.getString("ProgramName"));
+            ProgramDateTextView.setText(dt31.toString());
+            ProgramTimeTextView.setText(dt21.toString());
+
             // channelLogo.setImageUrl(jobj.getString("Channel_logo_img"), mImageLoader);
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return convertView;

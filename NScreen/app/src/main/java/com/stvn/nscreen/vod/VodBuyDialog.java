@@ -580,7 +580,7 @@ public class VodBuyDialog extends Activity {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 Intent intent = new Intent();
-                                intent.putExtra("jstr", "");
+                                intent.putExtra("purchasedProductType", "Bundle"); // 묶음구매했다고 알려줘라.
                                 setResult(RESULT_OK, intent);
                                 finish();
                             }
@@ -661,7 +661,7 @@ public class VodBuyDialog extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         Intent intent = new Intent();
-                        intent.putExtra("jstr", jstr);
+                        intent.putExtra("purchasedProductType", "Bundle"); // 묶음구매했다고 알려줘라.
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -722,7 +722,7 @@ public class VodBuyDialog extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         Intent intent = new Intent();
-                        intent.putExtra("jstr", jstr);
+                        intent.putExtra("purchasedProductType", "Bundle"); // 묶음구매했다고 알려줘라.
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -802,7 +802,7 @@ public class VodBuyDialog extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         Intent intent = new Intent();
-                        intent.putExtra("jstr", jstr);
+                        intent.putExtra("purchasedProductType", "Bundle"); // 묶음구매했다고 알려줘라.
                         setResult(RESULT_OK, intent);
                         finish();
                     }

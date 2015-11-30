@@ -577,10 +577,28 @@ public class VodDetailActivity extends Activity {
         switch(requestCode){
             case 1000: {    // 결제
                 if ( resultCode == RESULT_OK ) {
-                    // 결제가 완료됐으니, 전부 새로 고침.
-                    String oldAssetId = assetId;
-                    String oldContentGroupId = contentGroupId;
-                    refreshAll(oldAssetId, contentGroupId, episodePeerId);
+                    if ( intent.getExtras().get("purchasedProductType") != null ) {
+                        // 결제가 완료됐으니, 전부 새로 고침. + 묶음상품인 경우.
+                        String purchasedProductType = intent.getExtras().getString("purchasedProductType");
+                        if ( "Bundle".equals(purchasedProductType) ) {
+                            String thisPoductId = intent.getExtras().getString("productId");
+                            Intent newIntent = new Intent(mInstance, VodDetailBundleActivity.class);
+                            newIntent.putExtra("productType", "Bundle");
+                            newIntent.putExtra("productId", thisPoductId);
+                            newIntent.putExtra("assetId", assetId);
+                            startActivity(newIntent);
+                            finish();
+                        } else {
+                            String oldAssetId = assetId;
+                            String oldContentGroupId = contentGroupId;
+                            refreshAll(oldAssetId, contentGroupId, episodePeerId);
+                        }
+                    } else {
+                        // 결제가 완료됐으니, 전부 새로 고침.
+                        String oldAssetId = assetId;
+                        String oldContentGroupId = contentGroupId;
+                        refreshAll(oldAssetId, contentGroupId, episodePeerId);
+                    }
                 } else if ( resultCode == RESULT_CANCELED ) {
                     // nothing
                 }
@@ -1404,4 +1422,99 @@ public class VodDetailActivity extends Activity {
         mRequestQueue.add(request);
     }
      **********************************************************************************************/
+
+
+
+    //
+    private void startActivityAssetOrBundle(String assetId, JSONObject product){
+        try {
+            String purchasedTime = product.getString("purchasedTime");
+            if ( purchasedTime.length() > 0 ) {
+                String productId = product.getString("productId");
+                Intent intent    = new Intent(mInstance, VodDetailBundleActivity.class);
+                intent.putExtra("productType", "Bundle");
+                intent.putExtra("productId", productId);
+                intent.putExtra("assetId", assetId);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(mInstance, VodDetailActivity.class);
+                intent.putExtra("assetId", assetId);
+                startActivity(intent);
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    // VodMainGridViewAdapter에서 포스터를 클릭했을때 타는 메소드.
+    // assetInfo를 요청해서, 구매한 VOD인지를 알아낸다.
+    // 만약 구매 했다면, VodDetailBundleActivity로 이동.
+    // 만약 구매 안했다면, VodDetailActivity로 이동.
+    public void onClickBundulPoster(String primaryAssetId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String encAssetId = null;
+        try {
+            encAssetId  = URLDecoder.decode(primaryAssetId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = mPref.getWebhasServerUrl() + "/getAssetInfo.json?version=1&terminalKey="+terminalKey+"&assetProfile=9&assetId="+encAssetId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                boolean needJumpAsset = true;
+                try {
+                    JSONObject jo          = new JSONObject(response);
+                    JSONObject asset       = jo.getJSONObject("asset");
+                    JSONArray  productList = asset.getJSONArray("productList");
+                    for ( int i = 0; i < productList.length(); i++ ) {
+                        JSONObject product   = (JSONObject)productList.get(i);
+                        String productType   = product.getString("productType");
+                        if ( "Bundle".equals(productType) ) {
+                            String assetId   = asset.getString("assetId");
+                            startActivityAssetOrBundle(assetId,product);
+                            needJumpAsset = false;
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if ( needJumpAsset == true ) {
+                    // 예외 처리임. 원래 번들(묶음)이면, 여기까지 오면 안되고 위에서 startActivityAssetOrBundle()로 가야된다.
+                    // 묶음상품이였다가, 묶음상품이 아니라고 풀리는 경우가 있다고 해서 아래의 예외 처리 함.
+                    try {
+                        JSONObject jo    = new JSONObject(response);
+                        JSONObject asset = jo.getJSONObject("asset");
+                        String assetId   = asset.getString("assetId");
+                        Intent intent    = new Intent(mInstance, VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId);
+                        startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
 }

@@ -41,13 +41,15 @@ public class VodMainGridViewAdapter extends BaseAdapter {
     private              ArrayList<ListViewDataObject> mDatas           = new ArrayList<ListViewDataObject>();
 
     private              ImageLoader                   mImageLoader;
+    private              VodMainOtherTabFragment       mVodMainOtherTabFragment;
 
-    public VodMainGridViewAdapter(Context c, View.OnClickListener onClickListener) {
+    public VodMainGridViewAdapter(VodMainOtherTabFragment fragment, Context c, View.OnClickListener onClickListener) {
         super();
 
         this.mContext         = c;
         this.mOnClickListener = onClickListener;
         this.mImageLoader     = VolleySingleton.getInstance().getImageLoader();
+        this.mVodMainOtherTabFragment = fragment;
         mPref                 = new JYSharedPreferences(c);
     }
 
@@ -168,21 +170,26 @@ public class VodMainGridViewAdapter extends BaseAdapter {
                             mContext.startActivity(intent);
                         } else {
                             try {
-                                Intent intent = new Intent(mContext, VodDetailActivity.class);
-                                String episodePeerExistence = jo.getString("episodePeerExistence");
-                                if ( "1".equals(episodePeerExistence) ) {
-                                    String contentGroupId = jo.getString("contentGroupId");
-                                    String primaryAssetId = jo.getString("primaryAssetId");
-                                    intent.putExtra("episodePeerExistence", episodePeerExistence);
-                                    intent.putExtra("contentGroupId", contentGroupId);
-                                    intent.putExtra("primaryAssetId", primaryAssetId);
-                                    intent.putExtra("assetId", assetId1);
-                                    intent.putExtra("jstr", jo.toString());
-                                    mContext.startActivity(intent);
-                                } else {
-                                    intent.putExtra("assetId", assetId1);
-                                    intent.putExtra("jstr", jo.toString());
-                                    mContext.startActivity(intent);
+                                int     assetBundle          = jo.getInt("assetBundle");
+                                String  episodePeerExistence = jo.getString("episodePeerExistence");
+                                if ( assetBundle == 1 ) {  // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                    mVodMainOtherTabFragment.onClickBundulPoster(assetId1);
+                                } else {  // 이외는 번들(묶음상품)이 아니다.
+                                    Intent intent = new Intent(mContext, VodDetailActivity.class);
+                                    if ( "1".equals(episodePeerExistence) ) {
+                                        String contentGroupId = jo.getString("contentGroupId");
+                                        String primaryAssetId = jo.getString("primaryAssetId");
+                                        intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                        intent.putExtra("contentGroupId", contentGroupId);
+                                        intent.putExtra("primaryAssetId", primaryAssetId);
+                                        intent.putExtra("assetId", assetId1);
+                                        intent.putExtra("jstr", jo.toString());
+                                        mContext.startActivity(intent);
+                                    } else {
+                                        intent.putExtra("assetId", assetId1);
+                                        intent.putExtra("jstr", jo.toString());
+                                        mContext.startActivity(intent);
+                                    }
                                 }
                             } catch ( JSONException e ) {
                                 e.printStackTrace();

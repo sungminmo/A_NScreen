@@ -99,6 +99,8 @@ public class VodDetailBundleActivity extends Activity {
     // activity
     private String assetId; // intent param
     private String productId;
+    private String productType; // 묶음상품 상세보기 케이스. // intent.putExtra("productType", "Bundle");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +115,9 @@ public class VodDetailBundleActivity extends Activity {
 
         assetId   = getIntent().getExtras().getString("assetId");
         productId = getIntent().getExtras().getString("productId");
+        if ( getIntent().getExtras().get("productType") != null ) {
+            productType = getIntent().getExtras().getString("productType");
+        }
 
         mTitleTextView        = (TextView)findViewById(R.id.vod_detail_bundle_title);
         mMovieImageImageView  = (NetworkImageView)findViewById(R.id.vod_detail_bundle_imagefilename_imageview);
@@ -195,6 +200,21 @@ public class VodDetailBundleActivity extends Activity {
          */
         requestGetBundleProductInfo();
 
+    }
+
+    private void startActivityVodDetail(String assetId){
+        if ( productType != null && "Bundle".equals(productType) ) {
+            // 포스터에서 묶음 상품이라 넘어왔을 경우.
+            Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailActivity.class);
+            intent.putExtra("assetId", assetId);
+            intent.putExtra("productType", productType);
+            startActivity(intent);
+        } else {
+            // 결제화면에서 넘어왔을 경우.
+            Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
+            intent.putExtra("assetId", assetId);
+            startActivity(intent);
+        }
     }
 
     private void requestGetBundleProductInfo() {
@@ -288,9 +308,7 @@ public class VodDetailBundleActivity extends Activity {
                             mPoster1.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
-                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
-                                    intent.putExtra("assetId", assetId2);
-                                    startActivity(intent);
+                                    startActivityVodDetail(assetId2);
                                 }
                             });
                         }
@@ -302,9 +320,7 @@ public class VodDetailBundleActivity extends Activity {
                             mPoster2.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
-                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
-                                    intent.putExtra("assetId", assetId2);
-                                    startActivity(intent);
+                                    startActivityVodDetail(assetId2);
                                 }
                             });
                         }
@@ -316,9 +332,7 @@ public class VodDetailBundleActivity extends Activity {
                             mPoster3.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
-                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
-                                    intent.putExtra("assetId", assetId2);
-                                    startActivity(intent);
+                                    startActivityVodDetail(assetId2);
                                 }
                             });
                         }
@@ -330,9 +344,7 @@ public class VodDetailBundleActivity extends Activity {
                             mPoster4.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
-                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
-                                    intent.putExtra("assetId", assetId2);
-                                    startActivity(intent);
+                                    startActivityVodDetail(assetId2);
                                 }
                             });
                         }
@@ -344,9 +356,7 @@ public class VodDetailBundleActivity extends Activity {
                             mPoster5.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
-                                    Intent intent = new Intent(VodDetailBundleActivity.this, VodDetailBundle2Activity.class);
-                                    intent.putExtra("assetId", assetId2);
-                                    startActivity(intent);
+                                    startActivityVodDetail(assetId2);
                                 }
                             });
                         }

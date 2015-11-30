@@ -66,12 +66,12 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
 
     public void set(int position, ListViewDataObject obj) { mDatas.set(position, obj); }
     public void addItem(ListViewDataObject obj) { mDatas.add(obj); }
+    public void addItem(int posi, ListViewDataObject obj) { mDatas.add(posi, obj); }
     public void remove(int position) { mDatas.remove(position); }
     public void clear() { mDatas.clear(); }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_vod_main_other, parent, false);
         }
@@ -84,14 +84,10 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
             boolean leaf            = jo.getBoolean("leaf");
             int     viewerType      = jo.getInt("viewerType");
             boolean isOpened        = jo.getBoolean("isOpened");
-            boolean is2Depth        = false;
-            boolean is3Depth        = false;
 
-            if ( ! jo.isNull("is2Depth") ) {
-                is2Depth = jo.getBoolean("is2Depth");
-            }
-            if ( ! jo.isNull("is3Depth") ) {
-                is3Depth = jo.getBoolean("is3Depth");
+            if ( "평생소장영화관".equals(categoryName) ) {
+                int i = 0;
+                i++;
             }
 
             ImageView depth1ImageView = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_caterory_list_depth1_imageview);
@@ -101,15 +97,15 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
             ImageView imageView2 = (ImageView)ViewHolder.get(convertView, R.id.vod_main_other_categoty_list_imageview2);
 
             // 왼쪽의 폴더 접기/펴기 이미지 처리.
-            if ( is2Depth == true ) {
+            if ( dobj.iKey == 1 ) {
+                depth1ImageView.setVisibility(View.GONE);
+                depth2ImageView.setVisibility(View.GONE);
+            } else if ( dobj.iKey == 2 ) {
                 depth1ImageView.setVisibility(View.VISIBLE);
                 depth2ImageView.setVisibility(View.GONE);
-            } else if ( is3Depth == true ) {
+            } else if ( dobj.iKey == 3 ) {
                 depth1ImageView.setVisibility(View.GONE);
                 depth2ImageView.setVisibility(View.VISIBLE);
-            } else {
-                depth1ImageView.setVisibility(View.GONE);
-                depth2ImageView.setVisibility(View.GONE);
             }
 
             // 오른쪽의 화살표처리.
@@ -117,7 +113,7 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
                 imageView1.setVisibility(View.GONE);
                 imageView2.setVisibility(View.GONE);
             } else {
-                if ( is2Depth == true ) {
+                if ( dobj.iKey == 2 ) {
                     imageView1.setVisibility(View.VISIBLE);
                     imageView2.setVisibility(View.GONE);
                     if ( isOpened == true ) {
@@ -125,7 +121,7 @@ public class VodMainOtherListViewAdapter extends BaseAdapter {
                     } else {
                         imageView1.setImageResource(R.mipmap.depth1_arrow);
                     }
-                } else if ( is3Depth == true ) {
+                } else if ( dobj.iKey == 3 ) {
                     imageView1.setVisibility(View.GONE);
                     imageView2.setVisibility(View.GONE);
                     if ( isOpened == true ) {

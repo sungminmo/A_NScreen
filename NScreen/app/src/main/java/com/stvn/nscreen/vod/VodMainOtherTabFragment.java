@@ -47,6 +47,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -93,10 +95,15 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     private              ListView                    mCategoryListView;
 
     //
-    private              Map<String, String> mCateDepth1;
-    private              Map<String, String> mCateDepth2;
-    private              Map<String, String> mCateDepth3;
-    private              Map<String, String> mCateDepth4;
+////    private              Map<String, String> mCateDepth1;
+////    private              Map<String, String> mCateDepth2;
+////    private              Map<String, String> mCateDepth3;
+//    private              Map<String, String> mCateDepth4;
+
+    //
+    private              ArrayList<JSONObject> mCateDepths1;
+    private              ArrayList<JSONObject> mCateDepths2;
+    private              ArrayList<JSONObject> mCateDepths3;
 
 
 
@@ -190,7 +197,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mRequestItems = "daily";
 
 
-        mAdapter  = new VodMainGridViewAdapter(mInstance.getActivity(), null);
+        mAdapter  = new VodMainGridViewAdapter(this, mInstance.getActivity(), null);
         mGridView = (GridView)view.findViewById(R.id.vod_main_gridview);
         mGridView.setAdapter(mAdapter);
         //mGridView.setOnItemClickListener(assetItemClickListener);
@@ -206,11 +213,13 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCategoryBgFramelayout.setVisibility(View.VISIBLE);
                 int count = mCategoryAdapter.getCount();
-                int count2 = categorys.size();
-                int a = mCategoryListView.getVisibility();
-                //Log.d("category","");
+                if ( count == 0 ) {
+                    categorys.clear();
+                    requestGetCategoryTree(true);
+                } else {
+                    mCategoryBgFramelayout.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -218,16 +227,15 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
 
         mCategoryListView     = (ListView)view.findViewById(R.id.vod_main_other_category_listview);
         mCategoryListView.setAdapter(mCategoryAdapter);
-        mCategoryListView.setOnItemClickListener(mItemClickListener);
+        mCategoryListView.setOnItemClickListener(mCategoryItemClickListener);
 
 
-        mCateDepth1 = new  HashMap<String, String>();
-        mCateDepth2 = new  HashMap<String, String>();
-        mCateDepth3 = new  HashMap<String, String>();
-        mCateDepth4 = new  HashMap<String, String>();
+        mCateDepths1 = new ArrayList<JSONObject>();
+        mCateDepths2 = new ArrayList<JSONObject>();
+        mCateDepths3 = new ArrayList<JSONObject>();
 
         // 카테고리 요청. 추천.
-        requestGetCategoryTree();
+        requestGetCategoryTree(false);
 
         return view;
     }
@@ -275,9 +283,19 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     // 카테고리 요청.
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
-    private void requestGetCategoryTree() {
+    private void requestGetCategoryTree(final boolean showCategoryView) {
+        final String thisTurnCategoriId;
+        if ( showCategoryView == false ) {
+            thisTurnCategoriId = mCategoryId;
+        } else {
+            thisTurnCategoriId = mPref.getValue(Constants.CATEGORY_ID_TAB2, "");
+            mCategoryId = thisTurnCategoriId;
+        }
         mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
-        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&categoryProfile=4&categoryId="+mCategoryId+"&depth=4&traverseType=DFS";
+        String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()
+                +"&categoryProfile=4&categoryId="
+                //+mCategoryId+"&depth=4&traverseType=DFS";
+                +thisTurnCategoriId+"&depth=4&traverseType=DFS";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -291,21 +309,41 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                     for ( int i = 0; i < categoryList.length(); i++ ) {
                         JSONObject category = (JSONObject)categoryList.get(i);
                         category.put("isOpened", false);
+                        // viewerType : 20 이면 에셋인데, 트리에 나온다.
                         categorys.add(category);
                     }
                     if ( categoryList.length() > 1 ) {
                         categorys.remove(0);
                     }
                     JSONObject category = (JSONObject)categorys.get(0);
-                    mCategoryNameTextView.setText(category.getString("categoryName"));
-                    mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));
-                    mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
-                    mCurrCategoryObject.setsCategoryName(category.getString("categoryName"));
-                    mCurrCategoryObject.setsLeaf(category.getString("leaf"));
-                    mCurrCategoryObject.setsParentCategoryId(category.getString("parentCategoryId"));
-                    mCurrCategoryObject.setsViewerType(category.getString("viewerType"));
+                    if ( showCategoryView == false ) {
+                        mCategoryNameTextView.setText(category.getString("categoryName"));
+                        mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));
+                        mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
+                        mCurrCategoryObject.setsCategoryName(category.getString("categoryName"));
+                        mCurrCategoryObject.setsLeaf(category.getString("leaf"));
+                        mCurrCategoryObject.setsParentCategoryId(category.getString("parentCategoryId"));
+                        mCurrCategoryObject.setsViewerType(category.getString("viewerType"));
+                    }
                     processRequest();
-                    list2treee();
+                    for ( int i = 0; i < categorys.size(); i++ ) {
+                        JSONObject loopCategory     = (JSONObject)categorys.get(i);
+                        String     categoryId       = loopCategory.getString("categoryId");
+                        String     parentCategoryId = loopCategory.getString("parentCategoryId");
+                        boolean    leaf             = loopCategory.getBoolean("leaf");
+                        //if ( mCategoryId.equals(parentCategoryId) ) {
+                        if ( thisTurnCategoriId.equals(parentCategoryId) ) {
+                            loopCategory.put("isOpened", false);
+                            mCateDepths1.add(loopCategory);
+                            ListViewDataObject obj = new ListViewDataObject(0, 1, loopCategory.toString());
+                            mCategoryAdapter.addItem(obj);
+                        }
+                    }
+                    //list2treee();
+                    list2tree();
+                    if ( showCategoryView == true ) {
+                        mCategoryBgFramelayout.setVisibility(View.VISIBLE);
+                    }
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
@@ -336,7 +374,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mRequestQueue.add(request);
     }
 
-    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener mCategoryItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.d(tag, "mItemClickListener() " + position);
@@ -351,8 +389,6 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                 boolean    leaf             = jo.getBoolean("leaf");
                 String     parentCategoryId = jo.getString("parentCategoryId");
                 String     viewerType       = jo.getString("viewerType");
-
-
 
                 if ( leaf == true || ( leaf == false && "30".equals(viewerType)) ) { // 하부카테고리가 없으므로 닫을 것.
                     mCategoryBgFramelayout.setVisibility(View.GONE);
@@ -370,19 +406,60 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                     mAdapter.notifyDataSetChanged();
                     processRequest();
                 } else { // 하부카테고리가 있으므로 닫지 말것.
-                    ListViewDataObject obj = (ListViewDataObject)mCategoryAdapter.getItem(position);
-                    JSONObject oldJo       = new JSONObject(obj.sJson);
-                    boolean isOpened       = oldJo.getBoolean("isOpened");
-                    String thiscategoryId  = oldJo.getString("categoryId");
-                    JSONObject newJo       = getCategoryWithCategoryId(thiscategoryId);
-                    int index              = getCategoryIndxWithCategoryId(thiscategoryId);
+                    boolean isOpened       = jo.getBoolean("isOpened");
+                    String thisCategoryId  = jo.getString("categoryId");
+                    JSONObject newJo       = new JSONObject(jo.toString());
                     if ( isOpened == true ) {
                         newJo.put("isOpened", false);
+                        ListViewDataObject obj = new ListViewDataObject(0, dobj.iKey, newJo.toString());
+                        mCategoryAdapter.set(position, obj);
+                        if ( dobj.iKey == 1 ) {
+                            // close tree. remove 2 depth
+                            int iFindedPosi = getPositionWithCategoryId(categoryId);
+                            while ( iFindedPosi != -1 ) {
+                                mCategoryAdapter.remove(iFindedPosi);
+                                iFindedPosi = getPositionWithCategoryId(categoryId);
+                            }
+                        } else if ( dobj.iKey == 2 ) {
+                            // close tree. remove 3 depth
+                            int iFindedPosi = getPositionWithCategoryId(categoryId);
+                            while ( iFindedPosi != -1 ) {
+                                mCategoryAdapter.remove(iFindedPosi);
+                                iFindedPosi = getPositionWithCategoryId(categoryId);
+                            }
+                        }
                     } else {
                         newJo.put("isOpened", true);
+                        ListViewDataObject obj = new ListViewDataObject(0, dobj.iKey, newJo.toString());
+                        mCategoryAdapter.set(position, obj);
+                        if ( dobj.iKey == 1 ) {
+                            // append 2 depth
+                            int iLoop = position+1;
+                            for ( int i = 0; i < mCateDepths2.size(); i++ ) {
+                                JSONObject loopJo = mCateDepths2.get(i);
+                                String loopParentCategoryId = loopJo.getString("parentCategoryId");
+                                if ( thisCategoryId.equals(loopParentCategoryId) ) {
+                                    ListViewDataObject new2Depth = new ListViewDataObject(0, 2, loopJo.toString());
+                                    mCategoryAdapter.addItem(iLoop, new2Depth);
+                                    iLoop++;
+                                }
+                            }
+                        } else if ( dobj.iKey == 2 ) {
+                            // append 3 depth
+                            int iLoop = position+1;
+                            for ( int i = 0; i < mCateDepths3.size(); i++ ) {
+                                JSONObject loopJo = mCateDepths3.get(i);
+                                String loopParentCategoryId = loopJo.getString("parentCategoryId");
+                                if ( thisCategoryId.equals(loopParentCategoryId) ) {
+                                    ListViewDataObject new2Depth = new ListViewDataObject(0, 3, loopJo.toString());
+                                    mCategoryAdapter.addItem(iLoop, new2Depth);
+                                    iLoop++;
+                                }
+                            }
+                        }
                     }
-                    categorys.set(index, newJo);
-                    list2treee();
+                    //list2tree();
+                    mCategoryAdapter.notifyDataSetInvalidated();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -390,118 +467,69 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         }
     };
 
-    private void list2treee(){
-        mCateDepth1.clear();
-        mCateDepth2.clear();
-        mCateDepth3.clear();
-        mCateDepth4.clear();
-        mCategoryAdapter.clear();
+    private int getPositionWithCategoryId(String categoryId){
+        int rtn = -1;
         try {
-            for ( int i = 0; i < categorys.size(); i++ ) {
-                JSONObject category         = (JSONObject)categorys.get(i);
-                String     categoryId       = category.getString("categoryId");
-                String     parentCategoryId = category.getString("parentCategoryId");
-                boolean    leaf             = category.getBoolean("leaf");
-                //if ( leaf == false && mCategoryId.equals(parentCategoryId) ) {
-                if ( mCategoryId.equals(parentCategoryId) ) {
-                    mCateDepth1.put(categoryId, parentCategoryId);
-                }
-                if ( "1598483".equals(categoryId) ) {
-                    Log.d(tag, "aaa");
+            for (int i = 0; i < mCategoryAdapter.getCount(); i++ ) {
+                ListViewDataObject loopObj = (ListViewDataObject) mCategoryAdapter.getItem(i);
+                JSONObject loopJo = new JSONObject(loopObj.sJson);
+                String loopParentCategoryId = loopJo.getString("parentCategoryId");
+                if (categoryId.equals(loopParentCategoryId)) {
+                    return i;
                 }
             }
-            for ( int i = 0; i < categorys.size(); i++ ) {
-                JSONObject category         = (JSONObject)categorys.get(i);
-                String     categoryId       = category.getString("categoryId");
-                String     parentCategoryId = category.getString("parentCategoryId");
-                String     aaa              = mCateDepth1.get(parentCategoryId);
-                if ( aaa != null ) {
-                    //boolean leaf = category.getBoolean("leaf");
-                    //if ( leaf == false ) {
-                        mCateDepth2.put(categoryId, parentCategoryId);
-                    //}
-                }
-            }
-            for ( int i = 0; i < categorys.size(); i++ ) {
-                JSONObject category         = (JSONObject)categorys.get(i);
-                String     categoryId       = category.getString("categoryId");
-                String     parentCategoryId = category.getString("parentCategoryId");
-                String     aaa              = mCateDepth2.get(parentCategoryId);
-                if ( aaa != null ) {
-                    //boolean leaf = category.getBoolean("leaf");
-                    //if ( leaf == false ) {
-                        mCateDepth3.put(categoryId, parentCategoryId);
-                    //}
-                }
-            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        return rtn;
+    }
 
-            int loop = 0;
-            TreeMap<String,String> tm = new TreeMap<String,String>(mCateDepth1);
-            Iterator<String> iteratorKey = tm.keySet( ).iterator( );   //키값 오름차순 정렬(기본)
-            while ( iteratorKey.hasNext() ) {
-                String     key      = iteratorKey.next();
-                JSONObject category = getCategoryWithCategoryId(key);
-                category.put("is1Depth", true);
-                ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
-                mCategoryAdapter.addItem(obj);
-                loop++;
-                boolean isOpened = category.getBoolean("isOpened");
-                if ( isOpened == true ) {
+    // 이건 한번만 호출하자.
+    private void list2tree(){
+        try {
+            for ( int i = 0; i < mCateDepths1.size(); i++ ) {
+                JSONObject category = mCateDepths1.get(i);
+                if ( category.getBoolean("leaf") == false) {
                     String categoryId = category.getString("categoryId");
-                    loop = add2Depth(loop, categoryId);
+                    append2Depth(categoryId);
                 }
             }
-            mCategoryAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private int add2Depth(int start, String cid) {
-        int loop = start;
+    private void append2Depth(String categoryId){
         try {
             for ( int i = 0; i < categorys.size(); i++ ) {
                 JSONObject category         = (JSONObject)categorys.get(i);
                 String     parentCategoryId = category.getString("parentCategoryId");
-                boolean    leaf             = category.getBoolean("leaf");
-                //if ( leaf == false && cid.equals(parentCategoryId) ) {
-                if ( cid.equals(parentCategoryId) ) {
-                    category.put("is2Depth", true);
-                    ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
-                    mCategoryAdapter.addItem(obj);
-                    loop++;
-                    boolean isOpened = category.getBoolean("isOpened");
-                    if ( isOpened == true ) {
-                        String categoryId = category.getString("categoryId");
-                        loop = add3Depth(loop, categoryId);
+                if ( categoryId.equals(parentCategoryId) ) {
+                    mCateDepths2.add(category);
+                    boolean leaf = category.getBoolean("leaf");
+                    if ( category.getBoolean("leaf") == false ) {
+                        String thisCategoryId = category.getString("categoryId");
+                        append3Depth(thisCategoryId);
                     }
                 }
             }
-        } catch (JSONException e) {
+        } catch ( JSONException e ) {
             e.printStackTrace();
         }
-        return loop;
     }
 
-    private int add3Depth(int start, String cid) {
-        int loop = start;
+    private void append3Depth(String categoryId){
         try {
             for ( int i = 0; i < categorys.size(); i++ ) {
                 JSONObject category         = (JSONObject)categorys.get(i);
                 String     parentCategoryId = category.getString("parentCategoryId");
-                boolean    leaf             = category.getBoolean("leaf");
-                //if ( leaf == false && cid.equals(parentCategoryId) ) {
-                if ( cid.equals(parentCategoryId) ) {
-                    category.put("is3Depth", true);
-                    ListViewDataObject obj = new ListViewDataObject(loop, loop, category.toString());
-                    mCategoryAdapter.addItem(obj);
-                    loop++;
+                if ( categoryId.equals(parentCategoryId) ) {
+                    mCateDepths3.add(category);
                 }
             }
-        } catch (JSONException e) {
+        } catch ( JSONException e ) {
             e.printStackTrace();
         }
-        return loop;
     }
 
     private JSONObject getCategoryWithCategoryId(String cid) {
@@ -543,7 +571,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
          */
         mTabbar.setVisibility(View.GONE);
 
-        Toast.makeText(mInstance.getActivity(), "ViewerType: " + mCurrCategoryObject.getsViewerType(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(mInstance.getActivity(), "ViewerType: " + mCurrCategoryObject.getsViewerType(), Toast.LENGTH_LONG).show();
 
         if ("200".equals(mCurrCategoryObject.getsViewerType())) {
             mTabbar.setVisibility(View.VISIBLE);
@@ -699,6 +727,96 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     }
 
 
+    //
+    private void startActivityAssetOrBundle(String assetId, JSONObject product){
+        try {
+            String purchasedTime = product.getString("purchasedTime");
+            if ( purchasedTime.length() > 0 ) {
+                String productId = product.getString("productId");
+                Intent intent    = new Intent(getActivity(), VodDetailBundleActivity.class);
+                intent.putExtra("productType", "Bundle");
+                intent.putExtra("productId", productId);
+                intent.putExtra("assetId", assetId);
+                getActivity().startActivity(intent);
+            } else {
+                Intent intent = new Intent(this.getActivity(), VodDetailActivity.class);
+                intent.putExtra("assetId", assetId);
+                getActivity().startActivity(intent);
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    // VodMainGridViewAdapter에서 포스터를 클릭했을때 타는 메소드.
+    // assetInfo를 요청해서, 구매한 VOD인지를 알아낸다.
+    // 만약 구매 했다면, VodDetailBundleActivity로 이동.
+    // 만약 구매 안했다면, VodDetailActivity로 이동.
+    public void onClickBundulPoster(String primaryAssetId) {
+        mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String encAssetId = null;
+        try {
+            encAssetId  = URLDecoder.decode(primaryAssetId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = mPref.getWebhasServerUrl() + "/getAssetInfo.json?version=1&terminalKey="+terminalKey+"&assetProfile=9&assetId="+encAssetId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+                boolean needJumpAsset = true;
+                try {
+                    JSONObject jo          = new JSONObject(response);
+                    JSONObject asset       = jo.getJSONObject("asset");
+                    JSONArray  productList = asset.getJSONArray("productList");
+                    for ( int i = 0; i < productList.length(); i++ ) {
+                        JSONObject product   = (JSONObject)productList.get(i);
+                        String productType   = product.getString("productType");
+                        if ( "Bundle".equals(productType) ) {
+                            String assetId   = asset.getString("assetId");
+                            startActivityAssetOrBundle(assetId,product);
+                            needJumpAsset = false;
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if ( needJumpAsset == true ) {
+                    // 예외 처리임. 원래 번들(묶음)이면, 여기까지 오면 안되고 위에서 startActivityAssetOrBundle()로 가야된다.
+                    // 묶음상품이였다가, 묶음상품이 아니라고 풀리는 경우가 있다고 해서 아래의 예외 처리 함.
+                    try {
+                        JSONObject jo    = new JSONObject(response);
+                        JSONObject asset = jo.getJSONObject("asset");
+                        String assetId   = asset.getString("assetId");
+                        Intent intent    = new Intent(mInstance.getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId);
+                        getActivity().startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
     /**
      * IOnBackPressedListener
      */
