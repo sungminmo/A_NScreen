@@ -142,6 +142,16 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             public void onClickFrontView(int position) {
                 ListViewDataObject obj = getCurrentTabObjectWithIndex(position);
 
+                if (obj.remainTime < 0) {
+                    String alertTitle = getString(R.string.my_cnm_alert_title_expired);
+                    String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    }, true);
+                    return;
+                }
+
                 String assetId = "";
                 String primaryAssetId = "";
                 String episodePeerExistence = "";
@@ -365,6 +375,15 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                // 무제한
+                ArrayList<ListViewDataObject> moblieList_1 = new ArrayList<>();
+                ArrayList<ListViewDataObject> tvList_1 = new ArrayList<>();
+                // 기간 완료
+                ArrayList<ListViewDataObject> moblieList_2 = new ArrayList<>();
+                ArrayList<ListViewDataObject> tvList_2 = new ArrayList<>();
+                // 기간 만료
+                ArrayList<ListViewDataObject> moblieList_3 = new ArrayList<>();
+                ArrayList<ListViewDataObject> tvList_3 = new ArrayList<>();
 
                 try {
                     Date compareDate = new Date();
@@ -378,30 +397,54 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         String paymentType = jsonObj.getString("paymentType").toLowerCase();
                         if (checkAddListWithPaymentType(paymentType) && checkAddListWithProductType(productType)) {
                             String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");   // 1:TV, 2:MOBILE
-                            //Log.d("mycnm", "purchaseDeviceType:"+purchaseDeviceType);
-                            if ( "1".equals(purchaseDeviceType) ) {
-                                mTVList.add(obj);
-                            } else if ( "2".equals(purchaseDeviceType) ) {
-                                mMoblieList.add(obj);
-                            }
-
-                            String licenseEnd = jsonObj.getString("licenseEnd");
                             String purchasedTime = jsonObj.getString("purchasedTime");
                             String viewablePeriod = jsonObj.getString("viewablePeriod");
-//                            obj.remainMinute = CMDateUtil.getLicenseRemainMinute(licenseEnd, compareDate);
 
                             obj.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
                             obj.viewablePeriodState = jsonObj.getString("viewablePeriodState");
                             if ("1".equals(obj.viewablePeriodState) == false) {
                                 obj.remainTime = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, compareDate);
+
+                                if (obj.remainTime < 0) {
+                                    if ( "1".equals(purchaseDeviceType) ) {
+                                        tvList_3.add(obj);
+                                    } else if ( "2".equals(purchaseDeviceType) ) {
+                                        moblieList_3.add(obj);
+                                    }
+                                } else {
+                                    if ( "1".equals(purchaseDeviceType) ) {
+                                        tvList_2.add(obj);
+                                    } else if ( "2".equals(purchaseDeviceType) ) {
+                                        moblieList_2.add(obj);
+                                    }
+                                }
+                            } else {
+                                if ( "1".equals(purchaseDeviceType) ) {
+                                    tvList_1.add(obj);
+                                } else if ( "2".equals(purchaseDeviceType) ) {
+                                    moblieList_1.add(obj);
+                                }
                             }
                         }
                     }
 
                     ((MyMainActivity) getActivity()).hideProgressDialog();
 
-                    sortPurchaseList(mMoblieList);
-                    sortPurchaseList(mTVList);
+                    sortPurchaseList_1(moblieList_1);
+                    sortPurchaseList_2(moblieList_2);
+                    sortPurchaseList_3(moblieList_3);
+
+                    sortPurchaseList_1(tvList_1);
+                    sortPurchaseList_2(tvList_2);
+                    sortPurchaseList_3(tvList_3);
+
+                    mMoblieList.addAll(moblieList_1);
+                    mMoblieList.addAll(moblieList_2);
+                    mMoblieList.addAll(moblieList_3);
+
+                    mTVList.addAll(tvList_1);
+                    mTVList.addAll(tvList_2);
+                    mTVList.addAll(tvList_3);
 
                     changeListData();
                 } catch (JSONException e) {
@@ -438,10 +481,9 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         this.mAdapter.notifyDataSetChanged();
     }
 
-    private void sortPurchaseList(ArrayList<ListViewDataObject> list) {
+    private void sortPurchaseList_1(ArrayList<ListViewDataObject> list) {
         Collections.sort(list, new Comparator<ListViewDataObject>() {
             public int compare(ListViewDataObject left, ListViewDataObject right) {
-
                 if ("1".equals(left.viewablePeriodState)) {
                     if ("1".equals(right.viewablePeriodState)) {
                         if (left.puchaseSecond > right.puchaseSecond) {
@@ -456,9 +498,20 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     } else {
                         return 1;
                     }
-                } else if ("1".equals(right.viewablePeriodState)) {
-                    return 1;
-                } else
+                } else {
+                    if ("1".equals(right.viewablePeriodState)) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            }
+        });
+    }
+
+    private void sortPurchaseList_2(ArrayList<ListViewDataObject> list) {
+        Collections.sort(list, new Comparator<ListViewDataObject>() {
+            public int compare(ListViewDataObject left, ListViewDataObject right) {
                 if (left.remainTime == right.remainTime) {
                     if (left.puchaseSecond > right.puchaseSecond) {
                         return -1;
@@ -478,6 +531,22 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         } else {
                             return 0;
                         }
+                    }
+                }
+            }
+        });
+    }
+
+    private void sortPurchaseList_3(ArrayList<ListViewDataObject> list) {
+        Collections.sort(list, new Comparator<ListViewDataObject>() {
+            public int compare(ListViewDataObject left, ListViewDataObject right) {
+                if (left.puchaseSecond > right.puchaseSecond) {
+                    return -1;
+                } else {
+                    if (left.puchaseSecond > right.puchaseSecond) {
+                        return 1;
+                    } else {
+                        return 0;
                     }
                 }
             }

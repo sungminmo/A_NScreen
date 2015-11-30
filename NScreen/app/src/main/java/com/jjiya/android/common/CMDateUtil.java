@@ -17,13 +17,12 @@ public class CMDateUtil {
 
         String viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10)));
         long diffTime = 0;
-        long viewableTime = Long.valueOf(viewable)*24;
+        long viewableTime = Long.valueOf(viewable)*24*60*60;
 
         try {
             Date endDate = formatter.parse(purchaseDate);
 
-            long diff = (compareDate.getTime()-endDate.getTime()) / 1000; // 초단위로 변환
-            diffTime = diff / (60 * 60);
+            diffTime = (compareDate.getTime()-endDate.getTime()) / 1000; // 초단위로 변환
 
         } catch (ParseException e) {
             e.printStackTrace();

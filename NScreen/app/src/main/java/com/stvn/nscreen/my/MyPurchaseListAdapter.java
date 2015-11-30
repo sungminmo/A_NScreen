@@ -86,7 +86,7 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 
 			String viewablePeriodState = jsonObj.getString("viewablePeriodState");
 
-			String remainLicense;
+			String remainLicense = "";
 			if ("1".equals(viewablePeriodState)) {
 				remainLicense = "무제한 시청";
 			} else {
@@ -96,16 +96,25 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 					remainLicense = "기간 만료";
 				} else {
 
-					int day = (int)(info.remainTime/24);
-					int time = (int)(info.remainTime%24)-1;
+					long remains = 0;
+					long diffDay = info.remainTime / (24 * 60 * 60); // 일자
+					remains = info.remainTime % (24 * 60 * 60); // 일자
 
-					if (day == 0) {
-						if (time <= 0) {
-							time = 1;
-						}
-						remainLicense = time + "시간 남음";
-					} else {
-						remainLicense = day +"일 남음";
+					long diffTime = remains / (60 * 60); // 시간
+					remains = remains % (60 * 60); // 시간
+
+					long diffMinute = remains / (60); // 분
+					remains = remains % (60); // 분
+
+					long diffSecond = remains;
+
+
+					if (diffDay > 0) {
+						remainLicense = diffDay +"일 남음";
+					} else if (diffTime > 0) {
+						remainLicense = diffTime +"시간 남음";
+					} else if (diffTime == 0 && (diffMinute > 0 || diffSecond > 0)) {
+						remainLicense = "1시간 남음";
 					}
 				}
 			}
