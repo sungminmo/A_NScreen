@@ -682,6 +682,7 @@ public class EpgSubActivity extends AppCompatActivity {
         mDatas4.clear();
         mDatas5.clear();
         mDatas6.clear();
+        epg_sub_date_linearlayout1.performClick();
 
         requestGetSetTopStatus();
     }
@@ -880,12 +881,14 @@ public class EpgSubActivity extends AppCompatActivity {
     // 7.3.40 GetSetTopStatus
     // 셋탑의 상태 확인용.
     private void requestGetSetTopStatus() {
+        mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetSetTopStatus()"); }
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
         String url         = mPref.getRumpersServerUrl() + "/GetSetTopStatus.asp?deviceId="+uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                mProgressDialog.dismiss();
 
                 parseGetSetTopStatus(response);
 
@@ -957,11 +960,11 @@ public class EpgSubActivity extends AppCompatActivity {
                     alert.show();
                 }
                 mAdapter.notifyDataSetChanged();
-                requestGetChannelSchedule();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
@@ -1034,7 +1037,7 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 녹화 예약 목록 호출 */
     private void requestGetRecordReservelist() {
-        // mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
@@ -1045,12 +1048,12 @@ public class EpgSubActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
-                // mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
                 if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
-                    // requestGetChannelSchedule();
+                    //
                 } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
-                    // requestGetChannelSchedule();
+                    //
                 } else if ( "206".equals(sResultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
                     //
                     mStbState             = "";
@@ -1081,12 +1084,13 @@ public class EpgSubActivity extends AppCompatActivity {
                     AlertDialog alert = ad.create();
                     alert.show();
                 }
+                requestGetChannelSchedule();
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
@@ -1482,7 +1486,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 parseSetRecord(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
                     String alertTitle = "녹화 불가";
                     String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
@@ -1574,7 +1578,6 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
-                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1730,7 +1733,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 parseSetRecordReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
                     String alertTitle = "녹화 불가";
                     String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
@@ -1792,7 +1795,6 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
-                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1823,6 +1825,7 @@ public class EpgSubActivity extends AppCompatActivity {
         mRequestQueue.add(request);
     }
 
+    // 시리즈 예약 녹화
     private void requestSetRecordSeriesReserve(String channelId, String series, String starttime) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordReserve()"); }
@@ -1842,7 +1845,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 parseSetRecordReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
                     String alertTitle = "녹화 불가";
                     String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
@@ -1884,7 +1887,6 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
-                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1966,7 +1968,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 parseSetRecordCancelReserve(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    // reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
                     String alertTitle = "녹화예약취소 불가";
                     String alertMessage1 = "셋탑박스가 꺼져있습니다.";
@@ -1998,7 +2000,6 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
-                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override
