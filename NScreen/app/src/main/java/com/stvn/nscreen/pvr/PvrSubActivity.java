@@ -118,9 +118,11 @@ public class PvrSubActivity extends AppCompatActivity {
                     sChannelId = jo.getString("ChannelId");
                     sProgramName = jo.getString("ProgramName");
                     starttime = jo.getString("RecordStartTime");
+                    sSeriesId = jo.getString("SeriesId");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                final String sSeriesId2 = sSeriesId;
                 final String sChannelId2 = sChannelId;
                 final String starttime2 = starttime;
                 final String recordingtype2 = recordingtype;
@@ -134,14 +136,14 @@ public class PvrSubActivity extends AppCompatActivity {
                         CMAlertUtil.Alert_series_delete(mInstance, alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                final String ReserveCancel = "2"; // 시리즈전체취소-1, 단편취소-2
-                                requestSetRecordCancelReserve(position2, sChannelId2, starttime2, ReserveCancel);
+                                final String ReserveCancel = "1"; // 시리즈전체취소-1, 단편취소-2
+                                requestSetRecordCancelReserve(position2, sChannelId2, starttime2, ReserveCancel, sSeriesId2);
                             }
                         }, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                final String ReserveCancel = "1";
-                                requestSetRecordCancelReserve(position2, sChannelId2, starttime2, ReserveCancel);
+                                final String ReserveCancel = "2";
+                                requestSetRecordCancelReserve(position2, sChannelId2, starttime2, ReserveCancel, sSeriesId2);
                             }
                         }, new DialogInterface.OnClickListener() { // 시리즈전체취소-1, 단편취소-2
                             @Override
@@ -187,7 +189,7 @@ public class PvrSubActivity extends AppCompatActivity {
         }
     };
 
-    private void requestSetRecordCancelReserve(int position, String channelId, String starttime, String ReserveCancel) {
+    private void requestSetRecordCancelReserve(int position, String channelId, String starttime, String ReserveCancel, String seriesId) {
         final int position2 = position;
         final String ReserveCancel2 = ReserveCancel;
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }
@@ -199,7 +201,7 @@ public class PvrSubActivity extends AppCompatActivity {
         String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String url  = mPref.getRumpersServerUrl() + "/SetRecordCancelReserve.asp?Version=1&terminalKey=" + terminalKey + "&deviceId=" + uuid + "&channelId="
-                + channelId + "&StartTime=" + starttime + "&ReserveCancel=" + ReserveCancel;
+                + channelId + "&StartTime=" + starttime + "&ReserveCancel=" + ReserveCancel + "&seriesId=" + seriesId;
         // 시리즈전체취소-1, 단편취소-2
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
