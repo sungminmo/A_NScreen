@@ -230,8 +230,8 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void parseGetAppInitialize(String response) {
-        response = response.replace("<![CDATA[","");
-        response = response.replace("]]>", "");
+        //response = response.replace("<![CDATA[","");
+        //response = response.replace("]]>", "");
         XmlPullParserFactory factory = null;
         int iCategoryLoop = 0;
         try {

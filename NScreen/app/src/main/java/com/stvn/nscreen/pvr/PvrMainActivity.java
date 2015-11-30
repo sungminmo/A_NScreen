@@ -173,7 +173,7 @@ public class PvrMainActivity extends AppCompatActivity {
                 final String sSeriesId2 = sSeriesId;
                 int iMenuType = mAdapter.getItemViewType(position);
                 switch (iMenuType) {
-                    case 0: {
+                    case 0: { // 녹화중지
                         requestSetRecordStop(sChannelId);
                     }
                     break;
@@ -299,6 +299,13 @@ public class PvrMainActivity extends AppCompatActivity {
         requestGetRecordReservelist();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        reloadAll();
+    }
+
     private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -314,7 +321,7 @@ public class PvrMainActivity extends AppCompatActivity {
                     intent.putExtra("SeriesId", sSeriesId);
                     String jstr = getSeriesJson(sSeriesId);
                     intent.putExtra("jstr", jstr);
-                    startActivity(intent);
+                    startActivityForResult(intent, 7746);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -392,7 +399,11 @@ public class PvrMainActivity extends AppCompatActivity {
         mStbPipchannel = "";        // GetSetTopStatus API로 가져오는 값.
 
         //requestGetSetTopStatus();
-        requestGetRecordReservelist();
+        if ( button1.isSelected() == true ) {
+            requestGetRecordReservelist();
+        } else {
+            requestGetRecordlist();
+        }
     }
 
     // http://58.141.255.80/SMApplicationServer/GetSetTopStatus.asp?deviceId=86713f34-15f4-45ba-b1df-49b32b13d551
@@ -649,8 +660,8 @@ public class PvrMainActivity extends AppCompatActivity {
         XmlPullParserFactory factory     = null;
         List<String>         strings     = new ArrayList<String>();
 
-        response = response.replace("<![CDATA[","");
-        response = response.replace("]]>","");
+        //response = response.replace("<![CDATA[","");
+        //response = response.replace("]]>","");
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -918,6 +929,7 @@ public class PvrMainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 parseSetRecordStop(response);
+                reloadAll();
             }
         }, new Response.ErrorListener() {
             @Override

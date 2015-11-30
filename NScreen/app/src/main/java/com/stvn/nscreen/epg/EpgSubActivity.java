@@ -1116,8 +1116,8 @@ public class EpgSubActivity extends AppCompatActivity {
         XmlPullParserFactory factory     = null;
         List<String> strings     = new ArrayList<String>();
 
-        response = response.replace("<![CDATA[","");
-        response = response.replace("]]>", "");
+        //response = response.replace("<![CDATA[","");
+        //response = response.replace("]]>", "");
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
