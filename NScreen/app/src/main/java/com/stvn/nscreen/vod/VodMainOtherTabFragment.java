@@ -309,6 +309,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                     for ( int i = 0; i < categoryList.length(); i++ ) {
                         JSONObject category = (JSONObject)categoryList.get(i);
                         category.put("isOpened", false);
+                        // viewerType : 20 이면 에셋인데, 트리에 나온다.
                         categorys.add(category);
                     }
                     if ( categoryList.length() > 1 ) {
@@ -419,6 +420,13 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                                 mCategoryAdapter.remove(iFindedPosi);
                                 iFindedPosi = getPositionWithCategoryId(categoryId);
                             }
+                        } else if ( dobj.iKey == 2 ) {
+                            // close tree. remove 3 depth
+                            int iFindedPosi = getPositionWithCategoryId(categoryId);
+                            while ( iFindedPosi != -1 ) {
+                                mCategoryAdapter.remove(iFindedPosi);
+                                iFindedPosi = getPositionWithCategoryId(categoryId);
+                            }
                         }
                     } else {
                         newJo.put("isOpened", true);
@@ -432,6 +440,18 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                                 String loopParentCategoryId = loopJo.getString("parentCategoryId");
                                 if ( thisCategoryId.equals(loopParentCategoryId) ) {
                                     ListViewDataObject new2Depth = new ListViewDataObject(0, 2, loopJo.toString());
+                                    mCategoryAdapter.addItem(iLoop, new2Depth);
+                                    iLoop++;
+                                }
+                            }
+                        } else if ( dobj.iKey == 2 ) {
+                            // append 3 depth
+                            int iLoop = position+1;
+                            for ( int i = 0; i < mCateDepths3.size(); i++ ) {
+                                JSONObject loopJo = mCateDepths3.get(i);
+                                String loopParentCategoryId = loopJo.getString("parentCategoryId");
+                                if ( thisCategoryId.equals(loopParentCategoryId) ) {
+                                    ListViewDataObject new2Depth = new ListViewDataObject(0, 3, loopJo.toString());
                                     mCategoryAdapter.addItem(iLoop, new2Depth);
                                     iLoop++;
                                 }
@@ -511,12 +531,6 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
             e.printStackTrace();
         }
     }
-
-    private void remove2Depth(String parentCategoryId){
-
-    }
-
-
 
     private JSONObject getCategoryWithCategoryId(String cid) {
         try {
