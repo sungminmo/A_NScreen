@@ -158,7 +158,7 @@ public class EpgMainActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.d(tag, "mItemClickListener() " + position);
+            //Log.d(tag, "mItemClickListener() " + position);
             ListViewDataObject dobj = (ListViewDataObject) mAdapter.getItem(position);
 
             try {

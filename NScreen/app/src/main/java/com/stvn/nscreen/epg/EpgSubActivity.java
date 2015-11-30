@@ -956,6 +956,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     alert.setMessage(sb.toString());
                     alert.show();
                 }
+                mAdapter.notifyDataSetChanged();
                 requestGetChannelSchedule();
             }
         }, new Response.ErrorListener() {
@@ -1080,6 +1081,7 @@ public class EpgSubActivity extends AppCompatActivity {
                     AlertDialog alert = ad.create();
                     alert.show();
                 }
+                mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1404,6 +1406,7 @@ public class EpgSubActivity extends AppCompatActivity {
                         }
                     }, true);
                 }
+                mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override

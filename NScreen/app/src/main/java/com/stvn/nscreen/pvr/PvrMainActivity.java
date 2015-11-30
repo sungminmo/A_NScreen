@@ -406,6 +406,20 @@ public class PvrMainActivity extends AppCompatActivity {
         }
     }
 
+    Handler delayHandlerForReloadAll = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            mProgressDialog.dismiss();
+            reloadAll();
+        }
+    };
+
+    private void reloadAllWithDelay(){
+        mProgressDialog	= ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        delayHandlerForReloadAll.sendEmptyMessageDelayed(0, 5000);
+    }
+
     // http://58.141.255.80/SMApplicationServer/GetSetTopStatus.asp?deviceId=86713f34-15f4-45ba-b1df-49b32b13d551
     // 7.3.40 GetSetTopStatus
     // 셋탑의 상태 확인용.
@@ -929,7 +943,8 @@ public class PvrMainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
                 parseSetRecordStop(response);
-                reloadAll();
+
+                reloadAllWithDelay();
             }
         }, new Response.ErrorListener() {
             @Override
