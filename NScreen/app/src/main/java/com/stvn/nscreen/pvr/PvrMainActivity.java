@@ -75,6 +75,13 @@ public class PvrMainActivity extends AppCompatActivity {
     private              ProgressDialog         mProgressDialog;
     private              Map<String, Object>    mNetworkError;
 
+    private              Map<String, Object>    mStbStateMap;
+    private              String                 mStbState;             // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel1; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
+    private              String                 mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+
     private              ArrayList<JSONObject>  mReservs;  // 전체 얘약 목록
     private              PvrMainListViewAdapter mAdapter;  // 시리즈 중복은 제외한 예약 목록
     private              SwipeMenuListView      mListView;
@@ -119,6 +126,7 @@ public class PvrMainActivity extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(this);
         mNetworkError = new HashMap<String, Object>();
         mReservs      = new ArrayList<JSONObject>();
+        mStbStateMap  = new HashMap<String, Object>();
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
         mAdapter      = new PvrMainListViewAdapter(this, null);
@@ -137,15 +145,15 @@ public class PvrMainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 ListViewDataObject item = (ListViewDataObject) mAdapter.getItem(position);
-                sRecordId     = null;
-                sSeriesId     = null;
-                sChannelId    = null;
-                sProgramName  = null;
-                starttime     = null;
+                sRecordId = null;
+                sSeriesId = null;
+                sChannelId = null;
+                sProgramName = null;
+                starttime = null;
                 recordingtype = null;
                 try {
-                    JSONObject jo = new JSONObject (item.sJson);
-                    if ( jo.isNull("RecordId") ) {
+                    JSONObject jo = new JSONObject(item.sJson);
+                    if (jo.isNull("RecordId")) {
                         sRecordId = "";
                     } else {
                         sRecordId = jo.getString("RecordId");  // error RecordId 없음.
@@ -153,7 +161,7 @@ public class PvrMainActivity extends AppCompatActivity {
                     sSeriesId = jo.getString("SeriesId");
                     sChannelId = jo.getString("ChannelId");
                     sProgramName = jo.getString("ProgramName");
-                    starttime  = jo.getString("RecordStartTime");
+                    starttime = jo.getString("RecordStartTime");
                     recordingtype = jo.getString("RecordingType");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -170,7 +178,7 @@ public class PvrMainActivity extends AppCompatActivity {
                     }
                     break;
                     case 1: {
-                        if ( "NULL".equals(sSeriesId) ) { // 단편
+                        if ("NULL".equals(sSeriesId)) { // 단편
                             final String ReserveCancel = "2";
                             String alertTitle = "녹화예약취소확인";
                             String alertMsg1 = sProgramName;
@@ -186,7 +194,7 @@ public class PvrMainActivity extends AppCompatActivity {
 
                                 }
                             });
-                        } else if (!"NULL".equals(sSeriesId) ) { // 시리즈
+                        } else if (!"NULL".equals(sSeriesId)) { // 시리즈
                             String alertTitle = "녹화예약취소확인";
                             String alertMsg1 = sProgramName;
                             String alertMsg2 = getString(R.string.error_not_paring_compleated6);
@@ -213,7 +221,7 @@ public class PvrMainActivity extends AppCompatActivity {
                     }
                     break;
                     case 2: {
-                        if ( "NULL".equals(sSeriesId) ) { // 단편
+                        if ("NULL".equals(sSeriesId)) { // 단편
                             final String ReserveCancel = "2";
                             String alertTitle = "녹화삭제확인";
                             String alertMsg1 = sProgramName;
@@ -229,7 +237,7 @@ public class PvrMainActivity extends AppCompatActivity {
 
                                 }
                             });
-                        } else if ( !"NULL".equals(sSeriesId) ) { // 시리즈
+                        } else if (!"NULL".equals(sSeriesId)) { // 시리즈
                             String alertTitle = "녹화삭제확인";
                             String alertMsg1 = sProgramName;
                             String alertMsg2 = getString(R.string.error_not_paring_compleated9);
@@ -286,6 +294,8 @@ public class PvrMainActivity extends AppCompatActivity {
         });
 
         button1.setSelected(true);
+
+        //requestGetSetTopStatus();
         requestGetRecordReservelist();
     }
 
@@ -370,6 +380,185 @@ public class PvrMainActivity extends AppCompatActivity {
         }
     };
 
+
+    private void reloadAll() {
+        mAdapter.clear();
+        mAdapter.notifyDataSetChanged();
+        mStbStateMap.clear();
+        mStbState = "";             // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel1 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbRecordingchannel2 = ""; // GetSetTopStatus API로 가져오는 값.
+        mStbWatchingchannel = "";   // GetSetTopStatus API로 가져오는 값.
+        mStbPipchannel = "";        // GetSetTopStatus API로 가져오는 값.
+
+        //requestGetSetTopStatus();
+        requestGetRecordReservelist();
+    }
+
+    // http://58.141.255.80/SMApplicationServer/GetSetTopStatus.asp?deviceId=86713f34-15f4-45ba-b1df-49b32b13d551
+    // 7.3.40 GetSetTopStatus
+    // 셋탑의 상태 확인용.
+    private void requestGetSetTopStatus() {
+        mProgressDialog	   = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if ( mPref.isLogging() ) { Log.d(tag, "requestGetSetTopStatus()"); }
+        String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url         = mPref.getRumpersServerUrl() + "/GetSetTopStatus.asp?deviceId="+uuid;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgressDialog.dismiss();
+
+                parseGetSetTopStatus(response);
+
+                String resultCode = (String) mStbStateMap.get("resultCode");
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
+                    //
+                    mStbState             = (String) mStbStateMap.get("state");
+                    mStbRecordingchannel1 = (String) mStbStateMap.get("recordingchannel1");
+                    mStbRecordingchannel2 = (String) mStbStateMap.get("recordingchannel2");
+                    mStbWatchingchannel   = (String) mStbStateMap.get("watchingchannel");
+                    mStbPipchannel        = (String) mStbStateMap.get("pipchannel");
+                    //mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    //mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    //mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    String alertTitle = "씨앤앰 모바일 TV";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    //mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    String alertTitle = "씨앤앰 모바일 TV";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "SMART".equals(mPref.getSettopBoxKind()) ) { // SMART
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                } else {
+                    String errorString = (String)mStbStateMap.get("errorString");
+                    StringBuilder sb   = new StringBuilder();
+                    sb.append("API: GetSetTopStatus\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
+                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setMessage(sb.toString());
+                    alert.show();
+                }
+
+                requestGetRecordReservelist();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                if (error instanceof TimeoutError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NoConnectionError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_noconnectionerror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_servererror), Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(mInstance, mInstance.getString(R.string.error_network_networkerrorr), Toast.LENGTH_LONG).show();
+                }
+                if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                if ( mPref.isLogging() ) { Log.d(tag, "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void parseGetSetTopStatus(String response) {
+        XmlPullParserFactory factory = null;
+        try {
+            factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new ByteArrayInputStream(response.getBytes("utf-8")), "utf-8");
+
+            int eventType = xpp.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT ) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        String resultCode = xpp.nextText();
+                        mStbStateMap.put("resultCode", resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("errorString", errorString);
+
+                    } else if (xpp.getName().equalsIgnoreCase("state")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("state", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel1")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("recordingchannel1", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("recordingchannel2")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("recordingchannel2", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("watchingchannel")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("watchingchannel", errorString);
+                    } else if (xpp.getName().equalsIgnoreCase("pipchannel")) {
+                        String errorString = xpp.nextText();
+                        mStbStateMap.put("pipchannel", errorString);
+                    }
+                }
+                eventType = xpp.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private void requestGetRecordReservelist() {
         mProgressDialog	        = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
@@ -388,7 +577,17 @@ public class PvrMainActivity extends AppCompatActivity {
                     mAdapter.setTabNumber(1);
                     mAdapter.notifyDataSetChanged();
                 } else if ( "206".equals(sResultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    String alertTitle = "씨앤앰";
+                    String alertTitle = "씨앤앰 모바일 TV";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "208".equals(sResultCode) ) {
+                    String alertTitle = "씨앤앰 모바일 TV";
                     String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -572,7 +771,65 @@ public class PvrMainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 //Log.d(tag, response);
                 mProgressDialog.dismiss();
-                parseGetrecordlist(response);
+                String resultCode = parseGetrecordlist(response);
+
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
+                    //
+                    mStbState             = (String) mStbStateMap.get("state");
+                    mStbRecordingchannel1 = (String) mStbStateMap.get("recordingchannel1");
+                    mStbRecordingchannel2 = (String) mStbStateMap.get("recordingchannel2");
+                    mStbWatchingchannel   = (String) mStbStateMap.get("watchingchannel");
+                    mStbPipchannel        = (String) mStbStateMap.get("pipchannel");
+                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    String alertTitle = "씨앤앰 모바일 TV";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                    String alertTitle = "씨앤앰 모바일 TV";
+                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }, true);
+                } else if ( "SMART".equals(mPref.getSettopBoxKind()) ) { // SMART
+                    //
+                    mStbState             = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel   = "";
+                    mStbPipchannel        = "";
+                } else {
+                    //
+                }
+
                 textView2.setText("총 " + mAdapter.getCount() + "개의 녹화 콘텐츠가 있습니다.");
                 mAdapter.setTabNumber(2);
                 mAdapter.notifyDataSetChanged();
@@ -596,7 +853,8 @@ public class PvrMainActivity extends AppCompatActivity {
         mRequestQueue.add(request);
     }
 
-    private void parseGetrecordlist(String response) {
+    private String parseGetrecordlist(String response) {
+        String               sResultCode = "0";   // 응답받은 resultCode
         StringBuilder        sb      = new StringBuilder();
         XmlPullParserFactory factory = null;
         try {
@@ -609,7 +867,11 @@ public class PvrMainActivity extends AppCompatActivity {
             int eventType = xpp.getEventType();
             while ( eventType != XmlPullParser.END_DOCUMENT ) {
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (xpp.getName().equalsIgnoreCase("RecordId")) {
+                    if (xpp.getName().equalsIgnoreCase("resultCode")) {
+                        sResultCode = xpp.nextText(); mNetworkError.put("resultCode",sResultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        mNetworkError.put("errorString",xpp.nextText());
+                    } else if (xpp.getName().equalsIgnoreCase("RecordId")) {
                         sb.append("{\"RecordId\":\"").append(xpp.nextText()).append("\"");
                     } else if (xpp.getName().equalsIgnoreCase("RecordingType")) {
                         sb.append(",\"RecordingType\":\"").append(xpp.nextText()).append("\"");
@@ -641,6 +903,8 @@ public class PvrMainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return sResultCode;
     }
 
     private void requestSetRecordStop(String channelId) {
