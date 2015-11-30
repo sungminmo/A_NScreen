@@ -1,5 +1,6 @@
 package com.stvn.nscreen.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.Spannable;
@@ -83,6 +84,8 @@ public class CMAlertUtil {
     }
 
     public static void Alert(Context ctx,String title,String msg1,String msg2,boolean isbold1,boolean isbold2,DialogInterface.OnClickListener listener, boolean isOneButton) {
+
+        if ( ((Activity)ctx).isFinishing() ) { return; } // swlim. 셋탑 전원 OFF상태일 경우 리모컨 페이지 진입 후 셋탑 전원 확인 팝업 발생 전, 뒤로가기하여 이전 페이지 복귀 시 앱 강제 종료 됨
 
         CMAlertDialog.CMDialogType type = CMAlertDialog.CMDialogType.DialogType2;
         if (isOneButton) {
