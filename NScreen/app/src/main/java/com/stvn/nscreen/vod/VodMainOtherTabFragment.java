@@ -213,11 +213,13 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCategoryBgFramelayout.setVisibility(View.VISIBLE);
                 int count = mCategoryAdapter.getCount();
-                int count2 = categorys.size();
-                int a = mCategoryListView.getVisibility();
-                //Log.d("category","");
+                if ( count == 0 ) {
+                    categorys.clear();
+                    requestGetCategoryTree(true);
+                } else {
+                    mCategoryBgFramelayout.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -233,7 +235,7 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
         mCateDepths3 = new ArrayList<JSONObject>();
 
         // 카테고리 요청. 추천.
-        requestGetCategoryTree();
+        requestGetCategoryTree(false);
 
         return view;
     }
@@ -281,13 +283,19 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
     // 카테고리 요청.
     // 추천
     // http://192.168.40.5:8080/HApplicationServer/getCategoryTree.xml?version=1&categoryProfile=4&categoryId=713228&depth=3&traverseType=DFS
-    private void requestGetCategoryTree() {
-        //String thisCategoryId = "";
-        //if ( this.)
+    private void requestGetCategoryTree(final boolean showCategoryView) {
+        final String thisTurnCategoriId;
+        if ( showCategoryView == false ) {
+            thisTurnCategoriId = mCategoryId;
+        } else {
+            thisTurnCategoriId = mPref.getValue(Constants.CATEGORY_ID_TAB2, "");
+            mCategoryId = thisTurnCategoriId;
+        }
         mProgressDialog	 = ProgressDialog.show(mInstance.getActivity(), "", getString(R.string.wait_a_moment));
         String url = mPref.getWebhasServerUrl() + "/getCategoryTree.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()
                 +"&categoryProfile=4&categoryId="
-                +mCategoryId+"&depth=4&traverseType=DFS";
+                //+mCategoryId+"&depth=4&traverseType=DFS";
+                +thisTurnCategoriId+"&depth=4&traverseType=DFS";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -307,20 +315,23 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                         categorys.remove(0);
                     }
                     JSONObject category = (JSONObject)categorys.get(0);
-                    mCategoryNameTextView.setText(category.getString("categoryName"));
-                    mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));
-                    mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
-                    mCurrCategoryObject.setsCategoryName(category.getString("categoryName"));
-                    mCurrCategoryObject.setsLeaf(category.getString("leaf"));
-                    mCurrCategoryObject.setsParentCategoryId(category.getString("parentCategoryId"));
-                    mCurrCategoryObject.setsViewerType(category.getString("viewerType"));
+                    if ( showCategoryView == false ) {
+                        mCategoryNameTextView.setText(category.getString("categoryName"));
+                        mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));
+                        mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
+                        mCurrCategoryObject.setsCategoryName(category.getString("categoryName"));
+                        mCurrCategoryObject.setsLeaf(category.getString("leaf"));
+                        mCurrCategoryObject.setsParentCategoryId(category.getString("parentCategoryId"));
+                        mCurrCategoryObject.setsViewerType(category.getString("viewerType"));
+                    }
                     processRequest();
                     for ( int i = 0; i < categorys.size(); i++ ) {
                         JSONObject loopCategory     = (JSONObject)categorys.get(i);
                         String     categoryId       = loopCategory.getString("categoryId");
                         String     parentCategoryId = loopCategory.getString("parentCategoryId");
                         boolean    leaf             = loopCategory.getBoolean("leaf");
-                        if ( mCategoryId.equals(parentCategoryId) ) {
+                        //if ( mCategoryId.equals(parentCategoryId) ) {
+                        if ( thisTurnCategoriId.equals(parentCategoryId) ) {
                             loopCategory.put("isOpened", false);
                             mCateDepths1.add(loopCategory);
                             ListViewDataObject obj = new ListViewDataObject(0, 1, loopCategory.toString());
@@ -329,6 +340,9 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                     }
                     //list2treee();
                     list2tree();
+                    if ( showCategoryView == true ) {
+                        mCategoryBgFramelayout.setVisibility(View.VISIBLE);
+                    }
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
