@@ -1,6 +1,7 @@
 package com.stvn.nscreen.epg;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -234,6 +235,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
     public void clear() { mDatas.clear(); mStbRecordReservelist.clear(); }
 
     public JSONObject getStbRecordReserveWithChunnelId(String channelId, ListViewDataObject epgitem) {
+        //Log.d("EpgSubListViewAdapter", "getStbRecordReserveWithChunnelId:"+channelId);
         try {
             String str = epgitem.sJson;
             JSONObject epgjo = new JSONObject(str);
@@ -242,12 +244,14 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                 JSONObject reservjo = mStbRecordReservelist.get(i);
                 String RecordStartTime = reservjo.getString("RecordStartTime");
                 if ( programBroadcastingStartTime.equals(RecordStartTime) ) {  // epg의 시작간과 예약의 시작 시간이 같다면 동일 채널 동일 프로그램.
+                    //Log.d("EpgSubListViewAdapter", "getStbRecordReserveWithChunnelId find "+ i);
                     return reservjo;
                 }
             }
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
+        //Log.d("EpgSubListViewAdapter", "getStbRecordReserveWithChunnelId return");
         return null;
     }
 
@@ -271,6 +275,9 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             String             sChannelInfo                 = jobj.getString("programHD");
             String             ProgramBroadcastingStartTime = jobj.getString("programBroadcastingStartTime");
             String             ProgramBroadcastingEndTime   = jobj.getString("programBroadcastingEndTime");
+            String             programTitle                 = jobj.getString("programTitle");
+
+            //Log.d("EpgSubListViewAdapter", "programTitle:"+programTitle+",sProgramAge:"+sProgramAge+", sChannelInfo:"+sChannelInfo+", ProgramBroadcastingStartTime:"+ProgramBroadcastingStartTime+", ProgramBroadcastingEndTime:"+ProgramBroadcastingEndTime);
 
             ImageView          programAge                   = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_age);
             ImageView          Info                         = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_hdsd);
@@ -292,7 +299,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             // 현재시간
             Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
 
-            titleTextView.setText(jobj.getString("programTitle"));
+            titleTextView.setText(programTitle);
             channelProgramOnAirTime.setText(dt21 + "~" + dt22);
 
             if ( mCurrDateNo != 0 ) {
@@ -345,24 +352,32 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                 programAge.setImageResource(R.mipmap.btn_age_15);
             } else if ("19세 이상".equals(sProgramAge) ) {
                 programAge.setImageResource(R.mipmap.btn_age_19);
+            } else {
+                programAge.setImageDrawable(null);
             }
 
             if ( "YES".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_hd);
             } else if ("NO".equals(sChannelInfo) ) {
                 Info.setImageResource(R.mipmap.btn_size_sd);
+            } else {
+                Info.setImageDrawable(null);
             }
             JSONObject reservItem = getStbRecordReserveWithChunnelId(mChannelId, dobj);
 
             if ( ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) <= 0 ) ) {
                 if (mChannelId.equals(mStbRecordingchannel1) || mChannelId.equals(mStbRecordingchannel2)) {
                     State.setImageResource(R.mipmap.icon_record);
+                } else {
+                    State.setImageDrawable(null);
                 }
             } else {
                 if (reservItem != null) {
                     State.setImageResource(R.mipmap.icon_rec_book);
                 } else if (mPref.isWatchTvReserveWithProgramId(programId) == true) {
                     State.setImageResource(R.mipmap.icon_book);
+                } else {
+                    State.setImageDrawable(null);
                 }
             }
         } catch (JSONException e) {

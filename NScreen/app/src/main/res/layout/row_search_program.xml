@@ -154,7 +154,7 @@
                         android:layout_width="@dimen/dimen_48"
                         android:layout_height="@dimen/dimen_19"
                         android:id="@+id/ch_logo"
-                        android:background="#d1d1d1"
+                        android:background="@color/color28183d"
                         />
                 </LinearLayout>
                 <TextView

@@ -226,7 +226,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     mStbWatchingchannel   = "";
                     mStbPipchannel        = "";
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰";
+                    String alertTitle = "씨앤앰 모바일 TV";
                     String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -243,7 +243,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     mStbWatchingchannel   = "";
                     mStbPipchannel        = "";
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰";
+                    String alertTitle = "씨앤앰 모바일 TV";
                     String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -380,8 +380,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
         XmlPullParserFactory factory     = null;
         List<String> strings     = new ArrayList<String>();
 
-        response = response.replace("<![CDATA[","");
-        response = response.replace("]]>", "");
+        //response = response.replace("<![CDATA[","");
+        //response = response.replace("]]>", "");
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);

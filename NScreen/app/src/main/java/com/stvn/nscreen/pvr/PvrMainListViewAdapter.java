@@ -94,9 +94,21 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             ListViewDataObject dobj = (ListViewDataObject) getItem(position);
             JSONObject jobj = new JSONObject(dobj.sJson);
 
+            /*
+            {
+            "RecordId":"10",
+            "RecordingType":"1",
+            "SeriesId":"M6140234482",
+            "ChannelId":"1416",
+            "Channel_logo_img":"http:\/\/58.141.255.69:8080\/logo\/1416.png",
+            "ProgramName":"아이돌스타그램(75회)(재)",
+            "RecordStartTime":"2015-11-29 14:30:00",
+            "RecordEndTime":"NULL",
+            "RecordHD":"YES"}
+             */
             String RecordStartTime = jobj.getString("RecordStartTime");
             String RecordEndTime   = jobj.getString("RecordEndTime");
-            if ( ! "0".equals(RecordStartTime) ) {
+            if ( ( ! "0".equals(RecordStartTime) ) && ( ! "NULL".equals(RecordEndTime) ) ) {
                 Date dt11 = formatter.parse(RecordStartTime);
                 Date dt12 = formatter.parse(RecordEndTime);
                 String dt21 = formatter2.format(dt11).toString();
@@ -155,6 +167,7 @@ public class PvrMainListViewAdapter extends BaseAdapter {
         try {
             ListViewDataObject dobj            = (ListViewDataObject)getItem(position);
             JSONObject         jobj            = new JSONObject(dobj.sJson);
+            Log.d(tag, "item: " + dobj.sJson);
 
             String             RecordStartTime = jobj.getString("RecordStartTime");
             String             RecordEndTime   = jobj.getString("RecordEndTime");
@@ -173,32 +186,41 @@ public class PvrMainListViewAdapter extends BaseAdapter {
                 pvr_main_textview_time.setVisibility(View.VISIBLE);
                 progBar.setVisibility(View.VISIBLE);
 
-                Date               dt11                     = formatter.parse(RecordStartTime);
-                Date               dt12                     = formatter.parse(RecordEndTime);
-                String             dt21                     = formatter2.format(dt11).toString();
-                String             dt22                     = formatter2.format(dt12).toString();
-                String             dt23                     = formatter2.format(dt).toString();
-                String             dt31                     = formatter3.format(dt11).toString();
+                if ( ! "NULL".equals(RecordEndTime) ) {
+                    Date               dt11                     = formatter.parse(RecordStartTime);
+                    String             dt21                     = formatter2.format(dt11).toString();
+                    String             dt23                     = formatter2.format(dt).toString();
+                    String             dt31                     = formatter3.format(dt11).toString();
 
-                pvr_main_textview_time.setText(dt21);
-                pvr_main_textview_date.setText(dt31);
+                    Date               dt12                     = formatter.parse(RecordEndTime);
+                    String             dt22                     = formatter2.format(dt12).toString();
+                    Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
 
-                Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
-                Integer i2 = (Integer.parseInt(dt22.substring(0, 2)) * 60) + (Integer.parseInt(dt22.substring(3)));
-                Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+                    pvr_main_textview_time.setText(dt21);
+                    pvr_main_textview_date.setText(dt31);
 
-                if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
-                    float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
-                    progBar.setVisibility(View.VISIBLE);
-                    progBar.setProgress((int) (f1 * 100));
-                    pvr_main_pvr.setVisibility(View.VISIBLE);
-                } else if ( dt.compareTo(dt11) < 0 ) {
-                    progBar.setVisibility(View.VISIBLE);
-                    progBar.setProgress(0);
-                    pvr_main_pvr.setVisibility(View.INVISIBLE);
-                } else if ( dt.compareTo(dt12) > 0 || !("1".equals(jobj.getString("RecordingType"))) ){
+                    Integer i1 = (Integer.parseInt(dt21.substring(0, 2)) * 60) + (Integer.parseInt(dt21.substring(3)));
+                    Integer i3 = (Integer.parseInt(dt23.substring(0, 2)) * 60) + (Integer.parseInt(dt23.substring(3)));
+
+                    if ( dt.compareTo(dt11) > 0 && dt.compareTo(dt12) < 0 ) {
+                        float f1 = ((float)i3 - (float)i1) / ((float)i2 - (float)i1);
+                        progBar.setVisibility(View.VISIBLE);
+                        progBar.setProgress((int) (f1 * 100));
+                        pvr_main_pvr.setVisibility(View.VISIBLE);
+                    } else if ( dt.compareTo(dt11) < 0 ) {
+                        progBar.setVisibility(View.VISIBLE);
+                        progBar.setProgress(0);
+                        pvr_main_pvr.setVisibility(View.INVISIBLE);
+                    } else if ( dt.compareTo(dt12) > 0 || !("1".equals(jobj.getString("RecordingType"))) ){
+                        progBar.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    pvr_main_imageview_series.setVisibility(View.VISIBLE);
+                    pvr_main_textview_date.setVisibility(View.INVISIBLE);
+                    pvr_main_textview_time.setVisibility(View.INVISIBLE);
                     progBar.setVisibility(View.INVISIBLE);
                 }
+
             } else if ( "0".equals(RecordStartTime) ) {
                 pvr_main_imageview_series.setVisibility(View.VISIBLE);
                 pvr_main_textview_date.setVisibility(View.INVISIBLE);
