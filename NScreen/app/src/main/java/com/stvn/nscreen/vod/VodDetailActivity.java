@@ -1325,7 +1325,7 @@ public class VodDetailActivity extends Activity {
                     assets.add(new AssetItem("widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm", 1));
                     투모로우랜드 "widevine://cnm.video.toast.com/aaaaaa/dc66940e-4e2a-4cb0-b478-b3f6bc7147d6.wvm"
                      */
-                        contentUri = contentUri.replace("http://","widevine://");
+                        //contentUri = contentUri.replace("http://","widevine://");
 
                         // VOD시청목록 남기기
                         Date watchDate = new Date();
@@ -1343,6 +1343,7 @@ public class VodDetailActivity extends Activity {
                         intent.putExtra("terminalKey", terminalKey);
                         if ( isPrePlay == true ) {
                             intent.putExtra("isPrePlay", "YES");
+//                            contentUri = contentUri.replace("widevine://","http://");
                         } else {
                             intent.putExtra("isPrePlay", "NO");
                         }

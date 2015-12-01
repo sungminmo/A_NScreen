@@ -79,59 +79,64 @@ public class WidevineDrm {
             }
         });
 
-        mDrmManager.setOnEventListener(new DrmManagerClient.OnEventListener() {
+//        mDrmManager.setOnEventListener(new DrmManagerClient.OnEventListener() {
+//
+//            public void onEvent(DrmManagerClient client, DrmEvent event) {
+//                switch (event.getType()) {
+//                case DrmEvent.TYPE_DRM_INFO_PROCESSED:
+//                    logMessage("Info Processed\n");
+////                    if ( mVideoPlayerViewActivity != null ) {
+////                        if ( mWVDrmInfoRequestStatusKey == 0 ) { // DEVICE_IS_PROVISIONED
+////                            mVideoPlayerViewActivity.callStartPlayBack();
+////                        }
+////                    }
+//                    // ������ �����ϴ� �ڵ带 �ֽ��ϴ�.
+//                    break;
+//                case DrmEvent.TYPE_ALL_RIGHTS_REMOVED:
+//                    logMessage("All rights removed\n");
+//                    break;
+//                }
+//            }
+//        });
 
-            public void onEvent(DrmManagerClient client, DrmEvent event) {
-                switch (event.getType()) {
-                case DrmEvent.TYPE_DRM_INFO_PROCESSED:
-                    logMessage("Info Processed\n");
-//                    if ( mVideoPlayerViewActivity != null ) {
-//                        if ( mWVDrmInfoRequestStatusKey == 0 ) { // DEVICE_IS_PROVISIONED
-//                            mVideoPlayerViewActivity.callStartPlayBack();
-//                        }
-//                    }
-                    // ������ �����ϴ� �ڵ带 �ֽ��ϴ�.
-                    break;
-                case DrmEvent.TYPE_ALL_RIGHTS_REMOVED:
-                    logMessage("All rights removed\n");
-                    break;
-                }
-            }
-        });
-
-        mDrmManager.setOnErrorListener(new DrmManagerClient.OnErrorListener() {
-            public void onError(DrmManagerClient client, DrmErrorEvent event) {
-                switch (event.getType()) {
-                case DrmErrorEvent.TYPE_NO_INTERNET_CONNECTION:
-                    logMessage("No Internet Connection\n");
-                    break;
-                case DrmErrorEvent.TYPE_NOT_SUPPORTED:
-                    logMessage("Not Supported\n");
-                    break;
-                case DrmErrorEvent.TYPE_OUT_OF_MEMORY:
-                    logMessage("Out of Memory\n");
-                    break;
-                case DrmErrorEvent.TYPE_PROCESS_DRM_INFO_FAILED:
-                    logMessage("Process DRM Info failed\n");
-                    break;
-                case DrmErrorEvent.TYPE_REMOVE_ALL_RIGHTS_FAILED:
-                    logMessage("Remove All Rights failed\n");
-                    break;
-                case DrmErrorEvent.TYPE_RIGHTS_NOT_INSTALLED:
-                    logMessage("Rights not installed\n");
-                    break;
-                case DrmErrorEvent.TYPE_RIGHTS_RENEWAL_NOT_ALLOWED:
-                    logMessage("Rights renewal not allowed\n");
-                    break;
-                }
-                // ����ó���� �մϴ�.
-            }
-        });
+//        mDrmManager.setOnErrorListener(new DrmManagerClient.OnErrorListener() {
+//            public void onError(DrmManagerClient client, DrmErrorEvent event) {
+//                switch (event.getType()) {
+//                case DrmErrorEvent.TYPE_NO_INTERNET_CONNECTION:
+//                    logMessage("No Internet Connection\n");
+//                    break;
+//                case DrmErrorEvent.TYPE_NOT_SUPPORTED:
+//                    logMessage("Not Supported\n");
+//                    break;
+//                case DrmErrorEvent.TYPE_OUT_OF_MEMORY:
+//                    logMessage("Out of Memory\n");
+//                    break;
+//                case DrmErrorEvent.TYPE_PROCESS_DRM_INFO_FAILED:
+//                    logMessage("Process DRM Info failed\n");
+//                    break;
+//                case DrmErrorEvent.TYPE_REMOVE_ALL_RIGHTS_FAILED:
+//                    logMessage("Remove All Rights failed\n");
+//                    break;
+//                case DrmErrorEvent.TYPE_RIGHTS_NOT_INSTALLED:
+//                    logMessage("Rights not installed\n");
+//                    break;
+//                case DrmErrorEvent.TYPE_RIGHTS_RENEWAL_NOT_ALLOWED:
+//                    logMessage("Rights renewal not allowed\n");
+//                    break;
+//                }
+//                // ����ó���� �մϴ�.
+//            }
+//        });
 
 
     }
 
-
+    public void setOnErrorListener(DrmManagerClient.OnErrorListener errorListener) {
+        mDrmManager.setOnErrorListener(errorListener);
+    }
+    public void setOnEventListener(DrmManagerClient.OnEventListener eventListener) {
+        mDrmManager.setOnEventListener(eventListener);
+    }
 
     public DrmInfoRequest getDrmInfoRequest(String assetUri) {
         DrmInfoRequest rightsAcquisitionInfo;
