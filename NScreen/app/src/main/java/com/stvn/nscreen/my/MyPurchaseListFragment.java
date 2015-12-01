@@ -206,10 +206,13 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                                 intent.putExtra("assetId", assetId);
                                 startActivity(intent);
                             } else {
-                                int assetBundle = jsonObj.getInt("assetBundle");
-
+                                String productType = "";
+                                if (jsonObj.isNull("productType") == false) {
+                                    productType = jsonObj.getString("productType");
+                                    productType = productType.toLowerCase();
+                                }
                                 // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
-                                if (assetBundle == 1) {
+                                if ("bundle".equalsIgnoreCase(productType)) {
                                     requestGetAssetInfoWithBundleAssetId(assetId);
                                 }
                                 // 이외는 번들(묶음상품)이 아니다.
