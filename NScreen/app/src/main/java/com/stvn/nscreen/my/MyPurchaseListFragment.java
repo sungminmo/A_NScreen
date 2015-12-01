@@ -32,11 +32,14 @@ import com.stvn.nscreen.common.SwipeListView;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.vod.VodDetailActivity;
+import com.stvn.nscreen.vod.VodDetailBundleActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -142,22 +145,24 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             public void onClickFrontView(int position) {
                 ListViewDataObject obj = getCurrentTabObjectWithIndex(position);
 
-                if (obj.remainTime < 0) {
-                    String alertTitle = getString(R.string.my_cnm_alert_title_expired);
-                    String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
-                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {}
-                    }, true);
-                    return;
-                }
-
                 String assetId = "";
                 String primaryAssetId = "";
                 String episodePeerExistence = "";
                 String contentGroupId = "";
                 try {
                     JSONObject jsonObj = new JSONObject(obj.sJson);
+                    String licenseEnd = jsonObj.getString("licenseEnd");
+                    if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
+                        String alertTitle = getString(R.string.my_cnm_alert_title_expired);
+                        String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+                        CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
+                        return;
+                    }
+
                     String rating = jsonObj.getString("rating");
                     if (rating.startsWith("19") && mPref.isAdultVerification() == false) {
                         String alertTitle = "성인인증 필요";
@@ -195,15 +200,30 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         }
 
                         if (TextUtils.isEmpty(assetId) == false) {
-                            Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                            intent.putExtra("assetId", assetId);
 
-                            if (TextUtils.isEmpty(episodePeerExistence) == false && "1".equalsIgnoreCase(episodePeerExistence) == true) {
-                                intent.putExtra("episodePeerExistence", episodePeerExistence);
-                                intent.putExtra("contentGroupId", contentGroupId);
-                                intent.putExtra("primaryAssetId", primaryAssetId);
+                            if (TextUtils.isEmpty(episodePeerExistence)) {
+                                Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                                intent.putExtra("assetId", assetId);
+                                startActivity(intent);
+                            } else {
+                                int assetBundle = jsonObj.getInt("assetBundle");
+
+                                // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
+                                if (assetBundle == 1) {
+                                    requestGetAssetInfoWithBundleAssetId(assetId);
+                                }
+                                // 이외는 번들(묶음상품)이 아니다.
+                                else {
+                                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                                    intent.putExtra("assetId", assetId);
+                                    if ("1".equalsIgnoreCase(episodePeerExistence) == true) {
+                                        intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                        intent.putExtra("contentGroupId", contentGroupId);
+                                        intent.putExtra("primaryAssetId", primaryAssetId);
+                                    }
+                                    startActivity(intent);
+                                }
                             }
-                            startActivity(intent);
                         }
                     }
 
@@ -272,21 +292,21 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         ListViewDataObject obj = getCurrentTabObjectWithIndex(itemIndex);
         try {
             JSONObject jsonObj = new JSONObject(obj.sJson);
+
             vodTitle = jsonObj.getString("productName");
             purchasedId = jsonObj.getString("purchasedId");
-//            String licenseEnd = jsonObj.getString("licenseEnd");
-//            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
-//                isExpired = true;
-//            }
+            String licenseEnd = jsonObj.getString("licenseEnd");
+            if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
+                isExpired = true;
+            }
 
-            if (obj.remainTime < 0 && "0".equals(obj.viewablePeriodState)) {
+            if (isExpired == true) {
                 String alertTitle = getString(R.string.my_cnm_alert_title_expired);
                 String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
                 String alertMessage2 = getString(R.string.my_cnm_alert_message2_expired);
                 CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        mListView.dismiss(itemIndex);
                         requestDisablePurchaseLog(purchasedId, itemIndex);
                     }
                 }, true);
@@ -299,7 +319,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-//                                mListView.dismiss(itemIndex);
                                 requestDisablePurchaseLog(purchasedId, itemIndex);
                             }
                         }, new DialogInterface.OnClickListener() {
@@ -467,6 +486,99 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             }
         };
         mRequestQueue.add(request);
+    }
+
+    // VodMainGridViewAdapter에서 포스터를 클릭했을때 타는 메소드.
+    // assetInfo를 요청해서, 구매한 VOD인지를 알아낸다.
+    // 만약 구매 했다면, VodDetailBundleActivity로 이동.
+    // 만약 구매 안했다면, VodDetailActivity로 이동.
+    public void requestGetAssetInfoWithBundleAssetId(String primaryAssetId) {
+        ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String encAssetId = null;
+        try {
+            encAssetId  = URLDecoder.decode(primaryAssetId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = mPref.getWebhasServerUrl() + "/getAssetInfo.json?version=1&terminalKey="+terminalKey+"&assetProfile=9&assetId="+encAssetId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ((MyMainActivity)getActivity()).hideProgressDialog();
+
+                boolean needJumpAsset = true;
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    JSONObject asset = jo.getJSONObject("asset");
+                    JSONArray  productList = asset.getJSONArray("productList");
+                    for (int i = 0; i < productList.length(); i++) {
+                        JSONObject product = (JSONObject)productList.get(i);
+                        String productType = product.getString("productType");
+                        if ("Bundle".equals(productType)) {
+                            String assetId = asset.getString("assetId");
+                            startActivityAssetOrBundle(assetId,product);
+                            needJumpAsset = false;
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if ( needJumpAsset == true ) {
+                    // 예외 처리임. 원래 번들(묶음)이면, 여기까지 오면 안되고 위에서 startActivityAssetOrBundle()로 가야된다.
+                    // 묶음상품이였다가, 묶음상품이 아니라고 풀리는 경우가 있다고 해서 아래의 예외 처리 함.
+                    try {
+                        JSONObject jo    = new JSONObject(response);
+                        JSONObject asset = jo.getJSONObject("asset");
+                        String assetId   = asset.getString("assetId");
+                        Intent intent    = new Intent(getActivity(), VodDetailActivity.class);
+                        intent.putExtra("assetId", assetId);
+                        getActivity().startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((MyMainActivity)getActivity()).hideProgressDialog();
+                if ( mPref.isLogging() ) { VolleyLog.d("MyPurchaseListFragment", "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d("MyPurchaseListFragment", "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    private void startActivityAssetOrBundle(String assetId, JSONObject product) {
+        try {
+            String purchasedTime = product.getString("purchasedTime");
+            if ( purchasedTime.length() > 0 ) {
+                String productId = product.getString("productId");
+                Intent intent    = new Intent(getActivity(), VodDetailBundleActivity.class);
+                intent.putExtra("productType", "Bundle");
+                intent.putExtra("productId", productId);
+                intent.putExtra("assetId", assetId);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this.getActivity(), VodDetailActivity.class);
+                intent.putExtra("assetId", assetId);
+                startActivity(intent);
+            }
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
     }
 
     private void changeListData() {
