@@ -7,6 +7,9 @@ package com.widevine.sampleplayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.drm.DrmErrorEvent;
+import android.drm.DrmEvent;
+import android.drm.DrmManagerClient;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -98,7 +101,7 @@ public class VideoPlayerView extends Activity {
 
         //drm.printPluginVersion();
         // swlim aaa
-        drm.acquireRights(assetUri);
+        //drm.acquireRights(assetUri);
         try {
             Thread.sleep(100);
             startPlayback();
@@ -135,7 +138,7 @@ public class VideoPlayerView extends Activity {
         String terminalKey = this.getIntent().getStringExtra("terminalKey");
         assetUri = contentUri;
         assetUri = contentUri.replaceAll("wvplay", "http");
-        assetUri = contentUri.replaceAll("widevine", "http");
+        //assetUri = contentUri.replaceAll("widevine", "http");
         // widevine://cnm.video.toast.com/aaaaaa/b99fd60d-e0a1-465f-8641-b8276b3f1b8a.wvm
 
         drm = new WidevineDrm(this);
@@ -143,7 +146,7 @@ public class VideoPlayerView extends Activity {
         // public static String USER_DATA = ",user_id:myjulyyi,content_id:M0431531LFO259395100|www.hchoice.co.kr,device_key:648a16b50911464aaf92801c4ea88b31,so_idx:10";
         WidevineDrm.Settings.DEVICE_ID = terminalKey;
         WidevineDrm.Settings.DRM_SERVER_URI = drmServerUri;
-        WidevineDrm.Settings.DEVICE_ID = terminalKey;
+        //WidevineDrm.Settings.DEVICE_ID = terminalKey;
         WidevineDrm.Settings.USER_DATA = ",user_id:"+terminalKey+",content_id:"+assetId+",device_key:"+terminalKey+",so_idx:10";
 
 
@@ -153,6 +156,54 @@ public class VideoPlayerView extends Activity {
         logMessage("Drm Server: " + WidevineDrm.Settings.DRM_SERVER_URI + "\n");
         logMessage("Device Id: " + WidevineDrm.Settings.DEVICE_ID + "\n");
         logMessage("Portal Name: " + WidevineDrm.Settings.PORTAL_NAME + "\n");
+
+
+
+        drm.setOnEventListener(new DrmManagerClient.OnEventListener() {
+            public void onEvent(DrmManagerClient client, DrmEvent event) {
+                logMessage("Drm Event : " + event);
+                switch (event.getType()) {
+                    case DrmEvent.TYPE_DRM_INFO_PROCESSED:
+                        logMessage("Info Processed\n");
+                        // 영상을 실행하는 코드를 넣습니다.
+//                        startPlayback();
+                        break;
+                    case DrmEvent.TYPE_ALL_RIGHTS_REMOVED:
+                        logMessage("All rights removed\n");
+                        break;
+                }
+            }
+        });
+        drm.setOnErrorListener(new DrmManagerClient.OnErrorListener() {
+            public void onError(DrmManagerClient client, DrmErrorEvent event) {
+                logMessage("Drm Error : " + event.getType() + " / " + event.getMessage());
+                switch (event.getType()) {
+                    case DrmErrorEvent.TYPE_NO_INTERNET_CONNECTION:
+                        logMessage("No Internet Connection\n");
+                        break;
+                    case DrmErrorEvent.TYPE_NOT_SUPPORTED:
+                        logMessage("Not Supported\n");
+                        break;
+                    case DrmErrorEvent.TYPE_OUT_OF_MEMORY:
+                        logMessage("Out of Memory\n");
+                        break;
+                    case DrmErrorEvent.TYPE_PROCESS_DRM_INFO_FAILED:
+                        logMessage("Process DRM Info failed\n");
+                        break;
+                    case DrmErrorEvent.TYPE_REMOVE_ALL_RIGHTS_FAILED:
+                        logMessage("Remove All Rights failed\n");
+                        break;
+                    case DrmErrorEvent.TYPE_RIGHTS_NOT_INSTALLED:
+                        logMessage("Rights not installed\n");
+                        break;
+                    case DrmErrorEvent.TYPE_RIGHTS_RENEWAL_NOT_ALLOWED:
+                        logMessage("Rights renewal not allowed\n");
+                        break;
+                }
+                // 에러처리를 합니다.
+            }
+        });
+        drm.acquireRights(assetUri);
 
         // Set log update listener
         WidevineDrm.WidevineDrmLogEventListener drmLogListener = new WidevineDrm.WidevineDrmLogEventListener() {
@@ -527,7 +578,7 @@ public class VideoPlayerView extends Activity {
     }
 
     private void updateLogs() {
-        hRefresh.sendEmptyMessage(REFRESH);
+        //hRefresh.sendEmptyMessage(REFRESH);
     }
 
 
