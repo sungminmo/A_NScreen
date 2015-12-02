@@ -1,6 +1,7 @@
 package com.stvn.nscreen.vod;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,7 +79,10 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     private              boolean                isNeedReloadData; // 성인인증.
 
     // gui
+    private              int                    mBannerIndicatorIndex;
     private              ViewPager              mBannerViewPager;
+    private              LinearLayout           mBannerViewPagerIndicator;
+
     private              List<JSONObject>       mBanners;
 
     private              TextView               mSection1TextView;
@@ -91,12 +93,18 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
     private              LinearLayout           mSection3Linearlayout;
 
     private              ViewPager                     mPop20ViewPager;
+    private              LinearLayout                  mPop20ViewPagerIndicator;
+    private              int                           mPop20IndicatorIndex;
     private              EightVodPosterPagerAdapter    mPop20PagerAdapter; // 인기순위 Top 20
 
     private              ViewPager                     mNewMovieViewPager;
+    private              LinearLayout                  mNewMovieViewPagerIndicator;
+    private              int                           mNewMovieIndicatorIndex;
     private              VodNewMoviePosterPagerAdapter mNewMoviePagerAdapter; // 금주의 신작 영화
 
     private              ViewPager                     mThisMonthViewPager;
+    private              LinearLayout                  mThisMonthViewPagerIndicator;
+    private              int                           mThisMonthIndicatorIndex;
     private              VodNewMoviePosterPagerAdapter mThisMonthPagerAdapter; // 이달의 추천 VOD
 
     public VodMainFirstTabFragment() {
@@ -185,26 +193,70 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
 
 
         // 배너
+        ViewPager.SimpleOnPageChangeListener mBannerPagerListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                UiUtil.changePageIndicator(mBannerViewPagerIndicator, mBannerIndicatorIndex, position);
+                mBannerIndicatorIndex = position;
+            }
+        };
+        mBannerIndicatorIndex = 0;
         mBannerViewPager = (ViewPager)view.findViewById(R.id.vod_main_event_viewpager);
-
+        mBannerViewPager.addOnPageChangeListener(mBannerPagerListener);
+        mBannerViewPagerIndicator = (LinearLayout)view.findViewById(R.id.vod_main_event_viewpager_indicator);
         // 인가 탑20
+        ViewPager.SimpleOnPageChangeListener mPop20PagerListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                UiUtil.changePageIndicator(mPop20ViewPagerIndicator, mPop20IndicatorIndex, position);
+                mPop20IndicatorIndex = position;
+            }
+        };
+        mPop20IndicatorIndex = 0;
         mSection1TextView = (TextView)view.findViewById(R.id.vod_main_section1_textview);
         mSection1Linearlayout = (LinearLayout)view.findViewById(R.id.vod_main_pop20_more_linearlayout);
         mPop20ViewPager = (ViewPager)view.findViewById(R.id.vod_main_pop20_viewpager);
         mPop20ViewPager.setAdapter(mPop20PagerAdapter);
+        mPop20ViewPager.addOnPageChangeListener(mPop20PagerListener);
+        mPop20ViewPagerIndicator = (LinearLayout)view.findViewById(R.id.vod_main_pop20_viewpager_indicator);
+
+
 
         // 신작영화
+        ViewPager.SimpleOnPageChangeListener mNewMoviePagerListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                UiUtil.changePageIndicator(mNewMovieViewPagerIndicator, mNewMovieIndicatorIndex, position);
+                mNewMovieIndicatorIndex = position;
+            }
+        };
+        mNewMovieIndicatorIndex = 0;
         mSection2TextView = (TextView)view.findViewById(R.id.vod_main_section2_textview);
         mSection2Linearlayout = (LinearLayout)view.findViewById(R.id.vod_main_newmovie_more_linearlayout);
         mNewMovieViewPager = (ViewPager)view.findViewById(R.id.vod_main_newmovie_viewpager);
         mNewMovieViewPager.setAdapter(mNewMoviePagerAdapter);
+        mNewMovieViewPager.addOnPageChangeListener(mNewMoviePagerListener);
+        mNewMovieViewPagerIndicator = (LinearLayout)view.findViewById(R.id.vod_main_newmovie_viewpager_indicator);
 
         // 이달의 추천 VOD
+        ViewPager.SimpleOnPageChangeListener mThisMonthPagerListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                UiUtil.changePageIndicator(mThisMonthViewPagerIndicator, mThisMonthIndicatorIndex, position);
+                mThisMonthIndicatorIndex = position;
+            }
+        };
+        mThisMonthIndicatorIndex = 0;
         mSection3TextView = (TextView)view.findViewById(R.id.vod_main_section3_textview);
         mSection3Linearlayout = (LinearLayout)view.findViewById(R.id.vod_main_thismonth_more_linearlayout);
         mThisMonthViewPager = (ViewPager)view.findViewById(R.id.vod_main_thismonth_viewpager);
         mThisMonthViewPager.setAdapter(mThisMonthPagerAdapter);
-
+        mThisMonthViewPager.addOnPageChangeListener(mThisMonthPagerListener);
+        mThisMonthViewPagerIndicator = (LinearLayout)view.findViewById(R.id.vod_main_thismonth_viewpager_indicator);
         //
         MainCategoryObject cate1 = mPref.getMainCategoryObject(1);
         MainCategoryObject cate2 = mPref.getMainCategoryObject(2);
@@ -454,6 +506,10 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
             public void onResponse(String response) {
                 parseGetServiceBannerList(response);
                 mBannerViewPager.setAdapter(new PagerAdapterClass(mInstance.getActivity()));
+
+                int totalCount = mBanners.size();
+                UiUtil.initializePageIndicator(getActivity(), totalCount, mBannerViewPagerIndicator, mBannerIndicatorIndex);
+
                 requestGetPopularityChart();
             }
         }, new Response.ErrorListener() {
@@ -566,18 +622,6 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                 e.printStackTrace();
             }
 
-            ImageView indi1 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview1);
-            ImageView indi2 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview2);
-            ImageView indi3 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview3);
-            ImageView indi4 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview4);
-            ImageView indi5 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview5);
-            ImageView indi6 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview6);
-            ImageView indi7 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview7);
-            ImageView indi8 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview8);
-            ImageView indi9 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview9);
-            ImageView indi10 = (ImageView)v.findViewById(R.id.vod_main_banner_indicator_imageview10);
-            UiUtil.setIndicatorImage(position, getCount(), indi1, indi2, indi3, indi4, indi5, indi6, indi7, indi8, indi9, indi10);
-
             ((ViewPager)pager).addView(v);
 
             return v;
@@ -673,6 +717,10 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                     e.printStackTrace();
                 }
                 mPop20PagerAdapter.notifyDataSetChanged();
+
+                int totalCount = mPop20PagerAdapter.getCount();
+                UiUtil.initializePageIndicator(getActivity(), totalCount, mPop20ViewPagerIndicator, mPop20IndicatorIndex);
+
                 requestGetContentGroupList(); // 금주의 신작영화 요청.
             }
         }, new Response.ErrorListener() {
@@ -764,6 +812,9 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                         mNewMoviePagerAdapter.addVod(jo);
                     }
                     mNewMoviePagerAdapter.notifyDataSetChanged();
+
+                    int totalCount = mNewMoviePagerAdapter.getCount();
+                    UiUtil.initializePageIndicator(getActivity(), totalCount, mNewMovieViewPagerIndicator, mNewMovieIndicatorIndex);
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }
@@ -802,6 +853,9 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                         mThisMonthPagerAdapter.addVod(jo);
                     }
                     mThisMonthPagerAdapter.notifyDataSetChanged();
+
+                    int totalCount = mThisMonthPagerAdapter.getCount();
+                    UiUtil.initializePageIndicator(getActivity(), totalCount, mThisMonthViewPagerIndicator, mThisMonthIndicatorIndex);
                 } catch ( JSONException e ) {
                     e.printStackTrace();
                 }

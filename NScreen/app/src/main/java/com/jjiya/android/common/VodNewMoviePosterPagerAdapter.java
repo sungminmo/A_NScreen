@@ -1,12 +1,11 @@
 package com.jjiya.android.common;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -1042,16 +1041,6 @@ public class VodNewMoviePosterPagerAdapter extends PagerAdapter {
                 ((ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview8)).setVisibility(View.INVISIBLE);
                 ((ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview8)).setVisibility(View.INVISIBLE);
             }
-
-
-            ImageView indi1 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview1);
-            ImageView indi2 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview2);
-            ImageView indi3 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview3);
-            ImageView indi4 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview4);
-            ImageView indi5 = (ImageView)v.findViewById(R.id.eight_vod_poster_indicator_imageview5);
-            UiUtil.setIndicatorImage(position, getCount(), indi1, indi2, indi3, indi4, indi5, null, null, null, null, null);
-
-
 
         } catch (JSONException e) {
             e.printStackTrace();

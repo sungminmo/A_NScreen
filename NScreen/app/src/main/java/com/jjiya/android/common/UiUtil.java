@@ -1,9 +1,10 @@
 package com.jjiya.android.common;
 
-import android.app.AlertDialog;
-import android.util.Log;
+import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.stvn.nscreen.R;
 
@@ -457,4 +458,27 @@ public class UiUtil {
             PromotionSticker.setVisibility(View.GONE);
         }
     }
+
+    /**
+     * viewpager indicator 설정
+     * */
+    public static void initializePageIndicator(Context context, int totalSize, ViewGroup indicatorView, int initialzeIndex) {
+        for (int i = 0; i < totalSize; i++) {
+            ImageView iv = new ImageView(context);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.rightMargin = 6;
+            iv.setLayoutParams(lp);
+            iv.setBackgroundResource(R.mipmap.indicator_off);
+            indicatorView.addView(iv);
+        }
+        indicatorView.getChildAt(initialzeIndex).setBackgroundResource(R.mipmap.indicator_on);
+    }
+
+    public static void changePageIndicator(ViewGroup indicatorView, int beforeIndex,int changeIndex) {
+        if (changeIndex < indicatorView.getChildCount()) {
+            indicatorView.getChildAt(beforeIndex).setBackgroundResource(R.mipmap.indicator_off);
+            indicatorView.getChildAt(changeIndex).setBackgroundResource(R.mipmap.indicator_on);
+        }
+    }
+
 }

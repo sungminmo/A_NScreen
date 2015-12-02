@@ -27,6 +27,7 @@
     <dimen name="dp14.75">14.75dp</dimen>
     <dimen name="dp15">15.00dp</dimen>
     <dimen name="dp15.25">15.25dp</dimen>
+    <dimen name="dp15.75">15.75dp</dimen>
     <dimen name="dp16">16.00dp</dimen>
     <dimen name="dp17">17.00dp</dimen>
     <dimen name="dp17.25">17.25dp</dimen>

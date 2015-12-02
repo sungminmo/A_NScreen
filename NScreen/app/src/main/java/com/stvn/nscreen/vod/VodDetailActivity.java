@@ -18,7 +18,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,14 +36,12 @@ import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.bean.WishObject;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.widevine.sampleplayer.VideoPlayerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -57,9 +54,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class VodDetailActivity extends Activity {
 
@@ -97,7 +91,9 @@ public class VodDetailActivity extends Activity {
     private LinearLayout mPlayLinearLayout;
     private LinearLayout mTvOnlyLiearLayout;
     private TextView mTvOnlyTextView;
+    private int mViewPagerIndex;
     private ViewPager mViewPager;
+    private LinearLayout mViewPagerIndicator;
     private String viewable;
 
     private Button mPurchaseButton; // 구매하기 버튼  (버튼 3개 레이아웃)
@@ -219,7 +215,20 @@ public class VodDetailActivity extends Activity {
         mTvOnlyLiearLayout    = (LinearLayout)findViewById(R.id.vod_detail_tvonly_linearlayout);    // TV에서 시청가능합니다.
         mTvOnlyTextView       = (TextView)findViewById(R.id.vod_detail_tvonly_textview);
         mMobileImageView      = (ImageView)findViewById(R.id.vod_detail_device_mobile_imageview);
+
+        mViewPagerIndex = 0;
+        ViewPager.SimpleOnPageChangeListener mViewPagerListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                UiUtil.changePageIndicator(mViewPagerIndicator, mViewPagerIndex, position);
+                mViewPagerIndex = position;
+            }
+        };
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
+        mViewPager.addOnPageChangeListener(mViewPagerListener);
+        mViewPagerIndicator   = (LinearLayout)findViewById(R.id.vod_detail_related_viewpager_indicator);
+
         mSeriesScrollView     = (HorizontalScrollView)findViewById(R.id.mSeriesScrollView);
         mSeriesScrollView.post(new Runnable(){
             @Override
@@ -988,6 +997,10 @@ public class VodDetailActivity extends Activity {
                     if ( mViewPager.getAdapter() == null ) {
                         mViewPager.setAdapter(mPagerAdapter);
                     }
+
+                    int totalCount = mPagerAdapter.getCount();
+                    UiUtil.initializePageIndicator(VodDetailActivity.this, totalCount, mViewPagerIndicator, mViewPagerIndex);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

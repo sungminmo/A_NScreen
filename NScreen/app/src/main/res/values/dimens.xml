@@ -31,6 +31,7 @@
     <dimen name="dimen_14.75">@dimen/dp14.75</dimen>
     <dimen name="dimen_15">@dimen/dp15</dimen>
     <dimen name="dimen_15.25">@dimen/dp15.25</dimen>
+    <dimen name="dimen_15.75">@dimen/dp15.75</dimen>
     <dimen name="dimen_16">@dimen/dp16</dimen>
     <dimen name="dimen_17">@dimen/dp17</dimen>
     <dimen name="dimen_17.25">@dimen/dp17.25</dimen>

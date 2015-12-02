@@ -20,15 +20,23 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white">
 
             <!-- 배너 -->
             <android.support.v4.view.ViewPager
                 android:id="@+id/vod_main_event_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="196dp">
+                android:layout_height="175dp">
             </android.support.v4.view.ViewPager>
+            <LinearLayout
+                android:id="@+id/vod_main_event_viewpager_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_15.75"
+                android:layout_marginRight="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
+                android:gravity="center"
+                android:orientation="horizontal" />
 
             <!-- 인기 순위 Top20 -->
             <View
@@ -73,11 +81,19 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/vod_main_pop20_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="335.5dp"
+                android:layout_height="280dp"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp">
             </android.support.v4.view.ViewPager>
 
+            <LinearLayout
+                android:id="@+id/vod_main_pop20_viewpager_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_15.75"
+                android:layout_marginRight="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
+                android:gravity="center"
+                android:orientation="horizontal" />
 
             <!-- 금주의 신작영화 -->
             <View
@@ -120,11 +136,19 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/vod_main_newmovie_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="335.5dp"
+                android:layout_height="280dp"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp">
             </android.support.v4.view.ViewPager>
 
+            <LinearLayout
+                android:id="@+id/vod_main_newmovie_viewpager_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_15.75"
+                android:layout_marginRight="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
+                android:gravity="center"
+                android:orientation="horizontal" />
             <!-- 이달의 추천VOD -->
             <View
                 android:layout_width="match_parent"
@@ -166,11 +190,19 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/vod_main_thismonth_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="335.5dp"
+                android:layout_height="280dp"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp">
             </android.support.v4.view.ViewPager>
 
+            <LinearLayout
+                android:id="@+id/vod_main_thismonth_viewpager_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_15.75"
+                android:layout_marginRight="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
+                android:gravity="center"
+                android:orientation="horizontal" />
         </LinearLayout>
 
     </ScrollView>
