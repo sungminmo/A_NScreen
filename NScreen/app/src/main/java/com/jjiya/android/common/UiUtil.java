@@ -463,6 +463,14 @@ public class UiUtil {
      * viewpager indicator 설정
      * */
     public static void initializePageIndicator(Context context, int totalSize, ViewGroup indicatorView, int initialzeIndex) {
+        if (totalSize <= 0 || context == null || indicatorView == null) {
+            return;
+        }
+
+        if (initialzeIndex < 0) {
+            initialzeIndex = 0;
+        }
+
         for (int i = 0; i < totalSize; i++) {
             ImageView iv = new ImageView(context);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
