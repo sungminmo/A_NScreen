@@ -227,6 +227,7 @@ public class VodDetailActivity extends Activity {
         };
         mViewPager            = (ViewPager)findViewById(R.id.vod_detail_related_viewpager);
         mViewPager.addOnPageChangeListener(mViewPagerListener);
+        mViewPager.setAdapter(mPagerAdapter);
         mViewPagerIndicator   = (LinearLayout)findViewById(R.id.vod_detail_related_viewpager_indicator);
 
         mSeriesScrollView     = (HorizontalScrollView)findViewById(R.id.mSeriesScrollView);
@@ -567,6 +568,14 @@ public class VodDetailActivity extends Activity {
         relationVods.clear();
         mPagerAdapter.clear();
         mPagerAdapter.notifyDataSetChanged();
+
+        mViewPager.removeAllViews();
+        mViewPager.setAdapter(null);
+        mViewPager.setAdapter(mPagerAdapter);
+
+        mViewPagerIndicator.removeAllViews();
+        mViewPagerIndex = 0;
+
         //mTvOnlyTextView.setText("[] 은 (는)");
         //mTvOnlyLiearLayout.setVisibility(View.GONE);
 
@@ -578,6 +587,7 @@ public class VodDetailActivity extends Activity {
         mJimButton2.setText("찜하기");
 
         requestGetAssetListByEpisodePeerId();
+        requestRecommendContentGroupByAssetId();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -994,13 +1004,10 @@ public class VodDetailActivity extends Activity {
                         relationVods.add(content);
                         mPagerAdapter.addVod(content);
                     }
-                    if ( mViewPager.getAdapter() == null ) {
-                        mViewPager.setAdapter(mPagerAdapter);
-                    }
+                    mPagerAdapter.notifyDataSetChanged();
 
                     int totalCount = mPagerAdapter.getCount();
                     UiUtil.initializePageIndicator(VodDetailActivity.this, totalCount, mViewPagerIndicator, mViewPagerIndex);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

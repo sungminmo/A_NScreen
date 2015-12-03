@@ -8,6 +8,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,8 +85,8 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(View pager, int position, Object view) {
-        ((ViewPager)pager).removeView((View)view);
+    public void destroyItem(ViewGroup pager, int position, Object view) {
+        pager.removeView((View)view);
     }
 
     public void setImageLoader(ImageLoader il){
@@ -154,7 +155,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
      * swlim
      */
     @Override
-    public Object instantiateItem(View pager, int position) {
+    public Object instantiateItem(ViewGroup pager, int position) {
         View v = null;
 
         v = mLayoutInflater.inflate(R.layout.viewpager_vod_four_vod_poster, null);
@@ -303,8 +304,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
             e.printStackTrace();
         }
 
-
-        ((ViewPager)pager).addView(v); //((ViewPager)pager).addView(v, position);
+        pager.addView(v); //((ViewPager)pager).addView(v, position);
 
         return v;
     }
