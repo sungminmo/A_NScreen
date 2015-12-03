@@ -507,6 +507,14 @@ public class VodDetailActivity extends Activity {
         requestRecommendContentGroupByAssetId();
     }
 
+        @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        mInstance = this;
+
+    }
+
     /**
      * 화면 전체 새로 고침.
      */
@@ -596,30 +604,54 @@ public class VodDetailActivity extends Activity {
         switch(requestCode){
             case 1000: {    // 결제
                 if ( resultCode == RESULT_OK ) {
-                    if ( intent.getExtras() == null ) {
+//                    if ( intent.getExtras() == null ) {
+//                        // 결제가 완료됐으니, 전부 새로 고침.
+//                        String oldAssetId = assetId;
+//                        String oldContentGroupId = contentGroupId;
+//                        refreshAll(oldAssetId, contentGroupId, episodePeerId);
+//                    } else {
+//                        if ( intent.getExtras().get("purchasedProductType") != null ) {
+//                            // 결제가 완료됐으니, 전부 새로 고침. + 묶음상품인 경우.
+//                            String purchasedProductType = intent.getExtras().getString("purchasedProductType");
+//                            if ( "Bundle".equals(purchasedProductType) ) {
+//                                String thisPoductId = intent.getExtras().getString("productId");
+//                                Intent newIntent = new Intent(mInstance, VodDetailBundleActivity.class);
+//                                newIntent.putExtra("productType", "Bundle");
+//                                newIntent.putExtra("productId", thisPoductId);
+//                                newIntent.putExtra("assetId", assetId);
+//                                startActivity(newIntent);
+//                                finish();
+//                            } else {
+//                                String oldAssetId = assetId;
+//                                String oldContentGroupId = contentGroupId;
+//                                refreshAll(oldAssetId, contentGroupId, episodePeerId);
+//                            }
+//                        }
+//                    }
+
+                    if ( intent.getExtras().get("purchasedProductType") != null ) {
+                        // 결제가 완료됐으니, 전부 새로 고침. + 묶음상품인 경우.
+                        String purchasedProductType = intent.getExtras().getString("purchasedProductType");
+                        if ("Bundle".equals(purchasedProductType)) {
+                            String thisPoductId = intent.getExtras().getString("productId");
+                            Intent newIntent = new Intent(mInstance, VodDetailBundleActivity.class);
+                            newIntent.putExtra("productType", "Bundle");
+                            newIntent.putExtra("productId", thisPoductId);
+                            newIntent.putExtra("assetId", assetId);
+                            startActivity(newIntent);
+                            finish();
+                        } else {
+                            String oldAssetId = assetId;
+                            String oldContentGroupId = contentGroupId;
+                            refreshAll(oldAssetId, contentGroupId, episodePeerId);
+                        }
+                    } else {
                         // 결제가 완료됐으니, 전부 새로 고침.
                         String oldAssetId = assetId;
                         String oldContentGroupId = contentGroupId;
                         refreshAll(oldAssetId, contentGroupId, episodePeerId);
-                    } else {
-                        if ( intent.getExtras().get("purchasedProductType") != null ) {
-                            // 결제가 완료됐으니, 전부 새로 고침. + 묶음상품인 경우.
-                            String purchasedProductType = intent.getExtras().getString("purchasedProductType");
-                            if ( "Bundle".equals(purchasedProductType) ) {
-                                String thisPoductId = intent.getExtras().getString("productId");
-                                Intent newIntent = new Intent(mInstance, VodDetailBundleActivity.class);
-                                newIntent.putExtra("productType", "Bundle");
-                                newIntent.putExtra("productId", thisPoductId);
-                                newIntent.putExtra("assetId", assetId);
-                                startActivity(newIntent);
-                                finish();
-                            } else {
-                                String oldAssetId = assetId;
-                                String oldContentGroupId = contentGroupId;
-                                refreshAll(oldAssetId, contentGroupId, episodePeerId);
-                            }
-                        }
                     }
+
                 } else if ( resultCode == RESULT_CANCELED ) {
                     // nothing
                 }
