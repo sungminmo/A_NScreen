@@ -64,6 +64,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     private TextView mPurchaseEmptyMsg;
     private SwipeListView mListView;
     private MyPurchaseListAdapter mAdapter;
+    private ArrayList<ListViewDataObject> mResponseList = new ArrayList<>();
     private ArrayList<ListViewDataObject> mMoblieList = new ArrayList<>();
     private ArrayList<ListViewDataObject> mTVList     = new ArrayList<>();
     private boolean mLockListView = true;
@@ -199,24 +200,21 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             contentGroupId = jsonObj.getString("contentGroupId");
                         }
 
-                        if (TextUtils.isEmpty(assetId) == false) {
+                        String productType = "";
+                        if (jsonObj.isNull("productType") == false) {
+                            productType = jsonObj.getString("productType");
+                            productType = productType.toLowerCase();
+                        }
+                        if ("bundle".equalsIgnoreCase(productType)) {
+                            startActivityAssetOrBundle(assetId, jsonObj);
+                        } else {
+                            if (TextUtils.isEmpty(assetId) == false) {
+                                if (TextUtils.isEmpty(episodePeerExistence)) {
+                                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                                    intent.putExtra("assetId", assetId);
+                                    startActivity(intent);
+                                } else {
 
-                            if (TextUtils.isEmpty(episodePeerExistence)) {
-                                Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                                intent.putExtra("assetId", assetId);
-                                startActivity(intent);
-                            } else {
-                                String productType = "";
-                                if (jsonObj.isNull("productType") == false) {
-                                    productType = jsonObj.getString("productType");
-                                    productType = productType.toLowerCase();
-                                }
-                                // 번들(묶음상품)이면 묶음상품이면, getAssetInfo로 구매여부를 알아낸다.
-                                if ("bundle".equalsIgnoreCase(productType)) {
-                                    requestGetAssetInfoWithBundleAssetId(assetId);
-                                }
-                                // 이외는 번들(묶음상품)이 아니다.
-                                else {
                                     Intent intent = new Intent(getActivity(), VodDetailActivity.class);
                                     intent.putExtra("assetId", assetId);
                                     if ("1".equalsIgnoreCase(episodePeerExistence) == true) {
@@ -228,6 +226,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                                 }
                             }
                         }
+
                     }
 
 
@@ -397,78 +396,33 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // 무제한
-                ArrayList<ListViewDataObject> moblieList_1 = new ArrayList<>();
-                ArrayList<ListViewDataObject> tvList_1 = new ArrayList<>();
-                // 기간 완료
-                ArrayList<ListViewDataObject> moblieList_2 = new ArrayList<>();
-                ArrayList<ListViewDataObject> tvList_2 = new ArrayList<>();
-                // 기간 만료
-                ArrayList<ListViewDataObject> moblieList_3 = new ArrayList<>();
-                ArrayList<ListViewDataObject> tvList_3 = new ArrayList<>();
-
                 try {
-                    Date compareDate = new Date();
                     JSONObject responseObject = new JSONObject(response);
                     JSONArray puchaseArray = responseObject.getJSONArray("purchaseLogList");
+
+                    HashMap<String, Boolean> mapBundel = new HashMap<>();
                     for (int i = 0; i < puchaseArray.length(); i++) {
                         JSONObject jsonObj = puchaseArray.getJSONObject(i);
                         ListViewDataObject obj = new ListViewDataObject(i, 0, jsonObj.toString());
 
+                        String productId = jsonObj.getString("productId");
                         String productType = jsonObj.getString("productType").toLowerCase();
                         String paymentType = jsonObj.getString("paymentType").toLowerCase();
                         if (checkAddListWithPaymentType(paymentType) && checkAddListWithProductType(productType)) {
-                            String purchaseDeviceType = jsonObj.getString("purchaseDeviceType");   // 1:TV, 2:MOBILE
                             String purchasedTime = jsonObj.getString("purchasedTime");
-                            String viewablePeriod = jsonObj.getString("viewablePeriod");
 
                             obj.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
                             obj.viewablePeriodState = jsonObj.getString("viewablePeriodState");
-                            if ("1".equals(obj.viewablePeriodState) == false) {
-                                obj.remainTime = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, compareDate);
 
-                                if (obj.remainTime < 0) {
-                                    if ( "1".equals(purchaseDeviceType) ) {
-                                        tvList_3.add(obj);
-                                    } else if ( "2".equals(purchaseDeviceType) ) {
-                                        moblieList_3.add(obj);
-                                    }
-                                } else {
-                                    if ( "1".equals(purchaseDeviceType) ) {
-                                        tvList_2.add(obj);
-                                    } else if ( "2".equals(purchaseDeviceType) ) {
-                                        moblieList_2.add(obj);
-                                    }
-                                }
-                            } else {
-                                if ( "1".equals(purchaseDeviceType) ) {
-                                    tvList_1.add(obj);
-                                } else if ( "2".equals(purchaseDeviceType) ) {
-                                    moblieList_1.add(obj);
-                                }
+                            mResponseList.add(obj);
+
+                            if ("bundle".equals(productType)) {
+                                mapBundel.put(productId, false);
                             }
                         }
                     }
 
-                    ((MyMainActivity) getActivity()).hideProgressDialog();
-
-                    sortPurchaseList_1(moblieList_1);
-                    sortPurchaseList_2(moblieList_2);
-                    sortPurchaseList_3(moblieList_3);
-
-                    sortPurchaseList_1(tvList_1);
-                    sortPurchaseList_2(tvList_2);
-                    sortPurchaseList_3(tvList_3);
-
-                    mMoblieList.addAll(moblieList_1);
-                    mMoblieList.addAll(moblieList_2);
-                    mMoblieList.addAll(moblieList_3);
-
-                    mTVList.addAll(tvList_1);
-                    mTVList.addAll(tvList_2);
-                    mTVList.addAll(tvList_3);
-
-                    changeListData();
+                    requestGetBundleProductInfo(mapBundel);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -490,6 +444,137 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         };
         mRequestQueue.add(request);
     }
+
+    /**
+     * 번들상품 정보 조회
+     */
+    public void requestGetBundleProductInfo(final HashMap<String, Boolean> mapProductId) {
+        String terminalKey = mPref.getWebhasTerminalKey();
+
+        final Date compareDate = new Date();
+
+        for (String productID : mapProductId.keySet()) {
+            String url = mPref.getWebhasServerUrl() + "/getBundleProductInfo.json?version=1&terminalKey="+terminalKey+"&productId="+productID;
+
+            JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject responseObject = new JSONObject(response);
+                        JSONObject bundleObject = responseObject.getJSONObject("bundleProduct");
+                        String licenseStart = bundleObject.getString("licenseStart");
+                        String licenseEnd = bundleObject.getString("licenseEnd");
+                        String externalProductId = bundleObject.getString("externalProductId");
+                        String productId = bundleObject.getString("productId");
+
+                        for (ListViewDataObject dataObject : mResponseList) {
+                            JSONObject obj = new JSONObject(dataObject.sJson);
+                            String listProductId = obj.getString("productId");
+                            if (productId.equals(listProductId)) {
+                                obj.put("licenseStart", licenseStart);
+                                obj.put("licenseEnd", licenseEnd);
+                                obj.put("externalProductId", externalProductId);
+                                dataObject.sJson = obj.toString();
+                            }
+                        }
+                        mapProductId.put(productId, true);
+
+                        Boolean isResponsed = false;
+                        for (String key : mapProductId.keySet()) {
+                            isResponsed = mapProductId.get(key);
+                            if (isResponsed == false) {
+                                break;
+                            }
+                        }
+
+                        if (isResponsed == true) {
+                            // 무제한
+                            ArrayList<ListViewDataObject> moblieList_1 = new ArrayList<>();
+                            ArrayList<ListViewDataObject> tvList_1 = new ArrayList<>();
+                            // 기간 완료
+                            ArrayList<ListViewDataObject> moblieList_2 = new ArrayList<>();
+                            ArrayList<ListViewDataObject> tvList_2 = new ArrayList<>();
+                            // 기간 만료
+                            ArrayList<ListViewDataObject> moblieList_3 = new ArrayList<>();
+                            ArrayList<ListViewDataObject> tvList_3 = new ArrayList<>();
+
+                            for (ListViewDataObject dataObject : mResponseList) {
+                                JSONObject obj = new JSONObject(dataObject.sJson);
+                                String purchaseDeviceType = obj.getString("purchaseDeviceType");   // 1:TV, 2:MOBILE
+                                String purchasedTime = obj.getString("purchasedTime");
+                                String viewablePeriod = obj.getString("viewablePeriod");
+
+                                dataObject.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
+                                dataObject.viewablePeriodState = obj.getString("viewablePeriodState");
+
+                                if ("1".equals(dataObject.viewablePeriodState) == false) {
+                                    dataObject.remainTime = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, compareDate);
+
+                                    if (dataObject.remainTime < 0) {
+                                        if ( "1".equals(purchaseDeviceType) ) {
+                                            tvList_3.add(dataObject);
+                                        } else if ( "2".equals(purchaseDeviceType) ) {
+                                            moblieList_3.add(dataObject);
+                                        }
+                                    } else {
+                                        if ( "1".equals(purchaseDeviceType) ) {
+                                            tvList_2.add(dataObject);
+                                        } else if ( "2".equals(purchaseDeviceType) ) {
+                                            moblieList_2.add(dataObject);
+                                        }
+                                    }
+                                } else {
+                                    if ( "1".equals(purchaseDeviceType) ) {
+                                        tvList_1.add(dataObject);
+                                    } else if ( "2".equals(purchaseDeviceType) ) {
+                                        moblieList_1.add(dataObject);
+                                    }
+                                }
+                            }
+                            // 정렬 처리를 한다.
+                            sortPurchaseList_1(moblieList_1);
+                            sortPurchaseList_2(moblieList_2);
+                            sortPurchaseList_3(moblieList_3);
+
+                            sortPurchaseList_1(tvList_1);
+                            sortPurchaseList_2(tvList_2);
+                            sortPurchaseList_3(tvList_3);
+
+                            mMoblieList.addAll(moblieList_1);
+                            mMoblieList.addAll(moblieList_2);
+                            mMoblieList.addAll(moblieList_3);
+
+                            mTVList.addAll(tvList_1);
+                            mTVList.addAll(tvList_2);
+                            mTVList.addAll(tvList_3);
+
+                            ((MyMainActivity) getActivity()).hideProgressDialog();
+                            changeListData();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    ((MyMainActivity)getActivity()).hideProgressDialog();
+                    if ( mPref.isLogging() ) { VolleyLog.d("", "onErrorResponse(): " + error.getMessage()); }
+                }
+            }) {
+                @Override
+                protected Map<String,String> getParams(){
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("version", String.valueOf(1));
+                    if ( mPref.isLogging() ) { Log.d("", "getParams()" + params.toString()); }
+                    return params;
+                }
+            };
+            mRequestQueue.add(request);
+        }
+    }
+
 
     // VodMainGridViewAdapter에서 포스터를 클릭했을때 타는 메소드.
     // assetInfo를 요청해서, 구매한 VOD인지를 알아낸다.

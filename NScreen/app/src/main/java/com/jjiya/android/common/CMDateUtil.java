@@ -110,7 +110,7 @@ public class CMDateUtil {
 //                returnValue = diff+"초 남음";
                 returnValue = "1시간 남음";
             } else if (diff < 0) {
-                returnValue = "기간만료";
+                returnValue = "";
             }
 
         } catch (ParseException e) {
