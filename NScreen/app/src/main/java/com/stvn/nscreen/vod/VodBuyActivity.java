@@ -190,7 +190,9 @@ public class VodBuyActivity extends Activity {
             } break;
             case 4000: {    // 결제 다이얼로그.
                 if ( resultCode == RESULT_OK ) {
-                    Intent newIntent = new Intent();
+                    // minkyuuuu 2015-12-02 상세페이지에서 하단의 연관 컨텐츠의 상세페이지를 갖다와서 Vod 구매를 했을 때 원래의 상세페이지에 대한 포인터를 잃어 버려서 앱이 종료하는 이슈을 해결하기 위해서
+                    //Intent newIntent = new Intent();
+                    Intent newIntent = getIntent();
                     if ( intent.getExtras().get("purchasedProductType") != null ) {
                         String purchasedProductType = intent.getExtras().getString("purchasedProductType");
                         String productId = null;
