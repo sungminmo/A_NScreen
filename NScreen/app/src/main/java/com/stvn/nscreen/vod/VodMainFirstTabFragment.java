@@ -694,7 +694,13 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
                         JSONObject weeklyChart = jo.getJSONObject("weeklyChart");
                         JSONArray popularityList = weeklyChart.getJSONArray("popularityList");
-                        for ( int i = 0; i < popularityList.length(); i++ ) {
+
+                        // minkyuuuu 2015-12-03 추천 페이지 : 페이징 인디케이터 5개로 제한.
+                        // 1 page당 8개의 item : total 40개로 제한
+                        int restrictCount = popularityList.length();
+                        if( restrictCount >=40 ) restrictCount = 40;
+
+                        for ( int i = 0; i < restrictCount; i++ ) {
                             JSONObject popularity = popularityList.getJSONObject(i);
                             mPop20PagerAdapter.addVod(popularity);
                         }
@@ -807,7 +813,13 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                 try {
                     JSONObject first            = new JSONObject(response);
                     JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
-                    for ( int i = 0; i < contentGroupList.length(); i++ ) {
+
+                    // minkyuuuu 2015-12-03 추천 페이지 : 페이징 인디케이터 5개로 제한.
+                    // 1 page당 8개의 item : total 40개로 제한
+                    int restrictCount = contentGroupList.length();
+                    if( restrictCount >=40 ) restrictCount = 40;
+
+                    for ( int i = 0; i < restrictCount; i++ ) {
                         JSONObject jo = (JSONObject)contentGroupList.get(i);
                         mNewMoviePagerAdapter.addVod(jo);
                     }
@@ -848,7 +860,13 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                 try {
                     JSONObject first            = new JSONObject(response);
                     JSONArray  contentGroupList = first.getJSONArray("contentGroupList");
-                    for ( int i = 0; i < contentGroupList.length(); i++ ) {
+
+                    // minkyuuuu 2015-12-03 추천 페이지 : 페이징 인디케이터 5개로 제한.
+                    // 1 page당 8개의 item : total 40개로 제한
+                    int restrictCount = contentGroupList.length();
+                    if( restrictCount >=40 ) restrictCount = 40;
+
+                    for ( int i = 0; i < restrictCount; i++ ) {
                         JSONObject jo = (JSONObject)contentGroupList.get(i);
                         mThisMonthPagerAdapter.addVod(jo);
                     }
