@@ -42,6 +42,7 @@ import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.SubCategoryObject;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -691,17 +692,28 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                         }
                     } else {
                         String errorString = jo.getString("errorString");
-                        StringBuilder sb   = new StringBuilder();
-                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
-                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+
+//                        StringBuilder sb   = new StringBuilder();
+//                        sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
+//                        AlertDialog.Builder alert = new AlertDialog.Builder(mInstance.getActivity());
+//                        alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        alert.setMessage(sb.toString());
+//                        alert.show();
+
+                        String alertTitle = "안내";
+                        String alertMsg1 = "목록이 없습니다.";
+                        String alertMsg2 = "";
+                        CMAlertUtil.Alert1(mInstance.getActivity(), alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                             }
-                        });
-                        alert.setMessage(sb.toString());
-                        alert.show();
+                        }, true);
+
                     }
 
                 } catch ( JSONException e ) {
