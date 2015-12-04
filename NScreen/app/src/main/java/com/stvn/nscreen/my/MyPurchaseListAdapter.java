@@ -91,7 +91,7 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 				remainLicense = "무제한 시청";
 			} else {
 				String licenseEnd = jsonObj.getString("licenseEnd");
-//				remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd, this.mCompareDate);
+				remainLicense = CMDateUtil.getLicenseRemainDate(licenseEnd, this.mCompareDate);
 				if (info.remainTime < 0) {
 					remainLicense = "기간 만료";
 				} else {

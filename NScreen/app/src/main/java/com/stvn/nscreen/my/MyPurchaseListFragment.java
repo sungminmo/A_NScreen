@@ -146,88 +146,17 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             public void onClickFrontView(int position) {
                 ListViewDataObject obj = getCurrentTabObjectWithIndex(position);
 
-                String assetId = "";
-                String primaryAssetId = "";
-                String episodePeerExistence = "";
-                String contentGroupId = "";
+
                 try {
                     JSONObject jsonObj = new JSONObject(obj.sJson);
-                    String licenseEnd = jsonObj.getString("licenseEnd");
-                    if (TextUtils.isEmpty(CMDateUtil.getLicenseRemainDate(licenseEnd, new Date()))) {
-                        String alertTitle = getString(R.string.my_cnm_alert_title_expired);
-                        String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
-                        CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", true, false, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }, true);
-                        return;
-                    }
-
-                    String rating = jsonObj.getString("rating");
-                    if (rating.startsWith("19") && mPref.isAdultVerification() == false) {
-                        String alertTitle = "성인인증 필요";
-                        String alertMsg1 = getActivity().getString(R.string.error_not_adult1);
-                        String alertMsg2 = getActivity().getString(R.string.error_not_adult2);
-                        CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getActivity(), CMSettingMainActivity.class);
-                                getActivity().startActivity(intent);
-                            }
-                        }, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
+//                    String licenseEnd = jsonObj.getString("licenseEnd");
+                    String productType = jsonObj.getString("productType");
+                    if(productType.equalsIgnoreCase("bundle")){
+                        requestGetBundleProductDetail(jsonObj);
                     } else {
-                        if (jsonObj.isNull("assetId") == false) {
-                            assetId = jsonObj.getString("assetId");
-                        } else if (jsonObj.isNull("primaryAssetId") == false) {
-                            assetId = jsonObj.getString("primaryAssetId");
-                        }
-
-                        if (jsonObj.isNull("primaryAssetId") == false) {
-                            primaryAssetId = jsonObj.getString("primaryAssetId");
-                        }
-
-                        if (jsonObj.isNull("episodePeerExistence") == false) {
-                            episodePeerExistence = jsonObj.getString("episodePeerExistence");
-                        }
-
-                        if (jsonObj.isNull("contentGroupId") == false) {
-                            contentGroupId = jsonObj.getString("contentGroupId");
-                        }
-
-                        String productType = "";
-                        if (jsonObj.isNull("productType") == false) {
-                            productType = jsonObj.getString("productType");
-                            productType = productType.toLowerCase();
-                        }
-                        if ("bundle".equalsIgnoreCase(productType)) {
-                            startActivityAssetOrBundle(assetId, jsonObj);
-                        } else {
-                            if (TextUtils.isEmpty(assetId) == false) {
-                                if (TextUtils.isEmpty(episodePeerExistence)) {
-                                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                                    intent.putExtra("assetId", assetId);
-                                    startActivity(intent);
-                                } else {
-
-                                    Intent intent = new Intent(getActivity(), VodDetailActivity.class);
-                                    intent.putExtra("assetId", assetId);
-                                    if ("1".equalsIgnoreCase(episodePeerExistence) == true) {
-                                        intent.putExtra("episodePeerExistence", episodePeerExistence);
-                                        intent.putExtra("contentGroupId", contentGroupId);
-                                        intent.putExtra("primaryAssetId", primaryAssetId);
-                                    }
-                                    startActivity(intent);
-                                }
-                            }
-                        }
-
+                        requestGetAssetInfoDetail(jsonObj);
                     }
+
 
 
                 } catch (JSONException e) {
@@ -575,11 +504,185 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         }
     }
 
-
     // VodMainGridViewAdapter에서 포스터를 클릭했을때 타는 메소드.
     // assetInfo를 요청해서, 구매한 VOD인지를 알아낸다.
     // 만약 구매 했다면, VodDetailBundleActivity로 이동.
     // 만약 구매 안했다면, VodDetailActivity로 이동.
+
+    public void requestGetBundleProductDetail(final JSONObject object) {
+
+        String terminalKey = mPref.getWebhasTerminalKey();
+        String productID = null;
+        try {
+            productID = object.getString("productId");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = mPref.getWebhasServerUrl() + "/getBundleProductInfo.json?version=1&terminalKey="+terminalKey+"&productId="+productID+"&productProfile=1";
+
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+
+                    if(responseObject.getString("resultCode").equalsIgnoreCase("100")) {
+                        startActivityAssetOrBundle(object.getString("assetId"), object);
+                    } else {
+                        String alertTitle = getString(R.string.my_cnm_alert_title_expired);
+                        String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+                        CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((MyMainActivity)getActivity()).hideProgressDialog();
+                if ( mPref.isLogging() ) { VolleyLog.d("", "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                if ( mPref.isLogging() ) { Log.d("", "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+    }
+
+    public void requestGetAssetInfoDetail(final JSONObject object) {
+        ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
+        String assetId = "";
+        String terminalKey = "";
+        try {
+            assetId = object.getString("assetId");
+            terminalKey = mPref.getWebhasTerminalKey();
+            assetId  = URLDecoder.decode(assetId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = mPref.getWebhasServerUrl() + "/getAssetInfo.json?version=1&terminalKey="+terminalKey+"&assetProfile=9&assetId="+assetId;
+        JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ((MyMainActivity)getActivity()).hideProgressDialog();
+
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    if (jo.getString("resultCode").equals("100")) { // success
+                        JSONObject asset = jo.getJSONObject("asset");
+                        String assetId = asset.getString("assetId");
+                        String primaryAssetId = "";
+                        String episodePeerExistence = "";
+                        String contentGroupId = "";
+                        String rating = asset.getString("rating");
+                        if (rating.startsWith("19") && mPref.isAdultVerification() == false) {
+                            String alertTitle = "성인인증 필요";
+                            String alertMsg1 = getActivity().getString(R.string.error_not_adult1);
+                            String alertMsg2 = getActivity().getString(R.string.error_not_adult2);
+                            CMAlertUtil.Alert1(getActivity(), alertTitle, alertMsg1, alertMsg2, false, true, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(getActivity(), CMSettingMainActivity.class);
+                                    getActivity().startActivity(intent);
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                        } else {
+                            if (asset.isNull("assetId") == false) {
+                                assetId = asset.getString("assetId");
+                            } else if (asset.isNull("primaryAssetId") == false) {
+                                assetId = asset.getString("primaryAssetId");
+                            }
+
+                            if (asset.isNull("primaryAssetId") == false) {
+                                primaryAssetId = asset.getString("primaryAssetId");
+                            }
+
+                            if (asset.isNull("episodePeerExistence") == false) {
+                                episodePeerExistence = asset.getString("episodePeerExistence");
+                            }
+
+                            if (asset.isNull("contentGroupId") == false) {
+                                contentGroupId = asset.getString("contentGroupId");
+                            }
+
+                            String productType = "";
+                            if (asset.isNull("productType") == false) {
+                                productType = object.getString("productType");
+                                productType = productType.toLowerCase();
+                            }
+
+                                if (TextUtils.isEmpty(assetId) == false) {
+                                    if (TextUtils.isEmpty(episodePeerExistence)) {
+                                        Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                                        intent.putExtra("assetId", assetId);
+                                        startActivity(intent);
+                                    } else {
+
+                                        Intent intent = new Intent(getActivity(), VodDetailActivity.class);
+                                        intent.putExtra("assetId", assetId);
+                                        if ("1".equalsIgnoreCase(episodePeerExistence) == true) {
+                                            intent.putExtra("episodePeerExistence", episodePeerExistence);
+                                            intent.putExtra("contentGroupId", contentGroupId);
+                                            intent.putExtra("primaryAssetId", primaryAssetId);
+                                        }
+                                        startActivity(intent);
+                                    }
+                                }
+
+
+                        }
+                    } else {
+                            String alertTitle = getString(R.string.my_cnm_alert_title_expired);
+                            String alertMessage1 = getString(R.string.my_cnm_alert_message1_expired);
+                            CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, "", true, false, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }, true);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((MyMainActivity)getActivity()).hideProgressDialog();
+                if ( mPref.isLogging() ) { VolleyLog.d("MyPurchaseListFragment", "onErrorResponse(): " + error.getMessage()); }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("version", String.valueOf(1));
+                params.put("areaCode", String.valueOf(0));
+                if ( mPref.isLogging() ) { Log.d("MyPurchaseListFragment", "getParams()" + params.toString()); }
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
+
+    }
     public void requestGetAssetInfoWithBundleAssetId(String primaryAssetId) {
         ((MyMainActivity)getActivity()).showProgressDialog("", getString(R.string.wait_a_moment));
 

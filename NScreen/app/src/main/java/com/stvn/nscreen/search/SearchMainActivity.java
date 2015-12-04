@@ -124,7 +124,19 @@ public class SearchMainActivity extends CMBaseActivity {
                         hideSoftKeyboard();
                         if (mKeywordView.getText().length() > 0) {
                             mKeyword = mKeywordView.getText().toString();
-                            showFragment();
+                            if(mKeyword.trim().isEmpty()) {
+                                /*
+                                mKeyword = "";
+                                if (CMSettingData.getInstance().getAdultSearchRestriction(this) == true) {
+                                    mKeywordView.setHint("성인 콘텐츠를 검색하시려면 설정 > 성인검색 제한 설정을 해제 해주세요.");
+                                } else {
+                                    mKeywordView.setHint("");
+                                }
+                                */
+                                return false;
+                            } else {
+                                showFragment();
+                            }
                         } else {
                             mKeywordEmptyView.setVisibility(View.VISIBLE);
                         }

@@ -15,7 +15,24 @@ public class CMDateUtil {
         Locale currentLocale = new Locale("KOREAN", "KOREA");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", currentLocale);
 
-        String viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10)));
+        // 서버에서 오는 날짜 데이타 형식이 크게 세 경우이다
+        // 0000-00-3 00:00:00
+        // 0000-00-30 00:00:00
+        // 0000-00-365 00:00:00
+
+        //String viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10)));
+
+        String viewable = null;
+        if( viewablePeriod.substring(9, 10).equals(" ") ) {
+            viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 9)));
+        }
+        else if ( viewablePeriod.substring(10, 11).equals(" ") ) {
+            viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10)));
+        }
+        else if( viewablePeriod.substring(11, 12).equals(" ")) {
+            viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 11)));
+        }
+
         long diffTime = 0;
         long viewableTime = Long.valueOf(viewable)*24*60*60;
 
