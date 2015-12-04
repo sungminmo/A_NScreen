@@ -106,19 +106,28 @@ public class LoadingActivity extends AppCompatActivity {
 
         if ( getIntent().getExtras() != null ) {
             String striSeq = getIntent().getExtras().getString("iSeq");
-            int iSeqNoti = Integer.valueOf(striSeq);
-            //NotificationManager notifier = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            //notifier.cancel(iSeqNoti);
 
-            //NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            // Create a new intent which will be fired if you click on the notification
-            //Intent intent = new Intent(this, ApplicationClass.class);
-            // Attach the intent to a pending intent
-            //PendingIntent pendingIntent = PendingIntent.getActivity(this, iSeqNoti, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+            // 2015-12-05 minkyuuuu
+            // 앱 설치후 최초 진입시 getIntent() == null 이다. 앱을 종료하고 다시 진입하면..
+            // Lollipop 버전에서는 null이 아니구... getIntent().getExtras().getString("iSeq")이 null 들어와 예외 처리함.
+            // 그런데, 어디에서도 시청예약을 한 적도 없는 데 null이 아닌게 더 이상하다.
+            // 다른 버전(Lollipop이전버전 or 기기 마???) 에서는 당연히 null이 들어와서 이 부분을 skip한다.
+            if(striSeq != null) {
+                int iSeqNoti = Integer.valueOf(striSeq);
+                //NotificationManager notifier = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                //notifier.cancel(iSeqNoti);
 
-            String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(ns);
-            notificationManager.cancel(iSeqNoti);
+                //NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                // Create a new intent which will be fired if you click on the notification
+                //Intent intent = new Intent(this, ApplicationClass.class);
+                // Attach the intent to a pending intent
+                //PendingIntent pendingIntent = PendingIntent.getActivity(this, iSeqNoti, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+
+                String ns = Context.NOTIFICATION_SERVICE;
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(ns);
+
+                notificationManager.cancel(iSeqNoti);
+            }
         }
 
         // 10~20 : file io
