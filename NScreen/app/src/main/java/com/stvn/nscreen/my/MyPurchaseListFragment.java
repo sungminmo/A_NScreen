@@ -350,8 +350,8 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             }
                         }
                     }
-
-                    requestGetBundleProductInfo(mapBundel);
+                    drawPurchaseList();
+//                    requestGetBundleProductInfo(mapBundel);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -372,6 +372,79 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             }
         };
         mRequestQueue.add(request);
+    }
+
+    public void drawPurchaseList() {
+        try {
+            // 무제한
+            ArrayList<ListViewDataObject> moblieList_1 = new ArrayList<>();
+            ArrayList<ListViewDataObject> tvList_1 = new ArrayList<>();
+            // 기간 완료
+            ArrayList<ListViewDataObject> moblieList_2 = new ArrayList<>();
+            ArrayList<ListViewDataObject> tvList_2 = new ArrayList<>();
+            // 기간 만료
+            ArrayList<ListViewDataObject> moblieList_3 = new ArrayList<>();
+            ArrayList<ListViewDataObject> tvList_3 = new ArrayList<>();
+
+            for (ListViewDataObject dataObject : mResponseList) {
+                JSONObject obj = null;
+
+                obj = new JSONObject(dataObject.sJson);
+
+                String purchaseDeviceType = obj.getString("purchaseDeviceType");   // 1:TV, 2:MOBILE
+                String purchasedTime = obj.getString("purchasedTime");
+                String viewablePeriod = obj.getString("viewablePeriod");
+
+                dataObject.puchaseSecond = CMDateUtil.changeSecondToDate(purchasedTime);
+                dataObject.viewablePeriodState = obj.getString("viewablePeriodState");
+
+                if ("1".equals(dataObject.viewablePeriodState) == false) {
+                    dataObject.remainTime = CMDateUtil.getRemainWatchingTime(viewablePeriod, purchasedTime, new Date());
+
+                    if (dataObject.remainTime < 0) {
+                        if ("1".equals(purchaseDeviceType)) {
+                            tvList_3.add(dataObject);
+                        } else if ("2".equals(purchaseDeviceType)) {
+                            moblieList_3.add(dataObject);
+                        }
+                    } else {
+                        if ("1".equals(purchaseDeviceType)) {
+                            tvList_2.add(dataObject);
+                        } else if ("2".equals(purchaseDeviceType)) {
+                            moblieList_2.add(dataObject);
+                        }
+                    }
+                } else {
+                    if ("1".equals(purchaseDeviceType)) {
+                        tvList_1.add(dataObject);
+                    } else if ("2".equals(purchaseDeviceType)) {
+                        moblieList_1.add(dataObject);
+                    }
+                }
+            }
+            // 정렬 처리를 한다.
+            sortPurchaseList_1(moblieList_1);
+            sortPurchaseList_2(moblieList_2);
+            sortPurchaseList_3(moblieList_3);
+
+            sortPurchaseList_1(tvList_1);
+            sortPurchaseList_2(tvList_2);
+            sortPurchaseList_3(tvList_3);
+
+            mMoblieList.addAll(moblieList_1);
+            mMoblieList.addAll(moblieList_2);
+            mMoblieList.addAll(moblieList_3);
+
+            mTVList.addAll(tvList_1);
+            mTVList.addAll(tvList_2);
+            mTVList.addAll(tvList_3);
+
+            changeListData();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            ((MyMainActivity) getActivity()).hideProgressDialog();
+        }
     }
 
     /**
@@ -402,7 +475,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                             if (productId.equals(listProductId)) {
                                 obj.put("licenseStart", licenseStart);
                                 obj.put("licenseEnd", licenseEnd);
-                                obj.put("externalProductId", externalProductId);
+                                obj .put("externalProductId", externalProductId);
                                 dataObject.sJson = obj.toString();
                             }
                         }
