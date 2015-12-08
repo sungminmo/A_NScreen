@@ -284,6 +284,10 @@ public class VodBuyActivity extends Activity {
         // step1 -----------------------------------------------------------------------------------
         // RVOD (단일상품 또는 단일회차 버튼 표시 해야 한다. isSeriesLink
         try {
+            // 2015-12-08 minkyuuuu 월정액일 때 "매월 자동 결제되는 월정액 상품을 가입 하시면 ... " 먼저 보여야하는 이슈.
+            boolean isExistRVOD = false;
+            boolean isOnlySVOD = false;
+
             int iLoopOfSVOD = 0;
             for ( int i = 0; i< productList.length(); i++ ) {
                 final int  iLoopOfSVODFinal = iLoopOfSVOD;
@@ -298,6 +302,8 @@ public class VodBuyActivity extends Activity {
                 Log.d(tag, "setUI ---------------------------------------------------------------");
                 Log.d(tag, i+": price(정가): "+price+", listPrice(할인적용가): "+listPrice+", productType: "+productType+", productId: "+productId2);
                 if ( "RVOD".equals(productType) ) { //
+                    isExistRVOD = true;
+
                     if ( "YES".equals(isSeriesLink) ) { // 시리즈이면 "단일 회차 구매" 표시
                         vod_buy_step1_one_serise_linearlayout.setVisibility(View.VISIBLE);
                         addButton(vod_buy_step1_one_serise_linearlayout);
@@ -322,20 +328,24 @@ public class VodBuyActivity extends Activity {
                             vod_buy_step2_linearlayout2.setVisibility(View.GONE);   // 안내 감쳐라.
                         }
                     });
-                    vod_buy_step1_one_serise_linearlayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            setSeletedButton(vod_buy_step1_one_serise_linearlayout);
-                            // RVOD를 선택하면, STEP2를 보이고, 안내는 가린다.
-                            vod_buy_step2_linearlayout.setVisibility(View.VISIBLE); // 스텝2 보여라.
-                            vod_buy_step2_linearlayout2.setVisibility(View.GONE);   // 안내 감쳐라.
-                        }
-                    });
+
+                    // 2015-12-08 minkyuuuu 위와 동일하여 comment함
+//                    vod_buy_step1_one_serise_linearlayout.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            setSeletedButton(vod_buy_step1_one_serise_linearlayout);
+//                            // RVOD를 선택하면, STEP2를 보이고, 안내는 가린다.
+//                            vod_buy_step2_linearlayout.setVisibility(View.VISIBLE); // 스텝2 보여라.
+//                            vod_buy_step2_linearlayout2.setVisibility(View.GONE);   // 안내 감쳐라.
+//                        }
+//                    });
                 }
                 if ( "Package".equals(productType) ) {  // 시리즈 전체회차 구매
+                    isExistRVOD = true;
+
                     vod_buy_step1_serise_linearlayout.setVisibility(View.VISIBLE);
                     addButton(vod_buy_step1_serise_linearlayout);
-                    vod_buy_step1_serise_textview.setText(UiUtil.toNumFormat(listPrice)+"원 [부가세 별도]");
+                    vod_buy_step1_serise_textview.setText(UiUtil.toNumFormat(listPrice) + "원 [부가세 별도]");
                     vod_buy_step1_serise_linearlayout.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View v) {
@@ -344,8 +354,10 @@ public class VodBuyActivity extends Activity {
                     });
                 }
                 if ( "Bundle".equals(productType) ) { // 묶음 할인상품 구매
+                    isExistRVOD = true;
+
                     vod_buy_step1_packeage_linearlayout.setVisibility(View.VISIBLE);
-                    vod_buy_step1_packeage_textview.setText(UiUtil.toNumFormat(listPrice)+"원 [부가세 별도]"); // 묶음 할인상품 구매 text
+                    vod_buy_step1_packeage_textview.setText(UiUtil.toNumFormat(listPrice) + "원 [부가세 별도]"); // 묶음 할인상품 구매 text
                     addButton(vod_buy_step1_packeage_linearlayout);
                     vod_buy_step1_packeage_linearlayout.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -380,8 +392,22 @@ public class VodBuyActivity extends Activity {
                         }
                     });
                     iLoopOfSVOD++;
+
+                    // 2015-12-08 minkyuuuu 월정액일 때 "매월 자동 결제되는 월정액 상품을 가입 하시면 ... " 먼저 보여야하는 이슈.
+                    if(isExistRVOD == false) {
+                        isOnlySVOD = true;
+                    } else {
+                        isOnlySVOD = false;
+                    }
                 }
             }
+
+            // 2015-12-08 minkyuuuu 월정액일 때 "매월 자동 결제되는 월정액 상품을 가입 하시면 ... " 먼저 보여야하는 이슈.
+            if(isOnlySVOD) {
+                vod_buy_step2_linearlayout.setVisibility(View.GONE);     // 스텝2 감쳐라
+                vod_buy_step2_linearlayout2.setVisibility(View.VISIBLE); // 안내 보여라
+            }
+
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
