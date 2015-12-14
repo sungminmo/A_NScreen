@@ -48,6 +48,22 @@ public class CMDateUtil {
         return viewableTime - diffTime;
     }
 
+    public static Integer getViewablePeriod(String viewablePeriod) {
+        String viewable = null;
+
+        if( viewablePeriod.substring(9, 10).equals(" ") ) {
+            viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 9)));
+        }
+        else if ( viewablePeriod.substring(10, 11).equals(" ") ) {
+            viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10)));
+        }
+        else if( viewablePeriod.substring(11, 12).equals(" ")) {
+            viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 11)));
+        }
+
+        return Integer.valueOf(viewable);
+    }
+
     /**
      * 라이센스 남은 일자를 분으로 변환하여 반환한다.
      * */

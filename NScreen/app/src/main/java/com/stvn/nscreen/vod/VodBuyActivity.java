@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.CMDateUtil;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
@@ -640,14 +641,22 @@ public class VodBuyActivity extends Activity {
 
                     // 0000-00-30 00:00:00
                     // 0000-00-00 24:00:00
-                    String           viewablePeriod = jo.getString("viewablePeriod");
-                    Calendar         cal            = Calendar.getInstance();
-                    Locale           currentLocale  = new Locale("KOREAN", "KOREA");
-                    SimpleDateFormat formatter      = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", currentLocale);
-                    Date             dayofday       = formatter.parse(viewablePeriod);
-                    cal.setTime(dayofday);
-                    int selectedViewablePeriod      = cal.get(Calendar.DATE);
-                    viewable                        = selectedViewablePeriod + "일";
+                    Integer viewablePeriodState = jo.getInt("viewablePeriodState");
+
+                    if( viewablePeriodState == 1 ) {
+                        viewable = "무제한시청";
+                    } else {
+                        String           viewablePeriod = jo.getString("viewablePeriod");
+//                        Calendar         cal            = Calendar.getInstance();
+//                        Locale           currentLocale  = new Locale("KOREAN", "KOREA");
+//                        SimpleDateFormat formatter      = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", currentLocale);
+//                        Date             dayofday       = formatter.parse(viewablePeriod);
+//                        cal.setTime(dayofday);
+//                        int selectedViewablePeriod      = cal.get(Calendar.DATE);
+
+                        Integer viewableTime = CMDateUtil.getViewablePeriod(viewablePeriod);
+                        viewable = String.valueOf(viewableTime) + "일";
+                    }
 
                     // Step.2의 결제방식을 알아내기.
                     String sPayMethod = "";
@@ -690,8 +699,6 @@ public class VodBuyActivity extends Activity {
                     startActivityForResult(intent, 4000);
                 } catch ( JSONException e ) {
                     e.printStackTrace();
-                } catch (ParseException pe) {
-                    pe.printStackTrace();
                 }
 
             }

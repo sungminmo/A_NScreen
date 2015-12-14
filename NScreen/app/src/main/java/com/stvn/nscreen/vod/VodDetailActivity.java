@@ -29,6 +29,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.jjiya.android.common.CMDateUtil;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.FourVodPosterPagerAdapter;
 import com.jjiya.android.common.JYSharedPreferences;
@@ -826,14 +827,17 @@ public class VodDetailActivity extends Activity {
                 //viewable = String.valueOf((Integer.parseInt(viewablePeriod.substring(0, 4)) * 365) + (Integer.parseInt(viewablePeriod.substring(5, 7)) * 30 ) + Integer.parseInt(viewablePeriod.substring(8, 10))) + "일";
                 // 0000-00-30 00:00:00
                 // 0000-00-00 24:00:00
-                Calendar cal               = Calendar.getInstance();
-                Locale currentLocale       = new Locale("KOREAN", "KOREA");
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", currentLocale);
-                Date             dayofday  = formatter.parse(viewablePeriod);
-                cal.setTime(dayofday);
-                viewable                   = cal.get(Calendar.DATE) + "일";
-                viewablePeriod = viewable;
-                mViewableTextView.setText(viewablePeriod);
+//                Calendar cal               = Calendar.getInstance();
+//                Locale currentLocale       = new Locale("KOREAN", "KOREA");
+//                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", currentLocale);
+//                Date             dayofday  = formatter.parse(viewablePeriod);
+//                cal.setTime(dayofday);
+
+                Integer viewableTime = CMDateUtil.getViewablePeriod(viewablePeriod);
+                viewable = String.valueOf(viewableTime) + "일";
+
+                //viewablePeriod = viewable;
+                mViewableTextView.setText(viewable);
             }
 
             mTitleTextView.setText(asset.getString("title"));
@@ -890,8 +894,6 @@ public class VodDetailActivity extends Activity {
             }
         } catch ( JSONException e ) {
             e.printStackTrace();
-        } catch (ParseException pe) {
-            pe.printStackTrace();
         }
     }
 
