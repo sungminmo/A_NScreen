@@ -25,22 +25,13 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -182,11 +173,20 @@ public class VodBuyActivity extends Activity {
                 if ( resultCode == RESULT_OK ) {
                     vod_buy_step1_one_product_linearlayout.setSelected(false);
                     vod_buy_step1_packeage_linearlayout.setSelected(true);
+
                 } else if ( resultCode == RESULT_CANCELED ) {
                     vod_buy_step1_one_product_linearlayout.setSelected(true);
                     vod_buy_step1_packeage_linearlayout.setSelected(false);
                     vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원 [부가세 별도]");
                     vod_buy_step2_dis_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원 [부가세 별도]");
+
+                    // 2015-12-22 minkyuuuu 묶음 할인상품구매로 상세화면으로 가서 back button으로 돌아왔을 때 일반결제의 금액이 잘못되어 수정을 위하여..
+                    showNormalPaymentForSingleProduct();
+
+                    // 2015-12-22 minkyuuuu 묶음 할인상품구매로 상세화면으로 가서 back button으로 돌아왔을 때
+                    // 단일상품구매의 일반결제, 단일상품구매의 쿠폰결제의 "결제하기"에서 결제 팝업창에 묶음 할인상품 금액이 표시되는 오류 수정.
+                    LinearLayout defaultButton = (LinearLayout)step1Buttons.get(0);
+                    setSeletedButton(defaultButton);
                 }
             } break;
             case 4000: {    // 결제 다이얼로그.
@@ -210,7 +210,7 @@ public class VodBuyActivity extends Activity {
 
                     setResult(RESULT_OK, newIntent);
                     finish();
-                } else if ( resultCode == RESULT_CANCELED ) {
+                } else if ( resultCode == RESULT_CANCELED) {
 
                 }
             } break;
@@ -317,6 +317,10 @@ public class VodBuyActivity extends Activity {
                             @Override
                             public void onClick(View v) {
                                 setSeletedButton(vod_buy_step1_one_product_linearlayout);
+
+                                // 2015-12-22 minkyuuuu 묶음 할인상품구매로 상세화면으로 가서 back button으로 돌아왔을 때
+                                // 단일상품구매의 일반결제, 단일상품구매의 쿠폰결제의 "결제하기"에서 결제 팝업창에 묶음 할인상품 금액이 표시되는 오류 수정.
+                                showNormalPaymentForSingleProduct();
                             }
                         });
                     }
@@ -364,9 +368,24 @@ public class VodBuyActivity extends Activity {
                         @Override
                         public void onClick(View v) {
                             setSeletedButton(vod_buy_step1_packeage_linearlayout);
-                            String thisPrice = String.valueOf(listPrice);
-                            vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.valueOf(thisPrice)) + "원 [부가세 별도]");
-                            vod_buy_step2_dis_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(thisPrice)) + "원 [부가세 별도]");
+
+                            // 2015-12-22 minkyuuuu 묶음 할인상품구매로 상세화면으로 가서 back button으로 돌아왔을 때
+                            // 단일상품구매의 일반결제, 단일상품구매의 쿠폰결제의 "결제하기"에서 결제 팝업창에 묶음 할인상품 금액이 표시되는 오류 수정.
+                            vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
+                            vod_buy_step2_normal_dis_linearlayout.setVisibility(View.GONE);
+                            vod_buy_step2_normal_linearlayout.setSelected(true);
+                            vod_buy_step2_normal_dis_linearlayout.setSelected(false);
+
+                            // 상품의 금액 알아내기.
+                            JSONObject jo = null;
+                            try {
+                                jo = (JSONObject)productList.get(iSeletedProductList);
+                                String listPrice = jo.getString("listPrice");
+                                vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.valueOf(listPrice)) + "원 [부가세 별도]");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                             Intent intent = new Intent(mInstance, VodDetailBundleActivity.class);
                             intent.putExtra("assetId",   assetId);
                             intent.putExtra("productId", productId2);
@@ -425,33 +444,10 @@ public class VodBuyActivity extends Activity {
         vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
         vod_buy_step2_normal_price.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원 [부가세 별도]");
         vod_buy_step2_dis_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원 [부가세 별도]");
-        if ( couponList.length() == 0 ) {                           // 보유쿠폰이 없으면 무조건 일반결제 (비쿠폰구매)를 보이자.
-            vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
-            vod_buy_step2_normal_dis_linearlayout.setVisibility(View.GONE);
-            vod_buy_step2_normal_linearlayout.setSelected(true);
-            vod_buy_step2_normal_dis_linearlayout.setSelected(false);
-        } else {                                                    // 보유쿠폰이 있다면, 그중에 적용가능한 쿠폰이 있는지 비교해야 한다.
-            vod_buy_step2_normal_linearlayout.setVisibility(View.GONE);
-            String couponId = getUsableCouponId();
-            if ( couponId == null ) {
-                vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
-                vod_buy_step2_normal_dis_linearlayout.setVisibility(View.GONE);
-                vod_buy_step2_normal_linearlayout.setSelected(true);
-                vod_buy_step2_normal_dis_linearlayout.setSelected(false);
-            } else {
-                long discount     = getDiscountAmountBydiscountCouponMasterId(couponId);
-                ldiscountAmount   = discount;
-                sdiscountCouponId = getDiscountCouponId(couponId);
-                lpriceCouponDiscounted  = Integer.valueOf(sListPrice) - (int)discount;
-                vod_buy_step2_original_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원");
-                vod_buy_step2_original_price_textview.setPaintFlags(vod_buy_step2_original_price_textview.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                vod_buy_step2_dis_price_textview.setText(" → " + UiUtil.toNumFormat((int)lpriceCouponDiscounted) + " 원 [부가세 별도]");
-                vod_buy_step2_normal_linearlayout.setVisibility(View.GONE);
-                vod_buy_step2_normal_dis_linearlayout.setVisibility(View.VISIBLE);
-                vod_buy_step2_normal_linearlayout.setSelected(false);
-                vod_buy_step2_normal_dis_linearlayout.setSelected(true);
-            }
-        }
+
+        // 2015-12-22 minkyuuuu 묶음 할인상품구매로 상세화면으로 가서 back button으로 돌아왔을 때 일반결제의 금액이 잘못되어 수정을 위하여..
+        showNormalPaymentForSingleProduct();
+
         vod_buy_step2_coupon_point_textview.setText("잔액: "+UiUtil.toNumFormat((int) totalMoneyBalance) + "원");
         vod_buy_step2_tv_point_textview.setText("잔액: "+UiUtil.toNumFormat((int) pointBalance) + "원");
         //private              TextView             vod_buy_step2_coupon_can_textview;     // [쿠폰잔액부족-복합결제 가능]
@@ -485,6 +481,38 @@ public class VodBuyActivity extends Activity {
         // 값들 잘 찍었으면... Step.1 첫번째 항목을 디폴트로 선택해준다.
         LinearLayout defaultButton = (LinearLayout)step1Buttons.get(0);
         setSeletedButton(defaultButton);
+    }
+
+    // 단일상품구매시 일반결제
+    // 2015-12-22 minkyuuuu 묶음 할인상품구매로 상세화면으로 가서 back button으로 돌아왔을 때 일반결제의 금액이 잘못되어 수정을 위하여..
+    private void showNormalPaymentForSingleProduct() {
+        if ( couponList.length() == 0 ) {                           // 보유쿠폰이 없으면 무조건 일반결제 (비쿠폰구매)를 보이자.
+            vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
+            vod_buy_step2_normal_dis_linearlayout.setVisibility(View.GONE);
+            vod_buy_step2_normal_linearlayout.setSelected(true);
+            vod_buy_step2_normal_dis_linearlayout.setSelected(false);
+        } else {                                                    // 보유쿠폰이 있다면, 그중에 적용가능한 쿠폰이 있는지 비교해야 한다.
+            vod_buy_step2_normal_linearlayout.setVisibility(View.GONE);
+            String couponId = getUsableCouponId();
+            if ( couponId == null ) {
+                vod_buy_step2_normal_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_normal_dis_linearlayout.setVisibility(View.GONE);
+                vod_buy_step2_normal_linearlayout.setSelected(true);
+                vod_buy_step2_normal_dis_linearlayout.setSelected(false);
+            } else {
+                long discount     = getDiscountAmountBydiscountCouponMasterId(couponId);
+                ldiscountAmount   = discount;
+                sdiscountCouponId = getDiscountCouponId(couponId);
+                lpriceCouponDiscounted  = Integer.valueOf(sListPrice) - (int)discount;
+                vod_buy_step2_original_price_textview.setText(UiUtil.toNumFormat(Integer.valueOf(sListPrice)) + "원");
+                vod_buy_step2_original_price_textview.setPaintFlags(vod_buy_step2_original_price_textview.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                vod_buy_step2_dis_price_textview.setText(" → " + UiUtil.toNumFormat((int)lpriceCouponDiscounted) + " 원 [부가세 별도]");
+                vod_buy_step2_normal_linearlayout.setVisibility(View.GONE);
+                vod_buy_step2_normal_dis_linearlayout.setVisibility(View.VISIBLE);
+                vod_buy_step2_normal_linearlayout.setSelected(false);
+                vod_buy_step2_normal_dis_linearlayout.setSelected(true);
+            }
+        }
     }
 
     @Override

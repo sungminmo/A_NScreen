@@ -10,16 +10,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
 
 import com.jjiya.android.common.crypt.AESCrypt;
-import com.stvn.nscreen.LoadingActivity;
 import com.stvn.nscreen.bean.BookmarkChannelObject;
 import com.stvn.nscreen.bean.MainCategoryObject;
 import com.stvn.nscreen.bean.WatchTvObject;
 import com.stvn.nscreen.bean.WatchVodObject;
 import com.stvn.nscreen.bean.WishObject;
-import com.stvn.nscreen.vod.VodMainBaseFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,20 +25,15 @@ import org.json.JSONObject;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 
