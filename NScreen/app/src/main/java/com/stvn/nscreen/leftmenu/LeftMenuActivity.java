@@ -122,7 +122,7 @@ public class LeftMenuActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mInstance, PairingMainActivity.class);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
 
@@ -151,7 +151,7 @@ public class LeftMenuActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mInstance, EpgMainActivity.class);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
         leftmenu_remote_linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +173,7 @@ public class LeftMenuActivity extends Activity {
                     if ("HD".toLowerCase().equals(SetTopBoxKind) || "PVR".toLowerCase().equals(SetTopBoxKind)) {
                         Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
                         startActivity(intent);
-                        finish();
+//                        finish();
                     } else {
                         String alertTitle = "녹화 미 지원 상품";
                         String alertMsg1 = getString(R.string.error_not_paring_compleated2);
@@ -205,7 +205,7 @@ public class LeftMenuActivity extends Activity {
                     if ("PVR".toLowerCase().equals(SetTopBoxKind)) {
                         Intent intent = new Intent(mInstance, PvrMainActivity.class);
                         startActivity(intent);
-                        finish();
+//                        finish();
                     } else {
                         String alertTitle = "녹화 미 지원 상품";
                         String alertMsg1 = getString(R.string.error_not_paring_compleated);
@@ -235,7 +235,7 @@ public class LeftMenuActivity extends Activity {
                 } else {
                     Intent intent = new Intent(mInstance, MyMainActivity.class);
                     startActivity(intent);
-                    finish();
+//                    finish();
                 }
             }
         });
@@ -246,7 +246,7 @@ public class LeftMenuActivity extends Activity {
 
                 Intent intent = new Intent(mInstance, CMSettingMainActivity.class);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
 
@@ -274,7 +274,7 @@ public class LeftMenuActivity extends Activity {
                 Intent nextIntent = new Intent(LeftMenuActivity.this, CMSettingCustomerCenterActivity.class);
                 nextIntent.putExtra("GUIDE_ID", "1");
                 startActivity(nextIntent);
-                finish();
+//                finish();
             }
         });
     }
@@ -295,7 +295,7 @@ public class LeftMenuActivity extends Activity {
                         mPref.makeUUID();   // 사용자가 일부러 재등록을 했다면, UUID를 새로 만들어 줘야 한다.
                         Intent intent = new Intent(mInstance, PairingMainActivity.class);
                         startActivity(intent);
-                        finish();
+//                        finish();
                     } else {
                         //
                     }
