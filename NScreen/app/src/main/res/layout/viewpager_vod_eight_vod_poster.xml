@@ -45,14 +45,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview1"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview1"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -67,6 +59,14 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview1"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp" />
 
         </FrameLayout>
 
@@ -106,15 +106,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview2"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp"
-                android:background="@mipmap/vod_01" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview2"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -129,6 +120,15 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview2"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:background="@mipmap/vod_01" />
 
         </FrameLayout>
 
@@ -167,15 +167,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview3"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp"
-                android:background="@mipmap/vod_01" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview3"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -190,6 +181,15 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview3"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:background="@mipmap/vod_01" />
 
         </FrameLayout>
 
@@ -228,15 +228,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview4"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp"
-                android:background="@mipmap/vod_01" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview4"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -251,6 +242,15 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview4"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:background="@mipmap/vod_01" />
 
         </FrameLayout>
 
@@ -356,15 +356,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview5"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp"
-                android:background="@mipmap/vod_01" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview5"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -379,6 +370,15 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview5"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:background="@mipmap/vod_01" />
 
         </FrameLayout>
 
@@ -418,15 +418,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview6"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp"
-                android:background="@mipmap/vod_01" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview6"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -441,6 +432,15 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview6"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:background="@mipmap/vod_01" />
 
         </FrameLayout>
 
@@ -480,15 +480,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview7"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp"
-                android:background="@mipmap/vod_01" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview7"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -503,6 +494,15 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview7"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:background="@mipmap/vod_01" />
 
         </FrameLayout>
 
@@ -542,15 +542,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_promotionsticker_imageview8"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="2.25dp"
-                android:layout_marginRight="2.25dp"
-                android:background="@mipmap/vod_01" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_tvonly_imageview8"
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="2.25dp"
@@ -565,6 +556,15 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/icon_19"
                 android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_promotionsticker_imageview8"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="2.25dp"
+                android:layout_marginRight="2.25dp"
+                android:background="@mipmap/vod_01" />
 
         </FrameLayout>
 

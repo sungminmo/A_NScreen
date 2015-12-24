@@ -51,14 +51,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gridview_vod_main_promotionsticker_imageview"
-        android:layout_gravity="right|top"
-        android:layout_marginRight="2.25dp"
-        android:layout_marginTop="3.25dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/gridview_vod_main_tvonly_imageview"
         android:layout_gravity="right|bottom"
         android:layout_marginRight="2.25dp"
@@ -73,5 +65,13 @@
         android:layout_gravity="center_horizontal|top"
         android:background="@mipmap/icon_19"
         android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridview_vod_main_promotionsticker_imageview"
+        android:layout_gravity="right|top"
+        android:layout_marginRight="2.25dp"
+        android:layout_marginTop="3.25dp" />
 
 </FrameLayout>
