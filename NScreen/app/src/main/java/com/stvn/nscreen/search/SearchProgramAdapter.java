@@ -189,6 +189,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                 } else {
                     mPref.removeBookmarkChannelWithChannelId(channelID); // 선호채널 제거.
                 }
+                notifyDataSetChanged();
             }
         });
 
