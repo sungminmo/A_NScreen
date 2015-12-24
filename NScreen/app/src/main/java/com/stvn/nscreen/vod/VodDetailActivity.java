@@ -882,7 +882,7 @@ public class VodDetailActivity extends Activity {
             }
             // 에외처리. productType 이 FOD(무료시청)일 경우는 구매하지 않았더라도, 시청하기 보여라.
             if ( "FOD".equals(productType) || "0".equals(price) ) {
-                mPriceTextView.setText("무료시청");
+                mPriceTextView.setText("무료");
             }
 
             mGenreTextView.setText(genre+" / "+runningTime + releaseDate);
