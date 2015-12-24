@@ -1,212 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="56.25dp"
-        android:orientation="horizontal"
-        android:background="@mipmap/title_bar_bg">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="셋탑박스 등록"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" />
-
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/btn_back"
-            android:clickable="false"
-            android:background="@color/transparent" />
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2단계 : 셋탑박스 등록"
-            android:id="@+id/textView17"
-            android:textSize="15sp"
-            android:layout_marginLeft="5.75dp"
-            android:textColor="#4e3071" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.25dp"
-        android:background="#4e3071"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:gravity="center" />
+    >
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="293.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="12.75dp">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1. 리모컨의 &apos;메뉴&apos;버튼을 누른 후"
-            android:id="@+id/textView26"
-            android:textSize="13sp"
-            android:textColor="#707070" />
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56.25dp"
+            android:orientation="horizontal"
+            android:background="@mipmap/title_bar_bg">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[&apos;마이TV>&apos;씨앤앰 모바일TV 등록&apos; 메뉴]를 선택 하세요."
-            android:id="@+id/textView27"
-            android:layout_marginBottom="20.75dp"
-            android:textSize="13sp"
-            android:textColor="#707070"
-            android:paddingLeft="12.75dp" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="셋탑박스 등록"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2. TV 화면 팝업에 구매비밀번호 4자리를 입력하세요."
-            android:id="@+id/textView28"
-            android:layout_marginBottom="20.75dp"
-            android:textSize="13sp"
-            android:textColor="#707070" />
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/btn_back"
+                android:clickable="false"
+                android:background="@color/transparent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3. TV 화면의 [스마트폰 등록] 버튼을 선택하세요."
-            android:id="@+id/textView29"
-            android:layout_marginBottom="20.75dp"
-            android:textSize="13sp"
-            android:textColor="#707070" />
+        </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4. 전화번호 입력 창이 나타나면 빈 칸에 앱이 설치된"
-            android:id="@+id/textView30"
-            android:textSize="13sp"
-            android:textColor="#707070" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginLeft="12.75dp"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="스마트폰의 전화번호를 입력하고 전송 버튼을 선택하세요."
-            android:id="@+id/textView31"
-            android:layout_marginBottom="20.75dp"
-            android:textSize="13sp"
-            android:textColor="#707070"
-            android:paddingLeft="12.75dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2단계 : 셋탑박스 등록"
+                android:id="@+id/textView17"
+                android:textSize="15sp"
+                android:layout_marginLeft="5.75dp"
+                android:textColor="#4e3071" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5. TV 화면에 노출되는 인증번호를 아래 빈 칸에 입력하고,"
-            android:id="@+id/textView32"
-            android:textSize="13sp"
-            android:textColor="#707070" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.25dp"
+            android:background="#4e3071"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
+            android:gravity="center" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[등록완료] 버튼을 눌러 주세요."
-            android:id="@+id/textView33"
-            android:textSize="13sp"
-            android:textColor="#707070"
-            android:paddingLeft="12.75dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="293.75dp"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="12.75dp">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. 리모컨의 &apos;메뉴&apos;버튼을 누른 후"
+                android:id="@+id/textView26"
+                android:textSize="13sp"
+                android:textColor="#707070" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="141.5dp"
-        android:gravity="center_horizontal"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:background="#f0f0f2">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[&apos;마이TV>&apos;씨앤앰 모바일TV 등록&apos; 메뉴]를 선택 하세요."
+                android:id="@+id/textView27"
+                android:layout_marginBottom="20.75dp"
+                android:textSize="13sp"
+                android:textColor="#707070"
+                android:paddingLeft="12.75dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="인증번호 입력"
-            android:id="@+id/textView34"
-            android:layout_marginBottom="17.25dp"
-            android:layout_marginTop="39dp"
-            android:textSize="16.25sp"
-            android:textColor="@color/violet" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2. TV 화면 팝업에 구매비밀번호 4자리를 입력하세요."
+                android:id="@+id/textView28"
+                android:layout_marginBottom="20.75dp"
+                android:textSize="13sp"
+                android:textColor="#707070" />
 
-        <EditText
-            android:layout_width="261dp"
-            android:layout_height="29dp"
-            android:id="@+id/pairing_sub_authcode_edittext"
-            android:textColor="@color/violet"
-            android:textSize="16.25sp"
-            android:background="@mipmap/setting_pw_box_nor"
-            android:layout_marginLeft="36.75dp"
-            android:layout_marginRight="36.75dp"
-            android:layout_marginBottom="40dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3. TV 화면의 [스마트폰 등록] 버튼을 선택하세요."
+                android:id="@+id/textView29"
+                android:layout_marginBottom="20.75dp"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4. 전화번호 입력 창이 나타나면 빈 칸에 앱이 설치된"
+                android:id="@+id/textView30"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="스마트폰의 전화번호를 입력하고 전송 버튼을 선택하세요."
+                android:id="@+id/textView31"
+                android:layout_marginBottom="20.75dp"
+                android:textSize="13sp"
+                android:textColor="#707070"
+                android:paddingLeft="12.75dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5. TV 화면에 노출되는 인증번호를 아래 빈 칸에 입력하고,"
+                android:id="@+id/textView32"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[등록완료] 버튼을 눌러 주세요."
+                android:id="@+id/textView33"
+                android:textSize="13sp"
+                android:textColor="#707070"
+                android:paddingLeft="12.75dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="141.5dp"
+            android:gravity="center_horizontal"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginLeft="12.75dp"
+            android:background="#f0f0f2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="인증번호 입력"
+                android:id="@+id/textView34"
+                android:layout_marginBottom="17.25dp"
+                android:layout_marginTop="39dp"
+                android:textSize="16.25sp"
+                android:textColor="@color/violet" />
+
+            <EditText
+                android:layout_width="261dp"
+                android:layout_height="29dp"
+                android:id="@+id/pairing_sub_authcode_edittext"
+                android:textColor="@color/violet"
+                android:textSize="16.25sp"
+                android:background="@mipmap/setting_pw_box_nor"
+                android:layout_marginLeft="36.75dp"
+                android:layout_marginRight="36.75dp"
+                android:layout_marginBottom="40dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:textCursorDrawable="@color/pairing_edittext_color"
+                android:maxLength="6" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="74.25dp"
             android:gravity="center"
-            android:inputType="number"
-            android:textCursorDrawable="@color/pairing_edittext_color"
-            android:maxLength="6" />
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="39.5dp"
+                android:text="등록취소"
+                android:id="@+id/pairing_sub_cancle_button"
+                android:textSize="14.5sp"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/pbtn_selector" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="39.5dp"
+                android:text="등록완료"
+                android:id="@+id/pairing_sub_next_button"
+                android:textSize="14.5sp"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:background="@drawable/p2btn_selector" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="74.25dp"
-        android:gravity="center"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="39.5dp"
-            android:text="등록취소"
-            android:id="@+id/pairing_sub_cancle_button"
-            android:textSize="14.5sp"
-            android:textColor="@color/white"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/pbtn_selector" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="39.5dp"
-            android:text="등록완료"
-            android:id="@+id/pairing_sub_next_button"
-            android:textSize="14.5sp"
-            android:textColor="@color/white"
-            android:layout_weight="1"
-            android:background="@drawable/p2btn_selector" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
