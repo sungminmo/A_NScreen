@@ -92,11 +92,15 @@
         <!-- PAIRING -->
         <activity
             android:name=".pairing.PairingMainActivity"
-            android:label="@string/title_activity_pairing_main" >
+            android:label="@string/title_activity_pairing_main"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".pairing.PairingSubActivity"
-            android:label="@string/title_activity_pairing_sub" >
+            android:label="@string/title_activity_pairing_sub"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".pairing.PairingCheckActivity"

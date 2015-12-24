@@ -1,330 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="56.25dp"
-        android:orientation="horizontal"
-        android:background="@mipmap/title_bar_bg">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="셋탑박스 등록"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" />
-
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/btn_back"
-            android:background="@color/transparent" />
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:gravity="center_vertical"
-        android:id="@+id/pairing_main_non_title">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1단계 : 모바일 구매 비밀번호등록"
-            android:id="@+id/textView17"
-            android:textSize="15sp"
-            android:layout_marginLeft="5.75dp"
-            android:textColor="#4e3071" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:gravity="center_vertical"
-        android:id="@+id/pairing_main_ok_title">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[필수] 모바일 구매 비밀번호등록"
-            android:id="@+id/textView26"
-            android:textSize="15sp"
-            android:layout_marginLeft="5.75dp"
-            android:textColor="#4e3071" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.25dp"
-        android:background="#4e3071"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:gravity="center" />
+    >
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="155.5dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:gravity="center"
-        android:id="@+id/pairing_main_non_ment1">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="모바일에서 VOD 구매를 실행하기 위해"
-            android:id="@+id/textView18"
-            android:textSize="13sp"
-            android:textColor="#707070" />
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56.25dp"
+            android:orientation="horizontal"
+            android:background="@mipmap/title_bar_bg">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="사용하실 비밀번호를 입력해 주세요."
-            android:id="@+id/textView25"
-            android:textSize="13sp"
-            android:textColor="#707070"
-            android:layout_marginBottom="20.75dp" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="셋탑박스 등록"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="최소 4자리 이상 숫자 + 영문으로"
-            android:id="@+id/textView19"
-            android:textSize="13sp"
-            android:textColor="#707070" />
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/btn_back"
+                android:background="@color/transparent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="최대 20 자리 까지 입력 가능합니다."
-            android:id="@+id/textView24"
-            android:textSize="13sp"
-            android:textColor="#707070" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="155.5dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:gravity="center"
-        android:id="@+id/pairing_main_ok_ment1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="기존 등록하신 셋탑박스 연동정보가 유지되어"
-            android:id="@+id/textView27"
-            android:textSize="14sp"
-            android:textColor="#7b5aa3" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="재 연동하실 필요가 없습니다."
-            android:id="@+id/textView28"
-            android:textSize="14sp"
-            android:textColor="#7b5aa3"
-            android:layout_marginBottom="20.75dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="모바일에서 VOD 구매를 실행하기 위해"
-            android:id="@+id/textView29"
-            android:textSize="13sp"
-            android:textColor="#707070" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="사용하실 비밀번호를 다시 설정해 주세요."
-            android:id="@+id/textView30"
-            android:textSize="13sp"
-            android:textColor="#707070" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="구매비밀번호를 입력하지 않으실 경우,"
-            android:id="@+id/textView31"
-            android:textSize="13sp"
-            android:textColor="#707070" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="앱이 자동으로 종료됩니다."
-            android:id="@+id/textView80"
-            android:layout_gravity="center_horizontal"
-            android:textSize="13sp"
-            android:textColor="#707070" />
-    </LinearLayout>-
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="279.75dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:background="#f0f0f2"
-        android:gravity="center_horizontal">
+        </FrameLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:gravity="center_horizontal"
-            android:id="@+id/pairing_main_non_ment2">
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginLeft="12.75dp"
+            android:gravity="center_vertical"
+            android:id="@+id/pairing_main_non_title">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="비밀번호가 기억나지 않으실 경우, 셋탑박스를 다시 연동하여"
-                android:id="@+id/textView20"
-                android:textSize="12.5sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="21dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="비밀번호를 재설정 하실 수 있습니다."
-                android:id="@+id/textView21"
-                android:textSize="12.5sp"
-                android:textColor="@color/black" />
+                android:text="1단계 : 모바일 구매 비밀번호등록"
+                android:id="@+id/textView17"
+                android:textSize="15sp"
+                android:layout_marginLeft="5.75dp"
+                android:textColor="#4e3071" />
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginLeft="12.75dp"
+            android:gravity="center_vertical"
+            android:id="@+id/pairing_main_ok_title">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[필수] 모바일 구매 비밀번호등록"
+                android:id="@+id/textView26"
+                android:textSize="15sp"
+                android:layout_marginLeft="5.75dp"
+                android:textColor="#4e3071" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.25dp"
+            android:background="#4e3071"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
+            android:gravity="center" />
+
+        <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:gravity="center_horizontal"
-            android:id="@+id/pairing_main_ok_ment2">
+            android:layout_height="155.5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
+            android:gravity="center"
+            android:id="@+id/pairing_main_non_ment1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="모바일에서 VOD 구매를 실행하기 위해"
+                android:id="@+id/textView18"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사용하실 비밀번호를 입력해 주세요."
+                android:id="@+id/textView25"
+                android:textSize="13sp"
+                android:textColor="#707070"
+                android:layout_marginBottom="20.75dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="최소 4자리 이상 숫자 + 영문으로"
-                android:id="@+id/textView32"
-                android:textSize="12.5sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="21dp" />
+                android:id="@+id/textView19"
+                android:textSize="13sp"
+                android:textColor="#707070" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="최대 20자리 까지 입력 가능합니다."
-                android:id="@+id/textView33"
-                android:textSize="12.5sp"
-                android:textColor="@color/black" />
+                android:text="최대 20 자리 까지 입력 가능합니다."
+                android:id="@+id/textView24"
+                android:textSize="13sp"
+                android:textColor="#707070" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="구매 비밀번호 신규설정"
-            android:id="@+id/textView22"
-            android:textSize="16.25sp"
-            android:textColor="@color/violet"
-            android:layout_marginBottom="17.25dp" />
-
-        <EditText
-            android:layout_width="261dp"
-            android:layout_height="29dp"
-            android:id="@+id/pairing_main_purchase_password1_edittext"
-            android:textColor="@color/violet"
-            android:textSize="16.25sp"
-            android:background="@mipmap/setting_pw_box_nor"
-            android:layout_marginRight="36.75dp"
-            android:layout_marginLeft="36.75dp"
-            android:layout_marginBottom="27.5dp"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="155.5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
             android:gravity="center"
-            android:inputType="textPassword"
-            android:textCursorDrawable="@color/pairing_edittext_color"
-            android:maxLength="20" />
+            android:id="@+id/pairing_main_ok_ment1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="구매 비밀번호 입력확인"
-            android:id="@+id/textView23"
-            android:textSize="16.25sp"
-            android:textColor="@color/violet"
-            android:layout_marginBottom="17.25dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기존 등록하신 셋탑박스 연동정보가 유지되어"
+                android:id="@+id/textView27"
+                android:textSize="14sp"
+                android:textColor="#7b5aa3" />
 
-        <EditText
-            android:layout_width="261dp"
-            android:layout_height="29dp"
-            android:id="@+id/pairing_main_purchase_password2_edittext"
-            android:textColor="@color/violet"
-            android:textSize="16.25sp"
-            android:background="@mipmap/setting_pw_box_nor"
-            android:layout_marginLeft="36.75dp"
-            android:layout_marginRight="36.75dp"
-            android:layout_marginBottom="40dp"
-            android:gravity="center"
-            android:inputType="textPassword"
-            android:textCursorDrawable="@color/pairing_edittext_color"
-            android:maxLength="20"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="재 연동하실 필요가 없습니다."
+                android:id="@+id/textView28"
+                android:textSize="14sp"
+                android:textColor="#7b5aa3"
+                android:layout_marginBottom="20.75dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="모바일에서 VOD 구매를 실행하기 위해"
+                android:id="@+id/textView29"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사용하실 비밀번호를 다시 설정해 주세요."
+                android:id="@+id/textView30"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="구매비밀번호를 입력하지 않으실 경우,"
+                android:id="@+id/textView31"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="앱이 자동으로 종료됩니다."
+                android:id="@+id/textView80"
+                android:layout_gravity="center_horizontal"
+                android:textSize="13sp"
+                android:textColor="#707070" />
+        </LinearLayout>-
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="279.75dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginLeft="12.75dp"
+            android:background="#f0f0f2"
+            android:gravity="center_horizontal">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:gravity="center_horizontal"
+                android:id="@+id/pairing_main_non_ment2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호가 기억나지 않으실 경우, 셋탑박스를 다시 연동하여"
+                    android:id="@+id/textView20"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="21dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호를 재설정 하실 수 있습니다."
+                    android:id="@+id/textView21"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:gravity="center_horizontal"
+                android:id="@+id/pairing_main_ok_ment2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="최소 4자리 이상 숫자 + 영문으로"
+                    android:id="@+id/textView32"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="21dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="최대 20자리 까지 입력 가능합니다."
+                    android:id="@+id/textView33"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="구매 비밀번호 신규설정"
+                android:id="@+id/textView22"
+                android:textSize="16.25sp"
+                android:textColor="@color/violet"
+                android:layout_marginBottom="17.25dp" />
+
+            <EditText
+                android:layout_width="261dp"
+                android:layout_height="29dp"
+                android:id="@+id/pairing_main_purchase_password1_edittext"
+                android:textColor="@color/violet"
+                android:textSize="16.25sp"
+                android:background="@mipmap/setting_pw_box_nor"
+                android:layout_marginRight="36.75dp"
+                android:layout_marginLeft="36.75dp"
+                android:layout_marginBottom="27.5dp"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:textCursorDrawable="@color/pairing_edittext_color"
+                android:maxLength="20"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="구매 비밀번호 입력확인"
+                android:id="@+id/textView23"
+                android:textSize="16.25sp"
+                android:textColor="@color/violet"
+                android:layout_marginBottom="17.25dp" />
+
+            <EditText
+                android:layout_width="261dp"
+                android:layout_height="29dp"
+                android:id="@+id/pairing_main_purchase_password2_edittext"
+                android:textColor="@color/violet"
+                android:textSize="16.25sp"
+                android:background="@mipmap/setting_pw_box_nor"
+                android:layout_marginLeft="36.75dp"
+                android:layout_marginRight="36.75dp"
+                android:layout_marginBottom="40dp"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:textCursorDrawable="@color/pairing_edittext_color"
+                android:maxLength="20"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="74.25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="39.5dp"
+                android:text="등록취소"
+                android:id="@+id/pairing_main_cancle_button"
+                android:textSize="14.5sp"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/pbtn_selector" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="39.5dp"
+                android:text="다음단계"
+                android:id="@+id/pairing_main_next_button"
+                android:textSize="14.5sp"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:background="@drawable/p2btn_selector" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="74.25dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:gravity="center">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="39.5dp"
-            android:text="등록취소"
-            android:id="@+id/pairing_main_cancle_button"
-            android:textSize="14.5sp"
-            android:textColor="@color/white"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/pbtn_selector" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="39.5dp"
-            android:text="다음단계"
-            android:id="@+id/pairing_main_next_button"
-            android:textSize="14.5sp"
-            android:textColor="@color/white"
-            android:layout_weight="1"
-            android:background="@drawable/p2btn_selector" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
