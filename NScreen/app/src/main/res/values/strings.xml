@@ -63,7 +63,7 @@
     <string name="title_activity_epg_sub">EpgSubActivity</string>
     <string name="search_title">검색</string>
     <string name="search_title_tab_text1">VOD 명 검색</string>
-    <string name="search_title_tab_text2">프로그램 명 검색</string>
+    <string name="search_title_tab_text2">TV프로그램 명 검색</string>
     <string name="search_keyword_empty_msg">검색 창에 원하시는 검색어를\n입력해주세요.</string>
 
     <string name="title_activity_pvr_main">PvrMainActivity</string>
