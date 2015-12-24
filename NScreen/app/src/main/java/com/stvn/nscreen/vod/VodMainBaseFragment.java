@@ -36,6 +36,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
     private static Context             mContext;
     private        JYSharedPreferences mPref;
 
+    private boolean isLeftMenuShow = false;
 
     // UI
     private int iMyTabNumber;
@@ -64,7 +65,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
 
         //mInstance = this;
         //mPref = new JYSharedPreferences(mInstance.getActivity());
-
+        this.isLeftMenuShow = false;
         return view;
     }
 
@@ -72,6 +73,12 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity)activity).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.isLeftMenuShow = false;
     }
 
     /**
@@ -298,8 +305,11 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
         leftImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LeftMenuActivity.class);
-                startActivity(intent);
+                if (isLeftMenuShow == false) {
+                    isLeftMenuShow = true;
+                    Intent intent = new Intent(getActivity(), LeftMenuActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
