@@ -1330,7 +1330,7 @@ public class VodDetailActivity extends Activity {
     private void requestContentUri() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestContentUri()"); }
-        String action = "preview";
+        final String action;
         if ( isPrePlay == true ) {
             action = "preview";
         } else {
@@ -1381,9 +1381,11 @@ public class VodDetailActivity extends Activity {
                      */
                         //contentUri = contentUri.replace("http://","widevine://");
 
-                        // VOD시청목록 남기기
-                        Date watchDate = new Date();
-                        mPref.addWatchVod(watchDate, assetId, mTitle);
+                        // 미리보기가 아닌 시청하기에만 VOD 시청목록 남기기
+                        if ("play".equals(action)) {
+                            Date watchDate = new Date();
+                            mPref.addWatchVod(watchDate, assetId, mTitle);
+                        }
 
                         Intent intent = new Intent(mInstance, VideoPlayerView.class);
                         //intent.putExtra("com.widevine.demo.Path", "http://cjhv.video.toast.com/aaaaaa/7916612d-c6cb-752e-2eb8-650e4289e3e2.wvm");
