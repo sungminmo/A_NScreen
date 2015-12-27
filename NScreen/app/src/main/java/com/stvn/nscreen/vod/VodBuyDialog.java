@@ -53,7 +53,8 @@ public class VodBuyDialog extends Activity {
     private              EditText            mPwd;
     private              TextView            mPaymethod, dialog_buy_price, mTime, mInfo;
     private              TextView            dialog_buy_original_price_textview;
-
+    private              View                dialog_buy_blank; // 쿠폰 결제 관련 미사용시 시청기간 타이틀과 기간 데이터 사이 공백 뷰
+    private              View                dailog_buy_coupon_layout; // 쿠폰 결제 관련 레이아웃
     private              TextView            dailog_buy_coupon_use;     // 쿠폰사용
     private              TextView            dailog_buy_coupon_minus;   // 쿠폰차감금액
     private              Button              backBtn, purchaseBtn;
@@ -97,21 +98,20 @@ public class VodBuyDialog extends Activity {
         productName      = getIntent().getExtras().getString("productName");                // RVOD,SVOD,...
 
         if ( mPref.isLogging() ) {
-            Log.d(tag, "assetId:"+assetId);
-            Log.d(tag, "productId:"+productId);
-            Log.d(tag, "goodId:"+goodId);
-            Log.d(tag, "categoryId:"+categoryId);
-            Log.d(tag, "mTitle:"+mTitle);
-            Log.d(tag, "viewable:"+viewable);
-            Log.d(tag, "listPrice:"+listPrice);
-            Log.d(tag, "sPayMethod:"+sPayMethod);
-            Log.d(tag, "pointBalance:"+pointBalance);
-            Log.d(tag, "totalMoneyBalance:"+totalMoneyBalance);
-            Log.d(tag, "lpriceCouponDiscounted:"+lpriceCouponDiscounted);
-            Log.d(tag, "ldiscountAmount:"+ldiscountAmount);
-            Log.d(tag, "sdiscountCouponId:"+sdiscountCouponId);
+            Log.d(tag, "assetId:" + assetId);
+            Log.d(tag, "productId:" + productId);
+            Log.d(tag, "goodId:" + goodId);
+            Log.d(tag, "categoryId:" + categoryId);
+            Log.d(tag, "mTitle:" + mTitle);
+            Log.d(tag, "viewable:" + viewable);
+            Log.d(tag, "listPrice:" + listPrice);
+            Log.d(tag, "sPayMethod:" + sPayMethod);
+            Log.d(tag, "pointBalance:" + pointBalance);
+            Log.d(tag, "totalMoneyBalance:" + totalMoneyBalance);
+            Log.d(tag, "lpriceCouponDiscounted:" + lpriceCouponDiscounted);
+            Log.d(tag, "ldiscountAmount:" + ldiscountAmount);
+            Log.d(tag, "sdiscountCouponId:" + sdiscountCouponId);
         }
-
         mPaymethod                         = (TextView)findViewById(R.id.dialog_buy_paymethod);
         dialog_buy_original_price_textview = (TextView)findViewById(R.id.dialog_buy_original_price_textview);
         dialog_buy_price                   = (TextView)findViewById(R.id.dialog_buy_price);
@@ -120,6 +120,8 @@ public class VodBuyDialog extends Activity {
         mPwd                               = (EditText)findViewById(R.id.dialog_buy_pwd_edittext);
         backBtn                            = (Button) findViewById(R.id.backBtn);
         purchaseBtn                        = (Button) findViewById(R.id.purchaseBtn);
+        dialog_buy_blank                   = findViewById(R.id.dialog_buy_blank); // 쿠폰 사용관련 레이아웃
+        dailog_buy_coupon_layout           = findViewById(R.id.dailog_buy_coupon_layout); // 쿠폰 사용관련 레이아웃
         dailog_buy_coupon_use              = (TextView)findViewById(R.id.dailog_buy_coupon_use);    // 쿠폰사용
         dailog_buy_coupon_minus            = (TextView)findViewById(R.id.dailog_buy_coupon_minus);  // 쿠폰차감
 
@@ -170,7 +172,7 @@ public class VodBuyDialog extends Activity {
         }
 
         mTime.setText(viewable); // 시청기간.
-
+        
         // pointBalance; // TV포인트. getPointBalance 통해서 받아옴.
         // totalMoneyBalance; // 금액형 쿠폰의 총 잔액. getCouponBalance2 통해서 받아옴.
         // 0: 일반결제, 1:복합결제(쿠폰(할인권)+일반결제), 2:복합결제(쿠폰+일반결제), 3:쿠폰결제, 4:TV포인트 결제.
@@ -203,11 +205,18 @@ public class VodBuyDialog extends Activity {
             mPaymethod.setText("일반결제 [부가세 별도]");
             dailog_buy_coupon_use.setText("쿠폰사용");
             dailog_buy_coupon_minus.setText(UiUtil.toNumFormat((int)couponMinus)+"원 차감");
+
+            dialog_buy_blank.setVisibility(View.GONE);
+            dailog_buy_coupon_layout.setVisibility(View.VISIBLE);
+
         } else if ( "3".equals(sPayMethod)) {          // 쿠폰포인트 -------------------------------
             //Log.d(tag, "쿠폰포인트---결제임---------------------------------------------------------");
             mPaymethod.setText("쿠폰사용");
             dialog_buy_price.setText(UiUtil.toNumFormat(Integer.valueOf(listPrice))+"원");
             dailog_buy_coupon_minus.setText(UiUtil.toNumFormat(Integer.valueOf(listPrice))+"원 차감");
+
+            dialog_buy_blank.setVisibility(View.GONE);
+            dailog_buy_coupon_layout.setVisibility(View.VISIBLE);
         } else if ( "4".equals(sPayMethod) ) {          // TV포인트 ---------------------------------
             //Log.d(tag, "TV포인트결제임--------------------------------------------------------------");
             mPaymethod.setText("TV포인트");
