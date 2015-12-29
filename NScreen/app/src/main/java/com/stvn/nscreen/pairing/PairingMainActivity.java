@@ -83,10 +83,21 @@ public class PairingMainActivity extends AppCompatActivity implements CMEditText
             }
         });
 
+        mPurchasePassword1Edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mPurchasePassword1Edittext.setText("");
+                }
+            }
+        });
+
         mPurchasePassword2Edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus == false) {
+                if (hasFocus) {
+                    mPurchasePassword2Edittext.setText("");
+                } else {
                     checkPassword();
                 }
             }
@@ -107,11 +118,14 @@ public class PairingMainActivity extends AppCompatActivity implements CMEditText
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((actionId & EditorInfo.IME_MASK_ACTION) == EditorInfo.IME_ACTION_DONE) {
-                    CMLog.d("wd", "확인 필드 완료");
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-                    checkPassword();
+
+                    if (checkPassword()) {
+                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    } else {
+                        mPurchasePassword2Edittext.setText("");
+                    }
                     return true;
                 }
                 return false;
@@ -211,7 +225,8 @@ public class PairingMainActivity extends AppCompatActivity implements CMEditText
         }
     };
 
-    private void checkPassword() {
+    private boolean checkPassword() {
+        boolean returnValue = false;
         mErrorMessage.setText("");
         String pwd_1 = mPurchasePassword1Edittext.getText().toString();
         String pwd_2 = mPurchasePassword2Edittext.getText().toString();
@@ -220,11 +235,13 @@ public class PairingMainActivity extends AppCompatActivity implements CMEditText
             if (pwd_1.equals(pwd_2)) {
                 mErrorMessage.setText("입력 비밀번호가 일치합니다.");
                 nextButton.setEnabled(true);
+                returnValue = true;
             } else {
                 mErrorMessage.setText("입력 비밀번호가 일치하지 않습니다.");
                 nextButton.setEnabled(false);
             }
         }
+        return returnValue;
     }
 
     @Override
