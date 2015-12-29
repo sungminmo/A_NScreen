@@ -194,7 +194,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="279.75dp"
+            android:layout_height="300.75dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginRight="12.75dp"
             android:layout_marginLeft="12.75dp"
@@ -260,7 +260,7 @@
                 android:textColor="@color/violet"
                 android:layout_marginBottom="17.25dp" />
 
-            <EditText
+            <com.stvn.nscreen.custom.CMEditText
                 android:layout_width="261dp"
                 android:layout_height="29dp"
                 android:id="@+id/pairing_main_purchase_password1_edittext"
@@ -285,7 +285,7 @@
                 android:textColor="@color/violet"
                 android:layout_marginBottom="17.25dp" />
 
-            <EditText
+            <com.stvn.nscreen.custom.CMEditText
                 android:layout_width="261dp"
                 android:layout_height="29dp"
                 android:id="@+id/pairing_main_purchase_password2_edittext"
@@ -294,12 +294,20 @@
                 android:background="@mipmap/setting_pw_box_nor"
                 android:layout_marginLeft="36.75dp"
                 android:layout_marginRight="36.75dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="17.25dp"
                 android:gravity="center"
                 android:inputType="textPassword"
                 android:textCursorDrawable="@color/pairing_edittext_color"
                 android:maxLength="20"
                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pairing_main_purchase_password_error"
+                android:text=""
+                android:textSize="13sp"
+                android:textColor="@color/red" />
 
         </LinearLayout>
 
