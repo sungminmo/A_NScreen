@@ -60,7 +60,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     private String mAreaCode = "0";
     private String mKeyword;
     private int pageNo = 0;
-    private int limitCnt = 10;
+    private int limitCnt = 20;
     private int mTotCnt = 0;
 
     private Map<String, Object> mStbStateMap;
@@ -179,7 +179,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     private void reloadAll()
     {
         pageNo = 0;
-        limitCnt = 10;
+        limitCnt = 20;
         mTotCnt = 0;
         mProgramlist.clear();
         mStbRecordReservelist.clear();
