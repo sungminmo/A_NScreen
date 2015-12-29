@@ -105,7 +105,6 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                     Intent intent = new Intent(getActivity(), VodDetailActivity.class);
                     intent.putExtra("assetId", assetId);
                     getActivity().startActivity(intent);
-                    getActivity().finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
