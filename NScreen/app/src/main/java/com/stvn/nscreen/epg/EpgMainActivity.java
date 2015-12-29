@@ -106,6 +106,7 @@ public class EpgMainActivity extends AppCompatActivity {
         epg_main_genre_name.setText(sGenreName);
 
         mAdapter      = new EpgMainListViewAdapter(this, null);
+        mAdapter.setGenreCode(this.sGenreCode);
 
         mListView     = (ListView)findViewById(R.id.epg_main_listview);
         mListView.setAdapter(mAdapter);
@@ -202,10 +203,10 @@ public class EpgMainActivity extends AppCompatActivity {
 //        }
 
         // -----------------------------------------------------------------------------------------
-        // 선호채널이 아니면 통신 태우기.
+        // 선호채널일 경우 아니면 전체채널 조회를 하여 필터링한다
         String sGenreCode2 = sGenreCode;
         if ( "&genreCode=0".equals(sGenreCode) ) {
-            sGenreCode2 = "&genreCode=1";
+            sGenreCode2 = "";
         }
         String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode2 + "&noCache=";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
@@ -306,7 +307,7 @@ public class EpgMainActivity extends AppCompatActivity {
                     String channelName              = jo.getString("channelName");
                     String channelProgramOnAirTitle = jo.getString("channelProgramOnAirTitle");
                     //Log.d(tag, "channelId: "+channelId+", channelNumber:"+channelNumber+", channelName:"+channelName+ ", channelProgramOnAirTitle:"+channelProgramOnAirTitle+", bookmark:"+mPref.isBookmarkChannelWithChannelId(channelId));
-                    if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+                    if ( mPref.isBookmarkChannelWithChannelNumber(channelNumber) == true ) {
                         bookmarks.add(obj.sJson);
                     }
                 } catch (JSONException e) {

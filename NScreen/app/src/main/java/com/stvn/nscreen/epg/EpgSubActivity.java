@@ -254,7 +254,7 @@ public class EpgSubActivity extends AppCompatActivity {
             }
         });
 
-        if ( mPref.isBookmarkChannelWithChannelId(sChannelId) == true ) {
+        if ( mPref.isBookmarkChannelWithChannelNumber(sChannelNumber) == true ) {
             bookmarkImageButton.setImageResource(R.mipmap.icon_favorite_select);
         } else {
             bookmarkImageButton.setImageResource(R.mipmap.icon_favorite_unselect);
@@ -262,8 +262,8 @@ public class EpgSubActivity extends AppCompatActivity {
         bookmarkImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( mPref.isBookmarkChannelWithChannelId(sChannelId) == true ) {
-                    mPref.removeBookmarkChannelWithChannelId(sChannelId);
+                if ( mPref.isBookmarkChannelWithChannelNumber(sChannelNumber) == true ) {
+                    mPref.removeBookmarkChannelWithChannelNumber(sChannelNumber);
                     bookmarkImageButton.setImageResource(R.mipmap.icon_favorite_unselect);
                 } else {
                     mPref.addBookmarkChannel(sChannelId, sChannelNumber, sChannelName);

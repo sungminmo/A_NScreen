@@ -613,8 +613,33 @@ public class JYSharedPreferences {
         // Realm Database **********************************************************************
     }
 
+    public void removeBookmarkChannelWithChannelNumber(String channelNumber) {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<BookmarkChannelObject> results = mRealm.where(BookmarkChannelObject.class).equalTo("sChannelNumber", channelNumber).findAll();
+        if ( results.size() > 0 ) {
+            BookmarkChannelObject obj = results.get(0);
+            obj.removeFromRealm();
+        } else {
+            //
+        }
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
+
     public boolean isBookmarkChannelWithChannelId(String channelId) {
         RealmResults<BookmarkChannelObject> results = mRealm.where(BookmarkChannelObject.class).equalTo("sChannelId", channelId).findAll();
+        if ( results.size() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isBookmarkChannelWithChannelNumber(String channelNumber) {
+        RealmResults<BookmarkChannelObject> results = mRealm.where(BookmarkChannelObject.class).equalTo("sChannelNumber", channelNumber).findAll();
         if ( results.size() > 0 ) {
             return true;
         } else {

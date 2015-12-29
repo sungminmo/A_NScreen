@@ -106,6 +106,13 @@ public class RemoteControllerChoiceActivity extends Activity {
         remote_controller_choice_genre_like_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mInstance, RemoteControllerActivity.class);
+                intent.putExtra("sGenreCode", "&genreCode=0");  // 0은 원래 없는 코드. 그래서 0일 경우는 선호라고 로컬디비 사용.
+                intent.putExtra("sGenreName", "선호채널");
+                intent.putExtra("Channel", sChannel);
+                intent.putExtra("StbState", mStbState);
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });

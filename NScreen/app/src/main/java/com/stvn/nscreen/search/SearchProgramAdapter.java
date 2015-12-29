@@ -167,7 +167,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
             holder.chhd.setVisibility(View.GONE);
         }
 
-        if (mPref.isBookmarkChannelWithChannelId(item.getChannelId())) {
+        if (mPref.isBookmarkChannelWithChannelNumber(item.getChannelNumber())) {
             holder.favoriteimg.setSelected(true);
         }
         else {
@@ -187,7 +187,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                 if (isSelected) {
                     mPref.addBookmarkChannel(channelID, channelNO, channelName); // 선호채널 추가.
                 } else {
-                    mPref.removeBookmarkChannelWithChannelId(channelID); // 선호채널 제거.
+                    mPref.removeBookmarkChannelWithChannelNumber(channelNO); // 선호채널 제거.
                 }
                 notifyDataSetChanged();
             }

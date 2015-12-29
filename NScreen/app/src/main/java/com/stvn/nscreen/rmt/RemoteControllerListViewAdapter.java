@@ -53,6 +53,7 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
     private              String                 mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
     private              String                 mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
     private              String                 mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+    private String mGenreCode;
 
     private              int                           mSelectedIndex   = -1;
 
@@ -80,6 +81,10 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
         this.mStbRecordingchannel2 = recCh2; // ID
         this.mStbWatchingchannel   = watchCh;
         this.mStbPipchannel        = pipCh;
+    }
+
+    public void setGenreCode(String code) {
+        this.mGenreCode = code;
     }
 
     public String getChannelNumberWithChannelId(String cid) {
@@ -121,7 +126,7 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
     public void clear() { mDatas.clear(); }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_remote_controller, parent, false);
@@ -187,7 +192,7 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             final String channelNumber = jobj.getString("channelNumber");
             final String channelName = jobj.getString("channelName");
 
-            if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+            if ( mPref.isBookmarkChannelWithChannelNumber(channelNumber) == true ) {
                 bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_select);
             } else {
                 bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_unselect);
@@ -195,9 +200,16 @@ public class RemoteControllerListViewAdapter extends BaseAdapter {
             bookmarkImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
-                        mPref.removeBookmarkChannelWithChannelId(channelId);
+                    if ( mPref.isBookmarkChannelWithChannelNumber(channelNumber) == true ) {
+                        mPref.removeBookmarkChannelWithChannelNumber(channelNumber);
                         bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_unselect);
+
+                        // 현재 선택된 장르가 선호채널의 경우 선호채널에서 제외된 채널을 리스트에서 제거한다.
+                        if ("&genreCode=0".equals(mGenreCode)) {
+                            remove(position);
+                            notifyDataSetChanged();
+                        }
+
                     } else {
                         mPref.addBookmarkChannel(channelId, channelNumber, channelName);
                         bookmarkImageButton.setImageResource(R.mipmap.icon_list_favorite_select);

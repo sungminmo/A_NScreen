@@ -43,6 +43,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,12 +96,6 @@ public class RemoteControllerActivity extends AppCompatActivity{
 
         if (mPref.isLogging()) { Log.d(tag, "onCreate()"); }
 
-        mAdapter = new RemoteControllerListViewAdapter(this, null);
-
-        mListView = (ListView)findViewById(R.id.remote_controller_listview);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(mItemClickListener);
-
         remote_controller_genre_choice_imageButton = (ImageButton) findViewById(R.id.remote_controller_genre_choice_imageButton);
         remote_controller_backBtn                  = (ImageButton) findViewById(R.id.remote_controller_backBtn);
 
@@ -117,13 +112,11 @@ public class RemoteControllerActivity extends AppCompatActivity{
         channel4_linearlayout                      = (LinearLayout) findViewById(R.id.channel4_linearlayout);
         channel5_linearlayout                      = (LinearLayout) findViewById(R.id.channel5_linearlayout);
 
-
+        this.sGenreCode = "";
         try {
             Intent recvIntent = getIntent();
             if (recvIntent != null && recvIntent.hasExtra("sGenreCode")) {
                 this.sGenreCode = recvIntent.getStringExtra("sGenreCode");
-            } else {
-                this.sGenreCode = "";
             }
 
             sChannel = getIntent().getExtras().getString("Channel");
@@ -134,6 +127,13 @@ public class RemoteControllerActivity extends AppCompatActivity{
             remote_controller_channel_textview.setText("번");
             remote_controller_genre_name.setText("전체채널");
         }
+
+        mAdapter = new RemoteControllerListViewAdapter(this, null);
+        mAdapter.setGenreCode(this.sGenreCode);
+
+        mListView = (ListView)findViewById(R.id.remote_controller_listview);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(mItemClickListener);
 
         remote_controller_genre_choice_imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -527,7 +527,14 @@ public class RemoteControllerActivity extends AppCompatActivity{
             mStbState  = getIntent().getExtras().getString("StbState");
         } catch (NullPointerException e) {
         }
-        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode + "&noCache=";
+
+        // 선호채널일 경우 아니면 전체채널 조회를 하여 필터링한다
+        String sGenreCode2 = sGenreCode;
+        if ( "&genreCode=0".equals(sGenreCode) ) {
+            sGenreCode2 = "";
+        }
+
+        String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode2 + "&noCache=";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -613,6 +620,33 @@ public class RemoteControllerActivity extends AppCompatActivity{
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if ("&genreCode=0".equals(sGenreCode)) {
+            ArrayList<String> bookmarks = new ArrayList<String>();
+            for ( int i = 0; i < mAdapter.getCount(); i++ ) {
+                ListViewDataObject obj = (ListViewDataObject)mAdapter.getItem(i);
+                try {
+                    JSONObject jo = new JSONObject(obj.sJson);
+                    String channelId                = jo.getString("channelId");
+                    String channelNumber            = jo.getString("channelNumber");
+                    String channelName              = jo.getString("channelName");
+                    String channelProgramOnAirTitle = jo.getString("channelProgramOnAirTitle");
+                    //Log.d(tag, "channelId: "+channelId+", channelNumber:"+channelNumber+", channelName:"+channelName+ ", channelProgramOnAirTitle:"+channelProgramOnAirTitle+", bookmark:"+mPref.isBookmarkChannelWithChannelId(channelId));
+                    if ( mPref.isBookmarkChannelWithChannelNumber(channelNumber) == true ) {
+                        bookmarks.add(obj.sJson);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            mAdapter.clear();
+            for ( int i = 0; i < bookmarks.size(); i++ ) {
+                //Log.d(tag, "bookmarks :"+bookmarks.get(i));
+                ListViewDataObject obj = new ListViewDataObject(i, i, bookmarks.get(i));
+                mAdapter.addItem(obj);
+            }
+
         }
     }
 

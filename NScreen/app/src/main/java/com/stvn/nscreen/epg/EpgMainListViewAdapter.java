@@ -48,6 +48,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
     private              String                 mStbRecordingchannel2; // GetSetTopStatus API로 가져오는 값.
     private              String                 mStbWatchingchannel;   // GetSetTopStatus API로 가져오는 값.
     private              String                 mStbPipchannel;        // GetSetTopStatus API로 가져오는 값.
+    private String mGenreCode;
 
     public EpgMainListViewAdapter(Context c, View.OnClickListener onClickListener) {
         super();
@@ -75,6 +76,9 @@ public class EpgMainListViewAdapter extends BaseAdapter {
         this.mStbPipchannel        = pipCh;
     }
 
+    public void setGenreCode(String code) {
+        this.mGenreCode = code;
+    }
 
 
     /**
@@ -103,7 +107,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_epg_main, parent, false);
@@ -164,7 +168,7 @@ public class EpgMainListViewAdapter extends BaseAdapter {
                 progBar.setProgress(100);
             }
 
-            if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
+            if ( mPref.isBookmarkChannelWithChannelNumber(channelNumber) == true ) {
                 bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_select);
             } else {
                 bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_unselect);
@@ -172,9 +176,16 @@ public class EpgMainListViewAdapter extends BaseAdapter {
             bookmarkImageView.setOnClickListener(new View.OnClickListener (){
                 @Override
                 public void onClick(View v) {
-                    if ( mPref.isBookmarkChannelWithChannelId(channelId) == true ) {
-                        mPref.removeBookmarkChannelWithChannelId(channelId);
+                    if ( mPref.isBookmarkChannelWithChannelNumber(channelNumber) == true ) {
+                        mPref.removeBookmarkChannelWithChannelNumber(channelNumber);
                         bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_unselect);
+
+                        // 현재 선택된 장르가 선호 채널의 경우 선호채널에서 제외한 채널을 리스트에서 삭제한다.
+                        if ("&genreCode=0".equals(mGenreCode)) {
+                            remove(position);
+                            notifyDataSetChanged();
+                        }
+
                     } else {
                         mPref.addBookmarkChannel(channelId, channelNumber, channelName);
                         bookmarkImageView.setImageResource(R.mipmap.icon_list_favorite_select);
