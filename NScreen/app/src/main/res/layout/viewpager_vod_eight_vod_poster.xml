@@ -26,6 +26,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview1"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview1"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview1"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -41,24 +59,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="0.5dp"
                 android:gravity="center" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview1"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview1"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -87,6 +87,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview2"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview2"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview2"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -102,24 +120,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="8.5dp"
                 android:layout_marginTop="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview2"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview2"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -148,6 +148,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview3"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview3"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview3"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -163,24 +181,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="8.5dp"
                 android:layout_marginTop="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview3"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview3"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -209,6 +209,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview4"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview4"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview4"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -224,24 +242,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="8.5dp"
                 android:layout_marginTop="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview4"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview4"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -337,6 +337,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview5"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview5"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview5"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -352,24 +370,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="8.5dp"
                 android:layout_marginTop="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview5"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview5"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -399,6 +399,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview6"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview6"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview6"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -414,24 +432,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="8.5dp"
                 android:layout_marginTop="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview6"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview6"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -461,6 +461,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview7"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview7"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview7"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -476,24 +494,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="8.5dp"
                 android:layout_marginTop="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview7"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview7"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -523,6 +523,24 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_tvonly_imageview8"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="2.25dp"
+                android:layout_marginBottom="2.25dp"
+                android:background="@mipmap/icon_onlytv"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eight_vod_poster_19_imageview8"
+                android:layout_gravity="center"
+                android:background="@mipmap/icon_19"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/eight_vod_poster_rank_imageview8"
                 android:layout_gravity="left|top"
                 android:background="@mipmap/icon_rank"
@@ -538,24 +556,6 @@
                 android:textColor="#ffffff"
                 android:layout_marginLeft="8.5dp"
                 android:layout_marginTop="3dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_tvonly_imageview8"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="2.25dp"
-                android:layout_marginBottom="2.25dp"
-                android:background="@mipmap/icon_onlytv"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eight_vod_poster_19_imageview8"
-                android:layout_gravity="center"
-                android:background="@mipmap/icon_19"
-                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
