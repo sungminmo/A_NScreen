@@ -385,6 +385,8 @@ public class JYSharedPreferences {
         put(JYSharedPreferences.WEBHAS_PRIVATE_TERMINAL_KEY, ""); // 터미널키 저장.
         put(JYSharedPreferences.PURCHASE_PASSWORD, "");     // 구매비번 저장.
         put(I_AM_ADULT,""); // 성인인증
+        put(CMConstants.ADULT_SEARCH_RESTRICTION_KEY, true); // 성인검색제한
+
         writePairingInfoToPhone();
 
         makeUUID();   // 페어링 정보 날린다음 uuid가 없다. 그래서 uuid 새로 만든다.
