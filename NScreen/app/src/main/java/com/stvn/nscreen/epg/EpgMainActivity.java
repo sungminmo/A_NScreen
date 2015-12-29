@@ -121,6 +121,7 @@ public class EpgMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EpgMainActivity.this, EpgChoiceActivity.class);
+                intent.putExtra("GENRE_CODE", sGenreCode);
                 startActivity(intent);
             }
         });

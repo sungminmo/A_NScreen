@@ -3,6 +3,7 @@ package com.stvn.nscreen.rmt;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -55,6 +56,39 @@ public class RemoteControllerChoiceActivity extends Activity {
         remote_controller_choice_genre_seven_button = (Button) findViewById(R.id.remote_controller_choice_genre_seven_button);
         remote_controller_choice_genre_eight_button = (Button) findViewById(R.id.remote_controller_choice_genre_eight_button);
         remote_controller_choice_genre_nine_button  = (Button) findViewById(R.id.remote_controller_choice_genre_nine_button);
+
+
+
+        Intent recvIntent = getIntent();
+        if (recvIntent != null) {
+            if (recvIntent.hasExtra("GENRE_CODE")) {
+                String genreCode = recvIntent.getStringExtra("GENRE_CODE");
+                if (TextUtils.isEmpty(genreCode)) {
+                    remote_controller_choice_genre_all_button.setSelected(true);
+                } else if ("&genreCode=0".equals(genreCode)) {
+                    remote_controller_choice_genre_like_button.setSelected(true);
+                } else if ("&genreCode=1".equals(genreCode)) {
+                    remote_controller_choice_genre_one_button.setSelected(true);
+                } else if ("&genreCode=2".equals(genreCode)) {
+                    remote_controller_choice_genre_two_button.setSelected(true);
+                } else if ("&genreCode=3".equals(genreCode)) {
+                    remote_controller_choice_genre_three_button.setSelected(true);
+                } else if ("&genreCode=4".equals(genreCode)) {
+                    remote_controller_choice_genre_four_button.setSelected(true);
+                } else if ("&genreCode=5".equals(genreCode)) {
+                    remote_controller_choice_genre_five_button.setSelected(true);
+                } else if ("&genreCode=6".equals(genreCode)) {
+                    remote_controller_choice_genre_six_button.setSelected(true);
+                } else if ("&genreCode=7".equals(genreCode)) {
+                    remote_controller_choice_genre_seven_button.setSelected(true);
+                } else if ("&genreCode=8".equals(genreCode)) {
+                    remote_controller_choice_genre_eight_button.setSelected(true);
+                } else if ("&genreCode=9".equals(genreCode)) {
+                    remote_controller_choice_genre_nine_button.setSelected(true);
+                }
+            }
+        }
+
 
         remote_controller_choice_genre_all_button.setOnClickListener(new View.OnClickListener() {
             @Override

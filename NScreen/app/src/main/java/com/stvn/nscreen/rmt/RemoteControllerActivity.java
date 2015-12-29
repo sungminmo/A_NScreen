@@ -78,7 +78,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private              ImageButton                     remote_controller_genre_choice_imageButton, remote_controller_backBtn;
 
     private              TextView                        remote_controller_genre_name, remote_controller_channel_textview;
-    private              String                          sChannel, sPower, sVolume;
+    private              String                          sChannel, sPower, sVolume, sGenreCode;
     private              Button                          remote_controller_power_button, remote_controller_volume_up_button, remote_controller_volume_down_button;
     private              LinearLayout                    channel1_linearlayout, channel2_linearlayout, channel3_linearlayout, channel4_linearlayout, channel5_linearlayout;
 
@@ -119,6 +119,13 @@ public class RemoteControllerActivity extends AppCompatActivity{
 
 
         try {
+            Intent recvIntent = getIntent();
+            if (recvIntent != null && recvIntent.hasExtra("sGenreCode")) {
+                this.sGenreCode = recvIntent.getStringExtra("sGenreCode");
+            } else {
+                this.sGenreCode = "";
+            }
+
             sChannel = getIntent().getExtras().getString("Channel");
             remote_controller_channel_textview.setText(sChannel + "번");
             remote_controller_genre_name.setText(getIntent().getExtras().getString("sGenreName"));
@@ -134,7 +141,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
                 Intent i = new Intent(RemoteControllerActivity.this, RemoteControllerChoiceActivity.class);
                 i.putExtra("Channel", sChannel);
                 i.putExtra("StbState", mStbState);
-
+                i.putExtra("GENRE_CODE", sGenreCode);
                 startActivity(i);
             }
         });
@@ -516,15 +523,9 @@ public class RemoteControllerActivity extends AppCompatActivity{
     private void requestGetChannelList() {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelList()"); }
-        String sGenreCode = "";
         try {
-            sGenreCode = getIntent().getExtras().getString("sGenreCode");
             mStbState  = getIntent().getExtras().getString("StbState");
         } catch (NullPointerException e) {
-            sGenreCode = "";
-        }
-        if ( "".equals(sGenreCode) ) {
-            sGenreCode = "";
         }
         String url = mPref.getAircodeServerUrl() + "/getChannelList.xml?version=1&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + sGenreCode + "&noCache=";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {

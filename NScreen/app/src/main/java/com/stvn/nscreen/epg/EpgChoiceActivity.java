@@ -3,6 +3,7 @@ package com.stvn.nscreen.epg;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +13,8 @@ import android.widget.ImageButton;
 
 import com.jjiya.android.common.JYSharedPreferences;
 import com.stvn.nscreen.R;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by limdavid on 15. 9. 14..
@@ -51,6 +54,36 @@ public class EpgChoiceActivity extends Activity {
         epg_choice_genre_seven_button = (Button) findViewById(R.id.epg_choice_genre_seven_button);
         epg_choice_genre_eight_button = (Button) findViewById(R.id.epg_choice_genre_eight_button);
         epg_choice_genre_nine_button  = (Button) findViewById(R.id.epg_choice_genre_nine_button);
+
+        Intent recvIntent = getIntent();
+        if (recvIntent != null) {
+            if (recvIntent.hasExtra("GENRE_CODE")) {
+                String genreCode = recvIntent.getStringExtra("GENRE_CODE");
+                if (TextUtils.isEmpty(genreCode)) {
+                    epg_choice_genre_all_button.setSelected(true);
+                } else if ("&genreCode=0".equals(genreCode)) {
+                    epg_choice_genre_like_button.setSelected(true);
+                } else if ("&genreCode=1".equals(genreCode)) {
+                    epg_choice_genre_one_button.setSelected(true);
+                } else if ("&genreCode=2".equals(genreCode)) {
+                    epg_choice_genre_two_button.setSelected(true);
+                } else if ("&genreCode=3".equals(genreCode)) {
+                    epg_choice_genre_three_button.setSelected(true);
+                } else if ("&genreCode=4".equals(genreCode)) {
+                    epg_choice_genre_four_button.setSelected(true);
+                } else if ("&genreCode=5".equals(genreCode)) {
+                    epg_choice_genre_five_button.setSelected(true);
+                } else if ("&genreCode=6".equals(genreCode)) {
+                    epg_choice_genre_six_button.setSelected(true);
+                } else if ("&genreCode=7".equals(genreCode)) {
+                    epg_choice_genre_seven_button.setSelected(true);
+                } else if ("&genreCode=8".equals(genreCode)) {
+                    epg_choice_genre_eight_button.setSelected(true);
+                } else if ("&genreCode=9".equals(genreCode)) {
+                    epg_choice_genre_nine_button.setSelected(true);
+                }
+            }
+        }
 
         epg_choice_genre_all_button.setOnClickListener(new View.OnClickListener() {
             @Override
