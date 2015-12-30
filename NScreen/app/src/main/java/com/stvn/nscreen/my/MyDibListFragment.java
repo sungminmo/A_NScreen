@@ -388,6 +388,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
 
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
                         mListView.dismiss(position);
+                        mPref.removeWWishAsset(assetId);
                     } else {
                         String errorString = responseObj.getString("errorString");
                         StringBuilder sb = new StringBuilder();

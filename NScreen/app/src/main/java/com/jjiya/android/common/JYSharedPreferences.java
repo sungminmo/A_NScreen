@@ -441,6 +441,17 @@ public class JYSharedPreferences {
         }
     }
 
+    public void removeWWishAsset(String assetId) {
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<WishObject> results = mRealm.where(WishObject.class).equalTo("sAssetId", assetId).findAll();
+        if ( results.size() > 0 ) {
+            WishObject obj = results.get(0);
+            obj.removeFromRealm();
+        }
+        realm.commitTransaction();
+    }
+
     /**
      * getWishList로 전체 찜 목록을 가져왔을때 호출되는 함수.
      * 기존의 Wish들을 삭제하고, 파라메터의 어레이로 다시 채운다.
