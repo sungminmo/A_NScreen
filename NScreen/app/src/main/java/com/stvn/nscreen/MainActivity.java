@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
-        String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey+"&userId="+uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

@@ -163,6 +163,7 @@ public class VodDetailActivity extends Activity {
 
         //sJson   = getIntent().getExtras().getString("sJson");
         assetId   = getIntent().getExtras().getString("assetId");
+
         if ( getIntent().getExtras().get("episodePeerExistence") == null ) {
             episodePeerExistence = "";
             contentGroupId       = "";
@@ -420,32 +421,32 @@ public class VodDetailActivity extends Activity {
         mJimButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( mPref.isWishAsset(assetId) == false ) {
+                if (mPref.isWishAsset(assetId) == false) {
                     // 찜 안한 VOD
-                        if ( mPref.isPairingCompleted() == false ) {
-                            String alertTitle = "셋탑박스 연동 필요";
-                            String alertMsg1  = mTitle;
-                            String alertMsg2  = getString(R.string.error_not_paring_compleated3);
-                            CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            }, true);
-                        } else {
-                            requestAddRemoveWishItem("addWishItem");
-                            Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-                            img.setBounds(0, 0, 35, 35);
-                            mJimButton2.setCompoundDrawables(null, null, img, null);
-                            mJimButton2.setText("찜해제");
+                    if (mPref.isPairingCompleted() == false) {
+                        String alertTitle = "셋탑박스 연동 필요";
+                        String alertMsg1 = mTitle;
+                        String alertMsg2 = getString(R.string.error_not_paring_compleated3);
+                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }, true);
+                    } else {
+                        requestAddRemoveWishItem("addWishItem");
+                        Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                        img.setBounds(0, 0, 35, 35);
+                        mJimButton2.setCompoundDrawables(null, null, img, null);
+                        mJimButton2.setText("찜해제");
 
-                            Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 씨앤앰 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 씨앤앰 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     // 찜 한 VOD
-                    if ( mPref.isPairingCompleted() == false ) {
+                    if (mPref.isPairingCompleted() == false) {
                         String alertTitle = "셋탑박스 연동 필요";
-                        String alertMsg1  = mTitle;
-                        String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                        String alertMsg1 = mTitle;
+                        String alertMsg2 = getString(R.string.error_not_paring_compleated3);
                         CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -454,7 +455,7 @@ public class VodDetailActivity extends Activity {
                     }
                     requestAddRemoveWishItem("removeWishItem");
                     Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
-                    img.setBounds( 0, 0, 35, 35 );
+                    img.setBounds(0, 0, 35, 35);
                     mJimButton2.setCompoundDrawables(null, null, img, null);
                     mJimButton2.setText("찜하기");
 
@@ -462,25 +463,6 @@ public class VodDetailActivity extends Activity {
                 }
             }
         });
-
-        if ( mPref.isWishAsset(assetId) == false ) {
-            // 찜 안한 VOD
-            Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
-            img.setBounds(0, 0, 35, 35);
-            mJimButton.setCompoundDrawables(null, null, img, null);
-            mJimButton.setText("찜하기");
-            mJimButton2.setCompoundDrawables(null, null, img, null);
-            mJimButton2.setText("찜하기");
-        } else {
-            // 찜 한 VOD
-            Drawable img = getResources().getDrawable(R.mipmap.v_pick);
-            img.setBounds( 0, 0, 35, 35 );
-            mJimButton.setCompoundDrawables( null, null, img, null );
-            mJimButton.setText("찜해제");
-            mJimButton2.setCompoundDrawables( null, null, img, null );
-            mJimButton2.setText("찜해제");
-        }
-
 
         // (HD)막돼먹은 영애씨 시즌14 02회(08/11
         // http://192.168.40.5:8080/HApplicationServer/getAssetInfo.xml?version=1&terminalKey=9CED3A20FB6A4D7FF35D1AC965F988D2&assetProfile=9&assetId=www.hchoice.co.kr%7CM4132449LFO281926301
@@ -712,6 +694,7 @@ public class VodDetailActivity extends Activity {
 
     private void setUIAsset(JSONObject asset) {
         try {
+            assetId = asset.getString("assetId");
             fileName                    = asset.getString("fileName");
             categoryId                  = asset.getString("categoryId");
             String imageFileName        = asset.getString("imageFileName");
@@ -762,6 +745,8 @@ public class VodDetailActivity extends Activity {
             if ( ! asset.isNull("hot") ) {
                 hot = asset.getBoolean("hot");
             }
+
+            setWishButton(assetId);
 
             String runningTimeMinute = String.valueOf((Integer.parseInt(runningTime.substring(0, 2)) * 60) + Integer.parseInt(runningTime.substring(3))) + "분";
             runningTime = runningTimeMinute;
@@ -892,6 +877,7 @@ public class VodDetailActivity extends Activity {
             if ( "2".equals(publicationRight) ) {
                 mMobileImageView.setVisibility(View.VISIBLE);
             }
+
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
@@ -948,6 +934,26 @@ public class VodDetailActivity extends Activity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setWishButton(String findId) {
+        if (mPref.isWishAsset(findId) == false) {
+            // 찜 안한 VOD
+            Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
+            img.setBounds(0, 0, 35, 35);
+            mJimButton.setCompoundDrawables(null, null, img, null);
+            mJimButton.setText("찜하기");
+            mJimButton2.setCompoundDrawables(null, null, img, null);
+            mJimButton2.setText("찜하기");
+        } else {
+            // 찜 한 VOD
+            Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+            img.setBounds( 0, 0, 35, 35 );
+            mJimButton.setCompoundDrawables( null, null, img, null );
+            mJimButton.setText("찜해제");
+            mJimButton2.setCompoundDrawables( null, null, img, null );
+            mJimButton2.setText("찜해제");
         }
     }
 
@@ -1204,7 +1210,7 @@ public class VodDetailActivity extends Activity {
      * http://58.141.255.79:8080/HApplicationServer/addWishItem.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1&assetId=www.hchoice.co.kr|M4166179LSG353388601
      * http://58.141.255.79:8080/HApplicationServer/removeWishItem.json?version=1&terminalKey=B2F311C9641A0CCED9C7FE95BE624D9&transactionId=1&assetId=www.hchoice.co.kr|M4166179LSG353388601
      */
-    private void requestAddRemoveWishItem(String action) {
+    private void requestAddRemoveWishItem(final String action) {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestAddRemoveWishItem()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
@@ -1227,6 +1233,26 @@ public class VodDetailActivity extends Activity {
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
                         requestGetWishList();
                     } else {
+
+
+                        if ("addWishItem".equals(action)) {
+                            Drawable img = getResources().getDrawable(R.mipmap.v_unpick);
+                            img.setBounds(0, 0, 35, 35);
+                            mJimButton.setCompoundDrawables(null, null, img, null);
+                            mJimButton.setText("찜하기");
+
+                            mJimButton2.setCompoundDrawables(null, null, img, null);
+                            mJimButton2.setText("찜하기");
+                        } else if ("removeWishItem".equals(action)) {
+                            Drawable img = getResources().getDrawable(R.mipmap.v_pick);
+                            img.setBounds(0, 0, 35, 35);
+                            mJimButton.setCompoundDrawables(null, null, img, null);
+                            mJimButton.setText("찜해제");
+
+                            mJimButton2.setCompoundDrawables(null, null, img, null);
+                            mJimButton2.setText("찜해제");
+                        }
+
                         String errorString = jo.getString("errorString");
                         StringBuilder sb   = new StringBuilder();
                         sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
@@ -1271,7 +1297,9 @@ public class VodDetailActivity extends Activity {
         // mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetWishList()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
-        String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey;
+        String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
+        String url = mPref.getWebhasServerUrl() + "/getWishList.json?version=1&terminalKey="+terminalKey+"&userId="+uuid;
+
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
