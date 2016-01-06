@@ -387,6 +387,8 @@ public class JYSharedPreferences {
         put(I_AM_ADULT,""); // 성인인증
         put(CMConstants.ADULT_SEARCH_RESTRICTION_KEY, true); // 성인검색제한
 
+        removeAllWatchVod(); // 시청목록 삭제
+
         writePairingInfoToPhone();
 
         makeUUID();   // 페어링 정보 날린다음 uuid가 없다. 그래서 uuid 새로 만든다.
@@ -781,6 +783,18 @@ public class JYSharedPreferences {
         // Realm Database **********************************************************************
     }
 
+    public void removeAllWatchVod() {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<WatchVodObject> results = mRealm.where(WatchVodObject.class).findAll();
+        if (results.size() > 0) {
+            results.clear();
+        }
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
+    }
 
     public ArrayList<JSONObject> getAllWatchVodObject() {
         ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
