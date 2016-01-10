@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
  * Created by leejunghoon on 15. 9. 19..
  */
 
-public class SearchVodFragment extends SearchBaseFragment implements AdapterView.OnItemClickListener{
+public class SearchVodFragment extends SearchBaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener{
 
     private LayoutInflater mInflater;
     private TextView mEmptyMessage;
@@ -53,7 +54,9 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
 
     private JYSharedPreferences mPref;
     private boolean mLockListView = true;
-    private int mTotCnt;
+    private int pageNo = 0;
+    private int limitCnt = 20;
+    private int mTotCnt = 0;
     private VolleyHelper mVolleyHelper;
 
     @Override
@@ -79,6 +82,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
         mGridView = (GridView)getView().findViewById(R.id.programgridview);
         mAdapter = new SearchVodAdapter(getActivity(),mProgramlist);
         mGridView.setAdapter(mAdapter);
+        mGridView.setOnScrollListener(this);
         mGridView.setOnItemClickListener(this);
         mAdapter.notifyDataSetChanged();
     }
@@ -96,8 +100,9 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
         } catch ( UnsupportedEncodingException e ) {
             e.printStackTrace();
         }
+
         // String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+JYSharedPreferences.WEBHAS_PUBLIC_TERMINAL_KEY+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+mKeyword+"&contentGroupProfile=2";
-        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+searchWord+"&contentGroupProfile=2&noCache=";
+        String url = Constants.SERVER_URL_CASTIS_PUBLIC+"/searchContentGroup.json?version=1&terminalKey="+mPref.getWebhasTerminalKey()+"&includeAdultCategory="+includeAdultCategory+"&searchKeyword="+searchWord+"&contentGroupProfile=2&pageIndex="+pageNo+"&pageSize="+limitCnt+"&noCache=";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
@@ -106,6 +111,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
                         ((SearchMainActivity)getActivity()).hideProgressDialog();
                         try {
                             JSONArray object = response.getJSONArray("searchResultList");
+                            mTotCnt = 0;
                             if(object.length()>0)
                             {
                                 JSONObject groupobject = object.getJSONObject(0);
@@ -123,8 +129,7 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
                                     mProgramlist.add(data);
                                 }
 
-//                                CMAlertUtil.Alert(getActivity(), "리스트", "size : " + msg);
-                                mTotCnt = mProgramlist.size();
+                                mTotCnt = groupobject.getInt("totalCount");
                                 mAdapter.notifyDataSetChanged();
                                 ((SearchMainActivity)getActivity()).setSearchCountText(mTotCnt);
                             }
@@ -137,11 +142,13 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
                         } else {
                             mEmptyMessage.setVisibility(View.GONE);
                         }
+                        mLockListView = false;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 ((SearchMainActivity)getActivity()).hideProgressDialog();
+                mLockListView = false;
             }
         });
 
@@ -187,6 +194,26 @@ public class SearchVodFragment extends SearchBaseFragment implements AdapterView
                 startActivity(intent);
             }
         }
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int count = totalItemCount - visibleItemCount;
+
+        if(firstVisibleItem >= count && totalItemCount != 0
+                && mLockListView == false)
+        {
+            if(mTotCnt>pageNo*limitCnt)
+            {
+                pageNo++;
+                reqVodList();
+            }
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
 
     }
 
