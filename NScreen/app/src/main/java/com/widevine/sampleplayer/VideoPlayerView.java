@@ -5,8 +5,11 @@
 package com.widevine.sampleplayer;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.drm.DrmErrorEvent;
 import android.drm.DrmEvent;
 import android.drm.DrmManagerClient;
@@ -14,7 +17,10 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +37,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
+import com.stvn.nscreen.util.CMLog;
+import com.stvn.nscreen.util.CMUtil;
 
 public class VideoPlayerView extends Activity {
     private final static String TAG = "VideoPlayerView";
@@ -60,21 +69,53 @@ public class VideoPlayerView extends Activity {
     private boolean useMediaCodec;
     private int width, height;
 
+    private int currentSeek;
+
+    private CMUtil.CMNetworkType isNetworkType;
+
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("VideoPlayerView", "onResume()");
+        if (currentSeek > 0) {
+            if (videoView != null) {
+                if (videoView.isPlaying() == false) {
+                    videoView.seekTo(currentSeek);
+                    videoView.start();
+                }
+            }
+            if (mediaCodecView != null) {
+                if (mediaCodecView.isPlaying() == false) {
+                    mediaCodecView.seekTo(currentSeek);
+                    videoView.start();
+                }
+            }
+        }
     }
 
     @Override
     protected void onPause() {
         Log.v("VideoPlayerView", "------------------- onPause ----------------");
         super.onPause(); // swlim
-        onStop();
+
+        if (videoView != null) {
+            if (videoView.isPlaying()) {
+                videoView.pause();
+                currentSeek = videoView.getCurrentPosition();
+            }
+        }
+        if (mediaCodecView != null) {
+            if (mediaCodecView.isPlaying()) {
+                mediaCodecView.pause();
+                currentSeek = mediaCodecView.getCurrentPosition();
+            }
+        }
+
     }
 
     @Override
     public void finish() {
+        CMLog.d("wd", "finish");
         Intent intent = new Intent();
         intent.putExtra("currentpage",getIntent().getIntExtra("currentpage",0));
         setResult(Activity.RESULT_OK, intent);
@@ -88,6 +129,7 @@ public class VideoPlayerView extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        currentSeek = -1;
         height = display.getHeight();
         width = display.getWidth();
         context = this;
@@ -102,6 +144,45 @@ public class VideoPlayerView extends Activity {
         //drm.printPluginVersion();
         // swlim aaa
         //drm.acquireRights(assetUri);
+
+        this.isNetworkType = CMUtil.isNetworkConnectedType(this);
+
+        if (this.isNetworkType.compareTo(CMUtil.CMNetworkType.NotConnected) == 0) {
+            CMAlertUtil.Alert(VideoPlayerView.this, "알림", "연결된 네트워크가 없습니다.", "", false, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            }, true);
+        }
+
+        BroadcastReceiver mWifiStateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                CMUtil.CMNetworkType type = CMUtil.isNetworkConnectedType(VideoPlayerView.this);
+                if (type.compareTo(CMUtil.CMNetworkType.NotConnected) == 0) {
+                    CMAlertUtil.Alert(VideoPlayerView.this, "알림", "연결된 네트워크가 없습니다.", "", false, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    }, true);
+                } else if (isNetworkType.compareTo(CMUtil.CMNetworkType.WifiConnected) == 0 && type.compareTo(CMUtil.CMNetworkType.AnotherConnected) == 0) {
+                    CMAlertUtil.Alert(VideoPlayerView.this, "알림", "모바일 데이터(LTE, 3G)로 연결되었습니다.", "", false, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    }, true);
+                }
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(mWifiStateReceiver, intentFilter);
+
         try {
             Thread.sleep(100);
             startPlayback();
@@ -112,18 +193,8 @@ public class VideoPlayerView extends Activity {
 
     @Override
     protected void onStop() {
-        Log.d(TAG, "onStop.");
-        if (videoView != null) {
-            if (videoView.isPlaying()) {
-                stopPlayback();
-            }
-        }
-        if (mediaCodecView != null) {
-            if (mediaCodecView.isPlaying()) {
-                stopPlayback();
-            }
-        }
         super.onStop();
+        Log.d(TAG, "onStop.");
     }
 
     private View createView() {
@@ -441,6 +512,15 @@ public class VideoPlayerView extends Activity {
     }
 
     private void stopPlayback() {
+        // 플레이 완료 후 플레이어 종료 처리
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 300);
+
+        currentSeek = -1;
         logMessage("Stop Playback.");
         playButton.setText("Play");
         bgImage.setVisibility(View.VISIBLE);

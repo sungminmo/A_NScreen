@@ -6,6 +6,7 @@
     <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name="com.jjiya.android.ApplicationClass"
@@ -183,6 +184,8 @@
             android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />"
             </intent-filter>
         </activity>
         <activity

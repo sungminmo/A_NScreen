@@ -1,5 +1,8 @@
 package com.stvn.nscreen.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import org.json.JSONObject;
@@ -14,6 +17,10 @@ import java.util.Date;
  */
 
 public class CMUtil {
+
+    public static enum CMNetworkType {
+        NotConnected, WifiConnected, AnotherConnected;
+    };
 
     public static int parseInt(String str)
     {
@@ -62,6 +69,22 @@ public class CMUtil {
                 } catch (Exception e) {
                 }
             }
+        }
+    }
+
+    /**
+     * 네트워크 연결여부 확인
+     * */
+    public static CMNetworkType isNetworkConnectedType(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (activeNetInfo == null) {
+            return CMNetworkType.NotConnected;
+        } else if (activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+            return CMNetworkType.WifiConnected;
+        } else {
+            return CMNetworkType.AnotherConnected;
         }
     }
 }
