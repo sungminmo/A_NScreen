@@ -148,6 +148,8 @@ public class VodDetailActivity extends Activity {
     private String drmProtection; // true
     private boolean isPrePlay; // 미리보기? 아니면 전체보기 임.
 
+    private boolean isPlayVOD;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -627,14 +629,17 @@ public class VodDetailActivity extends Activity {
                             newIntent.putExtra("productType", "Bundle");
                             newIntent.putExtra("productId", thisPoductId);
                             newIntent.putExtra("assetId", assetId);
+                            newIntent.putExtra("directPlay", true);
                             startActivity(newIntent);
                             finish();
                         } else {
+                            isPlayVOD = true;
                             String oldAssetId = assetId;
                             String oldContentGroupId = contentGroupId;
                             refreshAll(oldAssetId, contentGroupId, episodePeerId);
                         }
                     } else {
+                        isPlayVOD = true;
                         // 결제가 완료됐으니, 전부 새로 고침.
                         String oldAssetId = assetId;
                         String oldContentGroupId = contentGroupId;
@@ -884,6 +889,21 @@ public class VodDetailActivity extends Activity {
                 mMobileImageView.setVisibility(View.VISIBLE);
             }
 
+            if (this.isPlayVOD == true) {
+                this.isPlayVOD = false;
+                if ( this.mPref.isPairingCompleted() == false ) {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMsg1  = mTitle;
+                    String alertMsg2  = getString(R.string.error_not_paring_compleated3);
+                    CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    }, true);
+                } else {
+                    isPrePlay = false;
+                    requestContentUri();
+                }
+            }
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
