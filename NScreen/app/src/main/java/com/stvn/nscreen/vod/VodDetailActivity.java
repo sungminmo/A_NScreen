@@ -38,6 +38,7 @@ import com.jjiya.android.http.BitmapLruCache;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.util.CMAlertUtil;
+import com.stvn.nscreen.util.CMLog;
 import com.widevine.sampleplayer.VideoPlayerView;
 
 import org.json.JSONArray;
@@ -240,22 +241,27 @@ public class VodDetailActivity extends Activity {
                 observer.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener(){
                     @Override
                     public void onScrollChanged() {
+
+                        LinearLayout serieslayout = (LinearLayout)findViewById(R.id.vod_detail_series_linearlayout2);
+                        int contentWidth = serieslayout.getMeasuredWidth();
                         int x = mSeriesScrollView.getScrollX();
-                        int barsize = mSeriesScrollView.getScrollBarSize();
                         int width = mSeriesScrollView.getWidth();
-                        if ( (width-10) <= x ) {
-                            //Log.d(tag, "왼쪽에 화살표 찍어라");
-                            mSeriesLeftImage.setImageResource(R.mipmap.series_arrow_01);
-                            mSeriesRightImage.setImageResource(R.mipmap.series_arrow_02_dim);
-                        } else if ( 10 >= x ) {
-                            //Log.d(tag, "오른쪽에 화살표 찍어라");
+
+                        // 좌측 이미지 비활성화, 우측 이미지 활성화
+                        if (x == 0) {
                             mSeriesLeftImage.setImageResource(R.mipmap.series_arrow_01_dim);
                             mSeriesRightImage.setImageResource(R.mipmap.series_arrow_02);
-                        } else {
+                        }
+                        // 좌측 이미지 활성화, 우측이미지 비활성화
+                        else if (x == (contentWidth - width)) {
+                            mSeriesLeftImage.setImageResource(R.mipmap.series_arrow_01);
+                            mSeriesRightImage.setImageResource(R.mipmap.series_arrow_02_dim);
+                        }
+                        // 모든 이미지 활성화
+                        else {
                             mSeriesLeftImage.setImageResource(R.mipmap.series_arrow_01);
                             mSeriesRightImage.setImageResource(R.mipmap.series_arrow_02);
                         }
-                        Log.d(tag, "x: " + x + ", width: " + width);
                     }
                 });
             }
