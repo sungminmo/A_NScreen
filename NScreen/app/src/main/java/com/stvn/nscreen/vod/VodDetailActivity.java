@@ -148,7 +148,8 @@ public class VodDetailActivity extends Activity {
     private String drmProtection; // true
     private boolean isPrePlay; // 미리보기? 아니면 전체보기 임.
 
-    private boolean isPlayVOD;
+    private boolean isPlayVOD; // 구매 완료 후 시청 여부
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,8 +162,8 @@ public class VodDetailActivity extends Activity {
         ImageLoader.ImageCache imageCache = new BitmapLruCache();
         mImageLoader  = new ImageLoader(mRequestQueue, imageCache);
 
-        isPrePlay     = true;
-
+        this.isPrePlay = true;
+        this.isPlayVOD = false;
 
         //sJson   = getIntent().getExtras().getString("sJson");
         assetId   = getIntent().getExtras().getString("assetId");
@@ -629,7 +630,6 @@ public class VodDetailActivity extends Activity {
                             newIntent.putExtra("productType", "Bundle");
                             newIntent.putExtra("productId", thisPoductId);
                             newIntent.putExtra("assetId", assetId);
-                            newIntent.putExtra("directPlay", true);
                             startActivity(newIntent);
                             finish();
                         } else {
