@@ -86,6 +86,10 @@ public class JYSharedPreferences {
         mRealm = Realm.getInstance(c);
     }
 
+    public Context getContext() {
+        return this.mContext;
+    }
+
     public boolean isLogging() {
         return bLogging;
     }
