@@ -39,587 +39,587 @@
     </FrameLayout>
 
     <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="185.25dp">
-
-        <FrameLayout
-            android:layout_width="124.75dp"
-            android:layout_height="match_parent">
-
-            <com.android.volley.toolbox.NetworkImageView
-                android:layout_width="112dp"
-                android:layout_height="163dp"
-                android:id="@+id/vod_detail_imagefilename_imageview"
-                android:background="#bbbbbb"
-                android:layout_marginLeft="12.75dp"
-                android:layout_marginTop="13.75dp"
-                android:layout_gravity="right|top" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView14"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="16.75dp"
-                android:layout_marginRight="2.75dp" />
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="13.75dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_rating_imageview"
-                    android:src="@mipmap/btn_age_all"
-                    android:layout_marginLeft="11.25dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_title"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="7.25dp"
-                    android:singleLine="true"
-                    android:layout_marginRight="12.75dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12.5dp"
-                android:background="@color/white"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:text="평 가"
-                    android:id="@+id/textView9"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#9a9a9a"
-                    android:singleLine="true"
-                    android:gravity="center_horizontal" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_review1"
-                    android:src="@mipmap/series_star_off"
-                    android:layout_marginRight="0.25dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_review2"
-                    android:src="@mipmap/series_star_off"
-                    android:layout_marginRight="0.25dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_review3"
-                    android:src="@mipmap/series_star_off"
-                    android:layout_marginRight="0.25dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_review4"
-                    android:src="@mipmap/series_star_off"
-                    android:layout_marginRight="0.25dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_review5"
-                    android:src="@mipmap/series_star_off"
-                    android:layout_marginRight="0.25dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5.75dp"
-                android:background="@color/white"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:text="가 격"
-                    android:id="@+id/textView8"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#9a9a9a"
-                    android:singleLine="true"
-                    android:gravity="center_horizontal" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_hd"
-                    android:src="@mipmap/btn_size_hd"
-                    android:layout_marginRight="5dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_price_textview"
-                    android:textSize="11sp"
-                    android:textColor="@color/black"
-                    android:singleLine="true" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5.75dp"
-                android:background="@color/white"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:text="개 요"
-                    android:id="@+id/textView11"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#9a9a9a"
-                    android:singleLine="true"
-                    android:gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_genre_textview"
-                    android:textSize="11sp"
-                    android:textColor="@color/black"
-                    android:singleLine="true"
-                    android:layout_marginRight="12.75dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5.75dp"
-                android:background="@color/white"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:text="감 독"
-                    android:id="@+id/textView13"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#9a9a9a"
-                    android:singleLine="true"
-                    android:gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_director_textview"
-                    android:textSize="11sp"
-                    android:textColor="@color/black"
-                    android:singleLine="true"
-                    android:layout_marginRight="12.75dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5.75dp"
-                android:background="@color/white"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:text="출 연"
-                    android:id="@+id/textView15"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#9a9a9a"
-                    android:singleLine="true"
-                    android:gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_starring_textview"
-                    android:textSize="11sp"
-                    android:textColor="@color/black"
-                    android:singleLine="true"
-                    android:layout_marginRight="12.75dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5.75dp"
-                android:background="@color/white"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="60.75dp"
-                    android:layout_height="wrap_content"
-                    android:text="시청기간"
-                    android:id="@+id/textView10"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#9a9a9a"
-                    android:singleLine="true"
-                    android:gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_viewable_textview"
-                    android:textSize="11sp"
-                    android:textColor="@color/black"
-                    android:singleLine="true"
-                    android:layout_marginRight="12.75dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5.75dp"
-                android:background="@color/white"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:layout_width="60.75dp"
-                    android:layout_height="wrap_content"
-                    android:text="시청기기"
-                    android:id="@+id/textView12"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#9a9a9a"
-                    android:singleLine="true"
-                    android:gravity="center_horizontal" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_device_imageview"
-                    android:src="@mipmap/icon_tv"
-                    android:layout_marginRight="3dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vod_detail_device_mobile_imageview"
-                    android:src="@mipmap/icon_mobile"
-                    android:visibility="invisible" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.25dp"
-        android:background="#b4b6b8"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginTop="12.75dp" />
-
-    <LinearLayout
+        android:layout_height="@dimen/dimen_0"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="36.5dp"
-        android:id="@+id/vod_detail_series_linearlayout"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginTop="3dp"
-        android:background="#f2eef6">
+        android:fillViewport="true">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/violet"
-            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/vod_detail_series_left_image"
-                android:src="@mipmap/series_arrow_01_dim"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="4dp" />
+            android:orientation="vertical">
 
-            <HorizontalScrollView
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:id="@+id/mSeriesScrollView"
-                android:background="#f2eef6"
-                android:layout_marginTop="0.25dp"
-                android:layout_marginBottom="0.25dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="14dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="185.25dp">
+
+            <FrameLayout
+                android:layout_width="124.75dp"
+                android:layout_height="match_parent">
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:layout_width="112dp"
+                    android:layout_height="163dp"
+                    android:id="@+id/vod_detail_imagefilename_imageview"
+                    android:background="#bbbbbb"
+                    android:layout_marginLeft="12.75dp"
+                    android:layout_marginTop="13.75dp"
+                    android:layout_gravity="right|top" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView14"
+                    android:layout_gravity="right|top"
+                    android:layout_marginTop="16.75dp"
+                    android:layout_marginRight="2.75dp" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:id="@+id/vod_detail_series_linearlayout2" />
-            </HorizontalScrollView>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13.75dp"
+                    android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/vod_detail_series_right_image"
-                android:src="@mipmap/series_arrow_02_dim"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="4dp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_rating_imageview"
+                        android:src="@mipmap/btn_age_all"
+                        android:layout_marginLeft="11.25dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_title"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="7.25dp"
+                        android:singleLine="true"
+                        android:layout_marginRight="12.75dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12.5dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:text="평 가"
+                        android:id="@+id/textView9"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a9a9a"
+                        android:singleLine="true"
+                        android:gravity="center_horizontal" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_review1"
+                        android:src="@mipmap/series_star_off"
+                        android:layout_marginRight="0.25dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_review2"
+                        android:src="@mipmap/series_star_off"
+                        android:layout_marginRight="0.25dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_review3"
+                        android:src="@mipmap/series_star_off"
+                        android:layout_marginRight="0.25dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_review4"
+                        android:src="@mipmap/series_star_off"
+                        android:layout_marginRight="0.25dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_review5"
+                        android:src="@mipmap/series_star_off"
+                        android:layout_marginRight="0.25dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.75dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:text="가 격"
+                        android:id="@+id/textView8"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a9a9a"
+                        android:singleLine="true"
+                        android:gravity="center_horizontal" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_hd"
+                        android:src="@mipmap/btn_size_hd"
+                        android:layout_marginRight="5dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_price_textview"
+                        android:textSize="11sp"
+                        android:textColor="@color/black"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.75dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:text="개 요"
+                        android:id="@+id/textView11"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a9a9a"
+                        android:singleLine="true"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_genre_textview"
+                        android:textSize="11sp"
+                        android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:layout_marginRight="12.75dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.75dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:text="감 독"
+                        android:id="@+id/textView13"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a9a9a"
+                        android:singleLine="true"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_director_textview"
+                        android:textSize="11sp"
+                        android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:layout_marginRight="12.75dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.75dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:text="출 연"
+                        android:id="@+id/textView15"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a9a9a"
+                        android:singleLine="true"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_starring_textview"
+                        android:textSize="11sp"
+                        android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:layout_marginRight="12.75dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.75dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="60.75dp"
+                        android:layout_height="wrap_content"
+                        android:text="시청기간"
+                        android:id="@+id/textView10"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a9a9a"
+                        android:singleLine="true"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_viewable_textview"
+                        android:textSize="11sp"
+                        android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:layout_marginRight="12.75dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.75dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="60.75dp"
+                        android:layout_height="wrap_content"
+                        android:text="시청기기"
+                        android:id="@+id/textView12"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#9a9a9a"
+                        android:singleLine="true"
+                        android:gravity="center_horizontal" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_device_imageview"
+                        android:src="@mipmap/icon_tv"
+                        android:layout_marginRight="3dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vod_detail_device_mobile_imageview"
+                        android:src="@mipmap/icon_mobile"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/violet" />
-    </LinearLayout>
-
-        <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:id="@+id/vod_detail_synopsis_scrollView"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginTop="6.25dp"
-        android:layout_marginRight="12.75dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/vod_detail_synopsis_textview"
-            android:textSize="11.75sp"
-            android:textColor="@color/black" />
-
-    </ScrollView>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40.75dp"
-            android:layout_marginLeft="12.25dp"
-            android:layout_marginRight="12.25dp"
-            android:id="@+id/vod_detail_purchase_linearlayout2"
-            android:gravity="center"
-            android:visibility="gone">
-
-            <Button
-                android:layout_width="108.25dp"
-                android:layout_height="match_parent"
-                android:text="구매하기"
-                android:id="@+id/vod_detail_order_button2"
-                android:layout_marginRight="5.25dp"
-                android:background="@mipmap/btn_select"
-                android:textColor="#FFFFFF"
-                android:textSize="14.5sp"
-                android:layout_weight="1" />
-
-
-            <Button
-                android:layout_width="108.25dp"
-                android:layout_height="match_parent"
-                android:text="찜하기"
-                android:id="@+id/vod_detail_jjim_button2"
-                android:background="@drawable/img_btn_selector_short"
-                android:textColor="@drawable/btn_selector_textcolor"
-                android:drawableRight="@mipmap/v_unpick"
-                android:paddingRight="10dp"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:layout_weight="1" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40.75dp"
-        android:layout_marginLeft="12.25dp"
-        android:layout_marginRight="12.25dp"
-        android:id="@+id/vod_detail_purchase_linearlayout"
-        android:gravity="center"
-        android:visibility="gone">
-
-
-        <Button android:id="@+id/vod_detail_preplay_button"
-            android:layout_width="108.25dp"
-            android:layout_height="match_parent"
-            android:text="미리보기"
-            android:layout_marginRight="5.5dp"
-            android:background="@drawable/img_btn_selector_short"
-            android:textColor="@drawable/btn_selector_textcolor"
-            android:textSize="14.5sp" />
-
-
-        <Button
-            android:layout_width="108.25dp"
-            android:layout_height="match_parent"
-            android:text="구매하기"
-            android:id="@+id/vod_detail_order_button"
-            android:layout_marginRight="5.25dp"
-            android:background="@mipmap/btn_select"
-            android:textColor="#FFFFFF"
-            android:textSize="14.5sp" />
-
-
-        <Button
-            android:layout_width="108.25dp"
-            android:layout_height="match_parent"
-            android:text="찜하기"
-            android:id="@+id/vod_detail_jjim_button"
-            android:background="@drawable/img_btn_selector_short"
-            android:textColor="@drawable/btn_selector_textcolor"
-            android:drawableRight="@mipmap/v_unpick"
-            android:paddingRight="10dp"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40.75dp"
-        android:layout_marginLeft="12.25dp"
-        android:layout_marginRight="12.25dp"
-        android:id="@+id/vod_detail_play_linearlayout"
-        android:visibility="gone">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="시청하기"
-            android:id="@+id/vod_detail_play_button"
-            android:background="@mipmap/btn_select"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="40.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp"
-        android:id="@+id/vod_detail_tvonly_linearlayout"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="[] 은 (는)"
-            android:id="@+id/vod_detail_tvonly_textview"
-            android:textSize="14sp"
-            android:textColor="@color/violet"
-            android:layout_weight="1"
-            android:gravity="center" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=" TV에서 시청하실 수 있습니다."
-            android:id="@+id/textView16"
-            android:layout_weight="1"
-            android:textColor="@color/violet"
-            android:textSize="14sp"
-            android:gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="해당 VOD를 시청하신 분들이 많이 찾는 VOD"
-            android:id="@+id/textView14"
-            android:textSize="13sp"
-            android:textColor="@color/black"
-            android:layout_marginLeft="12.75dp"
-            android:singleLine="true"
-            android:layout_marginRight="12.75dp"
-            android:textStyle="bold"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="8.75dp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.25dp"
             android:background="#b4b6b8"
             android:layout_marginLeft="12.75dp"
-            android:layout_marginRight="12.75dp" />
+            android:layout_marginRight="12.75dp"
+            android:layout_marginTop="12.75dp" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vod_detail_related_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="148.25dp">
-        </android.support.v4.view.ViewPager>
         <LinearLayout
-            android:id="@+id/vod_detail_related_viewpager_indicator"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_15.75"
-            android:layout_marginRight="@dimen/dp5"
-            android:layout_marginBottom="@dimen/dp5"
-            android:gravity="center"
-            android:orientation="horizontal" />
-    </LinearLayout>
+            android:layout_height="36.5dp"
+            android:id="@+id/vod_detail_series_linearlayout"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginTop="3dp"
+            android:background="#f2eef6">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/violet"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vod_detail_series_left_image"
+                    android:src="@mipmap/series_arrow_01_dim"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="4dp" />
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:id="@+id/mSeriesScrollView"
+                    android:background="#f2eef6"
+                    android:layout_marginTop="0.25dp"
+                    android:layout_marginBottom="0.25dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="14dp">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:id="@+id/vod_detail_series_linearlayout2" />
+                </HorizontalScrollView>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vod_detail_series_right_image"
+                    android:src="@mipmap/series_arrow_02_dim"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="4dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/violet" />
+        </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:id="@+id/vod_detail_synopsis_scrollView"
+                android:layout_marginLeft="12.75dp"
+                android:layout_marginTop="6.25dp"
+                android:layout_marginRight="12.75dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/vod_detail_synopsis_textview"
+                    android:textSize="11.75sp"
+                    android:textColor="@color/black" />
+
+            </ScrollView>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40.75dp"
+                android:layout_marginLeft="12.25dp"
+                android:layout_marginRight="12.25dp"
+                android:id="@+id/vod_detail_purchase_linearlayout2"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <Button
+                    android:layout_width="108.25dp"
+                    android:layout_height="match_parent"
+                    android:text="구매하기"
+                    android:id="@+id/vod_detail_order_button2"
+                    android:layout_marginRight="5.25dp"
+                    android:background="@mipmap/btn_select"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14.5sp"
+                    android:layout_weight="1" />
 
 
-</LinearLayout>
-</ScrollView>
+                <Button
+                    android:layout_width="108.25dp"
+                    android:layout_height="match_parent"
+                    android:text="찜하기"
+                    android:id="@+id/vod_detail_jjim_button2"
+                    android:background="@drawable/img_btn_selector_short"
+                    android:textColor="@drawable/btn_selector_textcolor"
+                    android:drawableRight="@mipmap/v_unpick"
+                    android:paddingRight="10dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40.75dp"
+                android:layout_marginLeft="12.25dp"
+                android:layout_marginRight="12.25dp"
+                android:id="@+id/vod_detail_purchase_linearlayout"
+                android:gravity="center"
+                android:visibility="gone">
+
+
+                <Button android:id="@+id/vod_detail_preplay_button"
+                    android:layout_width="108.25dp"
+                    android:layout_height="match_parent"
+                    android:text="미리보기"
+                    android:layout_marginRight="5.5dp"
+                    android:background="@drawable/img_btn_selector_short"
+                    android:textColor="@drawable/btn_selector_textcolor"
+                    android:textSize="14.5sp" />
+
+
+                <Button
+                    android:layout_width="108.25dp"
+                    android:layout_height="match_parent"
+                    android:text="구매하기"
+                    android:id="@+id/vod_detail_order_button"
+                    android:layout_marginRight="5.25dp"
+                    android:background="@mipmap/btn_select"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14.5sp" />
+
+
+                <Button
+                    android:layout_width="108.25dp"
+                    android:layout_height="match_parent"
+                    android:text="찜하기"
+                    android:id="@+id/vod_detail_jjim_button"
+                    android:background="@drawable/img_btn_selector_short"
+                    android:textColor="@drawable/btn_selector_textcolor"
+                    android:drawableRight="@mipmap/v_unpick"
+                    android:paddingRight="10dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40.75dp"
+                android:layout_marginLeft="12.25dp"
+                android:layout_marginRight="12.25dp"
+                android:id="@+id/vod_detail_play_linearlayout"
+                android:visibility="gone">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="시청하기"
+                    android:id="@+id/vod_detail_play_button"
+                    android:background="@mipmap/btn_select"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="40.75dp"
+                android:layout_marginLeft="12.75dp"
+                android:layout_marginRight="12.75dp"
+                android:id="@+id/vod_detail_tvonly_linearlayout"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[] 은 (는)"
+                    android:id="@+id/vod_detail_tvonly_textview"
+                    android:textSize="14sp"
+                    android:textColor="@color/violet"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" TV에서 시청하실 수 있습니다."
+                    android:id="@+id/textView16"
+                    android:layout_weight="1"
+                    android:textColor="@color/violet"
+                    android:textSize="14sp"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="해당 VOD를 시청하신 분들이 많이 찾는 VOD"
+                    android:id="@+id/textView14"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="12.75dp"
+                    android:singleLine="true"
+                    android:layout_marginRight="12.75dp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="8.75dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.25dp"
+                    android:background="#b4b6b8"
+                    android:layout_marginLeft="12.75dp"
+                    android:layout_marginRight="12.75dp" />
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vod_detail_related_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="148.25dp">
+                </android.support.v4.view.ViewPager>
+                <LinearLayout
+                    android:id="@+id/vod_detail_related_viewpager_indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_15.75"
+                    android:layout_marginRight="@dimen/dp5"
+                    android:layout_marginBottom="@dimen/dp5"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>
