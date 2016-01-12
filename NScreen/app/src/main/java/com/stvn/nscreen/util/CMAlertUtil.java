@@ -143,6 +143,20 @@ public class CMAlertUtil {
         mDialog.show();
     }
 
+    public static void Alert(Context ctx,String title,String msg1,String msg2,String ok,String cancel,boolean isbold1,boolean isbold2,DialogInterface.OnClickListener listener,DialogInterface.OnClickListener listener1, DialogInterface.OnCancelListener cancelListener, boolean isCancelable)
+    {
+        CMAlertDialog mDialog = new CMAlertDialog(ctx);
+        mDialog.setTitle(title);
+        mDialog.setMessage(msg1, msg2, isbold1, isbold2);
+        mDialog.setPositiveButton(ok, listener);
+        mDialog.setNegativeButton(cancel, listener1);
+        if (cancelListener != null) {
+            mDialog.setOnCancelListener(cancelListener);
+        }
+        mDialog.setCancelable(isCancelable);
+        mDialog.show();
+    }
+
     public static void Alert(Context ctx, String title, String msg1, String msg2, String ok, String cancel, boolean isbold1, boolean isbold2, boolean useSecureMode, InputDialogClickListener listener) {
         CMAlertDialog mDialog = new CMAlertDialog(ctx, CMAlertDialog.CMDialogType.DialogType3);
         mDialog.setTitle(title);

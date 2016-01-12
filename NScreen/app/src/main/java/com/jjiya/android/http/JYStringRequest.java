@@ -30,6 +30,7 @@ import java.util.Map;
 public class JYStringRequest extends StringRequest {
 
     private static final String tag = JYStringRequest.class.getSimpleName();
+    private static boolean isCloseAlertShow = false;
     private String mUrl = null;
     private JYSharedPreferences mPref = null;
 
@@ -45,16 +46,23 @@ public class JYStringRequest extends StringRequest {
         setRetryPolicy(policy);
 
         CMUtil.CMNetworkType type = CMUtil.isNetworkConnectedType(ApplicationClass.getInstance());
-        if (type.compareTo(CMUtil.CMNetworkType.NotConnected) == 0) {
+        if (type.compareTo(CMUtil.CMNetworkType.NotConnected) == 0 && JYStringRequest.isCloseAlertShow == false) {
 
-            CMAlertUtil.Alert(mPref.getContext(), "네트워크 오류", "네트워크에 접속할 수 없습니다. 앱을 종료하시겠습니까?", "", false, false, new DialogInterface.OnClickListener() {
+            JYStringRequest.isCloseAlertShow = true;
+            CMAlertUtil.Alert(mPref.getContext(), "네트워크 오류", "네트워크에 접속할 수 없습니다. 앱을 종료하시겠습니까?", "", "확인", "취소", false, false , new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    JYStringRequest.isCloseAlertShow = false;
                     Intent exitIntent = new Intent(mPref.getContext(), CMExitActivity.class);
                     exitIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     mPref.getContext().startActivity(exitIntent);
                 }
-            }, false);
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    JYStringRequest.isCloseAlertShow = false;
+                }
+            }, null, false);
         }
     }
 
