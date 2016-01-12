@@ -72,7 +72,7 @@ public class VideoPlayerView extends Activity {
     private int currentSeek;
 
     private CMUtil.CMNetworkType isNetworkType;
-
+    private BroadcastReceiver mWifiStateReceiver;
     @Override
     protected void onResume() {
         super.onResume();
@@ -156,7 +156,7 @@ public class VideoPlayerView extends Activity {
             }, true);
         }
 
-        BroadcastReceiver mWifiStateReceiver = new BroadcastReceiver() {
+        this.mWifiStateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -175,6 +175,8 @@ public class VideoPlayerView extends Activity {
                             finish();
                         }
                     }, true);
+                } else {
+                    isNetworkType = CMUtil.isNetworkConnectedType(VideoPlayerView.this);
                 }
             }
         };
@@ -194,6 +196,9 @@ public class VideoPlayerView extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
+        if (this.mWifiStateReceiver != null) {
+            unregisterReceiver(this.mWifiStateReceiver);
+        }
         Log.d(TAG, "onStop.");
     }
 
