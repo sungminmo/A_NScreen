@@ -1,82 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="56.25dp"
-        android:orientation="horizontal"
-        android:background="@mipmap/title_bar_bg">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="셋탑박스 등록"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" />
-
-    </FrameLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="502dp"
-        android:layout_marginRight="12.75dp"
-        android:layout_marginLeft="12.75dp">
+        android:layout_height="match_parent"
+        >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView12"
-            android:layout_gravity="center_horizontal"
-            android:background="@mipmap/stb_image"
-            android:layout_marginTop="156dp"
-            android:layout_marginBottom="21.5dp" />
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56.25dp"
+            android:orientation="horizontal"
+            android:background="@mipmap/title_bar_bg">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="셋탑박스가 모바일 앱에"
-            android:id="@+id/textView35"
-            android:layout_gravity="center_horizontal"
-            android:textSize="16.25sp"
-            android:textColor="@color/violet"
-            android:layout_marginBottom="5dp" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="셋탑박스 등록"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="성공적으로 등록되었습니다."
-            android:id="@+id/textView36"
-            android:layout_gravity="center_horizontal"
-            android:textSize="16.25sp"
-            android:textColor="@color/violet" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="502dp"
+            android:layout_marginRight="12.75dp"
+            android:layout_marginLeft="12.75dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView12"
+                android:layout_gravity="center_horizontal"
+                android:background="@mipmap/stb_image"
+                android:layout_marginTop="156dp"
+                android:layout_marginBottom="21.5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="셋탑박스가 모바일 앱에"
+                android:id="@+id/textView35"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16.25sp"
+                android:textColor="@color/violet"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="성공적으로 등록되었습니다."
+                android:id="@+id/textView36"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16.25sp"
+                android:textColor="@color/violet" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="56.75dp"
+            android:layout_marginLeft="12.75dp"
+            android:layout_marginRight="12.75dp">
+
+            <Button
+                android:layout_width="334.5dp"
+                android:layout_height="39.5dp"
+                android:text="확인"
+                android:id="@+id/pairing_check_okBtn"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12.75dp"
+                android:background="@drawable/p2btn_selector"
+                android:textSize="14.5sp"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="56.75dp"
-        android:layout_marginLeft="12.75dp"
-        android:layout_marginRight="12.75dp">
-
-        <Button
-            android:layout_width="334.5dp"
-            android:layout_height="39.5dp"
-            android:text="확인"
-            android:id="@+id/pairing_check_okBtn"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="12.75dp"
-            android:background="@drawable/p2btn_selector"
-            android:textSize="14.5sp"
-            android:textColor="@color/white" />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
