@@ -106,7 +106,8 @@
         <activity
             android:name=".pairing.PairingCheckActivity"
             android:label="@string/title_activity_pairing_check"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
         </activity>
 
         <!-- REMOTE CONTROLLER -->
