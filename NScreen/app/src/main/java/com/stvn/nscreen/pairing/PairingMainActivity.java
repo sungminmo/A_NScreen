@@ -55,6 +55,7 @@ public class PairingMainActivity extends AppCompatActivity implements CMEditText
         mPurchasePassword2Edittext = (CMEditText)findViewById(R.id.pairing_main_purchase_password2_edittext);
         cancleButton = (Button)findViewById(R.id.pairing_main_cancle_button);
         nextButton   = (Button)findViewById(R.id.pairing_main_next_button);
+        nextButton.setEnabled(false);
         backBtn = (ImageButton)findViewById(R.id.backBtn);
         pairing_main_non_title = (LinearLayout) findViewById(R.id.pairing_main_non_title);
         pairing_main_non_ment1 = (LinearLayout) findViewById(R.id.pairing_main_non_ment1);
@@ -145,7 +146,7 @@ public class PairingMainActivity extends AppCompatActivity implements CMEditText
                 finish();
             }
         });
-        nextButton.setEnabled(false);
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

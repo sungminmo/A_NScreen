@@ -345,7 +345,7 @@
             android:text="다음단계"
             android:id="@+id/pairing_main_next_button"
             android:textSize="14.5sp"
-            android:textColor="@color/white"
+            android:textColor="@drawable/p2btn_text_selector"
             android:layout_weight="1"
             android:background="@drawable/p2btn_selector" />
 
