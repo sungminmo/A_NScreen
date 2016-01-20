@@ -11,24 +11,26 @@
         android:layout_marginTop="1dp"
         android:background="#0000" />
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/volleyImageView"
-        android:layout_width="82.75dp"
-        android:layout_height="120.5dp"
-        android:layout_marginTop="1dp" />
-
-    <TextView
-        android:id="@+id/vod_main_textview_title"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="전국 노래자랑 광진구편 초대가수 임석원 사회 송해"
-        android:textSize="11.5sp"
-        android:textColor="@color/black"
-        android:ellipsize="end"
-        android:lines="1"
-        android:autoText="false"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="124dp" />
+        android:orientation="vertical">
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/volleyImageView"
+            android:layout_width="82.75dp"
+            android:layout_height="120.5dp"
+            android:layout_marginTop="1dp" />
+        <TextView
+            android:id="@+id/vod_main_textview_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="11.5sp"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+
 
     <ImageView
         android:layout_width="wrap_content"
