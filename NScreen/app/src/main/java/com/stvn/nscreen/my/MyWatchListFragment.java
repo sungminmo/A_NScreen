@@ -2,17 +2,26 @@ package com.stvn.nscreen.my;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.common.ListViewDataObject;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SwipeListView;
@@ -28,11 +37,11 @@ import java.util.ArrayList;
  * Created by leejunghoon on 15. 10. 31..
  */
 
-public class MyWatchListFragment extends Fragment implements View.OnClickListener,AbsListView.OnScrollListener{
+public class MyWatchListFragment extends Fragment implements AbsListView.OnScrollListener {
     LayoutInflater                mInflater;
     private TextView              mPurchasecount;
     private TextView              mPurchaseEmptyMsg;
-    private SwipeListView         mListView;
+    private SwipeMenuListView     mListView;
     private MyWatchListAdapter    mAdapter;
     private ArrayList<JSONObject> mList;
     private boolean               mLockListView = true;
@@ -58,47 +67,14 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
         mPurchaseEmptyMsg = (TextView)getView().findViewById(R.id.purchase_empty_msg);
         mPurchaseEmptyMsg.setVisibility(View.GONE);
 
-        mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
+        mListView = (SwipeMenuListView)getView().findViewById(R.id.purchaselistview);
         mAdapter = new MyWatchListAdapter(getActivity(), mList);
-        mAdapter.setmClicklitener(this);
         mListView.setAdapter(mAdapter);
+        mListView.setMenuCreator(creator);
         mListView.setOnScrollListener(this);
-        mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onOpened(int position, boolean toRight) {
-                Log.d("ljh", "onOpend");
-            }
-
-            @Override
-            public void onClosed(int position, boolean fromRight) {
-                Log.d("ljh", "onClosed");
-            }
-
-            @Override
-            public void onListChanged() {
-                Log.d("ljh", "onListChanged");
-            }
-
-            @Override
-            public void onMove(int position, float x) {
-                Log.d("ljh", "onMove");
-
-            }
-
-            @Override
-            public void onStartOpen(int position, int action, boolean right) {
-                mListView.closeOpenedItems();
-                Log.d("ljh", "onStartOpen");
-            }
-
-            @Override
-            public void onStartClose(int position, boolean right) {
-                Log.d("ljh", "onStartClose");
-            }
-
-            @Override
-            public void onClickFrontView(int position) {
-                //CMAlertUtil.ToastShort(getActivity(), position + "번째 리스트 클릭");
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     JSONObject jo = mList.get(position);
                     String assetId = jo.getString("sAssetId");
@@ -109,42 +85,13 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                     e.printStackTrace();
                 }
             }
-
+         });
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
-            public void onClickBackView(int position) {
-                Log.d("ljh", "onClickFrontView");
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                deleteWatchItem(position);
+                return false;
             }
-
-            /**
-             * Swipe 처리 유
-             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
-             * Swipe None : SwipeListView.SWIPE_MODE_NONE
-             * */
-            @Override
-            public int onChangeSwipeMode(int position) {
-                return super.onChangeSwipeMode(position);
-            }
-
-            /**
-             * 삭제 처리
-             * */
-            @Override
-            public void onDismiss(int[] reverseSortedPositions) {
-                for (int position : reverseSortedPositions) {
-                    mList.remove(position);
-                }
-                mAdapter.notifyDataSetChanged();
-
-                int count = mList.size();
-                setWatchListCountText(count);
-            }
-
-            @Override
-            public void onListScrolled() {
-                super.onListScrolled();
-                mListView.closeOpenedItems();
-            }
-
         });
     }
 
@@ -154,6 +101,25 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
         mLockListView = false;
         setWatchListCountText(iCountOfArray);
     }
+
+    /**
+     * Swipe Menu for ListView
+     */
+    SwipeMenuCreator creator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            if (menu.getViewType() == 0) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(R.color.red);
+                item1.setWidth(width);
+                item1.setTitle("삭제");
+                item1.setTitleSize(12);
+                item1.setTitleColor(getResources().getColor(R.color.white));
+                menu.addMenuItem(item1);
+            }
+        }
+    };
 
     /**
      * 조회 개수 문구 설정
@@ -199,29 +165,22 @@ public class MyWatchListFragment extends Fragment implements View.OnClickListene
                         public void onClick(DialogInterface dialog, int which) {
                             JYSharedPreferences pref = new JYSharedPreferences(getActivity());
                             pref.removeWatchVod(iSeq);
-                            mListView.dismiss(itemIndex);
+
+                            mList.remove(itemIndex);
+                            mAdapter.notifyDataSetChanged();
+
+                            int count = mList.size();
+                            setWatchListCountText(count);
                         }
                     }, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mListView.closeOpenedItems();
+                            mAdapter.notifyDataSetChanged();
                         }
                     });
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.btn1:
-                deleteWatchItem((int) v.getTag());
-                break;
-
-        }
-
     }
 
     @Override

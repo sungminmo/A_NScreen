@@ -20,22 +20,23 @@ public class MyWatchListAdapter extends BaseAdapter {
 
 	LayoutInflater mInflater;
 	private Context mContext;
-	private View.OnClickListener mClicklitener;
 	private ArrayList<JSONObject> mList;
-
-	public View.OnClickListener getmClicklitener() {
-		return mClicklitener;
-	}
-
-	public void setmClicklitener(View.OnClickListener mClicklitener) {
-		this.mClicklitener = mClicklitener;
-	}
 
 	public MyWatchListAdapter(Context context, ArrayList<JSONObject> arr)
 	{
 		mList     = arr;
 		mContext  = context;
 		mInflater = LayoutInflater.from(context);
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		return 0;
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		return 1;
 	}
 
 	@Override
@@ -65,23 +66,19 @@ public class MyWatchListAdapter extends BaseAdapter {
 			holder.rowdate = (TextView)convertView.findViewById(R.id.row_date);
 			holder.rowtime = (TextView)convertView.findViewById(R.id.row_time);
 			holder.rowname = (TextView)convertView.findViewById(R.id.row_name);
-			holder.btn = (Button)convertView.findViewById(R.id.btn1);
-			holder.btn.setText("삭제");
 			convertView.setTag(holder);
 		}
 		else
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		((SwipeListView)parent).recycle(convertView, position);
+
 		try {
 			JSONObject jo   = getItem(position);
 			String sTitle   = jo.getString("sTitle");
 			String sDate    = jo.getString("sDate");
 			String[] sDates = sDate.split(",");
 
-			holder.btn.setTag(position);
-			holder.btn.setOnClickListener(mClicklitener);
 			holder.rowdate.setText(sDates[0]);
 			holder.rowtime.setText(sDates[1]);
 			holder.rowname.setText(sTitle);
@@ -97,7 +94,6 @@ public class MyWatchListAdapter extends BaseAdapter {
 		TextView rowdate;
 		TextView rowtime;
 		TextView rowname;
-		Button btn;
 	}
 	
 }

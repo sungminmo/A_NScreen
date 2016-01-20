@@ -9,10 +9,12 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -21,6 +23,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.CMDateUtil;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
@@ -62,7 +68,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
     private View mPurchasetab2;
     private TextView mPurchasecount;
     private TextView mPurchaseEmptyMsg;
-    private SwipeListView mListView;
+    private SwipeMenuListView mListView;
     private MyPurchaseListAdapter mAdapter;
     private ArrayList<ListViewDataObject> mResponseList = new ArrayList<>();
     private ArrayList<ListViewDataObject> mMoblieList = new ArrayList<>();
@@ -103,99 +109,113 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         mPurchasetab1.setOnClickListener(this);
         mPurchasetab2.setOnClickListener(this);
 
-        mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
+        mListView = (SwipeMenuListView)getView().findViewById(R.id.purchaselistview);
         mAdapter = new MyPurchaseListAdapter(getActivity());
-        mAdapter.setmClicklitener(this);
 
         mListView.setAdapter(mAdapter);
+        mListView.setMenuCreator(creator);
         mListView.setOnScrollListener(this);
-        mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onOpened(int position, boolean toRight) {
-                Log.d("ljh", "onOpend");
-            }
-
-            @Override
-            public void onClosed(int position, boolean fromRight) {
-                Log.d("ljh", "onClosed");
-            }
-
-            @Override
-            public void onListChanged() {
-                Log.d("ljh", "onListChanged");
-            }
-
-            @Override
-            public void onMove(int position, float x) {
-                Log.d("ljh", "onMove");
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
-
-            @Override
-            public void onStartOpen(int position, int action, boolean right) {
-                mListView.closeOpenedItems();
-                Log.d("ljh", "onStartOpen");
-            }
-
-            @Override
-            public void onStartClose(int position, boolean right) {
-                Log.d("ljh", "onStartClose");
-            }
-
-            @Override
-            public void onClickFrontView(int position) {
-                ListViewDataObject obj = getCurrentTabObjectWithIndex(position);
-
-
-                try {
-                    JSONObject jsonObj = new JSONObject(obj.sJson);
-//                    String licenseEnd = jsonObj.getString("licenseEnd");
-                    String productType = jsonObj.getString("productType");
-                    if(productType.equalsIgnoreCase("bundle")){
-                        requestGetBundleProductDetail(jsonObj);
-                    } else {
-                        requestGetAssetInfoDetail(jsonObj);
-                    }
-
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onClickBackView(int position) {
-                Log.d("ljh", "onClickFrontView");
-            }
-
-            /**
-             * Swipe 처리 유
-             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
-             * Swipe None : SwipeListView.SWIPE_MODE_NONE
-             * */
-            @Override
-            public int onChangeSwipeMode(int position) {
-                return super.onChangeSwipeMode(position);
-            }
-
-            /**
-             * 삭제 처리
-             * */
-            public void onDismiss(int[] reverseSortedPositions) {
-                for (int position : reverseSortedPositions) {
-                    removeCurrentTabObjectWithIndex(position);
-                }
-                changeListData();
-            }
-
-            @Override
-            public void onListScrolled() {
-                super.onListScrolled();
-                mListView.closeOpenedItems();
-            }
-
         });
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                deletePurchaseItem(position);
+                return false;
+            }
+        });
+
+
+//        mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+//            @Override
+//            public void onOpened(int position, boolean toRight) {
+//                Log.d("ljh", "onOpend");
+//            }
+//
+//            @Override
+//            public void onClosed(int position, boolean fromRight) {
+//                Log.d("ljh", "onClosed");
+//            }
+//
+//            @Override
+//            public void onListChanged() {
+//                Log.d("ljh", "onListChanged");
+//            }
+//
+//            @Override
+//            public void onMove(int position, float x) {
+//                Log.d("ljh", "onMove");
+//
+//            }
+//
+//            @Override
+//            public void onStartOpen(int position, int action, boolean right) {
+//                mListView.closeOpenedItems();
+//                Log.d("ljh", "onStartOpen");
+//            }
+//
+//            @Override
+//            public void onStartClose(int position, boolean right) {
+//                Log.d("ljh", "onStartClose");
+//            }
+//
+//            @Override
+//            public void onClickFrontView(int position) {
+//                ListViewDataObject obj = getCurrentTabObjectWithIndex(position);
+//
+//
+//                try {
+//                    JSONObject jsonObj = new JSONObject(obj.sJson);
+////                    String licenseEnd = jsonObj.getString("licenseEnd");
+//                    String productType = jsonObj.getString("productType");
+//                    if (productType.equalsIgnoreCase("bundle")) {
+//                        requestGetBundleProductDetail(jsonObj);
+//                    } else {
+//                        requestGetAssetInfoDetail(jsonObj);
+//                    }
+//
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onClickBackView(int position) {
+//                Log.d("ljh", "onClickFrontView");
+//            }
+//
+//            /**
+//             * Swipe 처리 유
+//             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
+//             * Swipe None : SwipeListView.SWIPE_MODE_NONE
+//             * */
+//            @Override
+//            public int onChangeSwipeMode(int position) {
+//                return super.onChangeSwipeMode(position);
+//            }
+//
+//            /**
+//             * 삭제 처리
+//             * */
+//            public void onDismiss(int[] reverseSortedPositions) {
+//                for (int position : reverseSortedPositions) {
+//                    removeCurrentTabObjectWithIndex(position);
+//                }
+//                changeListData();
+//            }
+//
+//            @Override
+//            public void onListScrolled() {
+//                super.onListScrolled();
+//                mListView.closeOpenedItems();
+//            }
+//
+//        });
 
         changeTabWithIndex(TAB_MOBILE);
     }
@@ -255,7 +275,7 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                         }, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mListView.closeOpenedItems();
+                                mAdapter.notifyDataSetChanged();
                             }
                         });
             }
@@ -263,6 +283,25 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             e.printStackTrace();
         }
     }
+
+    /**
+     * Swipe Menu for ListView
+     */
+    SwipeMenuCreator creator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            if (menu.getViewType() == 0) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(R.color.red);
+                item1.setWidth(width);
+                item1.setTitle("삭제");
+                item1.setTitleSize(12);
+                item1.setTitleColor(getResources().getColor(R.color.white));
+                menu.addMenuItem(item1);
+            }
+        }
+    };
 
     /**
      * 모바일 구매목록/TV 구매목록 탭 이벤트
@@ -276,8 +315,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
             mPurchasetab1.setSelected(false);
             mPurchasetab2.setSelected(true);
         }
-
-        mListView.closeOpenedItems();
 
         changeListData();
     }
@@ -965,7 +1002,8 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                     JSONObject responseObj = new JSONObject(response);
                     String resultCode = responseObj.getString("resultCode");
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
-                        mListView.dismiss(position);
+                        removeCurrentTabObjectWithIndex(position);
+                        changeListData();
                     } else {
                         String errorString = responseObj.getString("errorString");
                         StringBuilder sb = new StringBuilder();
@@ -1007,9 +1045,6 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
                 break;
             case R.id.purchasetab2:                 // TV구매목록
                 changeTabWithIndex(TAB_TV);
-                break;
-            case R.id.btn1:
-                deletePurchaseItem((int)v.getTag());
                 break;
         }
 

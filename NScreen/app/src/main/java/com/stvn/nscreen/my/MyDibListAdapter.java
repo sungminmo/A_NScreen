@@ -21,20 +21,21 @@ public class MyDibListAdapter extends ArrayAdapter<ListViewDataObject> {
 
 	LayoutInflater mInflater;
 	private Context mContext;
-	private View.OnClickListener mClicklitener;
-
-	public View.OnClickListener getmClicklitener() {
-		return mClicklitener;
-	}
-
-	public void setmClicklitener(View.OnClickListener mClicklitener) {
-		this.mClicklitener = mClicklitener;
-	}
 
 	public MyDibListAdapter(Context context, ArrayList<ListViewDataObject> items) {
 		super(context, 0, items);
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		return 0;
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		return 1;
 	}
 
 	@Override
@@ -51,16 +52,12 @@ public class MyDibListAdapter extends ArrayAdapter<ListViewDataObject> {
 			holder.rowdate = (TextView)convertView.findViewById(R.id.row_date);
 			holder.rowtime = (TextView)convertView.findViewById(R.id.row_time);
 			holder.rowname = (TextView)convertView.findViewById(R.id.row_name);
-			holder.btn = (Button)convertView.findViewById(R.id.btn1);
-			holder.btn.setText("찜해제");
 			convertView.setTag(holder);
 		}
 		else
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-
-		((SwipeListView)parent).recycle(convertView, position);
 
 		ListViewDataObject info = getItem(position);
 
@@ -84,9 +81,6 @@ public class MyDibListAdapter extends ArrayAdapter<ListViewDataObject> {
 		}
 
 
-		holder.btn.setTag(position);
-		holder.btn.setOnClickListener(mClicklitener);
-
 		return convertView;
 	}
 	
@@ -95,7 +89,6 @@ public class MyDibListAdapter extends ArrayAdapter<ListViewDataObject> {
 		TextView rowdate;
 		TextView rowtime;
 		TextView rowname;
-		Button btn;
 	}
 	
 }

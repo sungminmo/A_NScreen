@@ -7,10 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,6 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.CMDateUtil;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
@@ -45,11 +51,11 @@ import java.util.Map;
  * Created by leejunghoon on 15. 10. 31..
  */
 
-public class MyDibListFragment extends Fragment implements View.OnClickListener,AbsListView.OnScrollListener{
+public class MyDibListFragment extends Fragment implements AbsListView.OnScrollListener{
     LayoutInflater mInflater;
     private TextView mPurchasecount;
     private TextView mPurchaseEmptyMsg;
-    private SwipeListView mListView;
+    private SwipeMenuListView mListView;
     private MyDibListAdapter mAdapter;
     private ArrayList<ListViewDataObject> mList = new ArrayList<>();
     private boolean mLockListView = true;
@@ -79,48 +85,17 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
         mPurchasecount = (TextView)getView().findViewById(R.id.purchasecount);
         mPurchaseEmptyMsg = (TextView)getView().findViewById(R.id.purchase_empty_msg);
         mPurchaseEmptyMsg.setVisibility(View.GONE);
-        mListView = (SwipeListView)getView().findViewById(R.id.purchaselistview);
+        mListView = (SwipeMenuListView)getView().findViewById(R.id.purchaselistview);
         mAdapter = new MyDibListAdapter(getActivity(),mList);
-        mAdapter.setmClicklitener(this);
+
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mListView.setAdapter(mAdapter);
+        mListView.setMenuCreator(creator);
         mListView.setOnScrollListener(this);
 
-        mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onOpened(int position, boolean toRight) {
-                Log.d("ljh", "onOpend");
-            }
-
-            @Override
-            public void onClosed(int position, boolean fromRight) {
-                Log.d("ljh", "onClosed");
-            }
-
-            @Override
-            public void onListChanged() {
-                Log.d("ljh", "onListChanged");
-            }
-
-            @Override
-            public void onMove(int position, float x) {
-                Log.d("ljh", "onMove");
-
-            }
-
-            @Override
-            public void onStartOpen(int position, int action, boolean right) {
-                mListView.closeOpenedItems();
-                Log.d("ljh", "onStartOpen");
-            }
-
-            @Override
-            public void onStartClose(int position, boolean right) {
-                Log.d("ljh", "onStartClose");
-            }
-
-            @Override
-            public void onClickFrontView(int position) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListViewDataObject obj = mList.get(position);
 
                 String assetId = "";
@@ -185,45 +160,35 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                     e.printStackTrace();
                 }
             }
-
+        });
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
-            public void onClickBackView(int position) {
-                Log.d("ljh", "onClickFrontView");
-            }
-
-            /**
-             * Swipe 처리 유
-             * Default Swipe : SwipeListView.SWIPE_MODE_DEFAULT
-             * Swipe None : SwipeListView.SWIPE_MODE_NONE
-             * */
-            @Override
-            public int onChangeSwipeMode(int position) {
-                return super.onChangeSwipeMode(position);
-            }
-
-            /**
-             * 삭제 처리
-             * */
-            @Override
-            public void onDismiss(int[] reverseSortedPositions) {
-                for (int position : reverseSortedPositions) {
-                    mList.remove(position);
-                }
-                mAdapter.notifyDataSetChanged();
-
-                int count = mList.size();
-                setDibListCountText(count);
-            }
-
-            @Override
-            public void onListScrolled() {
-                super.onListScrolled();
-                mListView.closeOpenedItems();
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                deleteDibItem(position);
+                return false;
             }
         });
         setDibListCountText(this.mList.size());
     }
 
+    /**
+     * Swipe Menu for ListView
+     */
+    SwipeMenuCreator creator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            if (menu.getViewType() == 0) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(R.color.red);
+                item1.setWidth(width);
+                item1.setTitle("찜해제");
+                item1.setTitleSize(12);
+                item1.setTitleColor(getResources().getColor(R.color.white));
+                menu.addMenuItem(item1);
+            }
+        }
+    };
     /**
      * 조회 개수 문구 설정
      * */
@@ -279,21 +244,12 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                         }, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mListView.closeOpenedItems();
+                                mAdapter.notifyDataSetChanged();
                             }
                         });
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn1:
-                deleteDibItem((int) v.getTag());
-                break;
         }
     }
 
@@ -387,7 +343,7 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                     String resultCode = responseObj.getString("resultCode");
 
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
-                        mListView.dismiss(position);
+                        mList.remove(position);
                         mPref.removeWWishAsset(assetId);
                     } else {
                         String errorString = responseObj.getString("errorString");
@@ -395,10 +351,8 @@ public class MyDibListFragment extends Fragment implements View.OnClickListener,
                         sb.append("API: action\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
 
                         CMAlertUtil.Alert(getActivity(), "알림", sb.toString());
-
-                        mAdapter.notifyDataSetChanged();
                     }
-
+                    mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

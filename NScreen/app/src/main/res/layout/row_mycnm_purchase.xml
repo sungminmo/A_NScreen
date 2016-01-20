@@ -6,26 +6,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_58"
-        android:id="@+id/back"
-        android:background="@color/white"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/btn1"
-            android:text="삭제"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/front"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_58"
         android:background="@drawable/setting_item_selector"
         android:orientation="horizontal"
         >
@@ -104,6 +84,5 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
-
 
 </RelativeLayout>

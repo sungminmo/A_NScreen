@@ -24,14 +24,6 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 	LayoutInflater mInflater;
 	private Context mContext;
 	private Date mCompareDate;
-	private View.OnClickListener mClicklitener;
-	public View.OnClickListener getmClicklitener() {
-		return mClicklitener;
-	}
-
-	public void setmClicklitener(View.OnClickListener mClicklitener) {
-		this.mClicklitener = mClicklitener;
-	}
 
 	public MyPurchaseListAdapter(Context context) {
 		super(context, 0);
@@ -58,13 +50,11 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 			holder.rowname = (TextView)convertView.findViewById(R.id.row_name);
 			holder.rowpay = (TextView)convertView.findViewById(R.id.row_pay);
 			holder.rowterm = (TextView)convertView.findViewById(R.id.row_term);
-			holder.btn = (Button)convertView.findViewById(R.id.btn1);
 
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		((SwipeListView)parent).recycle(convertView, position);
 
 		ListViewDataObject info = getItem(position);
 
@@ -137,8 +127,6 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 			e.printStackTrace();
 		}
 
-		holder.btn.setTag(position);
-		holder.btn.setOnClickListener(mClicklitener);
 		return convertView;
 	}
 	
@@ -149,7 +137,6 @@ public class MyPurchaseListAdapter extends ArrayAdapter<ListViewDataObject> {
 		TextView rowname;
 		TextView rowpay;
 		TextView rowterm;
-		Button btn;
 	}
 	
 }
