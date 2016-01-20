@@ -162,6 +162,7 @@ public class VideoPlayerView extends Activity {
 
                 CMUtil.CMNetworkType type = CMUtil.isNetworkConnectedType(VideoPlayerView.this);
                 if (type.compareTo(CMUtil.CMNetworkType.NotConnected) == 0) {
+                    unregisterReceiver(mWifiStateReceiver);
                     CMAlertUtil.Alert(VideoPlayerView.this, "알림", "연결된 네트워크가 없습니다.", "", false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -169,6 +170,19 @@ public class VideoPlayerView extends Activity {
                         }
                     }, true);
                 } else if (isNetworkType.compareTo(CMUtil.CMNetworkType.WifiConnected) == 0 && type.compareTo(CMUtil.CMNetworkType.AnotherConnected) == 0) {
+                    unregisterReceiver(mWifiStateReceiver);
+
+                    if (videoView != null) {
+                        if (videoView.isPlaying() == false) {
+                            videoView.pause();
+                        }
+                    } else if (mediaCodecView != null) {
+                        if (mediaCodecView.isPlaying() == false) {
+                            mediaCodecView.seekTo(currentSeek);
+                            mediaCodecView.pause();
+                        }
+                    }
+
                     CMAlertUtil.Alert(VideoPlayerView.this, "알림", "모바일 데이터(LTE, 3G)로 연결되었습니다.", "", false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
