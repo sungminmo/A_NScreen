@@ -16,15 +16,6 @@ public class SearchProgramDataObject {
     private String channelProgramSeq;
     private String channelProgramGrade;
     private String channelProgramHD;
-    private int SwipeMode = SwipeListView.SWIPE_MODE_DEFAULT;
-
-    public int getSwipeMode() {
-        return SwipeMode;
-    }
-
-    public void setSwipeMode(int swipeMode) {
-        SwipeMode = swipeMode;
-    }
 
     public String getChannelId() {
         return channelId;

@@ -1,9 +1,11 @@
 package com.stvn.nscreen.search;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +21,15 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.common.BaseSwipeListViewListener;
 import com.stvn.nscreen.common.SearchProgramDataObject;
-import com.stvn.nscreen.common.SwipeListView;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMLog;
 import com.stvn.nscreen.util.CMUtil;
@@ -53,7 +57,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
 
     private LayoutInflater mInflater;
     private TextView mEmptyMessage;
-    private SwipeListView mListView;
+    private SwipeMenuListView mListView;
     private ArrayList<SearchProgramDataObject> mProgramlist = new ArrayList<SearchProgramDataObject>();
     private SearchProgramAdapter mAdapter;
     private RequestQueue mRequestQueue;
@@ -102,79 +106,157 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
     private void initView()
     {
         mEmptyMessage = (TextView)getView().findViewById(R.id.search_empty_msg);
-        mListView = (SwipeListView)getView().findViewById(R.id.programlistview);
+        mListView = (SwipeMenuListView)getView().findViewById(R.id.programlistview);
         mAdapter = new SearchProgramAdapter(getActivity(),mProgramlist);
-        mAdapter.setSwipeClickListener(mSwipeButtonClickListener);
         mListView.setAdapter(mAdapter);
+        mListView.setMenuCreator(creator);
         mListView.setOnScrollListener(this);
-        mListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
-            public void onOpened(int position, boolean toRight) {
-                Log.d("ljh", "onOpend");
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                CMLog.d("wd", "menu.getViewType() : " + menu.getViewType() + ", Index : " + index);
+                // 셋탑 미연동
+                if (menu.getViewType() == 0) {
+                    String alertTitle = "셋탑박스 연동 필요";
+                    String alertMessage1 = getString(R.string.error_not_paring_compleated3);
+                    String alertMessage2 = "";
+                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    }, true);
+                } else {
+                    if (index == 0) {
+                        // 시청예약
+                        if (menu.getViewType() == 1 || menu.getViewType() == 2) {
+                            String programId = mProgramlist.get(position).getChannelProgramID();
+                            String seriesId = "";
+                            String programTitle = mProgramlist.get(position).getChannelProgramTitle();
+                            String programTime = mProgramlist.get(position).getChannelProgramTime();
+
+                            mPref.addWatchTvReserveAlarm(programId, seriesId, programTitle, programTime);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                        // 시청예약취소
+                        else if (menu.getViewType() == 3 || menu.getViewType() == 4) {
+                            mPref.removeWatchTvReserveAlarm(mProgramlist.get(position).getChannelProgramID());
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                    } else {
+                        // 녹화예약
+                        if (menu.getViewType() == 1 || menu.getViewType() == 3) {
+                            JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
+                            if (reservjo == null) {
+                                String programTime = mProgramlist.get(position).getChannelProgramTime();
+                                requestSetRecordReserve(mProgramlist.get(position).getChannelId(), programTime);
+                            }
+                        }
+                        // 녹화예약취소
+                        else if (menu.getViewType() == 2 || menu.getViewType() == 4) {
+                            try {
+                                JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
+                                if (reservjo != null) {
+                                    String starttime = reservjo.getString("RecordStartTime");
+                                    String seriesid = reservjo.getString("SeriesId");
+                                    requestSetRecordCancelReserve(mProgramlist.get(position).getChannelId(), starttime, seriesid);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                return false;
             }
-
-            @Override
-            public void onClosed(int position, boolean fromRight) {
-                Log.d("ljh", "onClosed");
-            }
-
-            @Override
-            public void onListChanged() {
-                Log.d("ljh", "onListChanged");
-            }
-
-            @Override
-            public void onMove(int position, float x) {
-                Log.d("ljh", "onMove");
-
-            }
-
-            @Override
-            public void onStartOpen(int position, int action, boolean right) {
-                mListView.closeOpenedItems();
-                Log.d("ljh", "onStartOpen");
-            }
-
-            @Override
-            public void onStartClose(int position, boolean right) {
-                Log.d("ljh", "onStartClose");
-            }
-
-            @Override
-            public void onClickFrontView(int position) {
-                Log.d("ljh", "onClickFrontView");
-            }
-
-            @Override
-            public void onClickBackView(int position) {
-                Log.d("ljh", "onClickFrontView");
-            }
-
-            @Override
-            public int onChangeSwipeMode(int position) {
-//
-                int swipemode = mProgramlist.get(position).getSwipeMode();
-
-                return swipemode;
-//                return super.onChangeSwipeMode(position);
-            }
-
-            @Override
-            public void onDismiss(int[] reverseSortedPositions) {
-//                for (int position : reverseSortedPositions) {
-//                    data.remove(position);
-//                }
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onListScrolled() {
-                super.onListScrolled();
-                mListView.closeOpenedItems();
-            }
-
         });
     }
+
+    /**
+     * Swipe Menu for ListView
+     */
+    SwipeMenuCreator creator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            if (menu.getViewType() == 0) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(R.color.red);
+                item1.setWidth(width*2);
+                item1.setTitle("셋탑 미 연동");
+                item1.setTitleSize(12);
+                item1.setTitleColor(getResources().getColor(R.color.white));
+                menu.addMenuItem(item1);
+            }
+            // 둘다 가능
+            else if (menu.getViewType() == 1) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
+                item1.setWidth(width);
+                item1.setTitle("시청예약");
+                item1.setTitleSize(12);
+                item1.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item1);
+                SwipeMenuItem item2 = new SwipeMenuItem(getActivity());
+                item2.setBackground(new ColorDrawable(Color.rgb(0xED, 0x72, 0x33)));
+                item2.setWidth(width);
+                item2.setTitle("녹화예약");
+                item2.setTitleSize(12);
+                item2.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item2);
+            }
+            // 시청만 가능
+            else if (menu.getViewType() == 2) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
+                item1.setWidth(width);
+                item1.setTitle("시청예약");
+                item1.setTitleSize(12);
+                item1.setTitleColor(Color.WHITE);;
+                menu.addMenuItem(item1);
+                SwipeMenuItem item2 = new SwipeMenuItem(getActivity());
+                item2.setBackground(new ColorDrawable(Color.rgb(0xC1, 0x4F, 0x28)));
+                item2.setWidth(width);
+                item2.setTitle("녹화예약취소");
+                item2.setTitleSize(12);
+                item2.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item2);
+            }
+            // 녹화만 가능
+            else if (menu.getViewType() == 3) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(new ColorDrawable(Color.rgb(0x7F, 0x94, 0x24)));
+                item1.setWidth(width);
+                item1.setTitle("시청예약취소");
+                item1.setTitleSize(12);
+                item1.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item1);
+                SwipeMenuItem item2 = new SwipeMenuItem(getActivity());
+                item2.setBackground(new ColorDrawable(Color.rgb(0xED, 0x72, 0x33)));
+                item2.setWidth(width);
+                item2.setTitle("녹화예약");
+                item2.setTitleSize(12);
+                item2.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item2);
+            }
+            // 둘다 불가능
+            else if (menu.getViewType() == 4) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(new ColorDrawable(Color.rgb(0x7F, 0x94, 0x24)));
+                item1.setWidth(width);
+                item1.setTitle("시청예약취소");
+                item1.setTitleSize(12);
+                item1.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item1);
+                SwipeMenuItem item2 = new SwipeMenuItem(getActivity());
+                item2.setBackground(new ColorDrawable(Color.rgb(0xC1, 0x4F, 0x28)));
+                item2.setWidth(width);
+                item2.setTitle("녹화예약취소");
+                item2.setTitleSize(12);
+                item2.setTitleColor(Color.WHITE);
+                menu.addMenuItem(item2);
+            }
+        }
+    };
 
     private void reloadAll()
     {
@@ -487,12 +569,14 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 //Log.d(tag, response);
                 parseGetSearchList(response);
                 mAdapter.notifyDataSetChanged();
+                mLockListView = false;
                 // ((SearchMainActivity)getActivity()).hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // ((SearchMainActivity)getActivity()).hideProgressDialog();
+                mLockListView = false;
                 CMLog.e("CM", error.getMessage());
             }
         }) {
@@ -571,7 +655,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 }
                 eventType = xpp.next();
             }
-            mLockListView = false;
+
             mAdapter.notifyDataSetChanged();
             ((SearchMainActivity)getActivity()).setSearchCountText(mTotCnt);
 
@@ -736,66 +820,6 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
             e.printStackTrace();
         }
     }
-
-    View.OnClickListener mSwipeButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int position = (int)v.getTag();
-            switch (v.getId())
-            {
-                case R.id.watch_tv:         // TV로 시청
-                    break;
-                case R.id.rec_start:        // 녹화시작
-                    break;
-                case R.id.rec_stop:         // 녹화중지
-                    break;
-                case R.id.set_reservation_rec: //예약녹화설정
-                    try {
-                        JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
-                        if (reservjo != null) {
-                            String starttime = null;
-                            starttime = reservjo.getString("RecordStartTime");
-                            requestSetRecordReserve(mProgramlist.get(position).getChannelId(), starttime);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case R.id.cancel_reservation_rec: // 예약녹화취소
-                    try {
-                        JSONObject reservjo = mAdapter.getStbRecordReserveWithChunnelId(mProgramlist.get(position).getChannelId(), mProgramlist.get(position));
-                        if (reservjo != null) {
-                            String starttime = null;
-                            starttime = reservjo.getString("RecordStartTime");
-                            String seriesid = reservjo.getString("SeriesId");
-                            requestSetRecordCancelReserve(mProgramlist.get(position).getChannelId(), starttime, seriesid);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case R.id.set_reservation_watch: //예약시청설정
-                    break;
-                case R.id.cancel_reservation_watch: //예약시청취소
-                    mPref.removeWatchTvReserveAlarm(mProgramlist.get(position).getChannelProgramID());
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                case R.id.not_pairing: { // 미 페어링
-                    String alertTitle = "셋탑박스 연동 필요";
-                    String alertMessage1 = getString(R.string.error_not_paring_compleated3);
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {}
-                    }, true);
-                }
-            }
-        }
-    };
-
-
-
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {

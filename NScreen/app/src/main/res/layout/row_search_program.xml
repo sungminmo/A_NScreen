@@ -3,94 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dimen_58">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_58"
-        android:id="@+id/back"
-        android:background="@color/white"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/not_pairing"
-            android:text="셋탑 미연동"
-            android:textColor="@color/white"
-            android:background="@color/black"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/rec_start"
-            android:text="즉시 녹화"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/rec_stop"
-            android:text="즉시 녹화중지"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/watch_tv"
-            android:text="TV로시청"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/set_reservation_rec"
-            android:text="녹화예약설정"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/cancel_reservation_rec"
-            android:text="녹화예약취소"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/set_reservation_watch"
-            android:text="시청예약설정"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/cancel_reservation_watch"
-            android:text="시청예약취소"
-            android:textColor="@color/white"
-            android:background="@color/red"
-            android:visibility="gone"
-            />
-    </LinearLayout>
-
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_58"
         android:background="@color/white"
-        android:id="@+id/front"
         android:layout_alignParentBottom="true">
         <ImageView
             android:layout_width="@dimen/dimen_17"

@@ -3,21 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/dimen_10.5">
-    <com.stvn.nscreen.common.SwipeListView
-        xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    <com.baoyz.swipemenulistview.SwipeMenuListView
+        android:id="@+id/programlistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/programlistview"
-        android:divider="@color/black"
-        android:dividerHeight="1px"
-        android:listSelector="@color/white"
-        android:cacheColorHint="@color/transparent"
-        swipe:swipeFrontView="@+id/front"
-        swipe:swipeBackView="@+id/back"
-        swipe:swipeOffsetLeft="@dimen/dimen_130"
-        swipe:swipeMode="left"
-        swipe:swipeCloseAllItemsWhenMoveList="true"
-        />
+        android:scrollbars="vertical"
+        android:background="@color/white" />
     <TextView
         android:id="@+id/search_empty_msg"
         android:layout_width="wrap_content"
