@@ -146,7 +146,11 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
             } else if ( getiMyTabNumber() == 3 ) {
                 textView4.performClick();
             } else if ( getiMyTabNumber() == 4 ) {
-                textView5.performClick();
+                if (mPref.isAdultVerification() == false) {
+                    mTab1TextView.performClick();
+                } else {
+                    textView5.performClick();
+                }
             }
         }
     }

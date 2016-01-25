@@ -38,7 +38,6 @@ import com.stvn.nscreen.setting.CMSettingCustomerCenterActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -293,6 +292,9 @@ public class LeftMenuActivity extends Activity {
                     if ( Constants.CODE_WEBHAS_OK.equals(resultCode) ) {
                         mPref.removePairingInfo();
                         mPref.makeUUID();   // 사용자가 일부러 재등록을 했다면, UUID를 새로 만들어 줘야 한다.
+                        // 성인인증 관련 정보가 변경되어 메인 페이지의 reload 처리를 한다.
+                        sendBroadcast(new Intent(JYSharedPreferences.I_AM_ADULT));
+
                         Intent intent = new Intent(mInstance, PairingMainActivity.class);
                         startActivity(intent);
 //                        finish();
