@@ -97,17 +97,7 @@ public class LeftMenuActivity extends Activity {
         leftmenu_version_textview = (TextView) findViewById(R.id.leftmenu_version_textview);
         leftmenu_version_textview.setText("현재 버전 " + appVer);
 
-        if (mPref.isPairingCompleted() == true) {
-            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("");
-            ((TextView) findViewById(R.id.leftmenu_pairing_textview2)).setText("셋탑박스와 연동중입니다.");
-            leftmenu_pairing_button1.setVisibility(View.GONE);
-            leftmenu_pairing_button2.setVisibility(View.VISIBLE);
-        } else {
-            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("원활한 서비스 이용을 위해");
-            ((TextView) findViewById(R.id.leftmenu_pairing_textview2)).setText("셋탑박스를 연동해주세요.");
-            leftmenu_pairing_button1.setVisibility(View.VISIBLE);
-            leftmenu_pairing_button2.setVisibility(View.GONE);
-        }
+        reloadPairingUI();
 
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,6 +268,26 @@ public class LeftMenuActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reloadPairingUI();
+    }
+
+    private void reloadPairingUI() {
+        if (mPref.isPairingCompleted() == true) {
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("");
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview2)).setText("셋탑박스와 연동중입니다.");
+            leftmenu_pairing_button1.setVisibility(View.GONE);
+            leftmenu_pairing_button2.setVisibility(View.VISIBLE);
+        } else {
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview1)).setText("원활한 서비스 이용을 위해");
+            ((TextView) findViewById(R.id.leftmenu_pairing_textview2)).setText("셋탑박스를 연동해주세요.");
+            leftmenu_pairing_button1.setVisibility(View.VISIBLE);
+            leftmenu_pairing_button2.setVisibility(View.GONE);
+        }
+    }
+
     private void requestRemoveUser() {
         if ( mPref.isLogging() ) { Log.d(tag, "requestRemoveUser()"); }
         String terminalKey = mPref.getWebhasTerminalKey();
@@ -294,6 +304,8 @@ public class LeftMenuActivity extends Activity {
                         mPref.makeUUID();   // 사용자가 일부러 재등록을 했다면, UUID를 새로 만들어 줘야 한다.
                         // 성인인증 관련 정보가 변경되어 메인 페이지의 reload 처리를 한다.
                         sendBroadcast(new Intent(JYSharedPreferences.I_AM_ADULT));
+
+                        reloadPairingUI();
 
                         Intent intent = new Intent(mInstance, PairingMainActivity.class);
                         startActivity(intent);
