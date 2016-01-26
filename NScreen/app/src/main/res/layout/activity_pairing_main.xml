@@ -94,7 +94,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="155.5dp"
+                android:layout_height="150.5dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="12.75dp"
                 android:layout_marginRight="12.75dp"
@@ -138,7 +138,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="155.5dp"
+                android:layout_height="150.5dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="12.75dp"
                 android:layout_marginRight="12.75dp"
@@ -194,15 +194,16 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="13sp"
                     android:textColor="#707070" />
-            </LinearLayout>-
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="300.75dp"
+                android:layout_height="292.75dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="12.75dp"
                 android:layout_marginLeft="12.75dp"
+                android:layout_marginBottom="12.75dp"
                 android:background="#f0f0f2"
                 android:gravity="center_horizontal">
 
@@ -234,7 +235,7 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
+                    android:layout_height="78dp"
                     android:gravity="center_horizontal"
                     android:id="@+id/pairing_main_ok_ment2">
 
@@ -274,7 +275,7 @@
                     android:background="@mipmap/setting_pw_box_nor"
                     android:layout_marginRight="36.75dp"
                     android:layout_marginLeft="36.75dp"
-                    android:layout_marginBottom="27.5dp"
+                    android:layout_marginBottom="20.5dp"
                     android:gravity="center"
                     android:inputType="textPassword"
                     android:textCursorDrawable="@color/pairing_edittext_color"
