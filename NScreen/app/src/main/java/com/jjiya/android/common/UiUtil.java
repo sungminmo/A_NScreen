@@ -1,12 +1,14 @@
 package com.jjiya.android.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.stvn.nscreen.R;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import java.text.DecimalFormat;
 
@@ -489,4 +491,298 @@ public class UiUtil {
         }
     }
 
+    public static boolean checkSTBStateCode(String code, Context ctx) {
+
+        boolean isSuccess = false;
+
+        //  공통
+        //  조회목록이 없는 경우(205)도 정상 처리임.
+        if ("100".equals(code) || "205".equals(code)) {
+            isSuccess = true;
+        } else if ("200".equals(code)) {
+
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "알수없는 에러";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("201".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "지원하지 않는 프로토콜";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("202".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "인증 실패";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("203".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "지원하지 않는 프로파일";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("204".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "잘못된 파라미터값";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        }
+//    else if ([code isEqualToString:@"205"])
+//    {
+//        [SIAlertView alert:@"씨앤앰 모바일 TV" message:@"녹화물 목록을 받을 수 없습니다."];
+//    }
+        else if ("206".equals(code) || "028".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("207".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "내부 프로세싱 에러";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("211".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "일반 DB 에러";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("221".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "이미 처리 되었음";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("223".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "이미 추가된 항목";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("231".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "인증코드발급 실패";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("232".equals(code)) {
+            String alertTitle = "씨앤앰 모바일 TV";
+            String alertMessage1 = "만료된 인증코드";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        }
+
+        //  녹화요청
+        else if ("001".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "MAC주소가 불일치 합니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("002".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("003".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("004".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "튜너를 모두 사용하고 있습니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("005".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "선택 하신 채널은 녹화하실 수 없습니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("006".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "이미 녹화가 예약되었습니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("007".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "프로그램 정보가 없습니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("008".equals(code)) {
+            String alertTitle = "녹화예약취소 불가";
+            String alertMessage1 = "녹화물 재생중엔 채널변경이 불가능합니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("009".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("010".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("011".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "고객님의 셋탑박스는 현재 다른 채널을 녹화중입니다. 녹화를 중지해주세요.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("012".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "고객님의 셋탑박스 설정에 의한 시청제한으로 녹화가 불가합니다. 셋탑박스 설정을 확인해주세요.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("013".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "제한채널로 녹화가 불가합니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("014".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("015".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "이미 녹화 중입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("016".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "삭제 오류입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("017".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "이름변경 오류입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("018".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "VOD상세 화면 띄우기 오류입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("019".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "개인 미디어 재생중입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("020".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "독립형(데이터 서비스) 실행중입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("021".equals(code)) {
+            String alertTitle = "녹화예약취소 불가";
+            String alertMessage1 = "VOD 시청중엔 채널변경이 불가능합니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        } else if ("023".equals(code)) {
+            String alertTitle = "녹화 불가";
+            String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
+            String alertMessage2 = "";
+            CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            }, true);
+        }
+
+
+        return isSuccess;
+    }
 }
