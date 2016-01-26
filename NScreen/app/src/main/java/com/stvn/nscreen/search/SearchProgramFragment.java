@@ -437,6 +437,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     String msg = "getRecordReservelist("+sResultCode+":"+mStbStateMap.get("errorString")+")";
                     CMAlertUtil.Alert(getActivity(), "알림", msg);
                 }
+
+                mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -695,7 +697,7 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     // ok
                     reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
                 } else {
-                    String errorString = (String)RemoteChannelControl.get("errorString");
+                    String errorString = (String)RemoteChannelControl.get("errString");
                     CMAlertUtil.Alert(getActivity(), "알림", errorString);
                 }
             }
@@ -732,9 +734,9 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     if (xpp.getName().equalsIgnoreCase("resultCode")) {
                         String resultCode = xpp.nextText();
                         RemoteChannelControl.put("resultCode", resultCode);
-                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                    } else if (xpp.getName().equalsIgnoreCase("errString")) {
                         String errorString = xpp.nextText();
-                        RemoteChannelControl.put("errorString", errorString);
+                        RemoteChannelControl.put("errString", errorString);
                     }
                 }
                 eventType = xpp.next();
@@ -805,9 +807,9 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     if (xpp.getName().equalsIgnoreCase("resultCode")) {
                         String resultCode = xpp.nextText();
                         RemoteChannelControl.put("resultCode", resultCode);
-                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                    } else if (xpp.getName().equalsIgnoreCase("errString")) {
                         String errorString = xpp.nextText();
-                        RemoteChannelControl.put("errorString", errorString);
+                        RemoteChannelControl.put("errString", errorString);
                     }
                 }
                 eventType = xpp.next();
