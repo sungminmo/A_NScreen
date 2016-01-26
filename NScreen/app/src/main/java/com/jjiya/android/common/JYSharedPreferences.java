@@ -392,7 +392,7 @@ public class JYSharedPreferences {
         put(CMConstants.ADULT_SEARCH_RESTRICTION_KEY, true); // 성인검색제한
 
         removeAllWatchVod(); // 시청목록 삭제
-
+        removeAllWishAsset(); // 찜목록 삭제
         writePairingInfoToPhone();
 
         makeUUID();   // 페어링 정보 날린다음 uuid가 없다. 그래서 uuid 새로 만든다.
@@ -456,6 +456,19 @@ public class JYSharedPreferences {
             obj.removeFromRealm();
         }
         realm.commitTransaction();
+    }
+
+    public void removeAllWishAsset() {
+        // Realm Database **********************************************************************
+        // Obtain a Realm instance
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<WishObject> results = mRealm.where(WishObject.class).findAll();
+        if (results.size() > 0) {
+            results.clear();
+        }
+        realm.commitTransaction();
+        // Realm Database **********************************************************************
     }
 
     /**
