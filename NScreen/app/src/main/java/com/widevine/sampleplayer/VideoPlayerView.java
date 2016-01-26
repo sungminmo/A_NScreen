@@ -76,6 +76,7 @@ public class VideoPlayerView extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
         Log.d("VideoPlayerView", "onResume()");
         if (currentSeek > 0) {
             if (videoView != null) {
@@ -120,6 +121,9 @@ public class VideoPlayerView extends Activity {
         intent.putExtra("currentpage",getIntent().getIntExtra("currentpage",0));
         setResult(Activity.RESULT_OK, intent);
 
+        if (this.mWifiStateReceiver != null) {
+            unregisterReceiver(this.mWifiStateReceiver);
+        }
         super.finish();
     }
 
@@ -163,6 +167,7 @@ public class VideoPlayerView extends Activity {
                 CMUtil.CMNetworkType type = CMUtil.isNetworkConnectedType(VideoPlayerView.this);
                 if (type.compareTo(CMUtil.CMNetworkType.NotConnected) == 0) {
                     unregisterReceiver(mWifiStateReceiver);
+                    mWifiStateReceiver = null;
                     CMAlertUtil.Alert(VideoPlayerView.this, "알림", "연결된 네트워크가 없습니다.", "", false, false, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -171,14 +176,13 @@ public class VideoPlayerView extends Activity {
                     }, true);
                 } else if (isNetworkType.compareTo(CMUtil.CMNetworkType.WifiConnected) == 0 && type.compareTo(CMUtil.CMNetworkType.AnotherConnected) == 0) {
                     unregisterReceiver(mWifiStateReceiver);
-
+                    mWifiStateReceiver = null;
                     if (videoView != null) {
-                        if (videoView.isPlaying() == false) {
+                        if (videoView.isPlaying()) {
                             videoView.pause();
                         }
                     } else if (mediaCodecView != null) {
-                        if (mediaCodecView.isPlaying() == false) {
-                            mediaCodecView.seekTo(currentSeek);
+                        if (mediaCodecView.isPlaying()) {
                             mediaCodecView.pause();
                         }
                     }
@@ -197,7 +201,7 @@ public class VideoPlayerView extends Activity {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(mWifiStateReceiver, intentFilter);
+        registerReceiver(this.mWifiStateReceiver, intentFilter);
 
         try {
             Thread.sleep(100);
@@ -210,9 +214,6 @@ public class VideoPlayerView extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (this.mWifiStateReceiver != null) {
-            unregisterReceiver(this.mWifiStateReceiver);
-        }
         Log.d(TAG, "onStop.");
     }
 
