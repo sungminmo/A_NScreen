@@ -40,9 +40,11 @@ import com.jjiya.android.common.CMConstants;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
+import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.util.CMAlertUtil;
+import com.stvn.nscreen.util.CMLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,6 +118,8 @@ public class EpgSubActivity extends AppCompatActivity {
 
     private              HorizontalScrollView  mChannelScrollView;
 
+
+    private boolean mShowIndicator = false;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -881,18 +885,23 @@ public class EpgSubActivity extends AppCompatActivity {
     // 7.3.40 GetSetTopStatus
     // 셋탑의 상태 확인용.
     private void requestGetSetTopStatus() {
-        mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetSetTopStatus()"); }
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
         String url         = mPref.getRumpersServerUrl() + "/GetSetTopStatus.asp?deviceId="+uuid;
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
-
                 parseGetSetTopStatus(response);
 
                 String resultCode = (String) mNetworkError.get("resultCode");
+                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) == false) {
+                    mShowIndicator = false;
+                    mProgressDialog.dismiss();
+                }
                 if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
                     //
                     mStbState             = (String)mNetworkError.get("state");
@@ -911,53 +920,17 @@ public class EpgSubActivity extends AppCompatActivity {
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
 
                     requestGetRecordReservelist();
-                } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
                 } else {
-                    String errorString = (String)mNetworkError.get("errorString");
-                    StringBuilder sb   = new StringBuilder();
-                    sb.append("API: GetSetTopStatus\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setMessage(sb.toString());
-                    alert.show();
+                    UiUtil.checkSTBStateCode(resultCode, EpgSubActivity.this);
+                    if ( "206".equals(resultCode) || "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                        //
+                        mStbState = "";
+                        mStbRecordingchannel1 = "";
+                        mStbRecordingchannel2 = "";
+                        mStbWatchingchannel = "";
+                        mStbPipchannel = "";
+                        mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    }
                 }
                 mAdapter.notifyDataSetChanged();
             }
@@ -965,6 +938,8 @@ public class EpgSubActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                mShowIndicator = false;
+
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
@@ -1037,7 +1012,10 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 녹화 예약 목록 호출 */
     private void requestGetRecordReservelist() {
-        mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetRecordReservelist()"); }
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
@@ -1048,48 +1026,16 @@ public class EpgSubActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //Log.d(tag, response);
-                mProgressDialog.dismiss();
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
-                if ( Constants.CODE_RUMPUS_OK.equals(sResultCode) ) { // 예약목록을 받았을 때
-                    //
-                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) { // 예약 목록이 없을때도 정상응답 받은 거임.
-                    //
-                } else if ( "206".equals(sResultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                UiUtil.checkSTBStateCode(sResultCode, EpgSubActivity.this);
 
-                        }
-                    }, true);
-                } else { // 그외는 error
-                    String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
-                    AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
-                    ad.setTitle("알림").setMessage(msg).setCancelable(false)
-                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    AlertDialog alert = ad.create();
-                    alert.show();
-                }
                 requestGetChannelSchedule();
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
                 if (error instanceof TimeoutError) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
@@ -1122,8 +1068,7 @@ public class EpgSubActivity extends AppCompatActivity {
         XmlPullParserFactory factory     = null;
         List<String> strings     = new ArrayList<String>();
 
-        //response = response.replace("<![CDATA[","");
-        //response = response.replace("]]>", "");
+        CMLog.d("wd", response);
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -1210,12 +1155,18 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 채널 편성 정보 호출 */
     private void requestGetChannelSchedule() {
-        mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
+
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetChannelSchedule()"); }
         String url = mPref.getAircodeServerUrl() + "/getChannelSchedule.xml?version=1&channelId=" + sChannelId + "&dateIndex=7&areaCode=" + mPref.getValue(CMConstants.USER_REGION_CODE_KEY, "17") + "&noCache=";
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
                 //Log.d(tag, response);
                 parseGetChannelList(response);
@@ -1293,6 +1244,7 @@ public class EpgSubActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
                 if ( mPref.isLogging() ) { VolleyLog.d(tag, "onErrorResponse(): " + error.getMessage()); }
             }
@@ -1367,7 +1319,12 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* TV로 시청 */
     private void requestSetRemoteChannelControl(String channelId) {
-        mProgressDialog	 = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
+
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
         String tk   = mPref.getWebhasTerminalKey();
@@ -1375,46 +1332,20 @@ public class EpgSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
                 parseSetRemoteChannelControl(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
-                    String alertTitle = "채널 변경";
-                    String alertMessage1 = "셋탑박스가 꺼져있습니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
-                    String alertTitle = "채널 변경";
-                    String alertMessage1 = "VOD 시청중엔 채널변경이 불가능합니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
-                    String alertTitle = "채널 변경";
-                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불가능합니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
+                } else {
+                    UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
 
                 if (error instanceof TimeoutError ) {
@@ -1474,7 +1405,11 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 즉시녹화 */
     private void requestSetRecord(String channelId) {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
+
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecord()"); }
         String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
@@ -1482,106 +1417,24 @@ public class EpgSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
                 parseSetRecord(response);
+
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) == false ) {
+                    mShowIndicator = false;
+                    mProgressDialog.dismiss();
+                }
+
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
                     reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
-                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "005".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "선택 하신 채널은 녹화하실 수 없습니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "009".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "011".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스는 현재 다른 채널을 녹화중입니다. 녹화를 중지해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                }else if ( "012".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스 설정에 의한 시청제한으로 녹화가 불가합니다. 셋탑박스 설정을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "023".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
+                }  else {
+                    UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
 
                 if (error instanceof TimeoutError ) {
@@ -1641,7 +1494,10 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 녹화중지 */
     private void requestSetRecordStop(String channelId) {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordStop()"); }
         String terminalKey = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
@@ -1649,13 +1505,13 @@ public class EpgSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
                 parseSetRecordStop(response);
                 reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
 
                 if (error instanceof TimeoutError ) {
@@ -1715,7 +1571,10 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 예약녹화 */
     private void requestSetRecordReserve(String channelId, String starttime) {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordReserve()"); }
         try {
             starttime = URLEncoder.encode(starttime, "utf-8");
@@ -1729,76 +1588,22 @@ public class EpgSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
                 parseSetRecordReserve(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) == false ) {
+                    mShowIndicator = false;
+                    mProgressDialog.dismiss();
+                }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
                     reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
-                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
-                    String alertMessage1 = "셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "005".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "선택 하신 채널은 녹화하실 수 없습니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
-                    String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
-                    String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "023".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스에서 제공되지 않는 채널입니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
+                } else {
+                    UiUtil.checkSTBStateCode((String)RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
 
                 if (error instanceof TimeoutError ) {
@@ -1827,7 +1632,10 @@ public class EpgSubActivity extends AppCompatActivity {
 
     // 시리즈 예약 녹화
     private void requestSetRecordSeriesReserve(String channelId, String series, String starttime) {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordReserve()"); }
         try {
             starttime = URLEncoder.encode(starttime, "utf-8");
@@ -1841,56 +1649,22 @@ public class EpgSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
                 parseSetRecordReserve(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) == false ) {
+                    mShowIndicator = false;
+                    mProgressDialog.dismiss();
+                }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
                     reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
-                } else if ( "002".equals(RemoteChannelControl.get("resultCode")) ) {        // Duplicated Recording Reserve Request
-                    String alertTitle = "녹화 불가";
-                    String alertMessage1 = "고객님의 셋탑박스는 해당시간에 다른 채널이 녹화예약되어있습니다. 녹화예약을 취소해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "003".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
-                    String alertMessage1 = "셋탑박스의 저장공간이 부족합니다. 녹화물 목록을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
-                    String alertMessage1 = "셋탑박스의 뒷 전원이 꺼져있거나, 통신이 고르지 못해 녹화가 불가합니다. 셋탑박스의 상태를 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "010".equals(RemoteChannelControl.get("resultCode")) ) {
-                    String alertTitle = "녹화예약 불가";
-                    String alertMessage1 = "셋탑박스에서 동시화면 기능을 사용중인 경우 즉시 녹화가 불가능합니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
+                } else {
+                    UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
 
                 if (error instanceof TimeoutError ) {
@@ -1932,9 +1706,9 @@ public class EpgSubActivity extends AppCompatActivity {
                     if (xpp.getName().equalsIgnoreCase("resultCode")) {
                         String resultCode = xpp.nextText();
                         RemoteChannelControl.put("resultCode", resultCode);
-                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                    } else if (xpp.getName().equalsIgnoreCase("errString")) {
                         String errorString = xpp.nextText();
-                        RemoteChannelControl.put("errorString", errorString);
+                        RemoteChannelControl.put("errString", errorString);
                     }
                 }
                 eventType = xpp.next();
@@ -1950,7 +1724,10 @@ public class EpgSubActivity extends AppCompatActivity {
 
     /* 예약 녹화 취소 */
     private void requestSetRecordCancelReserve(String channelId, String starttime, String seriesId) {
-        mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        if (mShowIndicator == false) {
+            mShowIndicator = true;
+            mProgressDialog = ProgressDialog.show(mInstance, "", getString(R.string.wait_a_moment));
+        }
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRecordCancelReserve()"); }
         try {
             starttime = URLEncoder.encode(starttime, "utf-8");
@@ -1964,48 +1741,23 @@ public class EpgSubActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mProgressDialog.dismiss();
                 parseSetRecordCancelReserve(response);
+                if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) == false ) {
+                    mShowIndicator = false;
+                    mProgressDialog.dismiss();
+                }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
                     reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
-                } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
-                    String alertTitle = "녹화예약취소 불가";
-                    String alertMessage1 = "셋탑박스가 꺼져있습니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "021".equals(RemoteChannelControl.get("resultCode")) ) {        // VOD 시청중
-                    String alertTitle = "녹화예약취소 불가";
-                    String alertMessage1 = "VOD 시청중엔 채널변경이 불가능합니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "008".equals(RemoteChannelControl.get("resultCode")) ) {        // 녹화물 재생중
-                    String alertTitle = "녹화예약취소 불가";
-                    String alertMessage1 = "녹화물 재생중엔 채널변경이 불가능합니다.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
+                } else {
+                    UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mShowIndicator = false;
                 mProgressDialog.dismiss();
-
                 if (error instanceof TimeoutError ) {
                     Toast.makeText(mInstance, mInstance.getString(R.string.error_network_timeout), Toast.LENGTH_LONG).show();
                 } else if (error instanceof NoConnectionError) {
