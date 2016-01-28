@@ -40,7 +40,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
 
     // UI
     private int iMyTabNumber;
-    TextView mTab1TextView, textView2, textView3, textView4, textView5;
+    public TextView mTab1TextView, textView2, textView3, textView4, textView5;
     View lineview1, lineview2, lineview3, lineview4, lineview5;
     ImageButton leftImageButton, rightImageButton;
 
@@ -126,8 +126,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainFirstTabFragment df = new VodMainFirstTabFragment();
                 df.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, df);
-                ft.addToBackStack("VodMainFirstTabFragment");
+                ft.replace(R.id.fragment_placeholder, df, "CurrentFragment");
                 ft.commit();
             }
         });
@@ -164,8 +163,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
                 otherTabFragment.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, otherTabFragment);
-                ft.addToBackStack("VodMainOtherTabFragment");
+                ft.replace(R.id.fragment_placeholder, otherTabFragment, "CurrentFragment");
                 ft.commit();
             }
         });
@@ -201,8 +199,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
                 otherTabFragment.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, otherTabFragment);
-                ft.addToBackStack("VodMainOtherTabFragment");
+                ft.replace(R.id.fragment_placeholder, otherTabFragment, "CurrentFragment");
                 ft.commit();
             }
         });
@@ -238,8 +235,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
                 FragmentTransaction ft = fm.beginTransaction();
                 VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
                 otherTabFragment.setArguments(param);
-                ft.replace(R.id.fragment_placeholder, otherTabFragment);
-                ft.addToBackStack("VodMainOtherTabFragment");
+                ft.replace(R.id.fragment_placeholder, otherTabFragment, "CurrentFragment");
                 ft.commit();
             }
         });
@@ -294,8 +290,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
                     FragmentTransaction ft = fm.beginTransaction();
                     VodMainOtherTabFragment otherTabFragment = new VodMainOtherTabFragment();
                     otherTabFragment.setArguments(param);
-                    ft.replace(R.id.fragment_placeholder, otherTabFragment);
-                    ft.addToBackStack("VodMainOtherTabFragment");
+                    ft.replace(R.id.fragment_placeholder, otherTabFragment, "CurrentFragment");
                     ft.commit();
                 }
             }
@@ -308,7 +303,7 @@ public class VodMainBaseFragment extends Fragment implements IOnBackPressedListe
                 if (isLeftMenuShow == false) {
                     isLeftMenuShow = true;
                     Intent intent = new Intent(getActivity(), LeftMenuActivity.class);
-                    startActivity(intent);
+                    getActivity().startActivityForResult(intent, MainActivity.Result_LeftMenu_Code);
                 }
             }
         });

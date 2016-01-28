@@ -1,5 +1,6 @@
 package com.stvn.nscreen;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -27,6 +28,7 @@ import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.IOnBackPressedListener;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.http.JYStringRequest;
+import com.stvn.nscreen.vod.VodMainBaseFragment;
 import com.stvn.nscreen.vod.VodMainFirstTabFragment;
 
 import org.json.JSONArray;
@@ -39,6 +41,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private static final String                 tag = MainActivity.class.getSimpleName();
+    public static final int Result_LeftMenu_Code = 1200;
     public  static       MainActivity           mInstance;
     private              IOnBackPressedListener mIOnBackPressedListener;
     private              JYSharedPreferences    mPref;
@@ -73,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
         VodMainFirstTabFragment firstTabFragment = new VodMainFirstTabFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_placeholder, firstTabFragment);
-        fragmentTransaction.addToBackStack("VodMainOtherTabFragment");
+        fragmentTransaction.replace(R.id.fragment_placeholder, firstTabFragment, "CurrentFragment");
         fragmentTransaction.commit();
 
         //mPref.addWatchTvAlarm("S321387639", "", "국악무대5000", "2015-11-10 20:50:00");
@@ -161,6 +163,19 @@ public class MainActivity extends AppCompatActivity {
         mRequestQueue.add(request);
     }
 
-//    public void setOnBackPressedListener(VodMainBaseFragment vodMainBaseFragment) {
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MainActivity.Result_LeftMenu_Code) {
+            if (resultCode == Activity.RESULT_OK) {
+                boolean isRemovePairing = data.getBooleanExtra("isRemovePairing", false);
+                if (isRemovePairing) {
+
+                    VodMainBaseFragment myFragment = (VodMainBaseFragment)getFragmentManager().findFragmentByTag("CurrentFragment");
+                    if (myFragment != null && myFragment.isVisible()) {
+                        myFragment.mTab1TextView.performClick();
+                    }
+                }
+            }
+        }
+    }
 }
