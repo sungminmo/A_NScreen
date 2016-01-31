@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -189,11 +190,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
                 JSONObject jo = new JSONObject(dobj.sJson);
                 String channelId = jo.getString("channelId");
                 String channelNumber = jo.getString("channelNumber");
-                requestSetRemoteChannelControl(channelId);
-
-                sChannel = channelNumber;
-                remote_controller_channel_textview.setText(sChannel + "번");
-
+                requestSetRemoteChannelControl(channelId, channelNumber);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -236,40 +233,21 @@ public class RemoteControllerActivity extends AppCompatActivity{
                     } else if ( "2".equals(mStbState) ) { // 독립형.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel3_linearlayout.setVisibility(View.VISIBLE);
-//                        String alertTitle = "채널 변경";
-//                        String alertMsg1  = getString(R.string.error_not_remote_control_case2);
-//                        String alertMsg2  = "";
-//                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        }, true);
                     } else if ( "4".equals(mStbState) ) { // 셋탑박스 대기모드.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel4_linearlayout.setVisibility(View.VISIBLE);
                     } else if ( "6".equals(mStbState) ) { // 개인 미디어 시청중.
                         channel1_linearlayout.setVisibility(View.GONE);
                         channel5_linearlayout.setVisibility(View.VISIBLE);
-//                        String alertTitle = "채널 변경";
-//                        String alertMsg1  = getString(R.string.error_not_remote_control_case2);
-//                        String alertMsg2  = "";
-//                        CMAlertUtil.Alert1(mInstance, alertTitle, alertMsg1, alertMsg2, true, false, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        }, true);
                     }
 
-//                } else if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found_authCode.equals(resultCode) ) {
-//                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-//                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                        }
-//                    });
-//                    alert.setMessage(getString(R.string.RUMPUS_ERROR_MSG_Not_Found_authCode));
-//                    alert.show();
+                    sChannel = mAdapter.getChannelNumberWithChannelId(mStbWatchingchannel);
+                    if (TextUtils.isEmpty(sChannel)) {
+                        remote_controller_channel_textview.setText("");
+                    } else {
+                        remote_controller_channel_textview.setText(sChannel + "번");
+                    }
+
                 } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
                     //
                     mStbState             = "";
@@ -400,7 +378,7 @@ public class RemoteControllerActivity extends AppCompatActivity{
     }
 
 
-    private void requestSetRemoteChannelControl(String channelId) {
+    private void requestSetRemoteChannelControl(String channelId, final String channelNumber) {
         mProgressDialog	 = ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
         if ( mPref.isLogging() ) { Log.d(tag, "requestSetRemoteChannelControl()"); }
         String uuid = mPref.getValue(JYSharedPreferences.UUID, "");
@@ -412,6 +390,8 @@ public class RemoteControllerActivity extends AppCompatActivity{
                 mProgressDialog.dismiss();
                 parseSetRemoteChannelControl(response);
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
+                    sChannel = channelNumber;
+                    remote_controller_channel_textview.setText(sChannel + "번");
                     // ok
                 } else if ( "014".equals(RemoteChannelControl.get("resultCode")) ) {        // Hold Mode
                     String alertTitle = "채널 변경";
