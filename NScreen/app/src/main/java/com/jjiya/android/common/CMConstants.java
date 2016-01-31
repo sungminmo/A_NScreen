@@ -19,7 +19,5 @@ public class CMConstants {
     // 환경설정 내 Preference 사용 키
     public static final String USER_REGION_CODE_KEY = "USER_REGION_CODE";
     public static final String USER_REGION_NAME_KEY = "USER_REGION_NAME";
-    // swlim. JYSharedPreferences 의 setIAmAdult(), removeIAmAdult() 을 호출해서 저장하는 방식으로 변경했습니다.
-    //public static final String ADULT_AUTH_CHECK_KEY = "ADULT_AUTH_CHECK"; // 성인인증 여부
     public static final String ADULT_SEARCH_RESTRICTION_KEY = "ADULT_SEARCH_RESTRICTION"; // 성인검색 제한 설정
 }

@@ -78,9 +78,11 @@ public class CMSettingData {
      * */
     public void setAdultAuth(Context context, boolean isAuth) {
         JYSharedPreferences preferences = new JYSharedPreferences(context);
-        // swlim.
-        //preferences.put(CMConstants.ADULT_AUTH_CHECK_KEY, isAuth);
-        preferences.setIAmAdult();
+        if (isAuth == true) {
+            preferences.setIAmAdult();
+        } else {
+            preferences.removeIAmAdult();
+        }
     }
 
     /**
