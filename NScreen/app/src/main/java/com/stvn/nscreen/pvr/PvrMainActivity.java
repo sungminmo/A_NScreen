@@ -38,12 +38,14 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
+import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.epg.EpgSubActivity;
 import com.stvn.nscreen.pairing.PairingMainActivity;
 import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
+import com.stvn.nscreen.util.CMLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -590,50 +592,16 @@ public class PvrMainActivity extends AppCompatActivity {
         String          uuid    = mPref.getValue(JYSharedPreferences.UUID, "");
         String          tk      = JYSharedPreferences.RUMPERS_TERMINAL_KEY;
         String          url     = mPref.getRumpersServerUrl() + "/getRecordReservelist.asp?Version=1&terminalKey=" + tk + "&deviceId=" + uuid;
+        CMLog.d("getRecordReservelist url : " + url );
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
-                //String sResultCode = parseGetRecordReservelist(request.getUtf8Response()); // 파싱 결과를 리턴 받는다.
+
+
                 String sResultCode = parseGetRecordReservelist(response); // 파싱 결과를 리턴 받는다.
-                if ( Constants.CODE_RUMPUS_ERROR_205_Not_Found.equals(sResultCode) ) {
-                    // 녹화물 없음이므로 정상.
-                    textView1.setText("총 0개의 녹화예약 콘텐츠가 있습니다.");
-                    mAdapter.setTabNumber(1);
-                    mAdapter.notifyDataSetChanged();
-                } else if ( "206".equals(sResultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    }, true);
-                } else if ( "208".equals(sResultCode) ) {
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( ! Constants.CODE_RUMPUS_OK.equals(sResultCode) ) {
-                    String msg = "getRecordReservelist("+sResultCode+":"+mNetworkError.get("errorString")+")";
-                    AlertDialog.Builder ad = new AlertDialog.Builder(mInstance);
-                    ad.setTitle("알림").setMessage(msg).setCancelable(false)
-                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    AlertDialog alert = ad.create();
-                    alert.show();
-                } else {
+                if (UiUtil.checkSTBStateCode(sResultCode, PvrMainActivity.this)) {
                     textView1.setText("총 " + mAdapter.getCount() + "개의 녹화예약 콘텐츠가 있습니다.");
                     mAdapter.setTabNumber(1);
                     mAdapter.notifyDataSetChanged();
@@ -689,9 +657,9 @@ public class PvrMainActivity extends AppCompatActivity {
                     if (xpp.getName().equalsIgnoreCase("response")) {
                         //
                     } else if (xpp.getName().equalsIgnoreCase("resultCode")) {
-                        sResultCode = xpp.nextText(); mNetworkError.put("resultCode",sResultCode);
+                        sResultCode = xpp.nextText(); mNetworkError.put("resultCode", sResultCode);
                     } else if (xpp.getName().equalsIgnoreCase("errorString")) {
-                        mNetworkError.put("errorString",xpp.nextText());
+                        mNetworkError.put("errorString", xpp.nextText());
                     } else if (xpp.getName().equalsIgnoreCase("Reserve_Item")) {
                         //
                     } else if (xpp.getName().equalsIgnoreCase("RecordingType")) {
