@@ -489,9 +489,8 @@ public class VodDetailActivity extends Activity {
             isSeriesLink = "NO";
             mSeriesLinearLayout.setVisibility(View.GONE);
             requestGetAssetInfo();
+            requestGetWishList();
         }
-
-
 
         /**
          * 화면 하단의 연관 VOD 요청
@@ -552,6 +551,7 @@ public class VodDetailActivity extends Activity {
             isSeriesLink = "NO";
             mSeriesLinearLayout.setVisibility(View.GONE);
             requestGetAssetInfo();
+            requestGetWishList();
         }
     }
 
@@ -756,8 +756,6 @@ public class VodDetailActivity extends Activity {
             if ( ! asset.isNull("hot") ) {
                 hot = asset.getBoolean("hot");
             }
-
-            setWishButton(assetId);
 
             String runningTimeMinute = String.valueOf((Integer.parseInt(runningTime.substring(0, 2)) * 60) + Integer.parseInt(runningTime.substring(3))) + "분";
             runningTime = runningTimeMinute;
@@ -1352,6 +1350,7 @@ public class VodDetailActivity extends Activity {
                         alert.show();
                     }
 
+                    setWishButton(assetId);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
