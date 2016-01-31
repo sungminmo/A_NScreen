@@ -31,10 +31,12 @@ import com.jjiya.android.common.CMConstants;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
+import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.bean.BookmarkChannelObject;
 import com.stvn.nscreen.util.CMAlertUtil;
+import com.stvn.nscreen.util.CMLog;
 
 
 import org.json.JSONException;
@@ -134,7 +136,8 @@ public class EpgMainActivity extends AppCompatActivity {
             }
         });
 
-        requestGetSetTopStatus();
+
+        requestGetChannelList();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -212,10 +215,15 @@ public class EpgMainActivity extends AppCompatActivity {
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d(tag, response);
-                // mProgressDialog.dismiss();
+                CMLog.d("채널 목록 수신");
                 parseGetChannelList(response);
                 mAdapter.notifyDataSetChanged();
+                CMLog.d("채널 목록 리스트 갱신");
+
+                // 구글셋탑이 아닌경우에만 셋탑 상태에 대하여 조회 한다.
+                if ( "HD".equals(mPref.getSettopBoxKind()) || "PVR".equals(mPref.getSettopBoxKind()) ) {
+                    requestGetSetTopStatus();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -331,86 +339,56 @@ public class EpgMainActivity extends AppCompatActivity {
         if ( mPref.isLogging() ) { Log.d(tag, "requestGetSetTopStatus()"); }
         String uuid        = mPref.getValue(JYSharedPreferences.UUID, "");
         String url         = mPref.getRumpersServerUrl() + "/GetSetTopStatus.asp?deviceId="+uuid;
+        CMLog.d("셋탑 상태 요청");
         JYStringRequest request = new JYStringRequest(mPref, Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                CMLog.d("셋탑 상태 수신");
                 parseGetSetTopStatus(response);
 
                 String resultCode = (String) mStbStateMap.get("resultCode");
-                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
-                    //
+
+                if (UiUtil.checkSTBStateCode(resultCode, EpgMainActivity.this)) {
                     mStbState             = (String) mStbStateMap.get("state");
                     mStbRecordingchannel1 = (String) mStbStateMap.get("recordingchannel1");
                     mStbRecordingchannel2 = (String) mStbStateMap.get("recordingchannel2");
                     mStbWatchingchannel   = (String) mStbStateMap.get("watchingchannel");
                     mStbPipchannel        = (String) mStbStateMap.get("pipchannel");
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(mInstance, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "SMART".equals(mPref.getSettopBoxKind()) ) { // SMART
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
                 } else {
-                    String errorString = (String)mStbStateMap.get("errorString");
-                    StringBuilder sb   = new StringBuilder();
-                    sb.append("API: GetSetTopStatus\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
-                    alert.setPositiveButton("알림", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setMessage(sb.toString());
-                    alert.show();
+                    if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                        //
+                        mStbState             = "";
+                        mStbRecordingchannel1 = "";
+                        mStbRecordingchannel2 = "";
+                        mStbWatchingchannel   = "";
+                        mStbPipchannel        = "";
+                        mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                        //
+                        mStbState             = "";
+                        mStbRecordingchannel1 = "";
+                        mStbRecordingchannel2 = "";
+                        mStbWatchingchannel   = "";
+                        mStbPipchannel        = "";
+                        mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
+                        //
+                        mStbState             = "";
+                        mStbRecordingchannel1 = "";
+                        mStbRecordingchannel2 = "";
+                        mStbWatchingchannel   = "";
+                        mStbPipchannel        = "";
+                        mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                    } else if ( "SMART".equals(mPref.getSettopBoxKind()) ) { // SMART
+                        //
+                        mStbState             = "";
+                        mStbRecordingchannel1 = "";
+                        mStbRecordingchannel2 = "";
+                        mStbWatchingchannel   = "";
+                        mStbPipchannel        = "";
+                    }
                 }
-
-                requestGetChannelList();
             }
         }, new Response.ErrorListener() {
             @Override

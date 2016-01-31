@@ -27,6 +27,7 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
+import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
 import com.stvn.nscreen.common.SearchProgramDataObject;
@@ -122,7 +123,8 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     String alertMessage2 = "";
                     CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {}
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
                     }, true);
                 } else {
                     if (index == 0) {
@@ -292,55 +294,20 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                     mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
 
                     requestGetRecordReservelist();
-                } else if ( "241".equals(resultCode) ) { // 페어링 안한 놈은 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                } else if ( "206".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
-                } else if ( "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                    //
-                    mStbState             = "";
-                    mStbRecordingchannel1 = "";
-                    mStbRecordingchannel2 = "";
-                    mStbWatchingchannel   = "";
-                    mStbPipchannel        = "";
-                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    String alertTitle = "씨앤앰 모바일 TV";
-                    String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
-                    String alertMessage2 = "";
-                    CMAlertUtil.Alert(getActivity(), alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }, true);
                 } else {
-                    String errorString = (String)mStbStateMap.get("errorString");
-                    StringBuilder sb   = new StringBuilder();
-                    sb.append("API: GetSetTopStatus\nresultCode: ").append(resultCode).append("\nerrorString: ").append(errorString);
-
-                    CMAlertUtil.Alert(getActivity(), "알림", sb.toString());
+                    // 구글 셋탑 이외의 셋탑에서는 에러 코드에 대한 팝업 처리를 한다.
+                    if ( "HD".equals(mPref.getSettopBoxKind()) || "PVR".equals(mPref.getSettopBoxKind()) ) {
+                        if (UiUtil.checkSTBStateCode(resultCode, getActivity()) == false) {
+                            mStbState             = "";
+                            mStbRecordingchannel1 = "";
+                            mStbRecordingchannel2 = "";
+                            mStbWatchingchannel   = "";
+                            mStbPipchannel        = "";
+                            mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
+                        }
+                    }
                 }
+
                 reqProgramList();
             }
         }, new Response.ErrorListener() {

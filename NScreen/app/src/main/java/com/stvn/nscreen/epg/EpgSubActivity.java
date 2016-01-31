@@ -6,8 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.LruCache;
 import android.util.TypedValue;
@@ -673,7 +674,13 @@ public class EpgSubActivity extends AppCompatActivity {
         }
     }
 
-    private void reloadAll() {
+    Handler mTimerHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            reloadAll(msg.what);
+        }
+    };
+
+    private void reloadAll(int time) {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
         mNetworkError.clear();
@@ -902,8 +909,8 @@ public class EpgSubActivity extends AppCompatActivity {
                     mShowIndicator = false;
                     mProgressDialog.dismiss();
                 }
-                if ( Constants.CODE_RUMPUS_OK.equals(resultCode) ) {
-                    //
+
+                if (UiUtil.checkSTBStateCode(resultCode, EpgSubActivity.this)) {
                     mStbState             = (String)mNetworkError.get("state");
                     mStbRecordingchannel1 = (String)mNetworkError.get("recordingchannel1");
                     mStbRecordingchannel2 = (String)mNetworkError.get("recordingchannel2");
@@ -921,17 +928,14 @@ public class EpgSubActivity extends AppCompatActivity {
 
                     requestGetRecordReservelist();
                 } else {
-                    UiUtil.checkSTBStateCode(resultCode, EpgSubActivity.this);
-                    if ( "206".equals(resultCode) || "028".equals(resultCode) ) { // 셋탑박스의 전원을 off하면 이값의 응답을 받지만, 정상처리 해줘야 한다.
-                        //
-                        mStbState = "";
-                        mStbRecordingchannel1 = "";
-                        mStbRecordingchannel2 = "";
-                        mStbWatchingchannel = "";
-                        mStbPipchannel = "";
-                        mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
-                    }
+                    mStbState = "";
+                    mStbRecordingchannel1 = "";
+                    mStbRecordingchannel2 = "";
+                    mStbWatchingchannel = "";
+                    mStbPipchannel = "";
+                    mAdapter.setStbState(mStbState, mStbRecordingchannel1, mStbRecordingchannel2, mStbWatchingchannel, mStbPipchannel);
                 }
+
                 mAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
@@ -977,25 +981,31 @@ public class EpgSubActivity extends AppCompatActivity {
                     if (xpp.getName().equalsIgnoreCase("resultCode")) {
                         String resultCode = xpp.nextText();
                         mNetworkError.put("resultCode", resultCode);
-                    } else if (xpp.getName().equalsIgnoreCase("errorString")) {
+                        CMLog.d("resultCode : " + resultCode);
+                    } else if (xpp.getName().equalsIgnoreCase("errString")) {
                         String errorString = xpp.nextText();
-                        mNetworkError.put("errorString", errorString);
-
+                        mNetworkError.put("errString", errorString);
+                        CMLog.d("errString : " + errorString);
                     } else if (xpp.getName().equalsIgnoreCase("state")) {
                         String errorString = xpp.nextText();
                         mNetworkError.put("state", errorString);
+                        CMLog.d("state : " + errorString);
                     } else if (xpp.getName().equalsIgnoreCase("recordingchannel1")) {
                         String errorString = xpp.nextText();
                         mNetworkError.put("recordingchannel1", errorString);
+                        CMLog.d("recordingchannel1 : " + errorString);
                     } else if (xpp.getName().equalsIgnoreCase("recordingchannel2")) {
                         String errorString = xpp.nextText();
                         mNetworkError.put("recordingchannel2", errorString);
+                        CMLog.d("recordingchannel2 : " + errorString);
                     } else if (xpp.getName().equalsIgnoreCase("watchingchannel")) {
                         String errorString = xpp.nextText();
                         mNetworkError.put("watchingchannel", errorString);
+                        CMLog.d("watchingchannel : " + errorString);
                     } else if (xpp.getName().equalsIgnoreCase("pipchannel")) {
                         String errorString = xpp.nextText();
                         mNetworkError.put("pipchannel", errorString);
+                        CMLog.d("pipchannel : " + errorString);
                     }
                 }
                 eventType = xpp.next();
@@ -1142,6 +1152,9 @@ public class EpgSubActivity extends AppCompatActivity {
             try {
                 for (int i = 0; i < strings.size(); i++) {
                     String str = strings.get(i);
+
+                    CMLog.d("[ mStbRecordReservelist "+i+" ] "+str);
+
                     mStbRecordReservelist.add(new JSONObject(str));
                 }
             } catch ( JSONException e ) {
@@ -1426,7 +1439,7 @@ public class EpgSubActivity extends AppCompatActivity {
 
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
                 }  else {
                     UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
@@ -1506,7 +1519,7 @@ public class EpgSubActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 parseSetRecordStop(response);
-                reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                mTimerHandler.sendEmptyMessageDelayed(0, 500);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1595,7 +1608,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
                 } else {
                     UiUtil.checkSTBStateCode((String)RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
@@ -1656,7 +1669,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
                 } else {
                     UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
@@ -1748,7 +1761,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    reloadAll(); // 기존 들고 있던 데이터 다 초기화 하고 다시 받아온다. 셋탑상태+예약녹화리스트
+                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
                 } else {
                     UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
