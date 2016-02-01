@@ -489,7 +489,9 @@ public class VodDetailActivity extends Activity {
             isSeriesLink = "NO";
             mSeriesLinearLayout.setVisibility(View.GONE);
             requestGetAssetInfo();
-            requestGetWishList();
+            if ( mPref.isPairingCompleted() ) {
+                requestGetWishList();
+            }
         }
 
         /**
