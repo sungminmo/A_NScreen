@@ -9,8 +9,12 @@ import android.util.Log;
 
 public class CMLog {
 
+    private static final String CMLog_Tag = "NScreen";
     private static boolean DEBUG_VIEW_MODE = true;
 
+    public static void d(String message) {
+        d(CMLog_Tag, message);
+    }
     public static void d(String t,String message) {
         if (DEBUG_VIEW_MODE) {
             String tag = "";
