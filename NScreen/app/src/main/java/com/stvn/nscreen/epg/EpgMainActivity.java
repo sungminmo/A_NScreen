@@ -155,9 +155,7 @@ public class EpgMainActivity extends AppCompatActivity {
         mStbWatchingchannel = "";   // GetSetTopStatus API로 가져오는 값.
         mStbPipchannel = "";        // GetSetTopStatus API로 가져오는 값.
 
-
-
-        requestGetSetTopStatus();
+        requestGetChannelList();
     }
 
     private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
