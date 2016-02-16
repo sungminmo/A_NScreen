@@ -118,7 +118,20 @@ public class MyPurchaseListFragment extends Fragment implements View.OnClickList
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListViewDataObject obj = getCurrentTabObjectWithIndex(position);
 
+                try {
+                    JSONObject jsonObj = new JSONObject(obj.sJson);
+//                    String licenseEnd = jsonObj.getString("licenseEnd");
+                    String productType = jsonObj.getString("productType");
+                    if (productType.equalsIgnoreCase("bundle")) {
+                        requestGetBundleProductDetail(jsonObj);
+                    } else {
+                        requestGetAssetInfoDetail(jsonObj);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
