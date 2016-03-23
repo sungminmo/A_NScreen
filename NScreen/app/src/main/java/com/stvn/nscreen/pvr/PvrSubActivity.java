@@ -92,6 +92,11 @@ public class PvrSubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // 2016-03-23 녹화예약관리 목록 : 방영시간별로 오름차순으로 정렬하기.
+        if(mAdapter.getCount() > 1) {
+            mAdapter.sortDatas();
+        }
+
         pvr_sub_backBtn = (ImageButton) findViewById(R.id.pvr_sub_backBtn);
 
         pvr_sub_backBtn.setOnClickListener(new View.OnClickListener() {

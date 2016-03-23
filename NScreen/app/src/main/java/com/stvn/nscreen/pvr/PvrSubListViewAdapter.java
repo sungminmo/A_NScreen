@@ -1,8 +1,6 @@
 package com.stvn.nscreen.pvr;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +20,9 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by limdavid on 15. 9. 15..
@@ -81,6 +80,37 @@ public class PvrSubListViewAdapter extends BaseAdapter {
     public void addItem(ListViewDataObject obj) { mDatas.add(obj); }
     public void remove(int position) { mDatas.remove(position); }
     public void clear() { mDatas.clear(); }
+
+    /**
+     * RecordStartTime : Asc sort
+     *
+     * 2016-03-23 녹화예약관리 목록 : 방영시간별로 오름차순으로 정렬하기.
+     */
+    public void sortDatas() {
+        Collections.sort(mDatas, new RecordStartTimeAscCompare());
+    }
+
+    private class RecordStartTimeAscCompare implements Comparator<ListViewDataObject> {
+        @Override
+        public int compare(ListViewDataObject arg0, ListViewDataObject arg1) {
+            JSONObject jsonObject;
+            String recordStartTime0 = "", recordStartTime1 = "";
+
+            try {
+                jsonObject = new JSONObject(arg0.sJson);
+                recordStartTime0 = jsonObject.getString("RecordStartTime");
+
+                jsonObject = new JSONObject(arg1.sJson);
+                recordStartTime1 = jsonObject.getString("RecordStartTime");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //return recordStartTime1.compareTo(recordStartTime0);    // 내림차순
+            return recordStartTime0.compareTo(recordStartTime1);    // 오름차순
+        }
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

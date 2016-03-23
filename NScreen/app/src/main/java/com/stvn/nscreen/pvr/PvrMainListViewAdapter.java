@@ -181,7 +181,7 @@ public class PvrMainListViewAdapter extends BaseAdapter {
             }
 
             return recordStartTime1.compareTo(recordStartTime0);    // 내림차순
-            //return recordStartTime0.compareTo(recordStartTime1);    // 올림차순
+            //return recordStartTime0.compareTo(recordStartTime1);    // 오름차순
         }
     }
 
