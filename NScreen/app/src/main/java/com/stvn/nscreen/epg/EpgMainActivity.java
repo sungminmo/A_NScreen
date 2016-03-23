@@ -1,15 +1,11 @@
 package com.stvn.nscreen.epg;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -28,16 +24,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.jjiya.android.common.CMConstants;
-import com.jjiya.android.common.Constants;
 import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.bean.BookmarkChannelObject;
-import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMLog;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +42,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EpgMainActivity extends AppCompatActivity {
@@ -81,6 +72,8 @@ public class EpgMainActivity extends AppCompatActivity {
     private              ImageButton            epg_main_genre_choice_imageButton, epg_main_backBtn;
 
     private              TextView epg_main_genre_name;
+
+    private             Parcelable              state;                  // 2016-03-23 방송목록 진입 후 채널가이드 페이지 복귀시 진입 전 위치로 보여주기.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +170,9 @@ public class EpgMainActivity extends AppCompatActivity {
                 intent.putExtra("channelLogoImg", sChannelLogoImg);
                 intent.putExtra("channelId", sChannelId);
 
+                // 2016-03-23 방송목록 진입 후 채널가이드 페이지 복귀시 진입 전 위치로 보여주기.
+                state = mListView.onSaveInstanceState();
+
                 startActivityForResult(intent, 1);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -217,6 +213,9 @@ public class EpgMainActivity extends AppCompatActivity {
                 parseGetChannelList(response);
                 mAdapter.notifyDataSetChanged();
                 CMLog.d("채널 목록 리스트 갱신");
+
+                // 2016-03-23 방송목록 진입 후 채널가이드 페이지 복귀시 진입 전 위치로 보여주기.
+                if(state != null) mListView.onRestoreInstanceState(state);
 
                 // 구글셋탑이 아닌경우에만 셋탑 상태에 대하여 조회 한다.
                 if ( "HD".equals(mPref.getSettopBoxKind()) || "PVR".equals(mPref.getSettopBoxKind()) ) {
