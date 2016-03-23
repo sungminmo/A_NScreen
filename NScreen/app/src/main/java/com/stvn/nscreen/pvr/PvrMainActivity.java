@@ -267,6 +267,9 @@ public class PvrMainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 2016-03-23 녹화예약관리 탭 복귀시 시리즈 녹화예약 상세목록이 중복으로 보이는 에러 처리
+                mReservs.clear();
+
                 mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
                 button1.setSelected(true);
@@ -386,6 +389,9 @@ public class PvrMainActivity extends AppCompatActivity {
 
 
     private void reloadAll() {
+        // 2016-03-23 녹화예약관리 탭 복귀시 시리즈 녹화예약 상세목록이 중복으로 보이는 에러 처리
+        mReservs.clear();
+
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
         mStbStateMap.clear();
@@ -741,7 +747,7 @@ public class PvrMainActivity extends AppCompatActivity {
     };
 
     private void requestGetRecordListWithDelay(){
-        mProgressDialog	= ProgressDialog.show(mInstance,"",getString(R.string.wait_a_moment));
+        mProgressDialog	= ProgressDialog.show(mInstance, "",getString(R.string.wait_a_moment));
         delayHandlerForGetRecordList.sendEmptyMessageDelayed(0, 5000);
     }
 
