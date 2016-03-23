@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,9 +39,6 @@ import com.jjiya.android.common.ListViewDataObject;
 import com.jjiya.android.common.UiUtil;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.R;
-import com.stvn.nscreen.epg.EpgSubActivity;
-import com.stvn.nscreen.pairing.PairingMainActivity;
-import com.stvn.nscreen.setting.CMSettingMainActivity;
 import com.stvn.nscreen.util.CMAlertUtil;
 import com.stvn.nscreen.util.CMLog;
 
@@ -850,6 +845,7 @@ public class PvrMainActivity extends AppCompatActivity {
         String               sResultCode = "0";   // 응답받은 resultCode
         StringBuilder        sb      = new StringBuilder();
         XmlPullParserFactory factory = null;
+
         try {
             factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -895,6 +891,11 @@ public class PvrMainActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        // 2016-03-23 녹화물 목록 : 방영시간별로 내림차순으로 정렬하기.
+        if(mAdapter.getCount() > 1) {
+            mAdapter.sortDatas();
         }
 
         return sResultCode;
