@@ -280,6 +280,7 @@ public class EpgSubListViewAdapter extends BaseAdapter {
             ImageView          programAge                   = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_age);
             ImageView          Info                         = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_hdsd);
             ImageView          State                        = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_state);
+            ImageView          StateBook                    = ViewHolder.get(convertView, R.id.epg_sub_imageview_program_state_book);
             TextView           titleTextView                = ViewHolder.get(convertView, R.id.epg_sub_textview_program_title);
             TextView           channelProgramOnAirTime      = ViewHolder.get(convertView, R.id.epg_sub_textview_program_time);
             ProgressBar        progBar                      = ViewHolder.get(convertView, R.id.progressBar);
@@ -377,6 +378,15 @@ public class EpgSubListViewAdapter extends BaseAdapter {
                 } else {
                     State.setImageDrawable(null);
                 }
+
+                // 2016-03-25 녹화예약과 시청예약이 동시에 존재할 때 둘 다 노출을 원함.
+                if (reservItem != null && mPref.isWatchTvReserveWithProgramId(programId) == true) {
+                    State.setImageResource(R.mipmap.icon_rec_book);
+                    StateBook.setImageResource(R.mipmap.icon_book);
+                } else {
+                    StateBook.setImageDrawable(null);
+                }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
