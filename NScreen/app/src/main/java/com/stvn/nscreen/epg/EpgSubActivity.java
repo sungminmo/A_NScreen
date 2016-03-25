@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.LruCache;
 import android.util.TypedValue;
@@ -1439,7 +1438,7 @@ public class EpgSubActivity extends AppCompatActivity {
 
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
+                    mTimerHandler.sendEmptyMessageDelayed(0, 1000);     // 2016-03-25 즉시녹화시 셋탑의 상태정보가 정상적으로 들어오질 않아 delay time을 500에서 1000으로 변경함.
                 }  else {
                     UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
@@ -1519,7 +1518,7 @@ public class EpgSubActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 parseSetRecordStop(response);
-                mTimerHandler.sendEmptyMessageDelayed(0, 500);
+                mTimerHandler.sendEmptyMessageDelayed(0, 1000);     // 2016-03-25 즉시녹화시 셋탑의 상태정보가 정상적으로 들어오질 않아 delay time을 500에서 1000으로 변경함.
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1608,7 +1607,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
+                    mTimerHandler.sendEmptyMessageDelayed(0, 1000);     // 2016-03-25 즉시녹화시 셋탑의 상태정보가 정상적으로 들어오질 않아 delay time을 500에서 1000으로 변경함.
                 } else {
                     UiUtil.checkSTBStateCode((String)RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
@@ -1669,7 +1668,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
+                    mTimerHandler.sendEmptyMessageDelayed(0, 1000);     // 2016-03-25 즉시녹화시 셋탑의 상태정보가 정상적으로 들어오질 않아 delay time을 500에서 1000으로 변경함.
                 } else {
                     UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
@@ -1761,7 +1760,7 @@ public class EpgSubActivity extends AppCompatActivity {
                 }
                 if ( Constants.CODE_RUMPUS_OK.equals(RemoteChannelControl.get("resultCode")) ) {
                     // ok
-                    mTimerHandler.sendEmptyMessageDelayed(0, 500);
+                    mTimerHandler.sendEmptyMessageDelayed(0, 1000);     // 2016-03-25 즉시녹화시 셋탑의 상태정보가 정상적으로 들어오질 않아 delay time을 500에서 1000으로 변경함.
                 } else {
                     UiUtil.checkSTBStateCode((String) RemoteChannelControl.get("resultCode"), EpgSubActivity.this);
                 }
