@@ -101,7 +101,9 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                 // 예약녹화 걸려있지 않은 방송
                 if (reservItem == null) {
                     // 시청예약 걸려있음
-                    if (mPref.isWatchTvReserveWithProgramId(item.getChannelProgramID()) == true) {
+                    // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
+                    // 그래서 시청시간을 추가함.
+                    if (mPref.isWatchTvReserveWithProgramIdAndStartTime(item.getChannelProgramID(), item.getChannelProgramTime()) == true) {
                         return 3;
                     }
                     // 시청예약 없음
@@ -112,7 +114,9 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                 // 예약녹화 걸린방송
                 else {
                     // 시청예약 걸려 있음
-                    if (mPref.isWatchTvReserveWithProgramId(item.getChannelProgramID()) == true) {
+                    // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
+                    // 그래서 시청시간을 추가함.
+                    if (mPref.isWatchTvReserveWithProgramIdAndStartTime(item.getChannelProgramID(), item.getChannelProgramTime()) == true) {
                         return 4;
                     }
                     // 시청예약 없음
@@ -134,13 +138,17 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                     } else {
                         JSONObject reservItem = getStbRecordReserveWithChunnelId(item.getChannelId(), item);
                         if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.
-                            if (mPref.isWatchTvReserveWithProgramId(item.getChannelProgramID()) == true) {
+                            // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
+                            // 그래서 시청시간을 추가함.
+                            if (mPref.isWatchTvReserveWithProgramIdAndStartTime(item.getChannelProgramID(), item.getChannelProgramTime()) == true) {
                                 return 3;
                             } else {
                                 return 1;
                             }
                         } else {    //  예약 녹화 걸린 방송.
-                            if (mPref.isWatchTvReserveWithProgramId(item.getChannelProgramID()) == true) {
+                            // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
+                            // 그래서 시청시간을 추가함.
+                            if (mPref.isWatchTvReserveWithProgramIdAndStartTime(item.getChannelProgramID(), item.getChannelProgramTime()) == true) {
                                 return 4;
                             } else {
                                 return 2;

@@ -144,7 +144,9 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                         }
                         // 시청예약취소
                         else if (menu.getViewType() == 3 || menu.getViewType() == 4) {
-                            mPref.removeWatchTvReserveAlarm(mProgramlist.get(position).getChannelProgramID());
+                            // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
+                            // 그래서 시청시간을 추가함.
+                            mPref.removeWatchTvReserveAlarmWithProgramIdAndStartTime(mProgramlist.get(position).getChannelProgramID(), mProgramlist.get(position).getChannelProgramTime());
                             mAdapter.notifyDataSetChanged();
                         }
 

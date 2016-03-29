@@ -604,8 +604,51 @@ public class JYSharedPreferences {
 
     }
 
+    // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
+    // 그래서 시청시간을 추가함.
+    public void removeWatchTvReserveAlarmWithProgramIdAndStartTime(String programId, String startTime) {
+        int iSeq = 0;
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+        RealmResults<WatchTvObject> results = mRealm.where(WatchTvObject.class)
+                .equalTo("sProgramId", programId)
+                .equalTo("sProgramBroadcastingStartTime", startTime)
+                .findAll();
+        if ( results.size() > 0 ) {
+            WatchTvObject obj = results.get(0);
+            iSeq = obj.getiSeq();
+            obj.removeFromRealm();
+        } else {
+            //
+        }
+        realm.commitTransaction();
+
+        AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(mContext, WatchTvAlarmBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, iSeq, intent, PendingIntent.FLAG_NO_CREATE);
+        if ( pendingIntent != null ) {
+            alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
+
+    }
+
     public boolean isWatchTvReserveWithProgramId(String programId) {
         RealmResults<WatchTvObject> results = mRealm.where(WatchTvObject.class).equalTo("sProgramId", programId).findAll();
+        if ( results.size() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
+    // 그래서 시청시간을 추가함.
+    public boolean isWatchTvReserveWithProgramIdAndStartTime(String programId, String startTime) {
+        RealmResults<WatchTvObject> results = mRealm.where(WatchTvObject.class)
+                .equalTo("sProgramId", programId)
+                .equalTo("sProgramBroadcastingStartTime", startTime)
+                .findAll();
         if ( results.size() > 0 ) {
             return true;
         } else {
