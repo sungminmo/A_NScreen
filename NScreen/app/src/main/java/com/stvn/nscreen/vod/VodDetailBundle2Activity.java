@@ -2,17 +2,12 @@ package com.stvn.nscreen.vod;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -262,6 +257,9 @@ public class VodDetailBundle2Activity extends Activity {
                     mSynopsisTextView.setText(synopsis);
                     if ( "2".equals(publicationRight) ) {
                         mMobileImageView.setVisibility(View.VISIBLE);
+                    } else {
+                        // 2016-03-30 시리즈 VOD 상세페이지에서 "모바일 판권"이 존재하지 않는 회차 이동시 "모바일"표시가 되지 않아야 한다. (화면갱신이 이루어지지 않음)
+                        mMobileImageView.setVisibility(View.INVISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
