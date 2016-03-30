@@ -132,9 +132,9 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
                     //현재방송중이거나 과거방송
                     if (mToday.compareTo(date) > 0) {
                         // 정책변경으로 인해 현재 방송중인 프로그램은 레이어 노출 불가
-                        return 0;
-//                        item.setSwipeMode(SwipeListView.SWIPE_MODE_NONE);
-//                        ((SwipeListView) mParent).setSwipeMode(SwipeListView.SWIPE_MODE_NONE);
+                        // 2016-03-29 "현재 방송 중"인 목록의 타이틀을 "셋탑 미 연동"에서 "현재 방송 중"으로 변경
+                        // 그래서 5번 타입 추가함.
+                        return 5;
                     } else {
                         JSONObject reservItem = getStbRecordReserveWithChunnelId(item.getChannelId(), item);
                         if (reservItem == null) { // 예약녹화 걸려있지 않은 방송.

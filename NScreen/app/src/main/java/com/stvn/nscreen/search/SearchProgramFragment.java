@@ -1,5 +1,6 @@
 package com.stvn.nscreen.search;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -117,10 +118,6 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 CMLog.d("wd", "menu.getViewType() : " + menu.getViewType() + ", Index : " + index);
                 // 셋탑 미연동
                 if (menu.getViewType() == 0) {
-                    // 2016-03-29 "현재 방송 중"인 목록의 타이틀을 "셋탑 미 연동"에서 "현재 방송 중"으로 변경
-                    // do nothing!!! and comment out below!!!
-
-                    /*
                     String alertTitle = "셋탑박스 연동 필요";
                     String alertMessage1 = getString(R.string.error_not_paring_compleated3);
                     String alertMessage2 = "";
@@ -129,7 +126,13 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     }, true);
-                    */
+                }
+
+                // 현재 방송 중
+                if (menu.getViewType() == 5) {
+                    // 2016-03-29 "현재 방송 중"인 목록의 타이틀을 "셋탑 미 연동"에서 "현재 방송 중"으로 변경
+                    // 그래서 5번 타입 추가함.
+                    // do nothing!!! and comment out below!!!
                 } else {
                     if (index == 0) {
                         // 시청예약
@@ -186,12 +189,26 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
         @Override
         public void create(SwipeMenu menu) {
             int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+
+            // 셋탑 미 연동
             if (menu.getViewType() == 0) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(R.color.red);
+                item1.setWidth(width*2);
+                item1.setTitle("셋탑 미 연동");
+                item1.setTitleSize(12);
+                item1.setTitleColor(getResources().getColor(R.color.white));
+                menu.addMenuItem(item1);
+            }
+
+            // 현재 방송 중
+            if (menu.getViewType() == 5) {
                 SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
                 item1.setBackground(R.color.red);
                 item1.setWidth(width*2);
 
                 // 2016-03-29 "현재 방송 중"인 목록의 타이틀을 "셋탑 미 연동"에서 "현재 방송 중"으로 변경
+                // 그래서 5번 타입 추가함.
                 item1.setTitle("현재 방송 중");
 
                 item1.setTitleSize(12);
