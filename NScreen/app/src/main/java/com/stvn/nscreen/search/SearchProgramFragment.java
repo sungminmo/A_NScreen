@@ -136,7 +136,9 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 } else {
                     if (index == 0) {
                         // 시청예약
-                        if (menu.getViewType() == 1 || menu.getViewType() == 2) {
+                        // 2016-03-30 HD, Google 셋탑박스에서는 녹화예약버튼이 없어야 함.
+                        // 그래서 6, 7번 타입 추가.
+                        if (menu.getViewType() == 1 || menu.getViewType() == 2 || menu.getViewType() == 6) {
                             String programId = mProgramlist.get(position).getChannelProgramID();
                             String seriesId = "";
                             String programTitle = mProgramlist.get(position).getChannelProgramTitle();
@@ -146,7 +148,9 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                             mAdapter.notifyDataSetChanged();
                         }
                         // 시청예약취소
-                        else if (menu.getViewType() == 3 || menu.getViewType() == 4) {
+                        // 2016-03-30 HD, Google 셋탑박스에서는 녹화예약버튼이 없어야 함.
+                        // 그래서 6, 7번 타입 추가.
+                        else if (menu.getViewType() == 3 || menu.getViewType() == 4 || menu.getViewType() == 7) {
                             // 2016-03-29 시청예약시 데이타베이스 처리를 programId 로 하는데 서버에서 programId를 중복으로 보내고 있다
                             // 그래서 시청시간을 추가함.
                             mPref.removeWatchTvReserveAlarmWithProgramIdAndStartTime(mProgramlist.get(position).getChannelProgramID(), mProgramlist.get(position).getChannelProgramTime());
@@ -282,6 +286,30 @@ public class SearchProgramFragment extends SearchBaseFragment implements AbsList
                 item2.setTitleSize(12);
                 item2.setTitleColor(Color.WHITE);
                 menu.addMenuItem(item2);
+            }
+            // 시청예약
+            // 2016-03-30 HD, Google 셋탑박스에서는 녹화예약버튼이 없어야 함.
+            // 그래서 6, 7번 타입 추가.
+            else if (menu.getViewType() == 6) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(new ColorDrawable(Color.rgb(0xB3, 0xCF, 0x3B)));
+                item1.setWidth(width*2);
+                item1.setTitle("시청예약");
+                item1.setTitleSize(12);
+                item1.setTitleColor(getResources().getColor(R.color.white));
+                menu.addMenuItem(item1);
+            }
+            // 시청예약취소
+            // 2016-03-30 HD, Google 셋탑박스에서는 녹화예약버튼이 없어야 함.
+            // 그래서 6, 7번 타입 추가.
+            else if (menu.getViewType() == 7) {
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+                item1.setBackground(new ColorDrawable(Color.rgb(0x7F, 0x94, 0x24)));
+                item1.setWidth(width*2);
+                item1.setTitle("시청예약취소");
+                item1.setTitleSize(12);
+                item1.setTitleColor(getResources().getColor(R.color.white));
+                menu.addMenuItem(item1);
             }
         }
     };

@@ -83,6 +83,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
 
     /**
      * 0 : 셋탑미연동 1: 시청예약:녹화예약, 2: 시청예약:녹화예약취소, 3: 시청예약취소:녹화예약, 4: 시청예약취소:녹화예약취소
+     * 5 : 현재 방송 중 6: 시청예약 7: 시청예약취소
      * */
     @Override
     public int getItemViewType(int position) {
@@ -94,7 +95,39 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
         }
         if (!mPref.isPairingCompleted()) {
             return 0;
-        } else {
+        }
+
+        // 세탑종류별 처리 : PVR, HD, SMART
+        // 2016-03-30 HD, Google 셋탑박스에서는 녹화예약버튼이 없어야 함.
+        // 그래서 6, 7번 타입 추가.
+        if ( "HD".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) || "SMART".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, "")) ) {
+            // 오늘이 아니라면...
+            if (!mTodayFormat.format(mToday).equals(CMUtil.getConverDateString(item.getChannelProgramTime().trim(), "yyyy-MM-ddHH:mm:ss", "yyyyMMdd"))) {
+                if (mPref.isWatchTvReserveWithProgramIdAndStartTime(item.getChannelProgramID(), item.getChannelProgramTime()) == true) {
+                    return 7;       // 시청예약 걸려있음
+                }
+                else {
+                    return 6;       // 시청예약 없음
+                }
+            }
+            // 오늘일경우
+            else {
+                try {
+                    Date date = mCompareFormat.parse(item.getChannelProgramTime());
+                    //현재방송중이거나 과거방송
+                    if (mToday.compareTo(date) > 0) {
+                        return 5;
+                    } else {
+                        if (mPref.isWatchTvReserveWithProgramIdAndStartTime(item.getChannelProgramID(), item.getChannelProgramTime()) == true) {
+                            return 7;       // 시청예약 걸려있음
+                        } else {
+                            return 6;       // 시청예약 없음
+                        }
+                    }
+                }catch(Exception e)
+                {}
+            }
+        } else {        // "PVR".equals(mPref.getValue(JYSharedPreferences.RUMPERS_SETOPBOX_KIND, ""))
             // 오늘이 아니라면...
             if (!mTodayFormat.format(mToday).equals(CMUtil.getConverDateString(item.getChannelProgramTime().trim(), "yyyy-MM-ddHH:mm:ss", "yyyyMMdd"))) {
                 JSONObject reservItem = getStbRecordReserveWithChunnelId(item.getChannelId(),item);
@@ -167,7 +200,7 @@ public class SearchProgramAdapter extends ArrayAdapter<SearchProgramDataObject> 
 
     @Override
     public int getViewTypeCount() {
-        return 5;
+        return 8;
     }
 
     @Override
