@@ -730,7 +730,11 @@ public class VodDetailActivity extends Activity {
 
             discountCouponMasterIdList  = asset.getJSONArray("discountCouponMasterIdList");
             productList                 = asset.getJSONArray("productList");
-            JSONObject product          = (JSONObject)productList.get(0);
+
+            //JSONObject product          = (JSONObject)productList.get(0);
+            // 2016-03-30 무료 페키지인 FOD가 있으면 우선순위로 사용한다.
+            JSONObject product          = getProductList(productList);
+
             productType                 = product.getString("productType");
             productId                   = product.getString("productId");
             goodId                      = product.getString("goodId");
@@ -1171,6 +1175,28 @@ public class VodDetailActivity extends Activity {
             }
             if ( rtn == null ) { // HD 못찾았으면 그냥 처음꺼 쓰자.
                 rtn = (JSONObject)assetList.get(0);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return rtn;
+    }
+
+    /**
+     * 2016-03-30 무료 페키지인 FOD가 있으면 우선순위로 사용한다.
+     */
+    private JSONObject getProductList(JSONArray productList) {
+        JSONObject rtn = null;
+        try {
+            for (int i = 0; i < productList.length(); i++) {
+                JSONObject jo = (JSONObject)productList.get(i);
+                if ( "FOD".equalsIgnoreCase(jo.getString("productType")) ) {
+                    rtn = jo;
+                    break;
+                }
+            }
+            if ( rtn == null ) { // FOD 못찾았으면 그냥 처음꺼 쓰자.
+                rtn = (JSONObject)productList.get(0);
             }
         } catch (JSONException e) {
             e.printStackTrace();
