@@ -186,6 +186,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 title1.setText(jo1.getString("title"));
                 String imageFileName1 = jo1.getString("imageFileName");
                 NetworkImageView niv1 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1);
+                niv1.setDefaultImageResId(R.mipmap.posterlist_default);
                 niv1.setImageUrl(imageFileName1, mImageLoader);
                 if ( "0".equals(mobilePublicationRight1) ) {
 
@@ -220,6 +221,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 title2.setText(jo2.getString("title"));
                 String imageFileName2 = jo2.getString("imageFileName");
                 NetworkImageView niv2 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2);
+                niv2.setDefaultImageResId(R.mipmap.posterlist_default);
                 niv2.setImageUrl(imageFileName2, mImageLoader);
                 niv2.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -251,6 +253,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 title3.setText(jo3.getString("title"));
                 String imageFileName3 = jo3.getString("imageFileName");
                 NetworkImageView niv3 = (NetworkImageView) v.findViewById(R.id.eight_vod_poster_netwokr_imageview3);
+                niv3.setDefaultImageResId(R.mipmap.posterlist_default);
                 niv3.setImageUrl(imageFileName3, mImageLoader);
                 niv3.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -282,6 +285,7 @@ public class FourVodPosterPagerAdapter extends PagerAdapter {
                 title4.setText(jo4.getString("title"));
                 String imageFileName4 = jo4.getString("imageFileName");
                 NetworkImageView niv4 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview4);
+                niv4.setDefaultImageResId(R.mipmap.posterlist_default);
                 niv4.setImageUrl(imageFileName4, mImageLoader);
                 niv4.setOnClickListener(new View.OnClickListener() {
                     @Override

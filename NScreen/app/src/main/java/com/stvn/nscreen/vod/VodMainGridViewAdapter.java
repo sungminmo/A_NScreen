@@ -79,6 +79,7 @@ public class VodMainGridViewAdapter extends BaseAdapter {
             final JSONObject         jo         = new JSONObject(obj.sJson);
 
             NetworkImageView vodImageView = ViewHolder.get(convertView, R.id.volleyImageView);
+            vodImageView.setDefaultImageResId(R.mipmap.posterlist_default);
             TextView titleTextView        = ViewHolder.get(convertView, R.id.vod_main_textview_title);
             TextView rankTextView         = ViewHolder.get(convertView, R.id.gridview_vod_main_ranking_textview);
             TextView gridview_vod_main_ranking_textview = ViewHolder.get(convertView, R.id.gridview_vod_main_ranking_textview);

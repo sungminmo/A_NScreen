@@ -607,6 +607,7 @@ public class VodMainFirstTabFragment extends VodMainBaseFragment {
                 final String assetId2  = jo.getString("assetId");
                 String imageUrl = jo.getString("android_imgurl");
                 NetworkImageView niv  = (NetworkImageView)v.findViewById(R.id.vod_main_banner_network_imageview);
+                niv.setDefaultImageResId(R.mipmap.banner_empty);
                 niv.setImageUrl(imageUrl, mImageLoader);
                 niv.setOnClickListener(new View.OnClickListener() {
                     @Override

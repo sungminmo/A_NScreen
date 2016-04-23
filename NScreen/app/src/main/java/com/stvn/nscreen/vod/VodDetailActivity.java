@@ -201,6 +201,7 @@ public class VodDetailActivity extends Activity {
         mHdSdImageView        = (ImageView)findViewById(R.id.vod_detail_hd);
         mPromotionSticker     = (ImageView)findViewById(R.id.imageView14);
         mMovieImageImageView  = (NetworkImageView)findViewById(R.id.vod_detail_imagefilename_imageview);
+        mMovieImageImageView.setDefaultImageResId(R.mipmap.voddetail_default);
         mPriceTextView        = (TextView)findViewById(R.id.vod_detail_price_textview);
         mGenreTextView        = (TextView)findViewById(R.id.vod_detail_genre_textview);
         mDirectorTextView     = (TextView)findViewById(R.id.vod_detail_director_textview);

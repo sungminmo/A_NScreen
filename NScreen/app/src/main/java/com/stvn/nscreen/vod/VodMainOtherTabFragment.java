@@ -320,16 +320,20 @@ public class VodMainOtherTabFragment extends VodMainBaseFragment implements View
                     if ( categoryList.length() > 1 ) {
                         categorys.remove(0);
                     }
-                    JSONObject category = (JSONObject)categorys.get(0);
-                    if ( showCategoryView == false ) {
-                        mCategoryNameTextView.setText(category.getString("categoryName"));
-                        mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));
-                        mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
-                        mCurrCategoryObject.setsCategoryName(category.getString("categoryName"));
-                        mCurrCategoryObject.setsLeaf(category.getString("leaf"));
-                        mCurrCategoryObject.setsParentCategoryId(category.getString("parentCategoryId"));
-                        mCurrCategoryObject.setsViewerType(category.getString("viewerType"));
+
+                    if (categorys.size() > 0) {
+                        JSONObject category = (JSONObject)categorys.get(0);
+                        if ( showCategoryView == false ) {
+                            mCategoryNameTextView.setText(category.getString("categoryName"));
+                            mCurrCategoryObject.setsCategoryId(category.getString("categoryId"));
+                            mCurrCategoryObject.setsAdultCategory(category.getString("adultCategory"));
+                            mCurrCategoryObject.setsCategoryName(category.getString("categoryName"));
+                            mCurrCategoryObject.setsLeaf(category.getString("leaf"));
+                            mCurrCategoryObject.setsParentCategoryId(category.getString("parentCategoryId"));
+                            mCurrCategoryObject.setsViewerType(category.getString("viewerType"));
+                        }
                     }
+
                     processRequest();
                     for ( int i = 0; i < categorys.size(); i++ ) {
                         JSONObject loopCategory     = (JSONObject)categorys.get(i);

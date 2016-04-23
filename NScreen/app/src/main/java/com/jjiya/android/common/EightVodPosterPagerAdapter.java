@@ -110,6 +110,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking1 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview1);
                 ImageView eight_vod_poster_promotionsticker_imageview1 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview1);
                 NetworkImageView niv11 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview1);
+                niv11.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview1 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview1);
                 ImageView eight_vod_poster_19_imageview1 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview1);
 
@@ -189,6 +190,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking2 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview2);
                 ImageView eight_vod_poster_promotionsticker_imageview2 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview2);
                 NetworkImageView niv21 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview2);
+                niv21.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview2 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview2);
                 ImageView eight_vod_poster_19_imageview2 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview2);
 
@@ -267,6 +269,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking3 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview3);
                 ImageView eight_vod_poster_promotionsticker_imageview3 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview3);
                 NetworkImageView niv31 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview3);
+                niv31.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview3 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview3);
                 ImageView eight_vod_poster_19_imageview3 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview3);
 
@@ -345,6 +348,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking4 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview4);
                 ImageView eight_vod_poster_promotionsticker_imageview4 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview4);
                 NetworkImageView niv41 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview4);
+                niv41.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview4 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview4);
                 ImageView eight_vod_poster_19_imageview4 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview4);
 
@@ -423,6 +427,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking5 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview5);
                 ImageView eight_vod_poster_promotionsticker_imageview5 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview5);
                 NetworkImageView niv51 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview5);
+                niv51.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview5 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview5);
                 ImageView eight_vod_poster_19_imageview5 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview5);
 
@@ -501,6 +506,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking6 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview6);
                 ImageView eight_vod_poster_promotionsticker_imageview6 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview6);
                 NetworkImageView niv61 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview6);
+                niv61.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview6 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview6);
                 ImageView eight_vod_poster_19_imageview6 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview6);
 
@@ -579,6 +585,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking7 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview7);
                 ImageView eight_vod_poster_promotionsticker_imageview7 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview7);
                 NetworkImageView niv71 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview7);
+                niv71.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview7 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview7);
                 ImageView eight_vod_poster_19_imageview7 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview7);
 
@@ -657,6 +664,7 @@ public class EightVodPosterPagerAdapter extends PagerAdapter {
                 TextView ranking8 = (TextView)v.findViewById(R.id.eight_vod_poster_rank_textview8);
                 ImageView eight_vod_poster_promotionsticker_imageview8 = (ImageView)v.findViewById(R.id.eight_vod_poster_promotionsticker_imageview8);
                 NetworkImageView niv81 = (NetworkImageView)v.findViewById(R.id.eight_vod_poster_netwokr_imageview8);
+                niv81.setDefaultImageResId(R.mipmap.posterlist_default);
                 ImageView eight_vod_poster_tvonly_imageview8 = (ImageView)v.findViewById(R.id.eight_vod_poster_tvonly_imageview8);
                 ImageView eight_vod_poster_19_imageview8 = (ImageView)v.findViewById(R.id.eight_vod_poster_19_imageview8);
 

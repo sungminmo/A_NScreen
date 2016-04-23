@@ -121,6 +121,7 @@ public class VodDetailBundleActivity extends Activity {
 
         mTitleTextView        = (TextView)findViewById(R.id.vod_detail_bundle_title);
         mMovieImageImageView  = (NetworkImageView)findViewById(R.id.vod_detail_bundle_imagefilename_imageview);
+        mMovieImageImageView.setDefaultImageResId(R.mipmap.voddetail_default);
         mPriceTextView        = (TextView)findViewById(R.id.vod_detail_bundle_price_textview);
         mPricelistTextView    = (TextView)findViewById(R.id.vod_detail_bundle_pricelist_textview);
         PricevbatTextview     = (TextView)findViewById(R.id.vod_detail_bundle_pricevbat_textview);
