@@ -373,7 +373,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="씨앤앰 청구서 포함결제"
+                                android:text="딜라이브 청구서 포함결제"
                                 android:id="@+id/textView53"
                                 android:textColor="@drawable/btn_purchase_textcolor"
                                 android:layout_gravity="left|center_vertical"
@@ -447,7 +447,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="씨앤앰 청구서 포함결제"
+                                android:text="딜라이브 청구서 포함결제"
                                 android:id="@+id/textView63"
                                 android:textColor="@drawable/btn_purchase_textcolor"
                                 android:layout_gravity="left|center_vertical"

@@ -405,7 +405,7 @@ public class VodDetailActivity extends Activity {
                         mJimButton.setCompoundDrawables(null, null, img, null);
                         mJimButton.setText("찜해제");
 
-                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 씨앤앰 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 딜라이브 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     // 찜 한 VOD
@@ -443,7 +443,7 @@ public class VodDetailActivity extends Activity {
                         mJimButton2.setCompoundDrawables(null, null, img, null);
                         mJimButton2.setText("찜해제");
 
-                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 씨앤앰 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(VodDetailActivity.this, "찜 하기가 완료되었습니다. '마이 딜라이브 > VOD 찜 목록'에서 확인하실 수 있습니다.", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     // 찜 한 VOD

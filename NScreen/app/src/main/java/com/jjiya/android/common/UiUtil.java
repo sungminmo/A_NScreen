@@ -501,7 +501,7 @@ public class UiUtil {
             isSuccess = true;
         } else if ("200".equals(code)) {
 
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "알수없는 에러";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -509,7 +509,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("201".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "지원하지 않는 프로토콜";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -517,7 +517,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("202".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "인증 실패";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -525,7 +525,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("203".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "지원하지 않는 프로파일";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -533,7 +533,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("204".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "잘못된 파라미터값";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -543,10 +543,10 @@ public class UiUtil {
         }
 //    else if ([code isEqualToString:@"205"])
 //    {
-//        [SIAlertView alert:@"씨앤앰 모바일 TV" message:@"녹화물 목록을 받을 수 없습니다."];
+//        [SIAlertView alert:@"딜라이브 모바일 TV" message:@"녹화물 목록을 받을 수 없습니다."];
 //    }
         else if ("206".equals(code) || "028".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "셋탑박스와 통신이 끊어졌습니다.\n전원을 확인해주세요.";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -554,7 +554,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("207".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "내부 프로세싱 에러";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -562,7 +562,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("211".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "일반 DB 에러";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -570,7 +570,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("221".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "이미 처리 되었음";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -578,7 +578,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("223".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "이미 추가된 항목";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -586,7 +586,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("231".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "인증코드발급 실패";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {
@@ -594,7 +594,7 @@ public class UiUtil {
                 public void onClick(DialogInterface dialog, int which) {}
             }, true);
         } else if ("232".equals(code)) {
-            String alertTitle = "씨앤앰 모바일 TV";
+            String alertTitle = "딜라이브 모바일 TV";
             String alertMessage1 = "만료된 인증코드";
             String alertMessage2 = "";
             CMAlertUtil.Alert(ctx, alertTitle, alertMessage1, alertMessage2, true, false, new DialogInterface.OnClickListener() {

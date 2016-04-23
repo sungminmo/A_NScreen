@@ -240,7 +240,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="마이 씨앤앰"
+                android:text="마이 딜라이브"
                 android:id="@+id/textView72"
                 android:textSize="14.5sp"
                 android:textColor="#ffffff" />

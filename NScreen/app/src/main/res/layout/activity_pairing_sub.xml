@@ -91,7 +91,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="[&apos;마이TV>&apos;씨앤앰 모바일TV 등록&apos; 메뉴]를 선택 하세요."
+                    android:text="[&apos;마이TV>&apos;딜라이브 모바일TV 등록&apos; 메뉴]를 선택 하세요."
                     android:id="@+id/textView27"
                     android:layout_marginBottom="20.75dp"
                     android:textSize="13sp"
