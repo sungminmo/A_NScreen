@@ -188,13 +188,15 @@ public class WidevineDrm {
                 Settings.WIDEVINE_MIME_TYPE);
         request.put("WVPortalKey", portal);
         DrmInfo response = mDrmManager.acquireDrmInfo(request);
+// TODO: 최신 버전 단말에서 시청 시 response 데이터가 null 로 들어오는 원인 파악이 필요함. 16.04.26
+        if (response != null) {
+            String drmInfoRequestStatusKey = (String)response.get("WVDrmInfoRequestStatusKey");
+            if (null != drmInfoRequestStatusKey && !drmInfoRequestStatusKey.equals("")) {
+                mWVDrmInfoRequestStatusKey = Long.parseLong(drmInfoRequestStatusKey);
+            }
 
-        String drmInfoRequestStatusKey = (String)response.get("WVDrmInfoRequestStatusKey");
-        if (null != drmInfoRequestStatusKey && !drmInfoRequestStatusKey.equals("")) {
-            mWVDrmInfoRequestStatusKey = Long.parseLong(drmInfoRequestStatusKey);
+            mPluginVersion = (String)response.get("WVDrmInfoRequestVersionKey");
         }
-
-        mPluginVersion = (String)response.get("WVDrmInfoRequestVersionKey");
     }
 
     public int acquireRights(String assetUri) {
