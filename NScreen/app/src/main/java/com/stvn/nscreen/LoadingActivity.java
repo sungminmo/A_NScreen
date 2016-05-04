@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +36,7 @@ import com.jjiya.android.common.JYSharedPreferences;
 import com.jjiya.android.common.crypt.AESCrypt;
 import com.jjiya.android.http.JYStringRequest;
 import com.stvn.nscreen.bean.MainCategoryObject;
+import com.stvn.nscreen.util.CMAlertUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -197,7 +199,36 @@ public class LoadingActivity extends AppCompatActivity {
                     String appversion = (String)mGetAppInitialize.get("appversion");
                     mPref.setAppVersionForServer(appversion);
 
-                    requestGetCategoryTreeForVodMain();
+                    String serverVer  = mPref.getAppVersionForServer();
+                    String appVer     = mPref.getAppVersionForApp();
+                    Float  fVerServer = Float.valueOf(serverVer);
+                    Float  fVerApp    = Float.valueOf(appVer);
+                    if ( fVerServer > fVerApp ) {
+                        StringBuilder sb   = new StringBuilder();
+                        sb.append("지금 사용하시는 버전보다 더 최신버전이 존재합니다. 구글 마켓에서 업데이트 하신 뒤 사용하시기 바랍니다.").append("\n")
+                                .append("사용 중인 버전 : ").append(appVer + " ver.\n")
+                        .append("최신 버전 : ").append(serverVer).append(" ver.");
+
+                        CMAlertUtil.Alert(LoadingActivity.this, "업데이트",sb.toString(), "", "업데이트", "확인", false, false,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // 업데이트 버튼
+                                        Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
+                                        marketLaunch.setData(Uri.parse("market://details?id=com.stvn.nscreen"));
+                                        startActivity(marketLaunch);
+                                        finish();
+                                    }
+                                }, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // 확인 버튼
+                                        requestGetCategoryTreeForVodMain();
+                                    }
+                                });
+                    } else {
+                        requestGetCategoryTreeForVodMain();
+                    }
                 } else {
                     String errorString = (String)mGetAppInitialize.get("errorString");
                     AlertDialog.Builder alert = new AlertDialog.Builder(mInstance);
